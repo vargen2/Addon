@@ -1,0 +1,102 @@
+<Page
+    x:Class="Addon.Views.ShellPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:behaviors="using:Addon.Behaviors"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:helpers="using:Addon.Helpers"
+    xmlns:views="using:Addon.Views"
+    xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    mc:Ignorable="d">
+
+    <i:Interaction.Behaviors>
+        <ic:EventTriggerBehavior EventName="Loaded">
+            <ic:InvokeCommandAction Command="{x:Bind ViewModel.LoadedCommand}" />
+        </ic:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+    <winui:NavigationView
+       x:Name="navigationView"
+        IsBackButtonVisible="Collapsed"
+        IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
+        SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
+        IsSettingsVisible="True"
+        Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+        <winui:NavigationView.MenuItems>
+
+            <winui:NavigationViewItem Name="navitem1" x:Uid="Shell_Main" Icon="Home" helpers:NavHelper.NavigateTo="views:MainPage" />
+            <winui:NavigationViewItem x:Uid="Shell_Browse" Icon="Globe" helpers:NavHelper.NavigateTo="views:BrowsePage" />
+        </winui:NavigationView.MenuItems>
+        <i:Interaction.Behaviors>
+            <behaviors:NavigationViewHeaderBehavior>
+                <!--DefaultHeader="{x:Bind ViewModel.Selected.Content, Mode=OneWay}"-->
+                <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock
+                                Text="{Binding}"
+                                Style="{ThemeResource TitleTextBlockStyle}"
+                                Margin="{StaticResource SmallLeftRightMargin}" />
+                        </Grid>
+                    </DataTemplate>
+                </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
+            </behaviors:NavigationViewHeaderBehavior>
+            <ic:EventTriggerBehavior EventName="ItemInvoked">
+                <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
+            </ic:EventTriggerBehavior>
+        </i:Interaction.Behaviors>
+
+        <winui:NavigationView.PaneCustomContent>
+            <StackPanel>
+                <Button Height="40"  Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch">
+                    <Button.Flyout>
+                        <MenuFlyout Placement="RightEdgeAlignedTop">
+                            <MenuFlyout.MenuFlyoutPresenterStyle>
+                                <Style TargetType="MenuFlyoutPresenter">
+                                    <Setter Property="MinHeight" Value="80" />
+                                    <Setter Property="MinWidth" Value="200" />
+                                </Style>
+                            </MenuFlyout.MenuFlyoutPresenterStyle>
+                            <MenuFlyoutItem Text="Add Folder..." Icon="OpenLocal" Tag="rating"/>
+                            <!--OpenFolderHorizontal-->
+                            <MenuFlyoutItem Text="Automatic Search..." Icon="Find" Tag="distance"/>
+
+                        </MenuFlyout>
+                    </Button.Flyout>
+                    <StackPanel Orientation="Horizontal">
+                        <SymbolIcon Symbol="Add" />
+                        <TextBlock Margin="20,0">Add Game</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Height="40" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch">
+                    <Button.Flyout>
+                        <MenuFlyout Placement="RightEdgeAlignedTop">
+                            <MenuFlyout.MenuFlyoutPresenterStyle>
+                                <Style TargetType="MenuFlyoutPresenter">
+                                    <Setter Property="MinHeight" Value="80" />
+                                    <Setter Property="MinWidth" Value="200" />
+                                </Style>
+                            </MenuFlyout.MenuFlyoutPresenterStyle>
+                            <MenuFlyoutItem Text="C:/Program Files/World of Warcraft/__retail__/"  Tag="rating"/>
+                            <MenuFlyoutItem Text="C:/Program Files/World of Warcraft/__PTR__/"  Tag="distance"/>
+                            <MenuFlyoutItem Text="F:/Games/Wow/"  Tag="match"/>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8E5;"/>
+                        <TextBlock Margin="20,0">Select Game</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </winui:NavigationView.PaneCustomContent>
+
+
+        <Grid>
+            <Frame x:Name="shellFrame" />
+        </Grid>
+
+    </winui:NavigationView>
+</Page>
