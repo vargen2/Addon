@@ -54,6 +54,11 @@
                         </RadioButton.CommandParameter>
                     </RadioButton>
                 </StackPanel>
+                <CheckBox IsChecked="{x:Bind ViewModel.IsAutoSaveWTFEnabled, Mode=TwoWay}"
+                          x:Uid="Settings_EnableAutoSaveWTF"
+                          Margin="0,8,0,0" />
+                <ToggleButton></ToggleButton>
+                <ToggleSwitch></ToggleSwitch>
             </StackPanel>
 
             <TextBlock

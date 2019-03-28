@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Addon.Helpers;
@@ -32,6 +33,24 @@ namespace Addon.ViewModels
 
         private ICommand _switchThemeCommand;
 
+        //public ICommand SwitchThemeCommand
+        //{
+        //    get
+        //    {
+        //        if (_switchThemeCommand == null)
+        //        {
+        //            _switchThemeCommand = new RelayCommand<ElementTheme>(
+        //                async (param) =>
+        //                {
+        //                    ElementTheme = param;
+        //                    await ThemeSelectorService.SetThemeAsync(param);
+        //                });
+        //        }
+
+        //        return _switchThemeCommand;
+        //    }
+        //}
+
         public ICommand SwitchThemeCommand
         {
             get
@@ -41,8 +60,10 @@ namespace Addon.ViewModels
                     _switchThemeCommand = new RelayCommand<ElementTheme>(
                         async (param) =>
                         {
-                            ElementTheme = param;
-                            await ThemeSelectorService.SetThemeAsync(param);
+                            if (_hasInstanceBeenInitialized)
+                            {
+                                await ThemeSelectorService.SetThemeAsync(param);
+                            }
                         });
                 }
 
@@ -67,6 +88,39 @@ namespace Addon.ViewModels
             var version = packageId.Version;
 
             return $"{appName} - {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
+        }
+
+
+        private bool? _isAutoSaveWTFEnabled;
+
+        public bool? IsAutoSaveWTFEnabled
+        {
+            get => _isAutoSaveWTFEnabled ?? false;
+
+            set
+            {
+                if (value != _isAutoSaveWTFEnabled)
+                {
+                    Task.Run(async () => await Windows.Storage.ApplicationData.Current.LocalSettings.SaveAsync(nameof(IsAutoSaveWTFEnabled), value ?? false));
+                }
+
+                Set(ref _isAutoSaveWTFEnabled, value);
+            }
+        }
+
+        private bool _hasInstanceBeenInitialized = false;
+
+        public async Task EnsureInstanceInitializedAsync()
+        {
+            if (!_hasInstanceBeenInitialized)
+            {
+                IsAutoSaveWTFEnabled =
+                await Windows.Storage.ApplicationData.Current.LocalSettings.ReadAsync<bool>(nameof(IsAutoSaveWTFEnabled));
+
+                Initialize();
+
+                _hasInstanceBeenInitialized = true;
+            }
         }
     }
 }
