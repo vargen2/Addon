@@ -13,8 +13,9 @@ namespace Addon.Views
         public MainPage()
         {
             InitializeComponent();
+            
         }
 
-        
+
     }
 }

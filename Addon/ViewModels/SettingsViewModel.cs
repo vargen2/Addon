@@ -33,23 +33,7 @@ namespace Addon.ViewModels
 
         private ICommand _switchThemeCommand;
 
-        //public ICommand SwitchThemeCommand
-        //{
-        //    get
-        //    {
-        //        if (_switchThemeCommand == null)
-        //        {
-        //            _switchThemeCommand = new RelayCommand<ElementTheme>(
-        //                async (param) =>
-        //                {
-        //                    ElementTheme = param;
-        //                    await ThemeSelectorService.SetThemeAsync(param);
-        //                });
-        //        }
-
-        //        return _switchThemeCommand;
-        //    }
-        //}
+       
 
         public ICommand SwitchThemeCommand
         {

@@ -1,5 +1,6 @@
 ﻿<Page
     x:Class="Addon.Views.MainPage"
+    xmlns:data="using:Addon.Core.Models"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,14 +9,42 @@
     mc:Ignorable="d">
     <Grid
         x:Name="ContentArea"
-        Margin="{StaticResource MediumLeftRightMargin}">
-        <Grid
-            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-            <!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
-                Place your content here.-->
-           
-
-            
-        </Grid>
+        Margin="{StaticResource MediumLeftMargin}">
+        <ListView ItemsSource="{x:Bind ViewModel.Game.Addons}"  SelectionMode="Single">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="data:Addon">
+                    <StackPanel Orientation="Horizontal"  Height="50" >
+                        <StackPanel Width="200">
+                            <TextBlock Text="{x:Bind Title}" FontWeight="SemiBold"  FontSize="{StaticResource MediumFontSize}" Height="25"  />
+                            <TextBlock Text="{x:Bind Version}" Height="25" />
+                        </StackPanel>
+                        <StackPanel Width="200">
+                            <TextBlock Text="Release"  Height="25" />
+                            <TextBlock Text="v3.4.5.2" Height="25" />
+                        </StackPanel>
+                        <StackPanel Width="200">
+                            <Button Content="Update" Margin="0 9 0 9"></Button>
+                            <TextBlock Text="{x:Bind Status}" Visibility="Collapsed" />
+                        </StackPanel>
+                       
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ContextFlyout>
+                <MenuFlyout>
+                    <ToggleMenuFlyoutItem Text="Ignore"></ToggleMenuFlyoutItem>
+                    <ToggleMenuFlyoutItem Text="Alpha"></ToggleMenuFlyoutItem>
+                    <ToggleMenuFlyoutItem Text="Beta"></ToggleMenuFlyoutItem>
+                    <ToggleMenuFlyoutItem Text="Release"></ToggleMenuFlyoutItem>
+                    <MenuFlyoutSubItem Text="Versions">
+                        <MenuFlyoutItem Text="Some version"></MenuFlyoutItem>
+                        <MenuFlyoutItem Text="Some version"></MenuFlyoutItem>
+                    </MenuFlyoutSubItem>
+                    <MenuFlyoutSubItem Text="Info">
+                        <MenuFlyoutItem Text="Info info info"></MenuFlyoutItem>
+                    </MenuFlyoutSubItem>
+                </MenuFlyout>
+            </ListView.ContextFlyout>
+        </ListView>
     </Grid>
 </Page>

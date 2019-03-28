@@ -39,10 +39,7 @@ namespace Addon.ViewModels
         {
             get
             {
-                if (_selected != null)
-                {
-                    Debug.WriteLine(_selected.ActualHeight);
-                }
+              
                 return _selected;
             }
             set { Set(ref _selected, value); }
