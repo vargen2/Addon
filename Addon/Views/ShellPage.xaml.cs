@@ -10,13 +10,14 @@ namespace Addon.Views
     public sealed partial class ShellPage : Page
     {
         public ShellViewModel ViewModel { get; } = new ShellViewModel();
+        public static ShellViewModel StaticReference;
 
         public ShellPage()
         {
             InitializeComponent();
             DataContext = ViewModel;
             ViewModel.Initialize(shellFrame, navigationView, KeyboardAccelerators);
-            
+            StaticReference = ViewModel;
         }
 
         /*

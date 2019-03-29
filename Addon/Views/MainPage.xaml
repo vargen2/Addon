@@ -9,24 +9,43 @@
     mc:Ignorable="d">
     <Grid
         x:Name="ContentArea"
-        Margin="{StaticResource MediumLeftMargin}">
-        <ListView ItemsSource="{x:Bind ViewModel.Game.Addons}"  SelectionMode="Single">
+        Margin="{StaticResource MediumLeftMargin}" d:IsHidden="True">
+        <ListView ItemsSource="{x:Bind ViewModel.Game.Addons}" SelectionMode="Single" d:IsHidden="True">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Height="25" Margin="10 0 0 0">
+                        <TextBlock Width="200" Text="Title" FontSize="{StaticResource MediumFontSize}"></TextBlock>
+                        <TextBlock Width="200" Text="Latest Version" FontSize="{StaticResource MediumFontSize}"></TextBlock>
+                        <TextBlock Width="200" Text="Status" FontSize="{StaticResource MediumFontSize}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+          <!--Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}"
+            Style="{ThemeResource BodyTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"
+            Style="{ThemeResource CaptionTextBlockStyle}" Opacity=".6"-->
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="data:Addon">
                     <StackPanel Orientation="Horizontal"  Height="50" >
+                        <!--<StackPanel Width="50">
+                            <Ellipse Height="44" Width="44" VerticalAlignment="Center">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="../Assets/Square44x44Logo.png"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </StackPanel>-->
                         <StackPanel Width="200">
-                            <TextBlock Text="{x:Bind Title}" FontWeight="SemiBold"  FontSize="{StaticResource MediumFontSize}" Height="25"  />
-                            <TextBlock Text="{x:Bind Version}" Height="25" />
+                            <TextBlock Text="{Binding Title}"  FontWeight="SemiBold"  FontSize="{StaticResource MediumFontSize}" Height="25"  />
+                            <TextBlock Text="{Binding Version}"   Height="25" />
                         </StackPanel>
                         <StackPanel Width="200">
-                            <TextBlock Text="Release"  Height="25" />
+                            <TextBlock Text="Release" Height="25" />
                             <TextBlock Text="v3.4.5.2" Height="25" />
                         </StackPanel>
                         <StackPanel Width="200">
-                            <Button Content="Update" Margin="0 9 0 9"></Button>
-                            <TextBlock Text="{x:Bind Status}" Visibility="Collapsed" />
+                            <Button Content="Update" Tag="{x:Bind}" Margin="0 9 0 9" Click="UpdateButtonClick"></Button>
+                            <TextBlock Text="{Binding Status}" Visibility="Collapsed" />
                         </StackPanel>
-                       
+
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

@@ -12,13 +12,17 @@ using Windows.System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
-
+using Addon.Core.Models;
 using WinUI = Microsoft.UI.Xaml.Controls;
 
 namespace Addon.ViewModels
 {
     public class ShellViewModel : Observable
     {
+
+        public Game SelectedGame { get; set; }
+
+
         private readonly KeyboardAccelerator _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, VirtualKeyModifiers.Menu);
         private readonly KeyboardAccelerator _backKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.GoBack);
 
@@ -39,7 +43,7 @@ namespace Addon.ViewModels
         {
             get
             {
-              
+
                 return _selected;
             }
             set { Set(ref _selected, value); }
@@ -51,6 +55,26 @@ namespace Addon.ViewModels
 
         public ShellViewModel()
         {
+            SelectedGame = new Game { AbsolutePath = "C:/Program Files/Wow" };
+            Debug.WriteLineIf(SelectedGame != null, SelectedGame.ToString());
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+
         }
 
         public void Initialize(Frame frame, WinUI.NavigationView navigationView, IList<KeyboardAccelerator> keyboardAccelerators)
