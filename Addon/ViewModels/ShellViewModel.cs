@@ -57,23 +57,11 @@ namespace Addon.ViewModels
         {
             SelectedGame = new Game { AbsolutePath = "C:/Program Files/Wow" };
             Debug.WriteLineIf(SelectedGame != null, SelectedGame.ToString());
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-            SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
+            for (int i = 0; i < 10; i++)
+            {
+                SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Updateable", GameVersion = "80100"});
+
+            }
 
         }
 

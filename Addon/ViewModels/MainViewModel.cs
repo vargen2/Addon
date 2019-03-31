@@ -14,5 +14,6 @@ namespace Addon.ViewModels
         {
             Game = ShellPage.StaticReference.SelectedGame;
         }
+
     }
 }

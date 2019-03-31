@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Addon.Helpers
@@ -17,6 +18,7 @@ namespace Addon.Helpers
 
             storage = value;
             OnPropertyChanged(propertyName);
+            Debug.WriteLine(storage.ToString() + " " + value.ToString() + " " + propertyName);
         }
 
         protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
