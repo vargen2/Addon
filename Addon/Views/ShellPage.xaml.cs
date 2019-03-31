@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using Addon.Core.Models;
+using Addon.Helpers;
+using Addon.Services;
 using Addon.ViewModels;
 
 using Windows.UI.Xaml.Controls;
@@ -18,6 +22,24 @@ namespace Addon.Views
             DataContext = ViewModel;
             ViewModel.Initialize(shellFrame, navigationView, KeyboardAccelerators);
             StaticReference = ViewModel;
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var listBox = sender as ListBox;
+            var clickedGame = listBox.SelectedValue as Game;
+            if (clickedGame == ViewModel.SelectedGame)
+                return;
+
+            ViewModel.SelectedGame = listBox.SelectedValue as Game;
+            NavigationService.ForceNavigateMainPage();
+
+            GameSelectorFlyout.Hide();
+        }
+
+        private void ListBox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            GameSelectorFlyout.Hide();
         }
 
         /*

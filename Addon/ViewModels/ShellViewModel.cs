@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using Addon.Core.Models;
 using WinUI = Microsoft.UI.Xaml.Controls;
+using System.Collections.ObjectModel;
 
 namespace Addon.ViewModels
 {
@@ -21,6 +22,10 @@ namespace Addon.ViewModels
     {
 
         public Game SelectedGame { get; set; }
+        public ObservableCollection<Game> Games { get; } = new ObservableCollection<Game>();
+
+
+
 
 
         private readonly KeyboardAccelerator _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, VirtualKeyModifiers.Menu);
@@ -56,12 +61,22 @@ namespace Addon.ViewModels
         public ShellViewModel()
         {
             SelectedGame = new Game { AbsolutePath = "C:/Program Files/Wow" };
-            Debug.WriteLineIf(SelectedGame != null, SelectedGame.ToString());
+            Debug.WriteLineIf(SelectedGame != null, "ShellViewModel Constructor " + SelectedGame.ToString());
             for (int i = 0; i < 10; i++)
             {
-                SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Updateable", GameVersion = "80100"});
+                SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Updateable", GameVersion = "80100" });
 
             }
+            Games.Add(SelectedGame);
+
+            var SecondGame = new Game { AbsolutePath = "F:/Games/Wow/__ptr__" };
+            
+            for (int i = 0; i < 5; i++)
+            {
+                SecondGame.Addons.Add(new Core.Models.Addon { Title = "Details", Version = "1.24", Status = "Updateable", GameVersion = "80100" });
+
+            }
+            Games.Add(SecondGame);
 
         }
 

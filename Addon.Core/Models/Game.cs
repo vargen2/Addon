@@ -22,5 +22,10 @@ namespace Addon.Core.Models
         //    addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
         //}
 
+        public override string ToString()
+        {
+            return base.ToString() + " " + AbsolutePath;
+        }
+
     }
 }

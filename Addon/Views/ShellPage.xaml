@@ -10,6 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:Addon.Views"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:data="using:Addon.Core.Models"
     mc:Ignorable="d">
 
     <i:Interaction.Behaviors>
@@ -127,18 +128,28 @@
                     HorizontalContentAlignment="Left"
                     Background="Transparent"
                     BorderThickness="0">
-                    <Button.Flyout>
+                    <Button.Flyout >
 
-                        <Flyout Placement="Right">
+                        <Flyout Placement="Right" x:Name="GameSelectorFlyout">
 
                             <StackPanel
                                 Width="300"
                                 VerticalAlignment="Stretch"
                                 Background="{ThemeResource AppBarBackgroundThemeBrush}">
-                                <MenuFlyoutItem Text="adsasd" />
-                                <MenuFlyoutItem Text="adsasd dfg" />
-                                <MenuFlyoutItem Text="adsasd" />
-                                <MenuFlyoutItem Text="adsasd" />
+                                <ListBox ItemsSource="{x:Bind ViewModel.Games}" SelectionMode="Single"
+                                         SelectionChanged="ListBox_SelectionChanged"
+                                         DisplayMemberPath="AbsolutePath"
+                                         SelectedItem="{x:Bind ViewModel.SelectedGame}"
+                                         Tapped="ListBox_Tapped"
+                                         >
+                                    <!--<DataTemplate x:DataType="data:Game">
+
+                                        <ListBoxItem>
+                                            <TextBlock Text="{x:Bind AbsolutePath}"></TextBlock>
+                                        </ListBoxItem>-->                                        
+                                    <!--</DataTemplate>-->
+                                </ListBox>
+                                
                             </StackPanel>
 
                             <Flyout.FlyoutPresenterStyle>

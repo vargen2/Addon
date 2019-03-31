@@ -1,5 +1,6 @@
-﻿using System;
-
+﻿using Addon.Views;
+using System;
+using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -56,6 +57,7 @@ namespace Addon.Services
 
         public static bool Navigate(Type pageType, object parameter = null, NavigationTransitionInfo infoOverride = null)
         {
+            Debug.WriteLine("pagetype: " + pageType.ToString());
             // Don't open the same page multiple times
             if (Frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParamUsed)))
             {
@@ -76,6 +78,12 @@ namespace Addon.Services
         public static bool Navigate<T>(object parameter = null, NavigationTransitionInfo infoOverride = null)
             where T : Page
             => Navigate(typeof(T), parameter, infoOverride);
+
+        public static bool ForceNavigateMainPage()
+        {
+            //TODO Change so it refreshes currently loaded page(not settings page maybe?)
+            return Frame.Navigate(typeof(MainPage), null, null);
+        }
 
         private static void RegisterFrameEvents()
         {
