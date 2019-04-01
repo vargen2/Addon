@@ -43,6 +43,17 @@
       </uap:VisualElements>
 
       <Extensions>
+
+        <uap:Extension Category="windows.fileTypeAssociation">
+
+          <uap:FileTypeAssociation Name="aaaa">
+
+            <uap:SupportedFileTypes>
+
+              <uap:FileType ContentType="txt/txt">.txt</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
       </Extensions>
     </Application>
   </Applications>

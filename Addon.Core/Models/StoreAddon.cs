@@ -72,5 +72,10 @@ namespace Addon.Core.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(Title)}: {Title}, {nameof(Url)}: {Url}, {nameof(Description)}: {Description}, {nameof(NrOfDownloads)}: {NrOfDownloads}, {nameof(UpdatedFormated)}: {UpdatedFormated}, {nameof(CreatedFormated)}: {CreatedFormated}, {nameof(Status)}: {Status}";
+        }
     }
 }

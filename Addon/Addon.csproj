@@ -205,6 +205,9 @@
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="Addon_TemporaryKey.pfx" />
+    <Content Include="Assets\curseaddons.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -217,6 +220,9 @@
       <Project>{E6760120-C01E-44CA-9028-EC9F0D7ABDDA}</Project>
       <Name>Addon.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

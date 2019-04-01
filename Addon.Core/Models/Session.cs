@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 
+
 namespace Addon.Core.Models
 {
     public class Session
@@ -11,13 +12,13 @@ namespace Addon.Core.Models
         public Game SelectedGame { get; set; }
         public ObservableCollection<Game> Games { get; } = new ObservableCollection<Game>();
 
-        public ObservableCollection<StoreAddon> StoreAddons { get; } = new ObservableCollection<StoreAddon>();
+        public ObservableCollection<StoreAddon> StoreAddons { get; set; }// = new ObservableCollection<StoreAddon>();
 
         public Session()
         {
             SelectedGame = new Game { AbsolutePath = "C:/Program Files/Wow" };
             Debug.WriteLineIf(SelectedGame != null, "SESSION Constructor " + SelectedGame.ToString());
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 30; i++)
             {
                 SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Updateable", GameVersion = "80100" });
 
@@ -35,14 +36,16 @@ namespace Addon.Core.Models
 
 
 
-            for (int i = 0; i < 5; i++)
-            {
-                StoreAddons.Add(new Core.Models.StoreAddon("http","Exorsus Raid Tools","Aasdasd asd asd asd asdsddasd asd asd asd asd" +
-                                                                            "asd asd asd asd asd asd asdasd asdadasdasdasd asd " +
-                                                                            "asdasdasdasdasdasdasdasdasdasdwf wf af awf a.",1000000,
-                    DateTime.Now, DateTime.Parse("01/10/2015")) );
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    StoreAddons.Add(new Core.Models.StoreAddon("http","Exorsus Raid Tools","Aasdasd asd asd asd asdsddasd asd asd asd asd" +
+            //                                                                "asd asd asd asd asd asd asdasd asdadasdasdasd asd " +
+            //                                                                "asdasdasdasdasdasdasdasdasdasdwf wf af awf a.",1000000,
+            //        DateTime.Now, DateTime.Parse("01/10/2015")) );
 
-            }
+            //}
+
+            
 
         }
     }

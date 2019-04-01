@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 using Addon.Activation;
 using Addon.Core.Helpers;
-
+using Addon.Core.Models;
 using Windows.ApplicationModel.Activation;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -64,6 +67,18 @@ namespace Addon.Services
                 // Tasks after activation
                 await StartupAsync();
             }
+            Task task = Task.Run<IList<StoreAddon>>(async () => await ReadFile()).ContinueWith(task1 =>
+            {
+               Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(task1.Result);
+                Debug.WriteLine("StoreAddons count: " + Singleton<Session>.Instance.StoreAddons.Count);
+            });
+
+            //await task.ContinueWith(task1 =>
+            // {
+
+            //     Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(task1.Result);
+            //     Debug.WriteLine("StoreAddons count: " + Singleton<Session>.Instance.StoreAddons.Count);
+            // });
         }
 
         private async Task InitializeAsync()
@@ -87,6 +102,24 @@ namespace Addon.Services
         private bool IsInteractive(object args)
         {
             return args is IActivatedEventArgs;
+        }
+
+        private async Task<IList<StoreAddon>> ReadFile()
+        {
+            var packageFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            Debug.WriteLine("packageFolder: " + packageFolder.Path);
+
+            string file = @"Assets\curseaddons.txt";
+            var sampleFile = await packageFolder.GetFileAsync(file);
+            string text = await FileIO.ReadTextAsync(sampleFile);
+
+            IList<CurseAddon> aa = await Json.ToObjectAsync<List<CurseAddon>>(@text);
+            Debug.WriteLine("size: " + aa.Count);
+            return aa.Select(ca =>
+            {
+                return new StoreAddon(ca.addonURL, ca.title, ca.description, ca.downloads, DateTime.Now,
+                    DateTime.Now);
+            }).ToList();
         }
     }
 }
