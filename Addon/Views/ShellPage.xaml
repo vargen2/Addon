@@ -4,13 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="using:Addon.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="using:Addon.Core.Models"
     xmlns:helpers="using:Addon.Helpers"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:Addon.Views"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
-    xmlns:data="using:Addon.Core.Models"
     mc:Ignorable="d">
 
     <i:Interaction.Behaviors>
@@ -24,7 +24,9 @@
         Background="{ThemeResource SystemControlBackgroundAltHighBrush}"
         IsBackButtonVisible="Collapsed"
         IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
+        IsPaneToggleButtonVisible="False"
         IsSettingsVisible="True"
+        PaneDisplayMode="LeftCompact"
         SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}">
         <winui:NavigationView.MenuItems>
 
@@ -36,7 +38,7 @@
             <winui:NavigationViewItem
                 x:Uid="Shell_Browse"
                 helpers:NavHelper.NavigateTo="views:BrowsePage"
-                Icon="Globe" />
+                Icon="Download" />
         </winui:NavigationView.MenuItems>
         <i:Interaction.Behaviors>
             <behaviors:NavigationViewHeaderBehavior>
@@ -58,39 +60,8 @@
         </i:Interaction.Behaviors>
 
         <winui:NavigationView.PaneCustomContent>
-
-            <!--<Button x:Name="MenuButton1" FontFamily="Segoe MDL2 Assets" Content="&#xE7C3;"
-                        Width="50" Height="50" Background="Transparent">
-                    <Button.Flyout>
-                        <MenuFlyout>
-                            <MenuFlyoutItem x:Name="mfNew" Text="New"/>
-                            <MenuFlyoutItem x:Name="mfOpen" Text="Open"/>
-                            <MenuFlyoutSeparator/>
-                            <MenuFlyoutItem x:Name="mfSave" Text="Save"/>
-                            <MenuFlyoutItem x:Name="mfSaveAs" Text="Save As ..."/>
-                            <MenuFlyoutSeparator/>
-                            <MenuFlyoutItem x:Name="mfPageSetup" Text="Page Setup"/>
-                            <MenuFlyoutItem x:Name="mfPrint" Text="Print"/>
-                            <MenuFlyoutSeparator/>
-                            <MenuFlyoutItem x:Name="mfExit" Text="Exit"/>
-                        </MenuFlyout>
-                    </Button.Flyout>
-                </Button>
-                <TextBlock Text="New" FontSize="18" VerticalAlignment="Center" />-->
-            <!--<StackPanel.fl></StackPanel.fl>
-                <MenuFlyoutSubItem Text="A aaa">
-                    <MenuFlyoutItem Text="B bbb" />
-                    <MenuFlyoutItem Text="B bbb" />
-                    <MenuFlyoutItem Text="B bbb" />
-                </MenuFlyoutSubItem>
-                <MenuFlyoutSubItem Text="A aaa">
-                    <MenuFlyoutItem Text="B bbb" />
-                    <MenuFlyoutItem Text="B bbb" />
-                </MenuFlyoutSubItem>
-            </StackPanel>-->
-
             <StackPanel>
-                <Button
+                <!--<Button
                     Height="40"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
@@ -121,35 +92,46 @@
                         <SymbolIcon Symbol="Add" />
                         <TextBlock Margin="20,0">Add Game</TextBlock>
                     </StackPanel>
-                </Button>
+                </Button>-->
                 <Button
                     Height="40"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
                     Background="Transparent"
                     BorderThickness="0">
-                    <Button.Flyout >
+                    <Button.Flyout>
 
-                        <Flyout Placement="Right" x:Name="GameSelectorFlyout">
+                        <Flyout x:Name="GameSelectorFlyout" Placement="Right">
 
                             <StackPanel
                                 Width="300"
                                 VerticalAlignment="Stretch"
                                 Background="{ThemeResource AppBarBackgroundThemeBrush}">
-                                <ListBox ItemsSource="{x:Bind ViewModel.Games}" SelectionMode="Single"
-                                         SelectionChanged="ListBox_SelectionChanged"
-                                         DisplayMemberPath="AbsolutePath"
-                                         SelectedItem="{x:Bind ViewModel.SelectedGame}"
-                                         Tapped="ListBox_Tapped"
-                                         >
-                                    <!--<DataTemplate x:DataType="data:Game">
+                                <Button
+                                    Height="40"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Content="Open Folder..." />
+                                <Button
+                                    Height="40"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Content="Scan for Games" />
+                                <NavigationViewItemSeparator />
+                                <ListBox
+                                    DisplayMemberPath="AbsolutePath"
+                                    ItemsSource="{x:Bind ViewModel.Games}"
+                                    SelectedItem="{x:Bind ViewModel.SelectedGame}"
+                                    SelectionChanged="ListBox_SelectionChanged"
+                                    SelectionMode="Single"
+                                    Tapped="ListBox_Tapped" />
 
-                                        <ListBoxItem>
-                                            <TextBlock Text="{x:Bind AbsolutePath}"></TextBlock>
-                                        </ListBoxItem>-->                                        
-                                    <!--</DataTemplate>-->
-                                </ListBox>
-                                
+
+
                             </StackPanel>
 
                             <Flyout.FlyoutPresenterStyle>
@@ -158,33 +140,17 @@
                                     <Setter Property="BorderThickness" Value="0" />
                                     <Setter Property="MaxHeight" Value="NaN" />
                                     <Setter Property="Height" Value="2000" />
-                                    <Setter Property="MinHeight" Value="2000"></Setter>
-                                    <Setter Property="Padding" Value="0 0 0 0"></Setter>
-                                    <Setter Property="Margin" Value="-4 0 0 0"></Setter>
+                                    <Setter Property="MinHeight" Value="2000" />
+                                    <Setter Property="Padding" Value="0,0,0,0" />
+                                    <Setter Property="Margin" Value="-4,0,0,0" />
                                 </Style>
                             </Flyout.FlyoutPresenterStyle>
                         </Flyout>
-
-                        <!--<MenuFlyout Placement="RightEdgeAlignedTop">
-                            <MenuFlyout.MenuFlyoutPresenterStyle>
-                                <Style TargetType="MenuFlyoutPresenter">
-                                    <Setter Property="MinHeight" Value="80" />
-                                    <Setter Property="MinWidth" Value="200" />
-                                </Style>
-                            </MenuFlyout.MenuFlyoutPresenterStyle>
-                            <MenuFlyoutItem Tag="rating" Text="C:/Program Files/World of Warcraft/__retail__/" />
-                            <MenuFlyoutItem Tag="distance" Text="C:/Program Files/World of Warcraft/__PTR__/" />
-                            <MenuFlyoutItem Tag="match" Text="F:/Games/Wow/" />
-
-                        </MenuFlyout>-->
-
-
                     </Button.Flyout>
-
-                    <StackPanel Orientation="Horizontal">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8E5;" />
-                        <TextBlock Margin="20,0">Select Game</TextBlock>
-                    </StackPanel>
+                    <SymbolIcon Symbol="More" />
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Menu" />
+                    </ToolTipService.ToolTip>
                 </Button>
             </StackPanel>
 
