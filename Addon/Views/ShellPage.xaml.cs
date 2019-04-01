@@ -14,24 +14,24 @@ namespace Addon.Views
     public sealed partial class ShellPage : Page
     {
         public ShellViewModel ViewModel { get; } = new ShellViewModel();
-        public static ShellViewModel StaticReference;
+        //public static ShellViewModel StaticReference;
 
         public ShellPage()
         {
             InitializeComponent();
             DataContext = ViewModel;
             ViewModel.Initialize(shellFrame, navigationView, KeyboardAccelerators);
-            StaticReference = ViewModel;
+          //  StaticReference = ViewModel;
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var listBox = sender as ListBox;
             var clickedGame = listBox.SelectedValue as Game;
-            if (clickedGame == ViewModel.SelectedGame)
+            if (clickedGame == ViewModel.Session.SelectedGame)
                 return;
 
-            ViewModel.SelectedGame = listBox.SelectedValue as Game;
+            ViewModel.Session.SelectedGame = listBox.SelectedValue as Game;
             NavigationService.ForceNavigateMainPage();
 
             GameSelectorFlyout.Hide();

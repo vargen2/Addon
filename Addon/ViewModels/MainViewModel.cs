@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Addon.Core.Helpers;
 using Addon.Core.Models;
 using Addon.Helpers;
 using Addon.Views;
@@ -12,7 +13,8 @@ namespace Addon.ViewModels
 
         public MainViewModel()
         {
-            Game = ShellPage.StaticReference.SelectedGame;
+            //Game = ShellPage.StaticReference.Session.SelectedGame;
+            Game = Singleton<Session>.Instance.SelectedGame;
         }
 
     }

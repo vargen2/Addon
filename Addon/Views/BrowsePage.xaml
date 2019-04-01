@@ -3,16 +3,103 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="using:Addon.Core.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
-    <Grid
-        x:Name="ContentArea"
-        Margin="{StaticResource MediumLeftRightMargin}">
-        <Grid
-            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-            <!--The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
-                Place your content here.-->
-        </Grid>
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+        <StackPanel>
+            <AutoSuggestBox
+                Margin="{StaticResource SmallTopBottomMargin}"
+                HorizontalAlignment="Stretch"
+                PlaceholderText="Search" />
+            <ListView ItemsSource="{x:Bind ViewModel.StoreAddons}" SelectionMode="Single">
+                <ListView.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                            Height="25"
+                            Margin="{StaticResource SmallBottomMargin}"
+                            Padding="{StaticResource SmallLeftMargin}"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Width="200"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Text="Title" />
+                            <TextBlock
+                                Width="400"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Text="Description" />
+                            <TextBlock
+                                Width="120"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Text="Downloads" />
+                            <TextBlock
+                                Width="120"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Text="Install" />
+                            <TextBlock
+                                Width="120"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Text="Updated" />
+                            <TextBlock
+                                Width="120"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Text="Created" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.HeaderTemplate>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="data:StoreAddon">
+                        <StackPanel Height="60" Orientation="Horizontal">
+                            <StackPanel Width="200">
+                                <TextBlock
+                                    Height="30"
+                                    Margin="0,15,0,15"
+                                    FontSize="{StaticResource MediumFontSize}"
+                                    Text="{Binding Title}" />
+                            </StackPanel>
+                            <StackPanel Width="400">
+                                <TextBlock
+                                    Height="60"
+                                    Margin="{StaticResource SmallRightMargin}"
+                                    Text="{Binding Description}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock
+                                    Height="30"
+                                    Margin="0,15,0,15"
+                                    Text="{Binding NrOfDownloads}" />
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <Button
+                                    Margin="0,14,0,14"
+                                    Content="Install"
+                                    Tag=""
+                                    Visibility="Visible" />
+                                <TextBlock
+                                    Height="30"
+                                    Margin="0,15,0,15"
+                                    Text=""
+                                    Visibility="Collapsed" />
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock
+                                    Height="30"
+                                    Margin="0,15,0,15"
+                                    Text="{Binding UpdatedFormated}" />
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock
+                                    Height="30"
+                                    Margin="0,15,0,15"
+                                    Text="{Binding CreatedFormated}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
     </Grid>
 </Page>

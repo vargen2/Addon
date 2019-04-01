@@ -15,17 +15,14 @@ using Windows.UI.Xaml.Navigation;
 using Addon.Core.Models;
 using WinUI = Microsoft.UI.Xaml.Controls;
 using System.Collections.ObjectModel;
+using Addon.Core.Helpers;
+using RelayCommand = Addon.Helpers.RelayCommand;
 
 namespace Addon.ViewModels
 {
     public class ShellViewModel : Observable
     {
-
-        public Game SelectedGame { get; set; }
-        public ObservableCollection<Game> Games { get; } = new ObservableCollection<Game>();
-
-
-
+        public Session Session { get; } = Singleton<Session>.Instance;
 
 
         private readonly KeyboardAccelerator _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, VirtualKeyModifiers.Menu);
@@ -58,27 +55,6 @@ namespace Addon.ViewModels
 
         public ICommand ItemInvokedCommand => _itemInvokedCommand ?? (_itemInvokedCommand = new RelayCommand<WinUI.NavigationViewItemInvokedEventArgs>(OnItemInvoked));
 
-        public ShellViewModel()
-        {
-            SelectedGame = new Game { AbsolutePath = "C:/Program Files/Wow" };
-            Debug.WriteLineIf(SelectedGame != null, "ShellViewModel Constructor " + SelectedGame.ToString());
-            for (int i = 0; i < 10; i++)
-            {
-                SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Updateable", GameVersion = "80100" });
-
-            }
-            Games.Add(SelectedGame);
-
-            var SecondGame = new Game { AbsolutePath = "F:/Games/Wow/__ptr__" };
-            
-            for (int i = 0; i < 5; i++)
-            {
-                SecondGame.Addons.Add(new Core.Models.Addon { Title = "Details", Version = "1.24", Status = "Updateable", GameVersion = "80100" });
-
-            }
-            Games.Add(SecondGame);
-
-        }
 
         public void Initialize(Frame frame, WinUI.NavigationView navigationView, IList<KeyboardAccelerator> keyboardAccelerators)
         {

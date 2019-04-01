@@ -12,6 +12,7 @@
         Margin="{StaticResource MediumLeftMargin}"
         d:IsHidden="True">
         <ListView
+            Margin="{StaticResource SmallTopBottomMargin}" 
             d:IsHidden="True"
             ItemsSource="{x:Bind ViewModel.Game.Addons}"
             SelectionMode="Single">
@@ -19,19 +20,20 @@
                 <DataTemplate>
                     <StackPanel
                         Height="25"
-                        Margin="10,0,0,0"
+                        Margin="{StaticResource SmallBottomMargin}"
+                        Padding="{StaticResource SmallLeftMargin}"
                         Orientation="Horizontal">
                         <TextBlock
                             Width="200"
-                            FontSize="{StaticResource MediumFontSize}"
+                            FontSize="{StaticResource ListViewHeaderItemThemeFontSize}"
                             Text="Title" />
                         <TextBlock
                             Width="200"
-                            FontSize="{StaticResource MediumFontSize}"
+                            FontSize="{StaticResource ListViewHeaderItemThemeFontSize}"
                             Text="Latest Version" />
                         <TextBlock
                             Width="200"
-                            FontSize="{StaticResource MediumFontSize}"
+                            FontSize="{StaticResource ListViewHeaderItemThemeFontSize}"
                             Text="Status" />
                     </StackPanel>
                 </DataTemplate>
@@ -115,7 +117,9 @@
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
+            
             <!--<ListView.Transitions>
+                
                 <EntranceThemeTransition IsStaggeringEnabled="True"></EntranceThemeTransition>
             </ListView.Transitions>-->
         </ListView>
