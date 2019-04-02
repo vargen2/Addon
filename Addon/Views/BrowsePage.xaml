@@ -16,8 +16,10 @@
         <AutoSuggestBox
             Margin="{StaticResource SmallTopBottomMargin}"
             HorizontalAlignment="Stretch"
-            PlaceholderText="Search" />
+            PlaceholderText="Search"
+            TextChanged="AutoSuggestBox_OnTextChanged"/>
         <ListView
+            x:Name="ListView"
             Grid.Row="1"
             ItemsSource="{x:Bind ViewModel.StoreAddons}"
             ScrollViewer.VerticalScrollBarVisibility="Auto"

@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="using:Addon.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:data="using:Addon.Core.Models"
     xmlns:helpers="using:Addon.Helpers"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
@@ -27,8 +26,8 @@
         IsPaneToggleButtonVisible="False"
         IsSettingsVisible="True"
         PaneDisplayMode="LeftCompact"
-        SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}" >
-        
+        SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}">
+
         <winui:NavigationView.MenuItems>
 
             <winui:NavigationViewItem
