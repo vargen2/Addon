@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Addon.ViewModels;
 
@@ -19,11 +20,9 @@ namespace Addon.Views
         {
             if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
 
-            var filtered = ViewModel.StoreAddons
+            ListView.ItemsSource = ViewModel.StoreAddons
                 .Where(storeAddon => storeAddon.Title.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase))
                 .ToList();
-            ListView.ItemsSource = filtered;
-
         }
     }
 }
