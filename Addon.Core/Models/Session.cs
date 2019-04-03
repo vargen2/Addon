@@ -9,6 +9,7 @@ namespace Addon.Core.Models
 {
     public class Session
     {
+        
         public Game SelectedGame { get; set; }
         public ObservableCollection<Game> Games { get; } = new ObservableCollection<Game>();
 
