@@ -1,17 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.Storage;
 using Windows.Storage.Search;
 using Addon.Core.Models;
-using Windows.UI.Xaml;
+using static System.String;
 
 namespace Addon.Helpers
 {
     public static class AppHelper
     {
+        private const string KnownSubFoldersFile = @"Assets\knownsubfolders.txt";
+
+        public sealed class Singleton
+        {
+            private static readonly Lazy<Singleton> lazy = new Lazy<Singleton>(() => new Singleton());
+
+            public static Singleton Instance => lazy.Value;
+
+            public HashSet<string> KnownSubFolders { get; } = AppHelper.LoadKnownSubFolders();
+
+            private Singleton()
+            {
+            }
+        }
+
         public class TocFile
         {
             public StorageFolder StorageFolder { get; }
@@ -30,7 +46,8 @@ namespace Addon.Helpers
             }
         }
 
-        private static readonly HashSet<string> knownSubFolders = new HashSet<string>();
+
+
 
         public static async void RefreshGameFolder(Game game)
         {
@@ -52,22 +69,15 @@ namespace Addon.Helpers
             game.IsLoading = false;
         }
 
-        public static async Task<Game> FolderToGame(Windows.Storage.StorageFolder folder)
+        public static Game FolderToGame(StorageFolder folder)
         {
-            if (knownSubFolders.Count == 0)
-            {
-                var list = await LoadKnownSubFolders();
-                knownSubFolders.UnionWith(list);
-            }
             return new Game(folder.Path);
-
         }
-
-
+        
         public static async Task<TocFile> FolderToTocFile(StorageFolder folder)
         {
-            var version = String.Empty;
-            var gameVersion = String.Empty;
+            var version = Empty;
+            var gameVersion = Empty;
             var folderFromPathAsync = await StorageFolder.GetFolderFromPathAsync(folder.Path);
             var files = await folderFromPathAsync.GetFilesAsync(CommonFileQuery.DefaultQuery);
             var file = files.First(f => f.FileType.Equals(".toc"));
@@ -86,9 +96,7 @@ namespace Addon.Helpers
                 }
             }
 
-
-
-            return new TocFile(folder, version, gameVersion, knownSubFolders.Contains(folder.Name));
+            return new TocFile(folder, version, gameVersion, Singleton.Instance.KnownSubFolders.Contains(folder.Name));
         }
 
 
@@ -109,13 +117,15 @@ namespace Addon.Helpers
 
         //    //private static final List<Charset> CHARSETS = List.of(Charset.defaultCharset(), Charset.forName("ISO-8859-1"));
 
-        public static async Task<IList<string>> LoadKnownSubFolders()
+        public static HashSet<string> LoadKnownSubFolders()
         {
-            var packageFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
-            string file = @"Assets\knownsubfolders.txt";
-            var sampleFile = await packageFolder.GetFileAsync(file);
-            var lines = await FileIO.ReadLinesAsync(sampleFile);
-            return lines;
+            return Task.Run(async () =>
+              {
+                  var packageFolder = Package.Current.InstalledLocation;
+                  var sampleFile = await packageFolder.GetFileAsync(KnownSubFoldersFile);
+                  var lines = await FileIO.ReadLinesAsync(sampleFile);
+                  return new HashSet<string>(lines);
+              }).Result;
         }
     }
 }
