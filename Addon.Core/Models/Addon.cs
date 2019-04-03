@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 using Addon.Core.Helpers;
+using static System.String;
 
 
 namespace Addon.Core.Models
@@ -13,27 +14,34 @@ namespace Addon.Core.Models
     public class Addon : INotifyPropertyChanged
 
     {
-        public Addon()
+        public Game Game { get; }
+        public string FolderName { get; }
+        public string AbsolutePath { get; }
+
+        public Addon(Game game, string folderName, string absolutePath)
         {
+            Game = game ?? throw new NullReferenceException(); ;
+            FolderName = folderName ?? throw new NullReferenceException(); ;
+            AbsolutePath = absolutePath ?? throw new NullReferenceException(); ;
             SetIgnored = new RelayCommand(() => IsIgnored = !IsIgnored);
             SetAlpha = new RelayCommand(() => PreferredReleaseType = "Alpha");
             SetBeta = new RelayCommand(() => PreferredReleaseType = "Beta");
             SetRelease = new RelayCommand(() => PreferredReleaseType = "Release");
         }
 
-        private string _title;
+        //private string _title;
 
-        public string Title
-        {
-            get => _title;
-            set
-            {
-                if (value == _title)
-                    return;
-                _title = value;
-                NotifyPropertyChanged();
-            }
-        }
+        //public string Title
+        //{
+        //    get => _title;
+        //    set
+        //    {
+        //        if (value == _title)
+        //            return;
+        //        _title = value;
+        //        NotifyPropertyChanged();
+        //    }
+        //}
 
         private string preferredReleaseType = "Release";
 
@@ -52,7 +60,7 @@ namespace Addon.Core.Models
             }
         }
 
-        public string Version { get; set; }
+        public string Version { get; set; } = Empty;
 
         public string CurrentReleaseTypeAndVersion => (CurrentDownload != null) ? CurrentDownload.ReleaseType + " " + CurrentDownload.Version : $"{Version}";
 
@@ -102,12 +110,12 @@ namespace Addon.Core.Models
 
 
 
-        public string GameVersion { get; set; }
+        public string GameVersion { get; set; } = Empty;
 
         public bool IsUpdateable => status.Equals("Updateable");
         public bool IsNotUpdateable => !status.Equals("Updateable");
 
-        private string status;
+        private string status = "Initialized";
         public string Status
         {
             get => status;
@@ -140,7 +148,7 @@ namespace Addon.Core.Models
 
         public override string ToString()
         {
-            return $"{nameof(Title)}: {Title}, {nameof(PreferredReleaseType)}: {PreferredReleaseType}, {nameof(CurrentReleaseTypeAndVersion)}: {CurrentReleaseTypeAndVersion}, {nameof(IsIgnored)}: {IsIgnored}, {nameof(Status)}: {Status}, {nameof(GameVersion)}: {GameVersion}";
+            return $"{nameof(FolderName)}: {FolderName}, {nameof(AbsolutePath)}: {AbsolutePath}, {nameof(PreferredReleaseType)}: {PreferredReleaseType}, {nameof(CurrentReleaseTypeAndVersion)}: {CurrentReleaseTypeAndVersion}, {nameof(IsIgnored)}: {IsIgnored}, {nameof(Status)}: {Status}, {nameof(GameVersion)}: {GameVersion}";
         }
 
 

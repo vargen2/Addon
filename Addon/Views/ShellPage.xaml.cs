@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using System.Threading.Tasks;
+using Windows.Storage.Search;
+using Windows.UI.Xaml;
 using Addon.Core.Models;
 using Addon.Helpers;
 using Addon.Services;
 using Addon.ViewModels;
 
 using Windows.UI.Xaml.Controls;
+using Addon.Core.Helpers;
 
 namespace Addon.Views
 {
@@ -14,14 +20,13 @@ namespace Addon.Views
     public sealed partial class ShellPage : Page
     {
         public ShellViewModel ViewModel { get; } = new ShellViewModel();
-        //public static ShellViewModel StaticReference;
 
         public ShellPage()
         {
             InitializeComponent();
             DataContext = ViewModel;
             ViewModel.Initialize(shellFrame, navigationView, KeyboardAccelerators);
-          //  StaticReference = ViewModel;
+
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -42,13 +47,36 @@ namespace Addon.Views
             GameSelectorFlyout.Hide();
         }
 
-        /*
-         *
-         *
-         * <ComboBox ItemsSource="{x:Bind Fonts}" DisplayMemberPath="Item1" SelectedValuePath="Item2"
-           Header="Font" Width="200" Loaded="Combo2_Loaded"/>
 
-        <ListBox ItemsSource="{x:Bind Fonts}" DisplayMemberPath="Item1" SelectedValuePath="Item2" Height="164" Loaded="ListBox2_Loaded"/>
-         */
+        private async void OpenFolder_OnClick(object sender, RoutedEventArgs e)
+        {
+
+            var folderPicker = new Windows.Storage.Pickers.FolderPicker();
+            folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
+            folderPicker.FileTypeFilter.Add("*");
+
+            Windows.Storage.StorageFolder folder = await folderPicker.PickSingleFolderAsync();
+            if (folder != null)
+            {
+
+                if (ViewModel.Session.Games.Any(g => g.AbsolutePath.Equals(folder.Path))) return;
+
+                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+                var game = await AppHelper.FolderToGame(folder);
+                ViewModel.Session.Games.Add(game);
+                if (ViewModel.Session.Games.Count == 1)
+                {
+                    ViewModel.Session.SelectedGame = game;
+                    NavigationService.ForceNavigateMainPage();
+                }
+                Debug.WriteLine("Picked folder: " + folder.Name);
+            }
+            else
+            {
+                Debug.WriteLine("Operation cancelled.");
+            }
+
+
+        }
     }
 }

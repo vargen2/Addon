@@ -61,7 +61,7 @@
                                 Height="25"
                                 FontSize="{StaticResource MediumFontSize}"
                                 FontWeight="SemiBold"
-                                Text="{Binding Title}" />
+                                Text="{Binding FolderName}" />
                             <TextBlock Height="25" Text="{Binding CurrentReleaseTypeAndVersion}" />
                         </StackPanel>
                         <StackPanel Width="200">

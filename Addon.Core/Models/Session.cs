@@ -16,36 +16,24 @@ namespace Addon.Core.Models
 
         public Session()
         {
-            SelectedGame = new Game { AbsolutePath = "C:/Program Files/Wow" };
-            Debug.WriteLineIf(SelectedGame != null, "SESSION Constructor " + SelectedGame.ToString());
-            for (int i = 0; i < 30; i++)
-            {
-                SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Updateable", GameVersion = "80100" });
+            //SelectedGame = new Game { AbsolutePath = "C:/Program Files/Wow" };
+            //Debug.WriteLineIf(SelectedGame != null, "SESSION Constructor " + SelectedGame.ToString());
+            //for (int i = 0; i < 30; i++)
+            //{
+            //    SelectedGame.Addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Updateable", GameVersion = "80100" });
 
-            }
-            Games.Add(SelectedGame);
+            //}
+            //Games.Add(SelectedGame);
 
-            var SecondGame = new Game { AbsolutePath = "F:/Games/Wow/__ptr__" };
-
-            for (int i = 0; i < 5; i++)
-            {
-                SecondGame.Addons.Add(new Core.Models.Addon { Title = "Details", Version = "1.24", Status = "Updateable", GameVersion = "80100" });
-
-            }
-            Games.Add(SecondGame);
-
-
+            //var SecondGame = new Game { AbsolutePath = "F:/Games/Wow/__ptr__" };
 
             //for (int i = 0; i < 5; i++)
             //{
-            //    StoreAddons.Add(new Core.Models.StoreAddon("http","Exorsus Raid Tools","Aasdasd asd asd asd asdsddasd asd asd asd asd" +
-            //                                                                "asd asd asd asd asd asd asdasd asdadasdasdasd asd " +
-            //                                                                "asdasdasdasdasdasdasdasdasdasdwf wf af awf a.",1000000,
-            //        DateTime.Now, DateTime.Parse("01/10/2015")) );
+            //    SecondGame.Addons.Add(new Core.Models.Addon { Title = "Details", Version = "1.24", Status = "Updateable", GameVersion = "80100" });
 
             //}
+            //Games.Add(SecondGame);
 
-            
 
         }
     }

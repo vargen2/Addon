@@ -7,20 +7,15 @@ namespace Addon.Core.Models
 {
     public class Game
     {
-        public string AbsolutePath { get; set; }
+        public string AbsolutePath { get; }
+        public ObservableCollection<Addon> Addons { get; } = new ObservableCollection<Addon>();
 
-        private ObservableCollection<Addon> addons = new ObservableCollection<Addon>();
-
-        public ObservableCollection<Addon> Addons
+        public Game(string absolutePath)
         {
-            get { return addons; }
+            AbsolutePath = absolutePath ?? throw new NullReferenceException();
         }
 
-        //public Game()
-        //{
-        //    AbsolutePath = "C:/Program Files/Wow";
-        //    addons.Add(new Core.Models.Addon { Title = "BigWigs", Version = "10.4", Status = "Up to date", GameVersion = "80100" });
-        //}
+
 
         public override string ToString()
         {

@@ -113,7 +113,8 @@
                                     HorizontalContentAlignment="Left"
                                     Background="Transparent"
                                     BorderThickness="0"
-                                    Content="Open Folder..." />
+                                    Content="Open Folder..."
+                                    Click="OpenFolder_OnClick"/>
                                 <Button
                                     Height="40"
                                     HorizontalAlignment="Stretch"
