@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Search;
 using Addon.Core.Models;
-
+using Windows.UI.Xaml;
 
 namespace Addon.Helpers
 {
@@ -31,6 +32,26 @@ namespace Addon.Helpers
 
         private static readonly HashSet<string> knownSubFolders = new HashSet<string>();
 
+        public static async void RefreshGameFolder(Game game)
+        {
+            //Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Wait, 10);
+            game.IsLoading = true;
+            var folder = await StorageFolder.GetFolderFromPathAsync(game.AbsolutePath);
+            var storageFolderQueryResult = folder.CreateFolderQuery(CommonFolderQuery.DefaultQuery);
+            var folders = await storageFolderQueryResult.GetFoldersAsync();
+
+            var tasks = await Task.WhenAll(folders.Select(FolderToTocFile));
+
+            tasks.Where(tf => tf != null && !tf.IsKnownSubFolder)
+                .Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
+                {
+                    Version = tf.Version,
+                    GameVersion = tf.GameVersion
+                })
+                .ToList().ForEach(game.Addons.Add);
+            game.IsLoading = false;
+        }
+
         public static async Task<Game> FolderToGame(Windows.Storage.StorageFolder folder)
         {
             if (knownSubFolders.Count == 0)
@@ -38,28 +59,8 @@ namespace Addon.Helpers
                 var list = await LoadKnownSubFolders();
                 knownSubFolders.UnionWith(list);
             }
+            return new Game(folder.Path);
 
-            var game = new Game(folder.Path);
-            var storageFolderQueryResult = folder.CreateFolderQuery(CommonFolderQuery.DefaultQuery);
-            var folders = await storageFolderQueryResult.GetFoldersAsync();
-
-            var tasks = await Task.WhenAll(folders.Select(FolderToTocFile));
-
-            tasks.Where(tf => tf != null && !tf.IsKnownSubFolder)
-                .Select(tf =>
-                {
-                    var addon = new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
-                    {
-                        Version = tf.Version,
-                        GameVersion = tf.GameVersion
-                    };
-                    return addon;
-                })
-                .ToList()
-                .ForEach(game.Addons.Add);
-
-
-            return game;
         }
 
 
@@ -84,6 +85,8 @@ namespace Addon.Helpers
                     version = line.Substring(line.IndexOf("Version:") + 8).Trim();
                 }
             }
+
+
 
             return new TocFile(folder, version, gameVersion, knownSubFolders.Contains(folder.Name));
         }

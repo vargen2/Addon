@@ -12,6 +12,7 @@ using Addon.Services;
 using Addon.ViewModels;
 
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Documents;
 using Addon.Core.Helpers;
 
 namespace Addon.Views
@@ -70,6 +71,7 @@ namespace Addon.Views
                     NavigationService.ForceNavigateMainPage();
                 }
                 Debug.WriteLine("Picked folder: " + folder.Name);
+                AppHelper.RefreshGameFolder(game);
             }
             else
             {

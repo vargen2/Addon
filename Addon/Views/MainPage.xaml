@@ -5,15 +5,24 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:Addon.Core.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
-    <Grid
-        x:Name="ContentArea"
-        Margin="{StaticResource MediumLeftMargin}"
-        d:IsHidden="True">
+    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel
+            Height="32"
+            Margin="{StaticResource SmallTopBottomMargin}"
+            Orientation="Horizontal">
+            <TextBlock Text="{x:Bind ViewModel.Game.AbsolutePath}"
+                       Width="400"/>
+            
+        </StackPanel>
         <ListView
-            Margin="{StaticResource SmallTopBottomMargin}" 
-            d:IsHidden="True"
+            Grid.Row="1"
             ItemsSource="{x:Bind ViewModel.Game.Addons}"
             SelectionMode="Single">
             <ListView.HeaderTemplate>
@@ -25,15 +34,15 @@
                         Orientation="Horizontal">
                         <TextBlock
                             Width="200"
-                            FontSize="{StaticResource ListViewHeaderItemThemeFontSize}"
+                            FontSize="{StaticResource MediumFontSize}"
                             Text="Title" />
                         <TextBlock
                             Width="200"
-                            FontSize="{StaticResource ListViewHeaderItemThemeFontSize}"
+                            FontSize="{StaticResource MediumFontSize}"
                             Text="Latest Version" />
                         <TextBlock
                             Width="200"
-                            FontSize="{StaticResource ListViewHeaderItemThemeFontSize}"
+                            FontSize="{StaticResource MediumFontSize}"
                             Text="Status" />
                     </StackPanel>
                 </DataTemplate>
@@ -117,11 +126,13 @@
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
-            
-            <!--<ListView.Transitions>
-                
-                <EntranceThemeTransition IsStaggeringEnabled="True"></EntranceThemeTransition>
-            </ListView.Transitions>-->
         </ListView>
+        <!--<ProgressBar Grid.Row="1"
+                     IsIndeterminate="{x:Bind ViewModel.Game.IsLoading,Mode=OneWay}"
+                     Visibility="{x:Bind ViewModel.Game.IsLoading,Mode=OneWay}"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"/>-->
+
+        <ProgressRing Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsActive="True" Visibility="{x:Bind ViewModel.Game.IsLoading,Mode=OneWay}"></ProgressRing>
     </Grid>
 </Page>

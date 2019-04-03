@@ -7,9 +7,12 @@ using Addon.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Data;
 
 namespace Addon.Views
 {
+    
+
     public sealed partial class MainPage : Page
     {
         public MainViewModel ViewModel { get; } = new MainViewModel();
