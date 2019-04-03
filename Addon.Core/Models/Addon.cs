@@ -60,7 +60,18 @@ namespace Addon.Core.Models
             }
         }
 
-        public string Version { get; set; } = Empty;
+        private string version = Empty;
+        public string Version
+        {
+            get => version; set
+            {
+                if (value.Equals(version))
+                    return;
+                version = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged("CurrentReleaseTypeAndVersion");
+            }
+        }
 
         public string CurrentReleaseTypeAndVersion => (CurrentDownload != null) ? CurrentDownload.ReleaseType + " " + CurrentDownload.Version : $"{Version}";
 
