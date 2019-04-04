@@ -85,32 +85,35 @@ namespace Addon.Views
         private async void TempTest_ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             var addon = ViewModel.Game.Addons.First();
-            if (addon.Status == Core.Models.Addon.INITIALIZED)
-            {
-                addon.Progress = 0;
-                addon.Status = Core.Models.Addon.DOWNLOADING_VERSIONS;
-            }
-            else if (addon.Status == Core.Models.Addon.DOWNLOADING_VERSIONS)
-            {
-                addon.Status = Core.Models.Addon.UPDATEABLE;
-            }
-            else if (addon.Status == Core.Models.Addon.UPDATEABLE)
-            {
-                addon.Progress = 50;
-                addon.Status = Core.Models.Addon.UPDATING;
-            }
-            else if (addon.Status == Core.Models.Addon.UPDATING)
-            {
-                addon.Status = Core.Models.Addon.UP_TO_DATE;
-            }
-            else if (addon.Status == Core.Models.Addon.UP_TO_DATE)
-            {
-                addon.Status = Core.Models.Addon.UNKNOWN;
-            }
-            else if (addon.Status == Core.Models.Addon.UNKNOWN)
-            {
-                addon.Status = Core.Models.Addon.INITIALIZED;
-            }
+
+            await AppHelper.FindProjectUrlAndDownLoadVersionsFor(addon);
+
+            //if (addon.Status == Core.Models.Addon.INITIALIZED)
+            //{
+            //    addon.Progress = 0;
+            //    addon.Status = Core.Models.Addon.DOWNLOADING_VERSIONS;
+            //}
+            //else if (addon.Status == Core.Models.Addon.DOWNLOADING_VERSIONS)
+            //{
+            //    addon.Status = Core.Models.Addon.UPDATEABLE;
+            //}
+            //else if (addon.Status == Core.Models.Addon.UPDATEABLE)
+            //{
+            //    addon.Progress = 50;
+            //    addon.Status = Core.Models.Addon.UPDATING;
+            //}
+            //else if (addon.Status == Core.Models.Addon.UPDATING)
+            //{
+            //    addon.Status = Core.Models.Addon.UP_TO_DATE;
+            //}
+            //else if (addon.Status == Core.Models.Addon.UP_TO_DATE)
+            //{
+            //    addon.Status = Core.Models.Addon.UNKNOWN;
+            //}
+            //else if (addon.Status == Core.Models.Addon.UNKNOWN)
+            //{
+            //    addon.Status = Core.Models.Addon.INITIALIZED;
+            //}
 
         }
     }

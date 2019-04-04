@@ -5,17 +5,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
+using Windows.Networking.Sockets;
 using Windows.Storage;
 using Windows.Storage.Search;
 using Windows.UI.Core;
 using Windows.Web.Http;
 using Addon.Core.Models;
 using static System.String;
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls.Maps;
+using Windows.Web;
 
 namespace Addon.Helpers
 {
     public static class AppHelper
     {
+        private static Dictionary<string, List<string>> PROJECT_URLS = new Dictionary<string, List<string>>()
+        {
+            {"bigwigs", new List<string>{"big-wigs"}},
+            {"dbm-core", new List<string>{"deadly-boss-mods"}},
+            {"omnicc", new List<string>{"omni-cc"}},
+            {"omen", new List<string>{"omen-threat-meter"}},
+            {"littlewigs", new List<string>{"little-wigs"}},
+            {"elvui_sle", new List<string>{"elvui-shadow-light"}},
+            {"atlasloot", new List<string>{"atlasloot-enhanced"}},
+            {"healbot", new List<string>{"heal-bot-continued"}},
+            {"tradeskillmaster", new List<string>{"tradeskill-master"}}
+        };
+
         private const string KnownSubFoldersFile = @"Assets\knownsubfolders.txt";
 
         public sealed class Singleton
@@ -131,34 +148,96 @@ namespace Addon.Helpers
               }).Result;
         }
 
-       
-        public static async void DownLoadVersionsFor(Core.Models.Addon addon) {
 
-            var uri = new Uri("https://exonojnjnojjkmle.com");
-            using (var httpClient = new HttpClient())
+        public static async Task FindProjectUrlAndDownLoadVersionsFor(Core.Models.Addon addon)
+        {
+            if (String.IsNullOrEmpty(addon.ProjectUrl))
             {
-                try
-                {
-                    var task = httpClient.GetStringAsync(uri);
-                   
+                addon.ProjectUrl = await FindProjectUrlFor(addon);
+            }
+            addon.Downloads = await DownloadVersionsFor(addon);
+        }
 
-                    //return await task;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                    Debug.WriteLine(ex.StackTrace);
-                }
+        public static async Task<string> FindProjectUrlFor(Core.Models.Addon addon)
+        {
+            List<String> urlNames = new List<string>() { addon.FolderName.Replace(" ", "-"), addon.FolderName };
+
+            if (PROJECT_URLS.TryGetValue(addon.FolderName.ToLower(), out List<string> list))
+            {
+                urlNames.InsertRange(0, list);
             }
 
-            //return Empty;
-            //if (addon.getStatus() == Addon.Status.IGNORE)
-            //    return false;
-            //addon.setStatus(Addon.Status.GETTING_VERSIONS);
-            //NetOperations.findProject(addon);
-            //boolean downloaded = NetOperations.downLoadVersions(addon, 0, 1);
-            //if (downloaded) Saver.save();
-            //return downloaded;
+            foreach (var urlName in urlNames)
+            {
+                var uri = new Uri(@"https://www.curseforge.com/wow/addons/" + urlName);
+                using (var httpClient = new HttpClient())
+                {
+                    try
+                    {
+                        var response = await httpClient.GetStringAsync(uri);
+                        int index1 = response.IndexOf("<p class=\"infobox__cta\"");
+                        int index2 = response.Substring(index1).IndexOf("</p>");
+                        string data = response.Substring(index1, index2);
+                        return Parse(data, "<a href=\"", "\">");
+                    }
+                    catch (Exception ex)
+                    {
+                        var error = WebSocketError.GetStatus(ex.HResult);
+                        if (error == WebErrorStatus.Unknown)
+                        {
+                            Debug.WriteLine(uri + " " + ex.Message);
+                        }
+                        else
+                        {
+                            Debug.WriteLine(uri + " " + error);
+                        }
+                    }
+                }
+            }
+            return Empty;
+        }
+
+        public static async Task<List<Download>> DownloadVersionsFor(Core.Models.Addon addon)
+        {
+            if (addon.ProjectUrl.Contains("https://wow.curseforge.com/projects/"))
+            {
+
+                //return new WowCurseForge(addon);
+
+            }
+            else if (addon.FolderName.Contains("https://www.wowace.com/projects/"))
+            {
+                var uri = new Uri(addon.ProjectUrl + "/files");
+                using (var httpClient = new HttpClient())
+                {
+                    try
+                    {
+                        var response = await httpClient.GetStringAsync(uri);
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        var error = WebSocketError.GetStatus(ex.HResult);
+                        if (error == WebErrorStatus.Unknown)
+                        {
+                            Debug.WriteLine(uri + " " + ex.Message);
+                        }
+                        else
+                        {
+                            Debug.WriteLine(uri + " " + error);
+                        }
+                    }
+                }
+
+            }
+            return new List<Download>();
+        }
+
+        public static String Parse(string input, string start, string end)
+        {
+            int startI = input.IndexOf(start) + start.Length;
+            string mid = input.Substring(startI);
+            return mid.Substring(0, mid.IndexOf(end)).Trim();
         }
     }
 }

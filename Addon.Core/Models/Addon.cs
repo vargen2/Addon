@@ -29,19 +29,21 @@ namespace Addon.Core.Models
             SetRelease = new RelayCommand(() => PreferredReleaseType = "Release");
         }
 
-        //private string _title;
+        private string projectUrl = Empty;
 
-        //public string Title
-        //{
-        //    get => _title;
-        //    set
-        //    {
-        //        if (value == _title)
-        //            return;
-        //        _title = value;
-        //        NotifyPropertyChanged();
-        //    }
-        //}
+        public string ProjectUrl
+        {
+            get => projectUrl;
+            set
+            {
+                if (value == null || value.Equals(projectUrl))
+                    return;
+                projectUrl = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public List<Download> Downloads { get; set; } = new List<Download>();
 
         private string preferredReleaseType = "Release";
 
