@@ -117,16 +117,40 @@ namespace Addon.Core.Models
 
 
 
+        private int progress;
+        public int Progress
+        {
+            get => progress;
+            set
+            {
+                if (value == progress)
+                    return;
+                progress = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged("IsIndeterminate");
+            }
+        }
 
-
+        public bool IsIndeterminate => progress == 0;
 
 
         public string GameVersion { get; set; } = Empty;
 
-        public bool IsUpdateable => status.Equals("Updateable");
-        public bool IsNotUpdateable => !status.Equals("Updateable");
+        public const string INITIALIZED = "Initialized";
+        public const string DOWNLOADING_VERSIONS = "Downloading Versions";
+        public const string UPDATEABLE = "Updateable";
+        public const string UPDATING = "Updating";
+        public const string UP_TO_DATE = "Up to date";
+        public const string UNKNOWN = "Unknown";
 
-        private string status = "Initialized";
+
+
+        public bool IsUpdateable => status.Equals(UPDATEABLE);
+        public bool IsNotUpdateable => !status.Equals(UPDATEABLE);
+
+        public bool IsProgressing => status == UPDATING || status == DOWNLOADING_VERSIONS;
+
+        private string status = INITIALIZED;
         public string Status
         {
             get => status;
@@ -138,6 +162,7 @@ namespace Addon.Core.Models
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("IsUpdateable");
                 NotifyPropertyChanged("IsNotUpdateable");
+                NotifyPropertyChanged("IsProgressing");
             }
         }
 

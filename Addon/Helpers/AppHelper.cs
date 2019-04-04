@@ -131,20 +131,18 @@ namespace Addon.Helpers
               }).Result;
         }
 
-        public static async Task<string> DoCurlAsync()
-        {
+       
+        public static async void DownLoadVersionsFor(Core.Models.Addon addon) {
+
             var uri = new Uri("https://exonojnjnojjkmle.com");
             using (var httpClient = new HttpClient())
             {
                 try
                 {
                     var task = httpClient.GetStringAsync(uri);
-                    //task.Progress = (installResult, progress) => CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    //{
-                    //    //StatusTextBlock.Text = "Progress: " + progress;
-                    //});
+                   
 
-                    return await task;
+                    //return await task;
                 }
                 catch (Exception ex)
                 {
@@ -153,11 +151,14 @@ namespace Addon.Helpers
                 }
             }
 
-            return Empty;
-            //using (var httpResponse = await httpClient.GetAsync(uri))
-            //{
-            //    return await httpResponse.Content.ReadAsStringAsync();
-            //}
+            //return Empty;
+            //if (addon.getStatus() == Addon.Status.IGNORE)
+            //    return false;
+            //addon.setStatus(Addon.Status.GETTING_VERSIONS);
+            //NetOperations.findProject(addon);
+            //boolean downloaded = NetOperations.downLoadVersions(addon, 0, 1);
+            //if (downloaded) Saver.save();
+            //return downloaded;
         }
     }
 }

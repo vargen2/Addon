@@ -9,7 +9,6 @@ namespace Addon.ViewModels
 {
     public class MainViewModel : Observable
     {
-        public bool NULLVALUE { get => false; }
         public Game Game { get; set; }
 
         public MainViewModel()

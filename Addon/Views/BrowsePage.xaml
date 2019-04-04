@@ -17,7 +17,7 @@
             Margin="{StaticResource SmallTopBottomMargin}"
             HorizontalAlignment="Stretch"
             PlaceholderText="Search"
-            TextChanged="AutoSuggestBox_OnTextChanged"/>
+            TextChanged="AutoSuggestBox_OnTextChanged" />
         <ListView
             x:Name="ListView"
             Grid.Row="1"
@@ -67,20 +67,20 @@
                                 Height="30"
                                 Margin="0,15,0,15"
                                 FontSize="{StaticResource MediumFontSize}"
-                                Text="{Binding Title}" />
+                                Text="{x:Bind Title}" />
                         </StackPanel>
                         <StackPanel Width="400">
                             <TextBlock
                                 Height="60"
                                 Margin="{StaticResource SmallRightMargin}"
-                                Text="{Binding Description}"
+                                Text="{x:Bind Description}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock
                                 Height="30"
                                 Margin="0,15,0,15"
-                                Text="{Binding NrOfDownloads}" />
+                                Text="{x:Bind NrOfDownloads}" />
                         </StackPanel>
                         <StackPanel Width="120">
                             <Button
@@ -98,13 +98,13 @@
                             <TextBlock
                                 Height="30"
                                 Margin="0,15,0,15"
-                                Text="{Binding UpdatedFormated}" />
+                                Text="{x:Bind UpdatedFormated}" />
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock
                                 Height="30"
                                 Margin="0,15,0,15"
-                                Text="{Binding CreatedFormated}" />
+                                Text="{x:Bind CreatedFormated}" />
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>

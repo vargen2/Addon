@@ -17,11 +17,14 @@
             Height="32"
             Margin="{StaticResource SmallTopBottomMargin}"
             Orientation="Horizontal">
-            <TextBlock Text="{x:Bind ViewModel.Game.AbsolutePath}"
-                       Width="400"/>
+            <TextBlock Width="400" Text="{x:Bind ViewModel.Game.AbsolutePath}" />
             <Button Margin="{StaticResource SmallLeftMargin}" Click="Temp_ButtonBase_OnClick">custom</Button>
-            <TextBlock Name="StatusTextBlock" Margin="{StaticResource SmallLeftMargin}" ></TextBlock>
-            <ProgressBar Name="StatusProgressBar" Value="10" Width="200"></ProgressBar>
+            <TextBlock Name="StatusTextBlock" Margin="{StaticResource SmallLeftMargin}" />
+            <ProgressBar
+                Name="StatusProgressBar"
+                Width="200"
+                Value="0" />
+            <Button Margin="{StaticResource SmallLeftMargin}" Click="TempTest_ButtonBase_OnClick">Test</Button>
         </StackPanel>
         <ListView
             Grid.Row="1"
@@ -80,6 +83,11 @@
                             <TextBlock Height="25" Text="v3.4.5.2" />
                         </StackPanel>
                         <StackPanel Width="200">
+                            <ProgressBar
+                                Width="200"
+                                IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
+                                Visibility="{x:Bind IsProgressing, Mode=OneWay}"
+                                Value="{x:Bind Progress, Mode=OneWay}" />
                             <Button
                                 Margin="0,9,0,9"
                                 Click="UpdateButtonClick"
@@ -88,9 +96,9 @@
                                 Visibility="{Binding IsUpdateable}" />
                             <TextBlock
                                 Height="25"
-                                Margin="0,13,0,13"
                                 Text="{Binding Status}"
                                 Visibility="{Binding IsNotUpdateable}" />
+
                         </StackPanel>
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout>
@@ -135,6 +143,11 @@
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"/>-->
 
-        <ProgressRing Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsActive="True" Visibility="{x:Bind ViewModel.Game.IsLoading,Mode=OneWay}"></ProgressRing>
+        <ProgressRing
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            IsActive="True"
+            Visibility="{x:Bind ViewModel.Game.IsLoading, Mode=OneWay}" />
     </Grid>
 </Page>

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Addon.Activation;
 using Addon.Core.Helpers;
 using Addon.Core.Models;
+using Addon.Helpers;
 using Windows.ApplicationModel.Activation;
 using Windows.Storage;
 using Windows.UI.Xaml;
@@ -69,7 +70,7 @@ namespace Addon.Services
             }
             Task task = Task.Run<IList<StoreAddon>>(async () => await ReadFile()).ContinueWith(task1 =>
             {
-               Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(task1.Result);
+                Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(task1.Result);
                 Debug.WriteLine("StoreAddons count: " + Singleton<Session>.Instance.StoreAddons.Count);
             });
 

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
+using Windows.Foundation;
+using Windows.Management.Deployment;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Addon.ViewModels;
@@ -12,6 +15,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Data;
 using Windows.Web.Http;
 using Addon.Helpers;
+using Windows.Storage;
+using Addon.Core.Helpers;
+using Addon.Core.Models;
+using Addon.Services;
 
 namespace Addon.Views
 {
@@ -24,9 +31,7 @@ namespace Addon.Views
         public MainPage()
         {
             InitializeComponent();
-
         }
-
 
         private void UpdateButtonClick(object sender, RoutedEventArgs e)
         {
@@ -47,24 +52,6 @@ namespace Addon.Views
                 .Select(s => s[Random.Next(s.Length)]).ToArray());
         }
 
-
-
-        //private void ListViewBase_OnItemClick(object sender, ItemClickEventArgs e)
-        //{
-
-        //    Debug.WriteLine("CLICK " + e.ClickedItem.ToString());
-
-        //}
-
-        //private void FlyoutBase_OnOpening(object sender, object e)
-        //{
-        //    var menuflyout = sender as MenuFlyout;
-
-        //    Debug.WriteLine("openeing " + sender.ToString() + " " + e.ToString());
-        //}
-
-
-
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
@@ -78,28 +65,14 @@ namespace Addon.Views
                 try
                 {
                     var task = httpClient.GetStringAsync(uri);
-                    
-                    task.Progress = async (installResult, progress) => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+
+                    task.Progress += async (installResult, progress) => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        try
-                        {
-                            
-                            //Debug.WriteLine("progg");
-                            //Debug.WriteLine("current: "+progress.BytesReceived+" totla: "+progress.TotalBytesToReceive);
-                            ////StatusTextBlock.Text ="Stage: "+progress.Stage+ " Progress: " + (progress.BytesReceived /progress.TotalBytesToReceive);
-                            StatusProgressBar.Value= ((int)(progress.Stage));
-                        }
-                        catch (Exception exception)
-                        {
-                            Console.WriteLine(exception.Message);
-                            Console.WriteLine(exception.StackTrace);
-                            
-                        }
+                        StatusProgressBar.Value = ((int)(progress.Stage));
                     });
 
-                    //return await task;
                     var result = await task;
-                   // Debug.WriteLine(result);
+                    StatusProgressBar.Value = 0;
                 }
                 catch (Exception ex)
                 {
@@ -107,8 +80,38 @@ namespace Addon.Views
                     Debug.WriteLine(ex.StackTrace);
                 }
             }
-            //var result =await AppHelper.DoCurlAsync();
-            //Debug.WriteLine(result);
+        }
+
+        private async void TempTest_ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            var addon = ViewModel.Game.Addons.First();
+            if (addon.Status == Core.Models.Addon.INITIALIZED)
+            {
+                addon.Progress = 0;
+                addon.Status = Core.Models.Addon.DOWNLOADING_VERSIONS;
+            }
+            else if (addon.Status == Core.Models.Addon.DOWNLOADING_VERSIONS)
+            {
+                addon.Status = Core.Models.Addon.UPDATEABLE;
+            }
+            else if (addon.Status == Core.Models.Addon.UPDATEABLE)
+            {
+                addon.Progress = 50;
+                addon.Status = Core.Models.Addon.UPDATING;
+            }
+            else if (addon.Status == Core.Models.Addon.UPDATING)
+            {
+                addon.Status = Core.Models.Addon.UP_TO_DATE;
+            }
+            else if (addon.Status == Core.Models.Addon.UP_TO_DATE)
+            {
+                addon.Status = Core.Models.Addon.UNKNOWN;
+            }
+            else if (addon.Status == Core.Models.Addon.UNKNOWN)
+            {
+                addon.Status = Core.Models.Addon.INITIALIZED;
+            }
+
         }
     }
 
