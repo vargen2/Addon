@@ -19,7 +19,9 @@
             Orientation="Horizontal">
             <TextBlock Text="{x:Bind ViewModel.Game.AbsolutePath}"
                        Width="400"/>
-            
+            <Button Margin="{StaticResource SmallLeftMargin}" Click="Temp_ButtonBase_OnClick">custom</Button>
+            <TextBlock Name="StatusTextBlock" Margin="{StaticResource SmallLeftMargin}" ></TextBlock>
+            <ProgressBar Name="StatusProgressBar" Value="10" Width="200"></ProgressBar>
         </StackPanel>
         <ListView
             Grid.Row="1"

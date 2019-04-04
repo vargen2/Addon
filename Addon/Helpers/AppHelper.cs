@@ -4,8 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.Core;
 using Windows.Storage;
 using Windows.Storage.Search;
+using Windows.UI.Core;
+using Windows.Web.Http;
 using Addon.Core.Models;
 using static System.String;
 
@@ -73,7 +76,7 @@ namespace Addon.Helpers
         {
             return new Game(folder.Path);
         }
-        
+
         public static async Task<TocFile> FolderToTocFile(StorageFolder folder)
         {
             var version = Empty;
@@ -126,6 +129,35 @@ namespace Addon.Helpers
                   var lines = await FileIO.ReadLinesAsync(sampleFile);
                   return new HashSet<string>(lines);
               }).Result;
+        }
+
+        public static async Task<string> DoCurlAsync()
+        {
+            var uri = new Uri("https://exonojnjnojjkmle.com");
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    var task = httpClient.GetStringAsync(uri);
+                    //task.Progress = (installResult, progress) => CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    //{
+                    //    //StatusTextBlock.Text = "Progress: " + progress;
+                    //});
+
+                    return await task;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                    Debug.WriteLine(ex.StackTrace);
+                }
+            }
+
+            return Empty;
+            //using (var httpResponse = await httpClient.GetAsync(uri))
+            //{
+            //    return await httpResponse.Content.ReadAsStringAsync();
+            //}
         }
     }
 }
