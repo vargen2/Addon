@@ -15,6 +15,7 @@ using static System.String;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.Web;
+using Addon.Core.Helpers;
 
 namespace Addon.Helpers
 {
@@ -155,7 +156,12 @@ namespace Addon.Helpers
             {
                 addon.ProjectUrl = await FindProjectUrlFor(addon);
             }
+            Debug.WriteLine("projecturl: " + addon.ProjectUrl);
             addon.Downloads = await DownloadVersionsFor(addon);
+            foreach (var download in addon.Downloads)
+            {
+                Debug.WriteLine(download);
+            }
         }
 
         public static async Task<string> FindProjectUrlFor(Core.Models.Addon addon)
@@ -178,7 +184,7 @@ namespace Addon.Helpers
                         int index1 = response.IndexOf("<p class=\"infobox__cta\"");
                         int index2 = response.Substring(index1).IndexOf("</p>");
                         string data = response.Substring(index1, index2);
-                        return Parse(data, "<a href=\"", "\">");
+                        return Util.Parse(data, "<a href=\"", "\">");
                     }
                     catch (Exception ex)
                     {
@@ -199,21 +205,82 @@ namespace Addon.Helpers
 
         public static async Task<List<Download>> DownloadVersionsFor(Core.Models.Addon addon)
         {
+            var downloads = new List<Download>();
             if (addon.ProjectUrl.Contains("https://wow.curseforge.com/projects/"))
             {
 
                 //return new WowCurseForge(addon);
 
             }
-            else if (addon.FolderName.Contains("https://www.wowace.com/projects/"))
+            else if (addon.ProjectUrl.Contains("https://www.wowace.com/projects/"))
             {
+
                 var uri = new Uri(addon.ProjectUrl + "/files");
                 using (var httpClient = new HttpClient())
                 {
                     try
                     {
-                        var response = await httpClient.GetStringAsync(uri);
-                        
+                        var input = await httpClient.GetStringAsync(uri);
+                        int index1 = input.IndexOf("<div class=\"listing-body\">");
+                        int index2 = input.IndexOf("</table>");
+                        string data = input.Substring(index1, index2 - index1);
+
+                        var strings = data.Split("<tr class=\"project-file-list-item\">").Skip(1).ToList();
+
+
+                        foreach (var s in strings)
+                        {
+                            // Debug.WriteLine(s);
+                            string temp = Util.Parse2(s, "<td class=\"project-file-release-type\">", "</td>");
+                            string release = Util.Parse2(temp, "title=\"", "\"></div>");
+
+                            string title = Util.Parse2(s, "data-name=\"", "\">");
+                            string fileSize = Util.Parse2(s, "<td class=\"project-file-size\">", "</td>").Trim();
+
+                            string a = Util.Parse2(s, "data-epoch=\"", "\"");
+                            var dateUploaded = DateTimeOffset.FromUnixTimeSeconds(long.Parse(a)).LocalDateTime;
+
+                            //LocalDateTime fileDateUploaded = LocalDateTime.ofEpochSecond(Integer.parseInt(a), 0, OffsetDateTime.now().getOffset());
+
+                            string gameVersion = Util.Parse2(s, "<span class=\"version-label\">", "</span>");
+
+                            string tempDL = Util.Parse2(s, "<td class=\"project-file-downloads\">", "</td>").Replace(",", "").Trim();
+
+                            long dls = long.Parse(tempDL);
+                            string downloadLink = Util.Parse2(s, " href=\"", "\"");
+
+                            Download download = new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink);
+                                downloads.Add(download);
+
+                            // Debug.WriteLine(release + ", " + title + ", " + fileSize + ", " + gameVersion + ", " + dls + ", " + downloadLink);
+                        }
+
+
+                        //while (matcher.find()) {
+
+                        //    String subString = data.substring(matcher.start());
+
+                        //    String temp = Util.parse(subString, "<td class=\"project-file-release-type\">", "</td>");
+                        //    String release = Util.parse(temp, "title=\"", "\"></div>");
+
+                        //    String title = Util.parse(subString, "data-name=\"", "\">");
+                        //    String fileSize = Util.parse(subString, "<td class=\"project-file-size\">", "</td>").trim();
+
+                        //    String a = Util.parse(subString, "data-epoch=\"", "\"");
+                        //    LocalDateTime fileDateUploaded = LocalDateTime.ofEpochSecond(Integer.parseInt(a), 0, OffsetDateTime.now().getOffset());
+
+                        //    String gameVersion = Util.parse(subString, "<span class=\"version-label\">", "</span>");
+
+                        //    String tempDL = Util.parse(subString, "<td class=\"project-file-downloads\">", "</td>").replaceAll(",", "").trim();
+
+                        //    long dls = Long.valueOf(tempDL);
+                        //    String downloadLink = Util.parse(subString, " href=\"", "\"");
+
+                        //    Download download = new Download(release, title, fileSize, fileDateUploaded, gameVersion, dls, downloadLink);
+                        //    downloads.add(download);
+                        //}
+
+
                     }
                     catch (Exception ex)
                     {
@@ -230,14 +297,8 @@ namespace Addon.Helpers
                 }
 
             }
-            return new List<Download>();
-        }
 
-        public static String Parse(string input, string start, string end)
-        {
-            int startI = input.IndexOf(start) + start.Length;
-            string mid = input.Substring(startI);
-            return mid.Substring(0, mid.IndexOf(end)).Trim();
+            return downloads;
         }
     }
 }

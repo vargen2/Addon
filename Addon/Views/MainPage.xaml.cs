@@ -22,8 +22,6 @@ using Addon.Services;
 
 namespace Addon.Views
 {
-
-
     public sealed partial class MainPage : Page
     {
         public MainViewModel ViewModel { get; } = new MainViewModel();
@@ -33,25 +31,13 @@ namespace Addon.Views
             InitializeComponent();
         }
 
-        private void UpdateButtonClick(object sender, RoutedEventArgs e)
+        private async void UpdateButtonClick(object sender, RoutedEventArgs e)
         {
-
             var button = e.OriginalSource as Button;
             var addon = button.Tag as Core.Models.Addon;
-
-            addon.Status = "Up to date";
-            Debug.WriteLine("NEW " + addon.ToString());
+            await Task.Delay(100);
         }
-
-        private static readonly Random Random = new Random();
-
-        public static string RandomString(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[Random.Next(s.Length)]).ToArray());
-        }
-
+        
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);

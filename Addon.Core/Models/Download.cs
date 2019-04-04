@@ -24,5 +24,10 @@ namespace Addon.Core.Models
             NrOfDownloads = nrOfDownloads;
             DownloadLink = downloadLink;
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(ReleaseType)}: {ReleaseType}, {nameof(Version)}: {Version}, {nameof(FileSize)}: {FileSize}, {nameof(DateUploaded)}: {DateUploaded}, {nameof(GameVersion)}: {GameVersion}, {nameof(NrOfDownloads)}: {NrOfDownloads}, {nameof(DownloadLink)}: {DownloadLink}";
+        }
     }
 }
