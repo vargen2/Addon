@@ -101,7 +101,7 @@
 
                         </StackPanel>
                         <FlyoutBase.AttachedFlyout >
-                            <MenuFlyout Opened="Addon_FlyoutBase_OnOpened" >
+                            <MenuFlyout>
                                 
                                 <MenuFlyoutItem Command="{Binding SetIgnored}" Text="Ignored">
                                     <MenuFlyoutItem.Icon>
@@ -126,6 +126,8 @@
 
 
                                 <MenuFlyoutSubItem
+                                    Loaded="VersionsMenuFlyout_OnLoaded"
+                                    
                                     Name="VersionsMenuFlyout"
                                     Tag="{x:Bind}"
                                     Text="Versions" />

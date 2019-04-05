@@ -19,6 +19,7 @@ using Windows.Storage;
 using Addon.Core.Helpers;
 using Addon.Core.Models;
 using Addon.Services;
+using Windows.UI.ViewManagement;
 
 namespace Addon.Views
 {
@@ -37,7 +38,7 @@ namespace Addon.Views
             var addon = button.Tag as Core.Models.Addon;
             await Task.Delay(100);
         }
-        
+
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
@@ -103,16 +104,21 @@ namespace Addon.Views
 
         }
 
-        private  void Addon_FlyoutBase_OnOpened(object sender, object e)
+        
+
+       
+
+        private async void VersionsMenuFlyout_OnLoaded(object sender, RoutedEventArgs e)
         {
-            // TODO FIXA ASYNC
-            var menuFlyout = sender as MenuFlyout;
-            var versionMenu=menuFlyout.Items.First(item => item.Name.Equals("VersionsMenuFlyout")) as MenuFlyoutSubItem;
-            var addon=versionMenu.Tag as Core.Models.Addon;
-            foreach (var download in addon.Downloads)
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                versionMenu.Items.Add(new MenuFlyoutItem(){Text = download.ToString()});    
-            }
+                var versionMenu = sender as MenuFlyoutSubItem;
+                var addon = versionMenu.Tag as Core.Models.Addon;
+                foreach (var download in addon.Downloads)
+                {
+                    versionMenu.Items.Add(new MenuFlyoutItem() { Text = download.ToString() });
+                }
+            });
         }
     }
 
