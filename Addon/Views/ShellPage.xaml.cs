@@ -71,7 +71,8 @@ namespace Addon.Views
                     NavigationService.ForceNavigateMainPage();
                 }
                 Debug.WriteLine("Picked folder: " + folder.Name);
-                AppHelper.RefreshGameFolder(game);
+                await AppHelper.RefreshGameFolder(game);
+                await Controls.Storage.SaveTask();
             }
             else
             {

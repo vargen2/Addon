@@ -70,7 +70,7 @@ namespace Addon.Helpers
 
 
 
-        public static async void RefreshGameFolder(Game game)
+        public static async Task RefreshGameFolder(Game game)
         {
             //Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Wait, 10);
             game.IsLoading = true;
@@ -250,7 +250,7 @@ namespace Addon.Helpers
                             string downloadLink = Util.Parse2(s, " href=\"", "\"");
 
                             Download download = new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink);
-                                downloads.Add(download);
+                            downloads.Add(download);
 
                             // Debug.WriteLine(release + ", " + title + ", " + fileSize + ", " + gameVersion + ", " + dls + ", " + downloadLink);
                         }
