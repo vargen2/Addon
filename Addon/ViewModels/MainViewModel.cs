@@ -14,7 +14,7 @@ namespace Addon.ViewModels
         public MainViewModel()
         {
             var temp = Singleton<Session>.Instance.SelectedGame;
-            Game = temp ?? new Game("") { IsLoading = false };
+            Game = temp ?? new Game("No Games Found") { IsLoading = false };
         }
 
     }

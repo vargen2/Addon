@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 using Addon.Core.Helpers;
+using Addon.Core.Storage;
 using static System.String;
 
 
@@ -189,6 +191,22 @@ namespace Addon.Core.Models
             return $"{nameof(FolderName)}: {FolderName}, {nameof(AbsolutePath)}: {AbsolutePath}, {nameof(PreferredReleaseType)}: {PreferredReleaseType}, {nameof(CurrentReleaseTypeAndVersion)}: {CurrentReleaseTypeAndVersion}, {nameof(IsIgnored)}: {IsIgnored}, {nameof(Status)}: {Status}, {nameof(GameVersion)}: {GameVersion}";
         }
 
+        public SaveableAddon AsSaveableAddon()
+        {
+            return new SaveableAddon()
+            {
+                AbsolutePath = this.AbsolutePath,
+                CurrentDownload = this.CurrentDownload,
+                Downloads = this.Downloads,
+                FolderName = this.FolderName,
+                GameVersion = this.GameVersion,
+                IsIgnored = this.IsIgnored,
+                PreferredReleaseType = this.PreferredReleaseType,
+                ProjectUrl = this.ProjectUrl,
+                Status = this.Status,
+                Version = this.Version
+            };
+        }
 
     }
 }

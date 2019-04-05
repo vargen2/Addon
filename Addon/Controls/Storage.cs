@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Addon.Core.Helpers;
 using Addon.Core.Models;
+using Addon.Core.Storage;
 using Addon.Helpers;
 
 namespace Addon.Controls
@@ -21,15 +22,22 @@ namespace Addon.Controls
         public static async Task SaveTask()
         {
             Debug.WriteLine(localFolder.Path);
-            var instance = Singleton<Session>.Instance;
-            // TODO dra en copy till json friendly ny SaveableSession typ
+            var instance = Singleton<Session>.Instance.AsSaveableSession();
             await localFolder.SaveAsync("session", instance);
-
-            //StorageFile saveFile = await localFolder.CreateFileAsync("session.json", CreationCollisionOption.ReplaceExisting);
-            //string sessionAsJson = await Json.StringifyAsync(Singleton<Session>.Instance);
-            //await FileIO.WriteTextAsync(saveFile, sessionAsJson);
         }
 
+        public static async Task LoadTask()
+        {
+            var saveableSession = await localFolder.ReadAsync<SaveableSession>("session");
+            Singleton<Session>.Instance.SelectedGame = saveableSession.SelectedGame.AsGame();
+            Singleton<Session>.Instance.Games.Clear();
+
+            foreach (var saveableGame in saveableSession.Games)
+            {
+                Singleton<Session>.Instance.Games.Add(saveableGame.AsGame());
+            }
+            Debug.WriteLine("Load Done: "+localFolder.Path);
+        }
 
     }
 }

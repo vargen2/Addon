@@ -26,10 +26,13 @@ namespace Addon
 
         protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
+            await Controls.Storage.LoadTask();
             if (!args.PrelaunchActivated)
             {
                 await ActivationService.ActivateAsync(args);
             }
+
+
         }
 
         protected override async void OnActivated(IActivatedEventArgs args)

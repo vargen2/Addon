@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Addon.Core.Storage;
 
 namespace Addon.Core.Models
 {
@@ -42,6 +44,15 @@ namespace Addon.Core.Models
         public override string ToString()
         {
             return base.ToString() + " " + AbsolutePath;
+        }
+
+        public SaveableGame AsSaveableGame()
+        {
+            return new SaveableGame()
+            {
+                AbsolutePath = this.AbsolutePath,
+                Addons = this.Addons.Select(a => a.AsSaveableAddon()).ToList()
+            };
         }
 
     }
