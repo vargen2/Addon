@@ -102,6 +102,18 @@ namespace Addon.Views
             //}
 
         }
+
+        private  void Addon_FlyoutBase_OnOpened(object sender, object e)
+        {
+            // TODO FIXA ASYNC
+            var menuFlyout = sender as MenuFlyout;
+            var versionMenu=menuFlyout.Items.First(item => item.Name.Equals("VersionsMenuFlyout")) as MenuFlyoutSubItem;
+            var addon=versionMenu.Tag as Core.Models.Addon;
+            foreach (var download in addon.Downloads)
+            {
+                versionMenu.Items.Add(new MenuFlyoutItem(){Text = download.ToString()});    
+            }
+        }
     }
 
 }

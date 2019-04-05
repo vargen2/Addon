@@ -220,67 +220,8 @@ namespace Addon.Helpers
                 {
                     try
                     {
-                        var input = await httpClient.GetStringAsync(uri);
-                        int index1 = input.IndexOf("<div class=\"listing-body\">");
-                        int index2 = input.IndexOf("</table>");
-                        string data = input.Substring(index1, index2 - index1);
-
-                        var strings = data.Split("<tr class=\"project-file-list-item\">").Skip(1).ToList();
-
-
-                        foreach (var s in strings)
-                        {
-                            // Debug.WriteLine(s);
-                            string temp = Util.Parse2(s, "<td class=\"project-file-release-type\">", "</td>");
-                            string release = Util.Parse2(temp, "title=\"", "\"></div>");
-
-                            string title = Util.Parse2(s, "data-name=\"", "\">");
-                            string fileSize = Util.Parse2(s, "<td class=\"project-file-size\">", "</td>").Trim();
-
-                            string a = Util.Parse2(s, "data-epoch=\"", "\"");
-                            var dateUploaded = DateTimeOffset.FromUnixTimeSeconds(long.Parse(a)).LocalDateTime;
-
-                            //LocalDateTime fileDateUploaded = LocalDateTime.ofEpochSecond(Integer.parseInt(a), 0, OffsetDateTime.now().getOffset());
-
-                            string gameVersion = Util.Parse2(s, "<span class=\"version-label\">", "</span>");
-
-                            string tempDL = Util.Parse2(s, "<td class=\"project-file-downloads\">", "</td>").Replace(",", "").Trim();
-
-                            long dls = long.Parse(tempDL);
-                            string downloadLink = Util.Parse2(s, " href=\"", "\"");
-
-                            Download download = new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink);
-                            downloads.Add(download);
-
-                            // Debug.WriteLine(release + ", " + title + ", " + fileSize + ", " + gameVersion + ", " + dls + ", " + downloadLink);
-                        }
-
-
-                        //while (matcher.find()) {
-
-                        //    String subString = data.substring(matcher.start());
-
-                        //    String temp = Util.parse(subString, "<td class=\"project-file-release-type\">", "</td>");
-                        //    String release = Util.parse(temp, "title=\"", "\"></div>");
-
-                        //    String title = Util.parse(subString, "data-name=\"", "\">");
-                        //    String fileSize = Util.parse(subString, "<td class=\"project-file-size\">", "</td>").trim();
-
-                        //    String a = Util.parse(subString, "data-epoch=\"", "\"");
-                        //    LocalDateTime fileDateUploaded = LocalDateTime.ofEpochSecond(Integer.parseInt(a), 0, OffsetDateTime.now().getOffset());
-
-                        //    String gameVersion = Util.parse(subString, "<span class=\"version-label\">", "</span>");
-
-                        //    String tempDL = Util.parse(subString, "<td class=\"project-file-downloads\">", "</td>").replaceAll(",", "").trim();
-
-                        //    long dls = Long.valueOf(tempDL);
-                        //    String downloadLink = Util.parse(subString, " href=\"", "\"");
-
-                        //    Download download = new Download(release, title, fileSize, fileDateUploaded, gameVersion, dls, downloadLink);
-                        //    downloads.add(download);
-                        //}
-
-
+                        var htmlPage = await httpClient.GetStringAsync(uri);
+                        return Parse.FromWowaceProjectsFilesToDownloads(htmlPage);
                     }
                     catch (Exception ex)
                     {

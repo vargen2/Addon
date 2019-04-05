@@ -100,8 +100,9 @@
                                 Visibility="{Binding IsNotUpdateable}" />
 
                         </StackPanel>
-                        <FlyoutBase.AttachedFlyout>
-                            <MenuFlyout>
+                        <FlyoutBase.AttachedFlyout >
+                            <MenuFlyout Opened="Addon_FlyoutBase_OnOpened" >
+                                
                                 <MenuFlyoutItem Command="{Binding SetIgnored}" Text="Ignored">
                                     <MenuFlyoutItem.Icon>
                                         <SymbolIcon Symbol="Accept" Visibility="{Binding IsIgnored}" />
@@ -124,10 +125,10 @@
                                 </MenuFlyoutItem>
 
 
-                                <MenuFlyoutSubItem Text="Versions">
-                                    <MenuFlyoutItem Text="Some version" />
-                                    <MenuFlyoutItem Text="Some version" />
-                                </MenuFlyoutSubItem>
+                                <MenuFlyoutSubItem
+                                    Name="VersionsMenuFlyout"
+                                    Tag="{x:Bind}"
+                                    Text="Versions" />
                                 <MenuFlyoutSubItem Text="Info">
                                     <MenuFlyoutItem Text="Info info info" />
                                 </MenuFlyoutSubItem>

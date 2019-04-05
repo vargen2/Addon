@@ -21,14 +21,26 @@ namespace Addon.Controls
 
         public static async Task SaveTask()
         {
-            Debug.WriteLine(localFolder.Path);
-            var instance = Singleton<Session>.Instance.AsSaveableSession();
-            await localFolder.SaveAsync("session", instance);
+            try
+            {
+                Debug.WriteLine(localFolder.Path);
+                var instance = Singleton<Session>.Instance.AsSaveableSession();
+                await localFolder.SaveAsync("session", instance);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("ERROR when saveing, "+e.Message);
+                
+            }
         }
 
         public static async Task LoadTask()
         {
+
             var saveableSession = await localFolder.ReadAsync<SaveableSession>("session");
+            if (saveableSession == null)
+                return;
+
             Singleton<Session>.Instance.SelectedGame = saveableSession.SelectedGame.AsGame();
             Singleton<Session>.Instance.Games.Clear();
 
@@ -36,7 +48,7 @@ namespace Addon.Controls
             {
                 Singleton<Session>.Instance.Games.Add(saveableGame.AsGame());
             }
-            Debug.WriteLine("Load Done: "+localFolder.Path);
+            Debug.WriteLine("Load Done: " + localFolder.Path);
         }
 
     }
