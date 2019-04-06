@@ -192,6 +192,9 @@ namespace Addon.Core.Models
             return $"{nameof(FolderName)}: {FolderName}, {nameof(AbsolutePath)}: {AbsolutePath}, {nameof(PreferredReleaseType)}: {PreferredReleaseType}, {nameof(CurrentReleaseTypeAndVersion)}: {CurrentReleaseTypeAndVersion}, {nameof(IsIgnored)}: {IsIgnored}, {nameof(Status)}: {Status}, {nameof(GameVersion)}: {GameVersion}";
         }
 
+
+        public string InfoString => $"{nameof(Game)}: {Game},\r\n{nameof(FolderName)}: {FolderName},\r\n{nameof(AbsolutePath)}: {AbsolutePath},\r\n{nameof(Title)}: {Title},\r\n{nameof(ProjectUrl)}: {ProjectUrl},\r\n{nameof(PreferredReleaseType)}: {PreferredReleaseType},\r\n{nameof(Version)}: {Version},\r\n{nameof(CurrentReleaseTypeAndVersion)}: {CurrentReleaseTypeAndVersion},\r\n{nameof(IsIgnored)}: {IsIgnored},\r\n{nameof(GameVersion)}: {GameVersion},\r\n{nameof(Status)}: {Status}";
+
         public SaveableAddon AsSaveableAddon()
         {
             return new SaveableAddon()

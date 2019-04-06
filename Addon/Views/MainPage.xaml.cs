@@ -44,71 +44,6 @@ namespace Addon.Views
             FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
         }
 
-        private async void Temp_ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            var uri = new Uri("https://aftonbladet.se");
-            using (var httpClient = new HttpClient())
-            {
-                try
-                {
-                    var task = httpClient.GetStringAsync(uri);
-
-                    task.Progress += async (installResult, progress) => await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                    {
-                        StatusProgressBar.Value = ((int)(progress.Stage));
-                    });
-
-                    var result = await task;
-                    StatusProgressBar.Value = 0;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                    Debug.WriteLine(ex.StackTrace);
-                }
-            }
-        }
-
-        private async void TempTest_ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            //var addon = ViewModel.Session.SelectedGame.Addons.First();
-            var addon = ViewModel.Session.SelectedGame.Addons.First(a => a.FolderName.ToLower().Equals("details"));
-
-            await Tasks.FindProjectUrlAndDownLoadVersionsFor(addon);
-
-            //if (addon.Status == Core.Models.Addon.INITIALIZED)
-            //{
-            //    addon.Progress = 0;
-            //    addon.Status = Core.Models.Addon.DOWNLOADING_VERSIONS;
-            //}
-            //else if (addon.Status == Core.Models.Addon.DOWNLOADING_VERSIONS)
-            //{
-            //    addon.Status = Core.Models.Addon.UPDATEABLE;
-            //}
-            //else if (addon.Status == Core.Models.Addon.UPDATEABLE)
-            //{
-            //    addon.Progress = 50;
-            //    addon.Status = Core.Models.Addon.UPDATING;
-            //}
-            //else if (addon.Status == Core.Models.Addon.UPDATING)
-            //{
-            //    addon.Status = Core.Models.Addon.UP_TO_DATE;
-            //}
-            //else if (addon.Status == Core.Models.Addon.UP_TO_DATE)
-            //{
-            //    addon.Status = Core.Models.Addon.UNKNOWN;
-            //}
-            //else if (addon.Status == Core.Models.Addon.UNKNOWN)
-            //{
-            //    addon.Status = Core.Models.Addon.INITIALIZED;
-            //}
-
-        }
-
-
-
-
-
         private async void VersionsMenuFlyout_OnLoaded(object sender, RoutedEventArgs e)
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -137,6 +72,6 @@ namespace Addon.Views
             Debug.WriteLine("Refreshed toc files for all addons");
             await Logic.Storage.SaveTask();
         }
-    }
+      }
 
 }
