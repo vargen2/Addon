@@ -1,11 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-
-using Addon.Core.Helpers;
-
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Addon.Core.Helpers;
 
 namespace Addon.Helpers
 {

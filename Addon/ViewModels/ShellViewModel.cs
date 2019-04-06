@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
-
-using Addon.Helpers;
-using Addon.Services;
-using Addon.Views;
-
 using Windows.System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
-using Addon.Core.Models;
 using WinUI = Microsoft.UI.Xaml.Controls;
 using System.Collections.ObjectModel;
 using Addon.Core.Helpers;
-using RelayCommand = Addon.Helpers.RelayCommand;
+using Addon.Core.Models;
+using Addon.Helpers;
+using Addon.Services;
+using Addon.Views;
+
 
 namespace Addon.ViewModels
 {
@@ -51,7 +49,7 @@ namespace Addon.ViewModels
             set { Set(ref _selected, value); }
         }
 
-        public ICommand LoadedCommand => _loadedCommand ?? (_loadedCommand = new RelayCommand(OnLoaded));
+        public ICommand LoadedCommand => _loadedCommand ?? (_loadedCommand = new Helpers.RelayCommand(OnLoaded));
 
         public ICommand ItemInvokedCommand => _itemInvokedCommand ?? (_itemInvokedCommand = new RelayCommand<WinUI.NavigationViewItemInvokedEventArgs>(OnItemInvoked));
 

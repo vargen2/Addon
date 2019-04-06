@@ -4,28 +4,22 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Windows.Storage;
-using Addon.Core.Helpers;
-using Addon.Core.Models;
-using Addon.Helpers;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Linq;
+using Addon.Core.Helpers;
+using Addon.Core.Models;
+using Addon.Helpers;
 
 namespace Addon.ViewModels
 {
     public class BrowseViewModel : Observable
     {
-        public ObservableCollection<StoreAddon> StoreAddons { get; set; }
+        public Session Session { get; }
 
         public BrowseViewModel()
         {
-            StoreAddons = Singleton<Session>.Instance.StoreAddons;
+            Session = Singleton<Session>.Instance;
         }
-
-
-
-
-
-
     }
 }

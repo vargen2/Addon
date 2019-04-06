@@ -1,10 +1,8 @@
 ﻿using System;
-
-using Addon.ViewModels;
-
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Addon.Core.Helpers;
+using Addon.ViewModels;
 
 namespace Addon.Views
 {

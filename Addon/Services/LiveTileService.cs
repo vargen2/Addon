@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Addon.Activation;
 using Addon.Helpers;
 
 using Windows.ApplicationModel.Activation;
 using Windows.Storage;
 using Windows.UI.Notifications;
 using Windows.UI.StartScreen;
+using Addon.Activation;
 
 namespace Addon.Services
 {

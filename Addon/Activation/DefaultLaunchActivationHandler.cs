@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-
-using Addon.Services;
-
 using Windows.ApplicationModel.Activation;
+using Addon.Services;
 
 namespace Addon.Activation
 {

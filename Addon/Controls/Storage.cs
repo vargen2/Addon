@@ -36,17 +36,17 @@ namespace Addon.Controls
 
         public static async Task LoadTask()
         {
-
+            var session = Singleton<Session>.Instance;
             var saveableSession = await localFolder.ReadAsync<SaveableSession>("session");
             if (saveableSession == null)
                 return;
 
-            Singleton<Session>.Instance.SelectedGame = saveableSession.SelectedGame.AsGame();
-            Singleton<Session>.Instance.Games.Clear();
+            session.SelectedGame = saveableSession.SelectedGame.AsGame();
+            session.Games.Clear();
 
             foreach (var saveableGame in saveableSession.Games)
             {
-                Singleton<Session>.Instance.Games.Add(saveableGame.AsGame());
+                session.Games.Add(saveableGame.AsGame());
             }
             Debug.WriteLine("Load Done: " + localFolder.Path);
         }

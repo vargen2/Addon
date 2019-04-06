@@ -6,13 +6,12 @@ using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using Windows.Storage.Search;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Documents;
 using Addon.Core.Models;
 using Addon.Helpers;
 using Addon.Services;
 using Addon.ViewModels;
-
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Documents;
 using Addon.Core.Helpers;
 
 namespace Addon.Views
@@ -68,7 +67,7 @@ namespace Addon.Views
                 if (ViewModel.Session.Games.Count == 1)
                 {
                     ViewModel.Session.SelectedGame = game;
-                    NavigationService.ForceNavigateMainPage();
+                   // NavigationService.ForceNavigateMainPage();
                 }
                 Debug.WriteLine("Picked folder: " + folder.Name);
                 await AppHelper.RefreshGameFolder(game);

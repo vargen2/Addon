@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using Addon.ViewModels;
-
 using Windows.UI.Xaml.Controls;
+using Addon.ViewModels;
 
 namespace Addon.Views
 {
@@ -20,7 +19,7 @@ namespace Addon.Views
         {
             if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
 
-            ListView.ItemsSource = ViewModel.StoreAddons
+            ListView.ItemsSource = ViewModel.Session.StoreAddons
                 .Where(storeAddon => storeAddon.Title.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase))
                 .ToList();
         }

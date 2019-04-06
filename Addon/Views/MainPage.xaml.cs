@@ -7,19 +7,18 @@ using Windows.Foundation;
 using Windows.Management.Deployment;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
-using Addon.ViewModels;
-
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Data;
 using Windows.Web.Http;
-using Addon.Helpers;
 using Windows.Storage;
 using Addon.Core.Helpers;
 using Addon.Core.Models;
 using Addon.Services;
 using Windows.UI.ViewManagement;
+using Addon.Helpers;
+using Addon.ViewModels;
 
 namespace Addon.Views
 {
@@ -71,7 +70,7 @@ namespace Addon.Views
 
         private async void TempTest_ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var addon = ViewModel.Game.Addons.First();
+            var addon = ViewModel.Session.SelectedGame.Addons.First();
 
             await AppHelper.FindProjectUrlAndDownLoadVersionsFor(addon);
 

@@ -17,7 +17,7 @@
             Height="32"
             Margin="{StaticResource SmallTopBottomMargin}"
             Orientation="Horizontal">
-            <TextBlock Width="400" Text="{x:Bind ViewModel.Game.AbsolutePath}" />
+            <TextBlock Width="400" Text="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath, Mode=OneWay}" />
             <Button Margin="{StaticResource SmallLeftMargin}" Click="Temp_ButtonBase_OnClick">custom</Button>
             <TextBlock Name="StatusTextBlock" Margin="{StaticResource SmallLeftMargin}" />
             <ProgressBar
@@ -28,7 +28,7 @@
         </StackPanel>
         <ListView
             Grid.Row="1"
-            ItemsSource="{x:Bind ViewModel.Game.Addons}"
+            ItemsSource="{x:Bind ViewModel.Session.SelectedGame.Addons,Mode=OneWay}"
             SelectionMode="Single">
             <ListView.HeaderTemplate>
                 <DataTemplate>
@@ -151,6 +151,6 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             IsActive="True"
-            Visibility="{x:Bind ViewModel.Game.IsLoading, Mode=OneWay}" />
+            Visibility="{x:Bind ViewModel.Session.SelectedGame.IsLoading, Mode=OneWay}" />
     </Grid>
 </Page>

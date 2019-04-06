@@ -1,9 +1,7 @@
 ﻿using System;
-
-using Addon.Services;
-
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
+using Addon.Services;
 
 namespace Addon
 {

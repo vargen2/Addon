@@ -25,9 +25,9 @@ namespace Addon.Core.Storage
             return $"{nameof(FolderName)}: {FolderName}, {nameof(AbsolutePath)}: {AbsolutePath}, {nameof(ProjectUrl)}: {ProjectUrl}, {nameof(Downloads)}: {Downloads}, {nameof(PreferredReleaseType)}: {PreferredReleaseType}, {nameof(Version)}: {Version}, {nameof(CurrentDownload)}: {CurrentDownload}, {nameof(IsIgnored)}: {IsIgnored}, {nameof(GameVersion)}: {GameVersion}, {nameof(Status)}: {Status}";
         }
 
-        public Core.Models.Addon AsAddon(Game game)
+        public global::Addon.Core.Models.Addon AsAddon(Game game)
         {
-            return new Core.Models.Addon(game,this.FolderName,this.AbsolutePath)
+            return new global::Addon.Core.Models.Addon(game,this.FolderName,this.AbsolutePath)
             {
                 ProjectUrl = this.ProjectUrl,
                 Downloads = this.Downloads,

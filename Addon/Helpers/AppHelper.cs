@@ -10,12 +10,12 @@ using Windows.Storage;
 using Windows.Storage.Search;
 using Windows.UI.Core;
 using Windows.Web.Http;
-using Addon.Core.Models;
 using static System.String;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.Web;
 using Addon.Core.Helpers;
+using Addon.Core.Models;
 
 namespace Addon.Helpers
 {

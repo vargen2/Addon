@@ -21,7 +21,7 @@
         <ListView
             x:Name="ListView"
             Grid.Row="1"
-            ItemsSource="{x:Bind ViewModel.StoreAddons}"
+            ItemsSource="{x:Bind ViewModel.Session.StoreAddons, Mode=OneWay}"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             SelectionMode="Single">
             <ListView.HeaderTemplate>

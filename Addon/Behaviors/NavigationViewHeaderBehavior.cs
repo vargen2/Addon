@@ -1,11 +1,9 @@
-﻿using Addon.Services;
-
-using Microsoft.Xaml.Interactivity;
+﻿using Microsoft.Xaml.Interactivity;
 
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-
+using Addon.Services;
 using WinUI = Microsoft.UI.Xaml.Controls;
 
 namespace Addon.Behaviors

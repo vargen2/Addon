@@ -9,12 +9,11 @@ namespace Addon.ViewModels
 {
     public class MainViewModel : Observable
     {
-        public Game Game { get; set; }
+        public Session Session { get; }
 
         public MainViewModel()
         {
-            var temp = Singleton<Session>.Instance.SelectedGame;
-            Game = temp ?? new Game("No Games Found") { IsLoading = false };
+            Session = Singleton<Session>.Instance;
         }
 
     }

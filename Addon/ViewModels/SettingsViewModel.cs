@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
-using Addon.Helpers;
-using Addon.Services;
-
 using Windows.ApplicationModel;
 using Windows.UI.Xaml;
+using Addon.Helpers;
+using Addon.Services;
 
 namespace Addon.ViewModels
 {
