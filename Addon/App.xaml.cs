@@ -24,7 +24,7 @@ namespace Addon
 
         protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
-            await Controls.Storage.LoadTask();
+            await Logic.Storage.LoadTask();
             if (!args.PrelaunchActivated)
             {
                 await ActivationService.ActivateAsync(args);

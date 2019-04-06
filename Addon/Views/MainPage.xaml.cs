@@ -18,6 +18,7 @@ using Addon.Core.Models;
 using Addon.Services;
 using Windows.UI.ViewManagement;
 using Addon.Helpers;
+using Addon.Logic;
 using Addon.ViewModels;
 
 namespace Addon.Views
@@ -70,9 +71,10 @@ namespace Addon.Views
 
         private async void TempTest_ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var addon = ViewModel.Session.SelectedGame.Addons.First();
+            //var addon = ViewModel.Session.SelectedGame.Addons.First();
+            var addon = ViewModel.Session.SelectedGame.Addons.First(a => a.FolderName.ToLower().Equals("details"));
 
-            await AppHelper.FindProjectUrlAndDownLoadVersionsFor(addon);
+            await Tasks.FindProjectUrlAndDownLoadVersionsFor(addon);
 
             //if (addon.Status == Core.Models.Addon.INITIALIZED)
             //{
@@ -103,9 +105,9 @@ namespace Addon.Views
 
         }
 
-        
 
-       
+
+
 
         private async void VersionsMenuFlyout_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -118,6 +120,22 @@ namespace Addon.Views
                     versionMenu.Items.Add(new MenuFlyoutItem() { Text = download.ToString() });
                 }
             });
+        }
+
+        private async void DownloadVersionsForAllAddonsInSelectedGame(object sender, RoutedEventArgs e)
+        {
+            var addons = ViewModel.Session.SelectedGame.Addons.ToList();
+            await Tasks.FindProjectUrlAndDownLoadVersionsFor(addons);
+            Debug.WriteLine("Version downloaded for all addons");
+            await Logic.Storage.SaveTask();
+        }
+
+        private async void RefreshTocFileForAllInSelectedGame(object sender, RoutedEventArgs e)
+        {
+            var addons = ViewModel.Session.SelectedGame.Addons.ToList();
+            await Tasks.RefreshTocFileFor(addons);
+            Debug.WriteLine("Refreshed toc files for all addons");
+            await Logic.Storage.SaveTask();
         }
     }
 

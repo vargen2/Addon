@@ -2,24 +2,20 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
-using Windows.ApplicationModel.Core;
 using Windows.Networking.Sockets;
 using Windows.Storage;
 using Windows.Storage.Search;
-using Windows.UI.Core;
-using Windows.Web.Http;
-using static System.String;
-using Windows.UI.Popups;
-using Windows.UI.Xaml.Controls.Maps;
 using Windows.Web;
+using Windows.Web.Http;
 using Addon.Core.Helpers;
 using Addon.Core.Models;
 
-namespace Addon.Helpers
+namespace Addon.Logic
 {
-    public static class AppHelper
+    public static class Tasks
     {
         private static Dictionary<string, List<string>> PROJECT_URLS = new Dictionary<string, List<string>>()
         {
@@ -42,7 +38,7 @@ namespace Addon.Helpers
 
             public static Singleton Instance => lazy.Value;
 
-            public HashSet<string> KnownSubFolders { get; } = AppHelper.LoadKnownSubFolders();
+            public HashSet<string> KnownSubFolders { get; } = Tasks.LoadKnownSubFolders();
 
             private Singleton()
             {
@@ -56,13 +52,16 @@ namespace Addon.Helpers
 
             public string GameVersion { get; }
 
+            public string Title { get; }
+
             public bool IsKnownSubFolder { get; }
 
-            public TocFile(StorageFolder storageFolder, string version, string gameVersion, bool isKnownSubFolder)
+            public TocFile(StorageFolder storageFolder, string version, string gameVersion, string title, bool isKnownSubFolder)
             {
                 StorageFolder = storageFolder;
                 Version = version;
                 GameVersion = gameVersion;
+                Title = title;
                 IsKnownSubFolder = isKnownSubFolder;
             }
         }
@@ -84,23 +83,20 @@ namespace Addon.Helpers
                 .Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
                 {
                     Version = tf.Version,
-                    GameVersion = tf.GameVersion
+                    GameVersion = tf.GameVersion,
+                    Title = tf.Title
                 })
                 .ToList().ForEach(game.Addons.Add);
             game.IsLoading = false;
         }
 
-        public static Game FolderToGame(StorageFolder folder)
-        {
-            return new Game(folder.Path);
-        }
-
         public static async Task<TocFile> FolderToTocFile(StorageFolder folder)
         {
-            var version = Empty;
-            var gameVersion = Empty;
-            var folderFromPathAsync = await StorageFolder.GetFolderFromPathAsync(folder.Path);
-            var files = await folderFromPathAsync.GetFilesAsync(CommonFileQuery.DefaultQuery);
+            var version = String.Empty;
+            var gameVersion = String.Empty;
+            var title = String.Empty;
+            //var folderFromPathAsync = await StorageFolder.GetFolderFromPathAsync(folder.Path);
+            var files = await folder.GetFilesAsync(CommonFileQuery.DefaultQuery);
             var file = files.First(f => f.FileType.Equals(".toc"));
 
             var lines = await FileIO.ReadLinesAsync(file);
@@ -115,11 +111,29 @@ namespace Addon.Helpers
                 {
                     version = line.Substring(line.IndexOf("Version:") + 8).Trim();
                 }
+
+                if (line.Contains("Title:"))
+                {
+                    var temp = line.Substring(line.IndexOf("Title:") + 6).Trim();
+                    var temp2 = Regex.Replace(temp, "\\|c[a-zA-Z_0-9]{8}", "");
+                    title = Regex.Replace(temp2, "\\|r", "");
+                }
             }
 
-            return new TocFile(folder, version, gameVersion, Singleton.Instance.KnownSubFolders.Contains(folder.Name));
+            return new TocFile(folder, version, gameVersion, title, Singleton.Instance.KnownSubFolders.Contains(folder.Name));
         }
 
+        public static async Task RefreshTocFileFor(IList<Core.Models.Addon> addons)
+        {
+            foreach (var addon in addons)
+            {
+                var folder = await StorageFolder.GetFolderFromPathAsync(addon.AbsolutePath);
+                var tocFile = await FolderToTocFile(folder);
+                addon.Title = tocFile.Title;
+                addon.Version = tocFile.Version;
+                addon.GameVersion = tocFile.GameVersion;
+            }
+        }
 
         //    //public static void createKnownSubFolders() {
         //    //    var game = App.model.getSelectedGame();
@@ -149,6 +163,13 @@ namespace Addon.Helpers
               }).Result;
         }
 
+        public static async Task FindProjectUrlAndDownLoadVersionsFor(IList<Core.Models.Addon> addons)
+        {
+            foreach (var addon in addons)
+            {
+                await FindProjectUrlAndDownLoadVersionsFor(addon);
+            }
+        }
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(Core.Models.Addon addon)
         {
@@ -156,17 +177,19 @@ namespace Addon.Helpers
             {
                 addon.ProjectUrl = await FindProjectUrlFor(addon);
             }
-            Debug.WriteLine("projecturl: " + addon.ProjectUrl);
+
             addon.Downloads = await DownloadVersionsFor(addon);
-            foreach (var download in addon.Downloads)
-            {
-                Debug.WriteLine(download);
-            }
+            // Debug.WriteLine("[SUCCESS] FindProjectUrlAndDownLoadVersionsFor: " + addon.ProjectUrl);
+            //foreach (var download in addon.Downloads)
+            //{
+            //    Debug.WriteLine(download);
+            //}
         }
 
         public static async Task<string> FindProjectUrlFor(Core.Models.Addon addon)
         {
-            List<String> urlNames = new List<string>() { addon.FolderName.Replace(" ", "-"), addon.FolderName };
+            List<String> urlNames = new List<string>() { addon.FolderName.Replace(" ", "-"),
+                addon.FolderName,addon.Title.Replace(" ","-"),addon.Title.Replace(" ",""),addon.Title };
 
             if (PROJECT_URLS.TryGetValue(addon.FolderName.ToLower(), out List<string> list))
             {
@@ -191,55 +214,47 @@ namespace Addon.Helpers
                         var error = WebSocketError.GetStatus(ex.HResult);
                         if (error == WebErrorStatus.Unknown)
                         {
-                            Debug.WriteLine(uri + " " + ex.Message);
+                            Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + ex.Message);
                         }
                         else
                         {
-                            Debug.WriteLine(uri + " " + error);
+                            Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + error);
                         }
                     }
                 }
             }
-            return Empty;
+            return String.Empty;
         }
 
         public static async Task<List<Download>> DownloadVersionsFor(Core.Models.Addon addon)
         {
-            var downloads = new List<Download>();
-            if (addon.ProjectUrl.Contains("https://wow.curseforge.com/projects/"))
+            if (string.IsNullOrEmpty(addon.ProjectUrl))
             {
-
-                //return new WowCurseForge(addon);
-
+                return new List<Download>();
             }
-            else if (addon.ProjectUrl.Contains("https://www.wowace.com/projects/"))
-            {
 
-                var uri = new Uri(addon.ProjectUrl + "/files");
-                using (var httpClient = new HttpClient())
+            var uri = new Uri(addon.ProjectUrl + "/files");
+            using (var httpClient = new HttpClient())
+            {
+                try
                 {
-                    try
+                    var htmlPage = await httpClient.GetStringAsync(uri);
+                    return Parse.FromPageToDownloads(addon, htmlPage);
+                }
+                catch (Exception ex)
+                {
+                    var error = WebSocketError.GetStatus(ex.HResult);
+                    if (error == WebErrorStatus.Unknown)
                     {
-                        var htmlPage = await httpClient.GetStringAsync(uri);
-                        return Parse.FromWowaceProjectsFilesToDownloads(htmlPage);
+                        Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + ex.Message);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        var error = WebSocketError.GetStatus(ex.HResult);
-                        if (error == WebErrorStatus.Unknown)
-                        {
-                            Debug.WriteLine(uri + " " + ex.Message);
-                        }
-                        else
-                        {
-                            Debug.WriteLine(uri + " " + error);
-                        }
+                        Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + error);
                     }
                 }
-
             }
-
-            return downloads;
+            return new List<Download>();
         }
     }
 }

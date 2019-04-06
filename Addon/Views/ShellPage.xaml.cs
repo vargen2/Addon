@@ -13,6 +13,7 @@ using Addon.Helpers;
 using Addon.Services;
 using Addon.ViewModels;
 using Addon.Core.Helpers;
+using Addon.Logic;
 
 namespace Addon.Views
 {
@@ -62,7 +63,7 @@ namespace Addon.Views
                 if (ViewModel.Session.Games.Any(g => g.AbsolutePath.Equals(folder.Path))) return;
 
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-                var game = AppHelper.FolderToGame(folder);
+                var game = Common.FolderToGame(folder);
                 ViewModel.Session.Games.Add(game);
                 if (ViewModel.Session.Games.Count == 1)
                 {
@@ -70,8 +71,8 @@ namespace Addon.Views
                    // NavigationService.ForceNavigateMainPage();
                 }
                 Debug.WriteLine("Picked folder: " + folder.Name);
-                await AppHelper.RefreshGameFolder(game);
-                await Controls.Storage.SaveTask();
+                await Tasks.RefreshGameFolder(game);
+                await Logic.Storage.SaveTask();
             }
             else
             {

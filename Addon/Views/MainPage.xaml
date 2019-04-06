@@ -18,6 +18,8 @@
             Margin="{StaticResource SmallTopBottomMargin}"
             Orientation="Horizontal">
             <TextBlock Width="400" Text="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath, Mode=OneWay}" />
+            <Button Margin="{StaticResource SmallLeftMargin}" Click="RefreshTocFileForAllInSelectedGame">Refresh Toc</Button>
+            <Button Margin="{StaticResource SmallLeftMargin}" Click="DownloadVersionsForAllAddonsInSelectedGame">Download versions</Button>
             <Button Margin="{StaticResource SmallLeftMargin}" Click="Temp_ButtonBase_OnClick">custom</Button>
             <TextBlock Name="StatusTextBlock" Margin="{StaticResource SmallLeftMargin}" />
             <ProgressBar
@@ -132,7 +134,7 @@
                                     Tag="{x:Bind}"
                                     Text="Versions" />
                                 <MenuFlyoutSubItem Text="Info">
-                                    <MenuFlyoutItem Text="Info info info" />
+                                    <MenuFlyoutItem Text="Info info\n info\n" />
                                 </MenuFlyoutSubItem>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>

@@ -12,7 +12,7 @@ using Addon.Core.Models;
 using Addon.Core.Storage;
 using Addon.Helpers;
 
-namespace Addon.Controls
+namespace Addon.Logic
 {
     public static class Storage
     {
@@ -23,14 +23,14 @@ namespace Addon.Controls
         {
             try
             {
-                Debug.WriteLine(localFolder.Path);
+                Debug.WriteLine("Saved to " + localFolder.Path);
                 var instance = Singleton<Session>.Instance.AsSaveableSession();
                 await localFolder.SaveAsync("session", instance);
             }
             catch (Exception e)
             {
-                Debug.WriteLine("ERROR when saveing, "+e.Message);
-                
+                Debug.WriteLine("ERROR when saveing, " + e.Message);
+
             }
         }
 
@@ -48,7 +48,7 @@ namespace Addon.Controls
             {
                 session.Games.Add(saveableGame.AsGame());
             }
-            Debug.WriteLine("Load Done: " + localFolder.Path);
+            Debug.WriteLine("Loaded from " + localFolder.Path);
         }
 
     }

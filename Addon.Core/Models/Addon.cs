@@ -19,6 +19,7 @@ namespace Addon.Core.Models
         public Game Game { get; }
         public string FolderName { get; }
         public string AbsolutePath { get; }
+        public string Title { get; set; } = Empty;
 
         public Addon(Game game, string folderName, string absolutePath)
         {
@@ -196,6 +197,7 @@ namespace Addon.Core.Models
             return new SaveableAddon()
             {
                 AbsolutePath = this.AbsolutePath,
+                Title = this.Title,
                 CurrentDownload = this.CurrentDownload,
                 Downloads = this.Downloads,
                 FolderName = this.FolderName,

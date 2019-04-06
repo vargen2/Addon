@@ -10,6 +10,7 @@ namespace Addon.Core.Storage
     {
         public string FolderName { get; set; }
         public string AbsolutePath { get; set; }
+        public string Title { get; set; }
         public string ProjectUrl { get; set; }
         public List<Download> Downloads { get; set; }
         public string PreferredReleaseType { get; set; }
@@ -22,13 +23,14 @@ namespace Addon.Core.Storage
 
         public override string ToString()
         {
-            return $"{nameof(FolderName)}: {FolderName}, {nameof(AbsolutePath)}: {AbsolutePath}, {nameof(ProjectUrl)}: {ProjectUrl}, {nameof(Downloads)}: {Downloads}, {nameof(PreferredReleaseType)}: {PreferredReleaseType}, {nameof(Version)}: {Version}, {nameof(CurrentDownload)}: {CurrentDownload}, {nameof(IsIgnored)}: {IsIgnored}, {nameof(GameVersion)}: {GameVersion}, {nameof(Status)}: {Status}";
+            return $"{nameof(FolderName)}: {FolderName}, {nameof(AbsolutePath)}: {AbsolutePath}, {nameof(Title)}: {Title}, {nameof(ProjectUrl)}: {ProjectUrl}, {nameof(Downloads)}: {Downloads}, {nameof(PreferredReleaseType)}: {PreferredReleaseType}, {nameof(Version)}: {Version}, {nameof(CurrentDownload)}: {CurrentDownload}, {nameof(IsIgnored)}: {IsIgnored}, {nameof(GameVersion)}: {GameVersion}, {nameof(Status)}: {Status}";
         }
 
         public global::Addon.Core.Models.Addon AsAddon(Game game)
         {
             return new global::Addon.Core.Models.Addon(game,this.FolderName,this.AbsolutePath)
             {
+                Title=this.Title,
                 ProjectUrl = this.ProjectUrl,
                 Downloads = this.Downloads,
                 PreferredReleaseType = this.PreferredReleaseType,
