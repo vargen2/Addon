@@ -184,6 +184,7 @@
                 Text="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath, Mode=OneWay}" />
             <Button Margin="{StaticResource SmallLeftMargin}" Click="RefreshTocFileForAllInSelectedGame">Refresh Toc</Button>
             <Button Margin="{StaticResource SmallLeftMargin}" Click="DownloadVersionsForAllAddonsInSelectedGame">Download versions</Button>
+<Button Margin="{StaticResource SmallLeftMargin}" Click="Button_Click">Delete All Games</Button>
             <TextBlock Name="StatusTextBlock" Margin="{StaticResource SmallLeftMargin}" />
             <ProgressBar
                 Name="StatusProgressBar"

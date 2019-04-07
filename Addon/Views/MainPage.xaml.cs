@@ -23,7 +23,7 @@ namespace Addon.Views
             var button = sender as Button;
             var addon = button.Tag as Core.Models.Addon;
             await Tasks.UpdateAddon(addon);
-            await Logic.Storage.SaveTask();
+            
         }
 
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -69,6 +69,17 @@ namespace Addon.Views
                 menuflyuout.Items.Insert(menuflyuout.Items.Count - 1, submenu);
             }
         }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            ViewModel.Session.Games.Clear();
+            ViewModel.Session.SelectedGame=new Core.Models.Game("No Game Found");
+            await Storage.SaveTask();
+
+        }
+
+        
     }
 
 }

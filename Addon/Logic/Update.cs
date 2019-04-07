@@ -10,9 +10,11 @@ using Windows.Storage;
 
 namespace Addon.Logic
 {
+
+
     public static class Update
     {
-        private static Windows.Storage.StorageFolder localFolder = Windows.Storage.ApplicationData.Current.LocalCacheFolder;
+        private static StorageFolder localFolder = ApplicationData.Current.TemporaryFolder;
 
         public static async Task<StorageFile> DownloadFile(Core.Models.Addon addon)
         {
@@ -40,23 +42,25 @@ namespace Addon.Logic
             return null;
         }
 
-        public static async Task UpdateAddon(Core.Models.Addon addon, StorageFile file)
+        public static async Task<Tuple<string, string>> UpdateAddon(Core.Models.Addon addon, StorageFile file)
         {
+            var extractFolderPath = localFolder.Path + @"\" + file.Name.Replace(".zip", "");
             try
             {
-                var extractFolderPath = localFolder.Path + @"\" + file.Name.Replace(".zip", "");
+
                 ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
+
                 var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
+
+
                 var folders = await extractFolder.GetFoldersAsync();
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
                 foreach (var folder in folders)
                 {
-                    Debug.WriteLine("zipfolder: " + folder.Name);
                     try
                     {
                         var delete = await gameFolder.GetFolderAsync(folder.Name);
-                        //Debug.WriteLine("deletfolder: " + delete.Name);
-                        await delete.DeleteAsync();
+                        await delete.DeleteAsync(StorageDeleteOption.PermanentDelete);
                     }
                     catch (Exception e)
                     {
@@ -68,10 +72,10 @@ namespace Addon.Logic
 
                 foreach (var folder in folders)
                 {
-                    await CopyFolderAsync(folder,gameFolder);
+                    await CopyFolderAsync(folder, gameFolder);
                 }
-                 Debug.WriteLine("copy ok");
-               
+                Debug.WriteLine("copy ok");
+
                 var foldersAsList = new List<StorageFolder>(folders);
                 var subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
                 var addons = addon.Game.Addons;
@@ -85,14 +89,19 @@ namespace Addon.Logic
                 }
                 addon.CurrentDownload = addon.SuggestedDownload;
 
-                await file.DeleteAsync();
-                await extractFolder.DeleteAsync();
+                //await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
+                //Debug.WriteLine(extractFolder.Path);
+
+                //await extractFolder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+
+
+
             }
             catch (Exception e)
             {
-                Debug.WriteLine("[ERROR] UpdateAddon. " + e.Message+", "+e.StackTrace);
+                Debug.WriteLine("[ERROR] UpdateAddon. " + e.Message + ", " + e.StackTrace);
             }
-
+            return new Tuple<string, string>(file.Path, extractFolderPath);
         }
 
 
@@ -112,5 +121,16 @@ namespace Addon.Logic
             }
         }
 
+        internal async static Task Cleanup(Tuple<string, string> trash)
+        {
+            var zipFile = await StorageFile.GetFileFromPathAsync(trash.Item1);
+            await zipFile.DeleteAsync();
+
+            var extractFolder = await StorageFolder.GetFolderFromPathAsync(trash.Item2);
+            await extractFolder.DeleteAsync();
+
+            
+
+        }
     }
 }

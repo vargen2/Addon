@@ -261,8 +261,11 @@ namespace Addon.Logic
         {
             var file = await Update.DownloadFile(addon);
             Debug.WriteLine("file downloaded: " + file.Path);
-            await Update.UpdateAddon(addon, file);
-            Debug.WriteLine("Update addon omcplete: " + addon.FolderName);
+            var trash = await Update.UpdateAddon(addon, file);
+            Debug.WriteLine("Update addon complete: " + addon.FolderName);
+            await Logic.Storage.SaveTask();
+            await Update.Cleanup(trash);
+            Debug.WriteLine("Cleanup complete: " + addon.FolderName);
         }
     }
 }
