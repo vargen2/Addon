@@ -67,7 +67,7 @@ namespace Addon.Views
         {
             var menuflyuout = sender as MenuFlyout;
             Core.Models.Addon addon = menuflyuout.Items.First().Tag as Core.Models.Addon;
-            MenuFlyoutItemBase temp = menuflyuout.Items.First(item => item.Name.Equals("VersionsMenuFlyout"));
+            MenuFlyoutItemBase temp = menuflyuout.Items.FirstOrDefault(item => item.Name.Equals("VersionsMenuFlyout"));
 
             if (temp != null)
             {
