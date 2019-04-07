@@ -184,7 +184,7 @@
                 Text="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath, Mode=OneWay}" />
             <Button Margin="{StaticResource SmallLeftMargin}" Click="RefreshTocFileForAllInSelectedGame">Refresh Toc</Button>
             <Button Margin="{StaticResource SmallLeftMargin}" Click="DownloadVersionsForAllAddonsInSelectedGame">Download versions</Button>
-<Button Margin="{StaticResource SmallLeftMargin}" Click="Button_Click">Delete All Games</Button>
+            <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveAllGames">Delete All Games</Button>
             <TextBlock Name="StatusTextBlock" Margin="{StaticResource SmallLeftMargin}" />
             <ProgressBar
                 Name="StatusProgressBar"
@@ -244,8 +244,8 @@
                             <TextBlock Height="25" Text="{Binding CurrentReleaseTypeAndVersion}" />
                         </StackPanel>
                         <StackPanel Width="200">
-                            <TextBlock Height="25" Text="{x:Bind SuggestedDownload.ReleaseType,Mode=OneWay}" />
-                            <TextBlock Height="25" Text="{x:Bind SuggestedDownload.Version,Mode=OneWay}" />
+                            <TextBlock Height="25" Text="{x:Bind SuggestedDownload.ReleaseType, Mode=OneWay}" />
+                            <TextBlock Height="25" Text="{x:Bind SuggestedDownload.Version, Mode=OneWay}" />
                         </StackPanel>
                         <StackPanel Width="200">
                             <ProgressBar

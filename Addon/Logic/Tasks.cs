@@ -173,6 +173,7 @@ namespace Addon.Logic
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(Core.Models.Addon addon)
         {
+            addon.Status = Core.Models.Addon.DOWNLOADING_VERSIONS;
             if (String.IsNullOrEmpty(addon.ProjectUrl))
             {
                 addon.ProjectUrl = await FindProjectUrlFor(addon);
@@ -259,9 +260,15 @@ namespace Addon.Logic
 
         public static async Task UpdateAddon(Core.Models.Addon addon)
         {
-            var file = await Update.DownloadFile(addon);
+            await UpdateAddon(addon, addon.SuggestedDownload);
+        }
+
+        public static async Task UpdateAddon(Core.Models.Addon addon, Download download)
+        {
+            addon.Status = Core.Models.Addon.UPDATING;
+            var file = await Update.DownloadFile(addon,download);
             Debug.WriteLine("file downloaded: " + file.Path);
-            var trash = await Update.UpdateAddon(addon, file);
+            var trash = await Update.UpdateAddon(addon,download, file);
             Debug.WriteLine("Update addon complete: " + addon.FolderName);
             await Logic.Storage.SaveTask();
             await Update.Cleanup(trash);

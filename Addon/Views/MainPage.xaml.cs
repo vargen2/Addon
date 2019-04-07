@@ -1,5 +1,6 @@
 ﻿using Addon.Logic;
 using Addon.ViewModels;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml;
@@ -23,7 +24,7 @@ namespace Addon.Views
             var button = sender as Button;
             var addon = button.Tag as Core.Models.Addon;
             await Tasks.UpdateAddon(addon);
-            
+
         }
 
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -64,22 +65,39 @@ namespace Addon.Views
                 };
                 foreach (var download in addon.Downloads)
                 {
-                    submenu.Items.Add(new MenuFlyoutItem() { Text = download.ToString() });
+                    var menuItem = new MenuFlyoutItem() { Text = download.ToString() };
+                    menuItem.Click += async (a, b) =>
+                    {
+                        ContentDialog updateAddonDialog = new ContentDialog()
+                        {
+                            Title = "Update Addon?",
+                            Content = "Update to " + download.ReleaseType + " " + download.Version + "?",
+                            PrimaryButtonText = "Ok",
+                            CloseButtonText = "Cancel"
+                        };
+
+                        var response = await updateAddonDialog.ShowAsync();
+                        if (response == ContentDialogResult.Primary)
+                        {
+                            await Tasks.UpdateAddon(addon, download);
+                        }
+                    };
+                    submenu.Items.Add(menuItem);
                 }
                 menuflyuout.Items.Insert(menuflyuout.Items.Count - 1, submenu);
             }
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void RemoveAllGames(object sender, RoutedEventArgs e)
         {
 
             ViewModel.Session.Games.Clear();
-            ViewModel.Session.SelectedGame=new Core.Models.Game("No Game Found");
+            ViewModel.Session.SelectedGame = new Core.Models.Game("No Game Found");
             await Storage.SaveTask();
 
         }
 
-        
+
     }
 
 }

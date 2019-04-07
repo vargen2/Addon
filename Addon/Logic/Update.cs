@@ -1,4 +1,5 @@
 ﻿using Addon.Core.Helpers;
+using Addon.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,13 +13,12 @@ namespace Addon.Logic
 {
 
 
-    public static class Update
+    internal static class Update
     {
         private static StorageFolder localFolder = ApplicationData.Current.TemporaryFolder;
 
-        public static async Task<StorageFile> DownloadFile(Core.Models.Addon addon)
+        internal static async Task<StorageFile> DownloadFile(Core.Models.Addon addon, Download download)
         {
-            var download = addon.SuggestedDownload;
             var temp = addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects"));
             var downloadLink = temp + download.DownloadLink;
             Debug.WriteLine(downloadLink);
@@ -42,17 +42,13 @@ namespace Addon.Logic
             return null;
         }
 
-        public static async Task<Tuple<string, string>> UpdateAddon(Core.Models.Addon addon, StorageFile file)
+        internal static async Task<Tuple<string, string>> UpdateAddon(Core.Models.Addon addon, Download download, StorageFile file)
         {
             var extractFolderPath = localFolder.Path + @"\" + file.Name.Replace(".zip", "");
             try
             {
-
                 ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
-
                 var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
-
-
                 var folders = await extractFolder.GetFoldersAsync();
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
                 foreach (var folder in folders)
@@ -68,7 +64,6 @@ namespace Addon.Logic
                     }
 
                 }
-                //Debug.WriteLine(gameFolder.Path);
 
                 foreach (var folder in folders)
                 {
@@ -87,15 +82,7 @@ namespace Addon.Logic
                         addons.Remove(subAddon);
                     }
                 }
-                addon.CurrentDownload = addon.SuggestedDownload;
-
-                //await file.DeleteAsync(StorageDeleteOption.PermanentDelete);
-                //Debug.WriteLine(extractFolder.Path);
-
-                //await extractFolder.DeleteAsync(StorageDeleteOption.PermanentDelete);
-
-
-
+                addon.CurrentDownload = download;
             }
             catch (Exception e)
             {
@@ -105,7 +92,7 @@ namespace Addon.Logic
         }
 
 
-        public static async Task CopyFolderAsync(StorageFolder source, StorageFolder destinationContainer, string desiredName = null)
+        internal static async Task CopyFolderAsync(StorageFolder source, StorageFolder destinationContainer, string desiredName = null)
         {
             StorageFolder destinationFolder = null;
             destinationFolder = await destinationContainer.CreateFolderAsync(
@@ -129,7 +116,7 @@ namespace Addon.Logic
             var extractFolder = await StorageFolder.GetFolderFromPathAsync(trash.Item2);
             await extractFolder.DeleteAsync();
 
-            
+
 
         }
     }
