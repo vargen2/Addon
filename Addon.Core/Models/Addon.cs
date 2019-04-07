@@ -46,7 +46,16 @@ namespace Addon.Core.Models
             }
         }
 
-        public List<Download> Downloads { get; set; } = new List<Download>();
+        private List<Download> downloads = new List<Download>();
+        public List<Download> Downloads
+        {
+            get => downloads;
+            set
+            {
+                downloads = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         private string preferredReleaseType = "Release";
 

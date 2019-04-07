@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:Addon.Core.Models"
+    xmlns:local="using:Addon.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     Style="{StaticResource PageStyle}"
@@ -50,7 +51,7 @@
                                 Foreground="{TemplateBinding Foreground}"
                                 Text="{TemplateBinding Text}"
                                 TextTrimming="None"
-                                TextWrapping="Wrap"/>
+                                TextWrapping="Wrap" />
                             <TextBlock
                                 x:Name="KeyboardAcceleratorTextBlock"
                                 Grid.Column="1"
@@ -166,7 +167,7 @@
         </Style>
 
 
-        
+
     </Page.Resources>
     <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
         <Grid.RowDefinitions>
@@ -264,9 +265,11 @@
 
                         </StackPanel>
                         <FlyoutBase.AttachedFlyout>
-                            <MenuFlyout>
-
-                                <MenuFlyoutItem Command="{Binding SetIgnored}" Text="Ignored">
+                            <MenuFlyout Opening="FlyoutBase_OnOpening">
+                                <MenuFlyoutItem
+                                    Command="{Binding SetIgnored}"
+                                    Tag="{x:Bind Mode=OneWay}"
+                                    Text="Ignored">
                                     <MenuFlyoutItem.Icon>
                                         <SymbolIcon Symbol="Accept" Visibility="{Binding IsIgnored}" />
                                     </MenuFlyoutItem.Icon>
@@ -286,34 +289,9 @@
                                         <SymbolIcon Symbol="Accept" Visibility="{Binding IsRelease}" />
                                     </MenuFlyoutItem.Icon>
                                 </MenuFlyoutItem>
-
-
-                                <MenuFlyoutSubItem
-                                    Name="VersionsMenuFlyout"
-                                    Loaded="VersionsMenuFlyout_OnLoaded"
-                                    Tag="{x:Bind}"
-                                    Text="Versions" />
+                                <MenuFlyoutSubItem Name="VersionsMenuFlyout" Text="Versions" />
                                 <MenuFlyoutSubItem Text="Info">
-
-                                    <MenuFlyoutItem
-                                        Style="{StaticResource mysyle2}"
-                                        Text="{x:Bind InfoString, Mode=OneWay}">
-                                        <!--<MenuFlyoutItem.Style>
-                                            <Style TargetType="MenuFlyoutItem">
-                                                <Setter Property="Template">
-                                        -->
-                                        <!--<Setter.Value>
-                                                        <ControlTemplate>
-                                                            <Style TargetType="TextBlock">
-                                                                <Setter Property="TextBlock.TextTrimming" Value="None" />
-                                                            </Style>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>-->
-                                        <!--
-                                                </Setter>
-                                            </Style>
-                                        </MenuFlyoutItem.Style>-->
-                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem Style="{StaticResource mysyle2}" Text="{x:Bind InfoString, Mode=OneWay}" />
                                 </MenuFlyoutSubItem>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>

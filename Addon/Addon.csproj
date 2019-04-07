@@ -119,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activation\ActivationHandler.cs" />
+    <Compile Include="Helpers\FlyoutMenuExtension.cs" />
     <Compile Include="Logic\Common.cs" />
     <Compile Include="Logic\Storage.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderBehavior.cs" />

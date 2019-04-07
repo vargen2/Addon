@@ -20,6 +20,8 @@ using Windows.UI.ViewManagement;
 using Addon.Helpers;
 using Addon.Logic;
 using Addon.ViewModels;
+using System.Collections.Generic;
+using Addon = Addon.Core.Models.Addon;
 
 namespace Addon.Views
 {
@@ -43,20 +45,7 @@ namespace Addon.Views
         {
             FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
         }
-
-        private async void VersionsMenuFlyout_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                var versionMenu = sender as MenuFlyoutSubItem;
-                var addon = versionMenu.Tag as Core.Models.Addon;
-                foreach (var download in addon.Downloads)
-                {
-                    versionMenu.Items.Add(new MenuFlyoutItem() { Text = download.ToString() });
-                }
-            });
-        }
-
+        
         private async void DownloadVersionsForAllAddonsInSelectedGame(object sender, RoutedEventArgs e)
         {
             var addons = ViewModel.Session.SelectedGame.Addons.ToList();
@@ -72,6 +61,29 @@ namespace Addon.Views
             Debug.WriteLine("Refreshed toc files for all addons");
             await Logic.Storage.SaveTask();
         }
-      }
+
+
+        private void FlyoutBase_OnOpening(object sender, object e)
+        {
+            var menuflyuout = sender as MenuFlyout;
+            Core.Models.Addon addon = menuflyuout.Items.First().Tag as Core.Models.Addon;
+            MenuFlyoutItemBase temp = menuflyuout.Items.First(item => item.Name.Equals("VersionsMenuFlyout"));
+
+            if (temp != null)
+            {
+                menuflyuout.Items.Remove(temp);
+                var submenu = new MenuFlyoutSubItem()
+                {
+                    Name = "VersionsMenuFlyout",
+                    Text = "Versions"
+                };
+                foreach (var download in addon.Downloads)
+                {
+                    submenu.Items.Add(new MenuFlyoutItem() { Text = download.ToString() });
+                }
+                menuflyuout.Items.Insert(menuflyuout.Items.Count - 1, submenu);
+            }
+        }
+    }
 
 }
