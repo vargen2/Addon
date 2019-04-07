@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Addon.Core.Helpers;
+using Addon.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -10,8 +12,6 @@ using Windows.Storage;
 using Windows.Storage.Search;
 using Windows.Web;
 using Windows.Web.Http;
-using Addon.Core.Helpers;
-using Addon.Core.Models;
 
 namespace Addon.Logic
 {
@@ -255,6 +255,14 @@ namespace Addon.Logic
                 }
             }
             return new List<Download>();
+        }
+
+        public static async Task UpdateAddon(Core.Models.Addon addon)
+        {
+            var file = await Update.DownloadFile(addon);
+            Debug.WriteLine("file downloaded: " + file.Path);
+            await Update.UpdateAddon(addon, file);
+            Debug.WriteLine("Update addon omcplete: " + addon.FolderName);
         }
     }
 }

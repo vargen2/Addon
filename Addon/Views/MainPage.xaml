@@ -243,8 +243,8 @@
                             <TextBlock Height="25" Text="{Binding CurrentReleaseTypeAndVersion}" />
                         </StackPanel>
                         <StackPanel Width="200">
-                            <TextBlock Height="25" Text="Release" />
-                            <TextBlock Height="25" Text="v3.4.5.2" />
+                            <TextBlock Height="25" Text="{x:Bind SuggestedDownload.ReleaseType,Mode=OneWay}" />
+                            <TextBlock Height="25" Text="{x:Bind SuggestedDownload.Version,Mode=OneWay}" />
                         </StackPanel>
                         <StackPanel Width="200">
                             <ProgressBar

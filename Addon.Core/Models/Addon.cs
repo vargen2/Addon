@@ -60,6 +60,7 @@ namespace Addon.Core.Models
                 downloads = value;
                 updateStatus();
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("SuggestedDownload");
             }
         }
 
@@ -74,11 +75,13 @@ namespace Addon.Core.Models
                     return;
                 preferredReleaseType = value;
                 updateStatus();
+                NotifyPropertyChanged();
                 NotifyPropertyChanged("IsAlpha");
                 NotifyPropertyChanged("IsBeta");
                 NotifyPropertyChanged("IsRelease");
                 NotifyPropertyChanged("InfoString");
-                NotifyPropertyChanged();
+                NotifyPropertyChanged("SuggestedDownload");
+                
             }
         }
 
@@ -115,6 +118,7 @@ namespace Addon.Core.Models
                 updateStatus();
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("CurrentReleaseTypeAndVersion");
+                NotifyPropertyChanged("SuggestedDownload");
             }
         }
 

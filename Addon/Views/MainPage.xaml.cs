@@ -1,27 +1,11 @@
-﻿using System;
+﻿using Addon.Logic;
+using Addon.ViewModels;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.Management.Deployment;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Data;
-using Windows.Web.Http;
-using Windows.Storage;
-using Addon.Core.Helpers;
-using Addon.Core.Models;
-using Addon.Services;
-using Windows.UI.ViewManagement;
-using Addon.Helpers;
-using Addon.Logic;
-using Addon.ViewModels;
-using System.Collections.Generic;
-using Addon = Addon.Core.Models.Addon;
 
 namespace Addon.Views
 {
@@ -36,16 +20,17 @@ namespace Addon.Views
 
         private async void UpdateButtonClick(object sender, RoutedEventArgs e)
         {
-            var button = e.OriginalSource as Button;
+            var button = sender as Button;
             var addon = button.Tag as Core.Models.Addon;
-            await Task.Delay(100);
+            await Tasks.UpdateAddon(addon);
+            await Logic.Storage.SaveTask();
         }
 
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
         }
-        
+
         private async void DownloadVersionsForAllAddonsInSelectedGame(object sender, RoutedEventArgs e)
         {
             var addons = ViewModel.Session.SelectedGame.Addons.ToList();
