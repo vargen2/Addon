@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
@@ -23,9 +24,12 @@ namespace Addon.Core.Models
 
         public Addon(Game game, string folderName, string absolutePath)
         {
-            Game = game ?? throw new NullReferenceException(); ;
-            FolderName = folderName ?? throw new NullReferenceException(); ;
-            AbsolutePath = absolutePath ?? throw new NullReferenceException(); ;
+            Game = game ?? throw new NullReferenceException();
+            ;
+            FolderName = folderName ?? throw new NullReferenceException();
+            ;
+            AbsolutePath = absolutePath ?? throw new NullReferenceException();
+            ;
             SetIgnored = new RelayCommand(() => IsIgnored = !IsIgnored);
             SetAlpha = new RelayCommand(() => PreferredReleaseType = "Alpha");
             SetBeta = new RelayCommand(() => PreferredReleaseType = "Beta");
@@ -47,12 +51,14 @@ namespace Addon.Core.Models
         }
 
         private List<Download> downloads = new List<Download>();
+
         public List<Download> Downloads
         {
             get => downloads;
             set
             {
                 downloads = value;
+                updateStatus();
                 NotifyPropertyChanged();
             }
         }
@@ -67,17 +73,21 @@ namespace Addon.Core.Models
                 if (value.Equals(preferredReleaseType))
                     return;
                 preferredReleaseType = value;
+                updateStatus();
                 NotifyPropertyChanged("IsAlpha");
                 NotifyPropertyChanged("IsBeta");
                 NotifyPropertyChanged("IsRelease");
+                NotifyPropertyChanged("InfoString");
                 NotifyPropertyChanged();
             }
         }
 
         private string version = Empty;
+
         public string Version
         {
-            get => version; set
+            get => version;
+            set
             {
                 if (value.Equals(version))
                     return;
@@ -87,10 +97,13 @@ namespace Addon.Core.Models
             }
         }
 
-        public string CurrentReleaseTypeAndVersion => (CurrentDownload != null) ? CurrentDownload.ReleaseType + " " + CurrentDownload.Version : $"{Version}";
+        public string CurrentReleaseTypeAndVersion => (CurrentDownload != null)
+            ? CurrentDownload.ReleaseType + " " + CurrentDownload.Version
+            : $"{Version}";
 
         //public string ReleaseType_Version => $"{ReleaseType} {Version}";
         private Download currentDownload;
+
         public Download CurrentDownload
         {
             get => currentDownload;
@@ -99,6 +112,7 @@ namespace Addon.Core.Models
                 if (currentDownload != null && value == currentDownload)
                     return;
                 currentDownload = value;
+                updateStatus();
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("CurrentReleaseTypeAndVersion");
             }
@@ -111,6 +125,7 @@ namespace Addon.Core.Models
         public ICommand SetRelease { get; set; }
 
         private bool isIgnored;
+
         public bool IsIgnored
         {
             get => isIgnored;
@@ -132,6 +147,7 @@ namespace Addon.Core.Models
 
 
         private int progress;
+
         public int Progress
         {
             get => progress;
@@ -165,6 +181,7 @@ namespace Addon.Core.Models
         public bool IsProgressing => status == UPDATING || status == DOWNLOADING_VERSIONS;
 
         private string status = INITIALIZED;
+
         public string Status
         {
             get => status;
@@ -184,7 +201,53 @@ namespace Addon.Core.Models
 
 
 
+        public Download SuggestedDownload
+        {
+            get
+            {
+                if (Downloads.Count == 0)
+                {
+                    return null;
+                }
+                
+                return downloads.FirstOrDefault(dl => dl.ReleaseType.ToLower().Equals(this.preferredReleaseType.ToLower()));
+            }
+        }
 
+
+        private void updateStatus()
+        {
+            if (downloads.Count == 0)
+            {
+                Status = UNKNOWN;
+                return;
+            }
+
+            var suggestedDownload = SuggestedDownload;
+
+            if (suggestedDownload == null)
+            {
+                Status = UNKNOWN;
+                return;
+            }
+
+            if (currentDownload == null)
+            {
+                Status = UPDATEABLE;
+                return;
+            }
+
+            if (suggestedDownload.DateUploaded > this.currentDownload.DateUploaded)
+            {
+                Status = UPDATEABLE;
+            }
+            else
+            {
+                Status = UP_TO_DATE;
+            }
+
+
+        }
 
 
 
@@ -202,7 +265,7 @@ namespace Addon.Core.Models
         }
 
 
-        public string InfoString => $"{nameof(Game)}: {Game},\r\n{nameof(FolderName)}: {FolderName},\r\n{nameof(AbsolutePath)}: {AbsolutePath},\r\n{nameof(Title)}: {Title},\r\n{nameof(ProjectUrl)}: {ProjectUrl},\r\n{nameof(PreferredReleaseType)}: {PreferredReleaseType},\r\n{nameof(Version)}: {Version},\r\n{nameof(CurrentReleaseTypeAndVersion)}: {CurrentReleaseTypeAndVersion},\r\n{nameof(IsIgnored)}: {IsIgnored},\r\n{nameof(GameVersion)}: {GameVersion},\r\n{nameof(Status)}: {Status}";
+        public string InfoString => $"{nameof(Game)}: {Game},\r\n{nameof(FolderName)}: {FolderName},\r\n{nameof(AbsolutePath)}: {AbsolutePath},\r\n{nameof(Title)}: {Title},\r\n{nameof(ProjectUrl)}: {ProjectUrl},\r\n{nameof(PreferredReleaseType)}: {PreferredReleaseType},\r\n{nameof(Version)}: {Version},\r\n{nameof(CurrentReleaseTypeAndVersion)}: {CurrentReleaseTypeAndVersion},\r\n{nameof(IsIgnored)}: {IsIgnored},\r\n{nameof(GameVersion)}: {GameVersion},\r\n{nameof(Status)}: {Status},\r\n{nameof(CurrentDownload)}: {CurrentDownload},\r\n{nameof(SuggestedDownload)}: {SuggestedDownload}";
 
         public SaveableAddon AsSaveableAddon()
         {
