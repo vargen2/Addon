@@ -24,7 +24,7 @@ namespace Addon.Logic
             }
             catch (Exception e)
             {
-                Debug.WriteLine("ERROR when saveing, " + e.Message);
+                Debug.WriteLine("ERROR when saveing session, " + e.Message);
 
             }
         }
