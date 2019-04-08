@@ -83,6 +83,11 @@ namespace Addon.Logic
                     }
                 }
                 addon.CurrentDownload = download;
+                if (subFoldersToDelete.Count > 0)
+                {
+                    Singleton<Session>.Instance.KnownSubFolders.UnionWith(subFoldersToDelete);
+                    await Storage.SaveKnownSubFoldersToUser();
+                }
             }
             catch (Exception e)
             {

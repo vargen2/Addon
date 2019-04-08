@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Addon.Activation;
+using Addon.Core.Helpers;
+using Addon.Core.Models;
+using Addon.Logic;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Addon.Helpers;
 using Windows.ApplicationModel.Activation;
-using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Addon.Activation;
-using Addon.Core.Helpers;
-using Addon.Core.Models;
 
 namespace Addon.Services
 {
@@ -67,15 +66,25 @@ namespace Addon.Services
                 // Tasks after activation
                 await StartupAsync();
             }
-            
-            Task.Run(async () =>
+
+           
+            var storeAddons = await Tasks.LoadStoreAddons();
+            Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(storeAddons);
+            Debug.WriteLine("Loaded StoreAddons " + Singleton<Session>.Instance.StoreAddons.Count);
+
+            var knownSubFolders = await Tasks.LoadKnownSubFolders();
+            var userKnownSubFolders = await Storage.LoadKnownSubFoldersFromUser();
+            if (userKnownSubFolders != null)
             {
-                //await Controls.Storage.LoadTask();
-                var storeAddons = await ReadFile();
-                Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(storeAddons);
-                Debug.WriteLine("Loaded StoreAddons. count=" + Singleton<Session>.Instance.StoreAddons.Count);
-            });
-            
+                knownSubFolders.UnionWith(userKnownSubFolders);
+            }
+            Singleton<Session>.Instance.KnownSubFolders.UnionWith(knownSubFolders);
+
+            Debug.WriteLine("Loaded knownsubfolders " + Singleton<Session>.Instance.KnownSubFolders.Count);
+
+
+           
+
         }
 
         private async Task InitializeAsync()
@@ -101,16 +110,5 @@ namespace Addon.Services
             return args is IActivatedEventArgs;
         }
 
-        private static async Task<IList<StoreAddon>> ReadFile()
-        {
-            var packageFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
-            var sampleFile = await packageFolder.GetFileAsync(@"Assets\curseaddons.txt");
-            var text = await FileIO.ReadTextAsync(sampleFile);
-            // TODO fix time
-            IList<CurseAddon> curseAddons = await Json.ToObjectAsync<List<CurseAddon>>(@text);
-            return curseAddons
-                .Select(ca => new StoreAddon(ca.addonURL, ca.title, ca.description, ca.downloads, DateTime.Now, DateTime.Now))
-                .ToList();
-        }
     }
 }

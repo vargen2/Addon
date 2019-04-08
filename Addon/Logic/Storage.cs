@@ -3,6 +3,7 @@ using Addon.Core.Models;
 using Addon.Core.Storage;
 using Addon.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -48,6 +49,28 @@ namespace Addon.Logic
             //}
 
             Debug.WriteLine("Loaded from " + localFolder.Path);
+        }
+
+        public static async Task<HashSet<string>> LoadKnownSubFoldersFromUser()
+        {
+            var knownFolders = await localFolder.ReadAsync<HashSet<string>>("knownsubfolders");
+            return knownFolders;
+
+        }
+
+        public static async Task SaveKnownSubFoldersToUser()
+        {
+            try
+            {
+                var instance = Singleton<Session>.Instance.KnownSubFolders;
+                await localFolder.SaveAsync("knownsubfolders", instance);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("ERROR when saveing knownsubfolders, " + e.Message);
+
+            }
+
         }
 
     }

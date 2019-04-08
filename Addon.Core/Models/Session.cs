@@ -29,7 +29,9 @@ namespace Addon.Core.Models
 
         public ObservableCollection<Game> Games { get; } = new ObservableCollection<Game>();
 
-        public ObservableCollection<StoreAddon> StoreAddons { get; set; }// = new ObservableCollection<StoreAddon>();
+        public ObservableCollection<StoreAddon> StoreAddons { get; set; } = new ObservableCollection<StoreAddon>();
+
+        public HashSet<string> KnownSubFolders { get; } = new HashSet<string>();
 
         public SaveableSession AsSaveableSession()
         {

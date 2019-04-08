@@ -33,18 +33,18 @@ namespace Addon.Logic
 
         private const string KnownSubFoldersFile = @"Assets\knownsubfolders.txt";
 
-        public sealed class Singleton
-        {
-            private static readonly Lazy<Singleton> lazy = new Lazy<Singleton>(() => new Singleton());
+        //public sealed class Singleton
+        //{
+        //    private static readonly Lazy<Singleton> lazy = new Lazy<Singleton>(() => new Singleton());
 
-            public static Singleton Instance => lazy.Value;
+        //    public static Singleton Instance => lazy.Value;
 
-            public HashSet<string> KnownSubFolders { get; } = Tasks.LoadKnownSubFolders();
+        //    public HashSet<string> KnownSubFolders { get; } = Tasks.LoadKnownSubFolders();
 
-            private Singleton()
-            {
-            }
-        }
+        //    private Singleton()
+        //    {
+        //    }
+        //}
 
         public class TocFile
         {
@@ -147,7 +147,7 @@ namespace Addon.Logic
                 }
             }
 
-            return new TocFile(folder, version, gameVersion, title, Singleton.Instance.KnownSubFolders.Contains(folder.Name));
+            return new TocFile(folder, version, gameVersion, title, Singleton<Session>.Instance.KnownSubFolders.Contains(folder.Name));
         }
 
         public static async Task RefreshTocFileFor(IList<Core.Models.Addon> addons)
@@ -162,32 +162,16 @@ namespace Addon.Logic
             }
         }
 
-        //    //public static void createKnownSubFolders() {
-        //    //    var game = App.model.getSelectedGame();
-        //    //    String saveString = game.getAddons().stream()
-        //    //            .filter(addon -> addon.getExtraFolders() != null)
-        //    //            .map(Addon::getExtraFolders)
-        //    //            .flatMap(Collection::stream)
-        //    //            .map(file -> file.getName() + Util.LINE)
-        //    //            .collect(Collectors.joining());
-        //    //    try {
-        //    //        Files.writeString(KNOWN, saveString);
-        //    //    } catch (IOException e) {
-        //    //        e.printStackTrace();
-        //    //    }
-        //    //}
+       
 
         //    //private static final List<Charset> CHARSETS = List.of(Charset.defaultCharset(), Charset.forName("ISO-8859-1"));
 
-        public static HashSet<string> LoadKnownSubFolders()
-        {
-            return Task.Run(async () =>
-              {
-                  var packageFolder = Package.Current.InstalledLocation;
-                  var sampleFile = await packageFolder.GetFileAsync(KnownSubFoldersFile);
-                  var lines = await FileIO.ReadLinesAsync(sampleFile);
-                  return new HashSet<string>(lines);
-              }).Result;
+        public static async Task<HashSet<string>> LoadKnownSubFolders()
+        {            
+            var packageFolder = Package.Current.InstalledLocation;
+            var sampleFile = await packageFolder.GetFileAsync(KnownSubFoldersFile);
+            var lines = await FileIO.ReadLinesAsync(sampleFile);
+            return new HashSet<string>(lines);
         }
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(ObservableCollection<Core.Models.Addon> addons)
@@ -301,6 +285,19 @@ namespace Addon.Logic
             await Logic.Storage.SaveTask();
             await Update.Cleanup(trash);
             Debug.WriteLine("Cleanup complete: " + addon.FolderName);
+        }
+
+        
+        public static async Task<IList<StoreAddon>> LoadStoreAddons()
+        {
+            var packageFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            var sampleFile = await packageFolder.GetFileAsync(@"Assets\curseaddons.txt");
+            var text = await FileIO.ReadTextAsync(sampleFile);
+            // TODO fix time
+            IList<CurseAddon> curseAddons = await Json.ToObjectAsync<List<CurseAddon>>(@text);
+            return curseAddons
+                .Select(ca => new StoreAddon(ca.addonURL, ca.title, ca.description, ca.downloads, DateTime.Now, DateTime.Now))
+                .ToList();
         }
     }
 }
