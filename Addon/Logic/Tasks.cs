@@ -66,7 +66,16 @@ namespace Addon.Logic
             }
         }
 
-
+        public static async Task sort(Game game)
+        {
+            //var addons = game.Addons;
+            //var sorted = addons.OrderBy(a=>a.Status).ToList();
+            //addons.Clear();
+            //foreach (var item in sorted)
+            //{
+            //    addons.Add(item);
+            //}
+        }
 
 
         public static async Task RefreshGameFolder(Game game)
@@ -165,26 +174,24 @@ namespace Addon.Logic
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(IList<Core.Models.Addon> addons)
         {
-            foreach (var addon in addons)
-            {
-                await FindProjectUrlAndDownLoadVersionsFor(addon);
-            }
+            var tasks = addons.Select(FindProjectUrlAndDownLoadVersionsFor).ToArray();
+            await Task.WhenAll(tasks);
+            //foreach (var addon in addons)
+            //{
+            //    await FindProjectUrlAndDownLoadVersionsFor(addon);
+            //}
         }
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(Core.Models.Addon addon)
         {
+            addon.Progress = 0;
             addon.Status = Core.Models.Addon.DOWNLOADING_VERSIONS;
             if (String.IsNullOrEmpty(addon.ProjectUrl))
             {
                 addon.ProjectUrl = await FindProjectUrlFor(addon);
-            }
 
+            }
             addon.Downloads = await DownloadVersionsFor(addon);
-            // Debug.WriteLine("[SUCCESS] FindProjectUrlAndDownLoadVersionsFor: " + addon.ProjectUrl);
-            //foreach (var download in addon.Downloads)
-            //{
-            //    Debug.WriteLine(download);
-            //}
         }
 
         public static async Task<string> FindProjectUrlFor(Core.Models.Addon addon)
@@ -265,10 +272,11 @@ namespace Addon.Logic
 
         public static async Task UpdateAddon(Core.Models.Addon addon, Download download)
         {
+            addon.Progress = 0;
             addon.Status = Core.Models.Addon.UPDATING;
-            var file = await Update.DownloadFile(addon,download);
+            var file = await Update.DownloadFile(addon, download);
             Debug.WriteLine("file downloaded: " + file.Path);
-            var trash = await Update.UpdateAddon(addon,download, file);
+            var trash = await Update.UpdateAddon(addon, download, file);
             Debug.WriteLine("Update addon complete: " + addon.FolderName);
             await Logic.Storage.SaveTask();
             await Update.Cleanup(trash);

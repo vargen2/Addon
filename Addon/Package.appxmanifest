@@ -4,9 +4,8 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  xmlns:genTemplate="http://schemas.microsoft.com/appx/developer/windowsTemplateStudio"
-  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-    IgnorableNamespaces="uap mp genTemplate rescap">
+  xmlns:genTemplate="http://schemas.microsoft.com/appx/developer/windowsTemplateStudio"  
+    IgnorableNamespaces="uap mp genTemplate">
 
   <Identity
     Name="C365E4D1-EBB9-449A-80BE-93D58F47E278"
@@ -62,8 +61,7 @@
   </Applications>
 
   <Capabilities>
-    <Capability Name="internetClient" />
-    <rescap:Capability Name="broadFileSystemAccess" />
+    <Capability Name="internetClient" />    
   </Capabilities>
 
   <genTemplate:Metadata>
@@ -75,3 +73,7 @@
     <genTemplate:Item Name="platform" Value="Uwp" />
   </genTemplate:Metadata>
 </Package>
+
+<!--xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"-->
+<!--IgnorableNamespaces="uap mp genTemplate rescap">-->
+<!--<rescap:Capability Name="broadFileSystemAccess" />-->

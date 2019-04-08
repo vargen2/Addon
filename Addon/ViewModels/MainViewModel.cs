@@ -13,7 +13,7 @@ namespace Addon.ViewModels
 
         public MainViewModel()
         {
-            Session = Singleton<Session>.Instance;
+            Session = Singleton<Session>.Instance;            
         }
 
     }

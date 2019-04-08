@@ -38,7 +38,7 @@ namespace Addon.Views
                 return;
 
             ViewModel.Session.SelectedGame = listBox.SelectedValue as Game;
-            NavigationService.ForceNavigateMainPage();
+           // NavigationService.ForceNavigateMainPage();
 
             GameSelectorFlyout.Hide();
         }
@@ -63,6 +63,7 @@ namespace Addon.Views
                 if (ViewModel.Session.Games.Any(g => g.AbsolutePath.Equals(folder.Path))) return;
 
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+                 
                 var game = Common.FolderToGame(folder);
                 ViewModel.Session.Games.Add(game);
                 if (ViewModel.Session.Games.Count == 1)
@@ -72,6 +73,9 @@ namespace Addon.Views
                 }
                 Debug.WriteLine("Picked folder: " + folder.Name);
                 await Tasks.RefreshGameFolder(game);
+                await Logic.Storage.SaveTask();
+                await Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons);
+                //await Tasks.sort(game);
                 await Logic.Storage.SaveTask();
             }
             else

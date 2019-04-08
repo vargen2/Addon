@@ -185,14 +185,11 @@
             <Button Margin="{StaticResource SmallLeftMargin}" Click="RefreshTocFileForAllInSelectedGame">Refresh Toc</Button>
             <Button Margin="{StaticResource SmallLeftMargin}" Click="DownloadVersionsForAllAddonsInSelectedGame">Download versions</Button>
             <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveAllGames">Delete All Games</Button>
-            <TextBlock Name="StatusTextBlock" Margin="{StaticResource SmallLeftMargin}" />
-            <ProgressBar
-                Name="StatusProgressBar"
-                Width="200"
-                Value="0" />
         </StackPanel>
         <ListView
             Grid.Row="1"
+            AllowDrop="True"
+            CanReorderItems="True"
             ItemsSource="{x:Bind ViewModel.Session.SelectedGame.Addons, Mode=OneWay}"
             SelectionMode="Single">
             <ListView.HeaderTemplate>

@@ -95,9 +95,7 @@ namespace Addon.Views
             ViewModel.Session.SelectedGame = new Core.Models.Game("No Game Found");
             await Storage.SaveTask();
 
-        }
-
-
+        }        
     }
 
 }

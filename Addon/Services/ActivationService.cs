@@ -67,7 +67,7 @@ namespace Addon.Services
                 // Tasks after activation
                 await StartupAsync();
             }
-
+            
             Task.Run(async () =>
             {
                 //await Controls.Storage.LoadTask();
@@ -75,7 +75,7 @@ namespace Addon.Services
                 Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(storeAddons);
                 Debug.WriteLine("Loaded StoreAddons. count=" + Singleton<Session>.Instance.StoreAddons.Count);
             });
-
+            
         }
 
         private async Task InitializeAsync()
