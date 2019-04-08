@@ -34,7 +34,7 @@ namespace Addon.Views
 
         private async void DownloadVersionsForAllAddonsInSelectedGame(object sender, RoutedEventArgs e)
         {
-            var addons = ViewModel.Session.SelectedGame.Addons.ToList();
+            var addons = ViewModel.Session.SelectedGame.Addons;
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(addons);
             Debug.WriteLine("Version downloaded for all addons");
             await Logic.Storage.SaveTask();
@@ -95,7 +95,7 @@ namespace Addon.Views
             ViewModel.Session.SelectedGame = new Core.Models.Game("No Game Found");
             await Storage.SaveTask();
 
-        }        
+        }
     }
 
 }

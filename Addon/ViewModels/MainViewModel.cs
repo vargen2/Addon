@@ -9,11 +9,13 @@ namespace Addon.ViewModels
 {
     public class MainViewModel : Observable
     {
+       
         public Session Session { get; }
 
         public MainViewModel()
         {
-            Session = Singleton<Session>.Instance;            
+            Session = Singleton<Session>.Instance;
+            //Session.SelectedGame.Addons.CollectionChanged += (a, b) => Debug.WriteLine("changed");
         }
 
     }

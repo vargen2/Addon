@@ -2,6 +2,7 @@
 using Addon.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -66,15 +67,32 @@ namespace Addon.Logic
             }
         }
 
-        public static async Task sort(Game game)
+        public static async Task Sort(ObservableCollection<Core.Models.Addon> addons)
         {
-            //var addons = game.Addons;
-            //var sorted = addons.OrderBy(a=>a.Status).ToList();
-            //addons.Clear();
-            //foreach (var item in sorted)
-            //{
-            //    addons.Add(item);
-            //}
+            if (addons.Count == 0)
+                return;
+
+            var count = addons.Where(a => a.IsUpdateable).Count();
+            if (count == 0)
+                return;
+
+            for (int i = 0; i < count; i++)
+            {
+                var addon = addons.LastOrDefault(a => a.IsUpdateable);
+                if (addon == null)
+                {
+                    return;
+                }
+                var moveFrom = addons.IndexOf(addon);
+                addons.Move(moveFrom, 0);
+            }
+            Debug.WriteLine("kom hit count: " + count);
+
+        }
+
+        public static async Task Sort(Game game)
+        {
+            await Sort(game.Addons);
         }
 
 
@@ -172,10 +190,11 @@ namespace Addon.Logic
               }).Result;
         }
 
-        public static async Task FindProjectUrlAndDownLoadVersionsFor(IList<Core.Models.Addon> addons)
+        public static async Task FindProjectUrlAndDownLoadVersionsFor(ObservableCollection<Core.Models.Addon> addons)
         {
             var tasks = addons.Select(FindProjectUrlAndDownLoadVersionsFor).ToArray();
             await Task.WhenAll(tasks);
+            await Tasks.Sort(addons);
             //foreach (var addon in addons)
             //{
             //    await FindProjectUrlAndDownLoadVersionsFor(addon);
@@ -278,6 +297,7 @@ namespace Addon.Logic
             Debug.WriteLine("file downloaded: " + file.Path);
             var trash = await Update.UpdateAddon(addon, download, file);
             Debug.WriteLine("Update addon complete: " + addon.FolderName);
+            await Sort(addon.Game);
             await Logic.Storage.SaveTask();
             await Update.Cleanup(trash);
             Debug.WriteLine("Cleanup complete: " + addon.FolderName);

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Storage;
-using Addon.Core.Helpers;
+﻿using Addon.Core.Helpers;
 using Addon.Core.Models;
 using Addon.Core.Storage;
 using Addon.Helpers;
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Addon.Logic
 {
@@ -48,6 +42,11 @@ namespace Addon.Logic
             {
                 session.Games.Add(saveableGame.AsGame());
             }
+            //foreach (var game in session.Games)
+            //{
+            //    game.Addons.CollectionChanged += (a, b) => Debug.WriteLine("changed");
+            //}
+
             Debug.WriteLine("Loaded from " + localFolder.Path);
         }
 
