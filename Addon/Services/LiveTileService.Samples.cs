@@ -14,16 +14,16 @@ namespace Addon.Services
         public void SampleUpdate()
         {
             // These would be initialized with actual data
-            string from = "Jennifer Parker";
-            string subject = "Photos from our trip";
-            string body = "Check out these awesome photos I took while in New Zealand!";
+            string from = "";
+            string subject = "";
+            string body = "";
 
             // Construct the tile content
             var content = new TileContent()
             {
                 Visual = new TileVisual()
                 {
-                    Arguments = "Jennifer Parker",
+                    Arguments = "Addon Manager",
                     TileMedium = new TileBinding()
                     {
                         Content = new TileBindingContentAdaptive()

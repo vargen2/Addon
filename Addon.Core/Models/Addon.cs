@@ -60,6 +60,7 @@ namespace Addon.Core.Models
                 downloads = value;
                 updateStatus();
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("InfoString");
                 NotifyPropertyChanged("SuggestedDownload");
             }
         }
@@ -118,6 +119,7 @@ namespace Addon.Core.Models
                 updateStatus();
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("CurrentReleaseTypeAndVersion");
+                NotifyPropertyChanged("InfoString");
                 NotifyPropertyChanged("SuggestedDownload");
             }
         }
@@ -139,6 +141,7 @@ namespace Addon.Core.Models
                     return;
                 isIgnored = value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("InfoString");
 
             }
         }
@@ -198,6 +201,7 @@ namespace Addon.Core.Models
                 NotifyPropertyChanged("IsUpdateable");
                 NotifyPropertyChanged("IsNotUpdateable");
                 NotifyPropertyChanged("IsProgressing");
+                NotifyPropertyChanged("InfoString");
             }
         }
 
