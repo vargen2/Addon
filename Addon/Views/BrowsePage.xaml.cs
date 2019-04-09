@@ -2,8 +2,11 @@
 using Addon.Logic;
 using Addon.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace Addon.Views
 {
@@ -30,6 +33,23 @@ namespace Addon.Views
             var button = sender as Button;
             var storeAddon = button.Tag as StoreAddon;
             await Install.InstallAddon(storeAddon);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            Debug.WriteLine("OnNavigatedTo innan");
+            var addons = new HashSet<string>(ViewModel.Session.SelectedGame.Addons.Select(a => a.FolderName.ToLower()).ToList());
+            addons.UnionWith(ViewModel.Session.SelectedGame.Addons.Select(a => a.Title.ToLower()).ToList());
+            foreach (var storeAddon in ViewModel.Session.StoreAddons)
+            {
+                if (addons.Contains(storeAddon.Url.ToLower()) || addons.Contains(storeAddon.Title.ToLower()))
+                {
+                    storeAddon.Status = StoreAddon.INSTALLED;
+                }
+            }
+            Debug.WriteLine("OnNavigatedTo efter");
+
         }
     }
 }

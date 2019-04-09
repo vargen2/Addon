@@ -79,12 +79,7 @@ namespace Addon.Services
             where T : Page
             => Navigate(typeof(T), parameter, infoOverride);
 
-        public static bool ForceNavigateMainPage()
-        {
-            //TODO Change so it refreshes currently loaded page(not settings page maybe?)
-            return Frame.Navigate(typeof(MainPage), null, null);
-        }
-
+        
         private static void RegisterFrameEvents()
         {
             if (_frame != null)
