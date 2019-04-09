@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Addon.Core.Helpers;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
-using Addon.Core.Helpers;
 
 namespace Addon.Helpers
 {
@@ -22,7 +22,6 @@ namespace Addon.Helpers
         {
             var file = await folder.CreateFileAsync(GetFileName(name), CreationCollisionOption.ReplaceExisting);
             var fileContent = await Json.StringifyAsync(content);
-
             await FileIO.WriteTextAsync(file, fileContent);
         }
 

@@ -3,19 +3,31 @@ using Addon.Core.Models;
 using Addon.Core.Storage;
 using Addon.Helpers;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Addon.Logic
 {
+
+
     public static class Storage
     {
-        //private ConcurrentQueue<Task> saveQueue = new ConcurrentQueue<Task>();
+
+        private static ConcurrentQueue<string> saveQueue = new ConcurrentQueue<string>();
         private static Windows.Storage.StorageFolder localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
 
         public static async Task SaveTask()
         {
+            Debug.WriteLine("nothing atm ");
+           // saveQueue.Enqueue("asd");
+        }
+
+        public static async Task SaveTask2()
+        {
+
             try
             {
                 Debug.WriteLine("Saved to " + localFolder.Path);
@@ -49,6 +61,28 @@ namespace Addon.Logic
             //}
 
             Debug.WriteLine("Loaded from " + localFolder.Path);
+
+            //var t = new Thread(() =>
+            //{
+            //    try
+            //    {
+
+            //        while (true)
+            //        {
+            //            Thread.Sleep(2000);
+            //            if (saveQueue.TryDequeue(out var res))
+            //            {
+            //                SaveTask2();
+            //            }
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Debug.WriteLine("[ABORTED] save thread. " + e.Message);
+
+            //    }
+            //});
+            //t.Start();
         }
 
         public static async Task<HashSet<string>> LoadKnownSubFoldersFromUser()

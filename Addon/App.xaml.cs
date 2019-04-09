@@ -2,6 +2,8 @@
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Addon.Services;
+using System.Diagnostics;
+using Addon.Helpers;
 
 namespace Addon
 {
@@ -47,5 +49,7 @@ namespace Addon
         {
             return new Views.ShellPage();
         }
+
+       
     }
 }

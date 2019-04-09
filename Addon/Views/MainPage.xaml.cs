@@ -37,7 +37,11 @@ namespace Addon.Views
             var addons = ViewModel.Session.SelectedGame.Addons;
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(addons);
             Debug.WriteLine("Version downloaded for all addons");
-            await Logic.Storage.SaveTask();
+            for (int i = 0; i < 10; i++)
+            {
+                await Logic.Storage.SaveTask();
+            }
+            
         }
 
         private async void RefreshTocFileForAllInSelectedGame(object sender, RoutedEventArgs e)
