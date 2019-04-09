@@ -1,8 +1,9 @@
-﻿using System;
-using System.Diagnostics;
+﻿using Addon.Core.Models;
+using Addon.Logic;
+using Addon.ViewModels;
+using System;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
-using Addon.ViewModels;
 
 namespace Addon.Views
 {
@@ -22,6 +23,13 @@ namespace Addon.Views
             ListView.ItemsSource = ViewModel.Session.StoreAddons
                 .Where(storeAddon => storeAddon.Title.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase))
                 .ToList();
+        }
+
+        private async void Install_Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var storeAddon = button.Tag as StoreAddon;
+            await Install.InstallAddon(storeAddon);
         }
     }
 }

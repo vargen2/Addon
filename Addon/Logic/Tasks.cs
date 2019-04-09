@@ -33,18 +33,6 @@ namespace Addon.Logic
 
         private const string KnownSubFoldersFile = @"Assets\knownsubfolders.txt";
 
-        //public sealed class Singleton
-        //{
-        //    private static readonly Lazy<Singleton> lazy = new Lazy<Singleton>(() => new Singleton());
-
-        //    public static Singleton Instance => lazy.Value;
-
-        //    public HashSet<string> KnownSubFolders { get; } = Tasks.LoadKnownSubFolders();
-
-        //    private Singleton()
-        //    {
-        //    }
-        //}
 
         public class TocFile
         {
@@ -86,8 +74,8 @@ namespace Addon.Logic
                 var moveFrom = addons.IndexOf(addon);
                 addons.Move(moveFrom, 0);
             }
-           // Debug.WriteLine("kom hit count: " + count);
-
+            // Debug.WriteLine("kom hit count: " + count);
+            await Task.CompletedTask;
         }
 
         public static async Task Sort(Game game)
@@ -162,12 +150,12 @@ namespace Addon.Logic
             }
         }
 
-       
+
 
         //    //private static final List<Charset> CHARSETS = List.of(Charset.defaultCharset(), Charset.forName("ISO-8859-1"));
 
         public static async Task<HashSet<string>> LoadKnownSubFolders()
-        {            
+        {
             var packageFolder = Package.Current.InstalledLocation;
             var sampleFile = await packageFolder.GetFileAsync(KnownSubFoldersFile);
             var lines = await FileIO.ReadLinesAsync(sampleFile);
@@ -287,7 +275,7 @@ namespace Addon.Logic
             Debug.WriteLine("Cleanup complete: " + addon.FolderName);
         }
 
-        
+
         public static async Task<IList<StoreAddon>> LoadStoreAddons()
         {
             var packageFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;

@@ -15,7 +15,7 @@ namespace Addon.Logic
 
     internal static class Update
     {
-        private static StorageFolder localFolder = ApplicationData.Current.TemporaryFolder;
+        internal static StorageFolder localFolder = ApplicationData.Current.TemporaryFolder;
 
         internal static async Task<StorageFile> DownloadFile(Core.Models.Addon addon, Download download)
         {
@@ -62,7 +62,6 @@ namespace Addon.Logic
                     {
                         Debug.WriteLine("[ERROR] No folder found to delete. " + e.Message);
                     }
-
                 }
 
                 foreach (var folder in folders)
@@ -73,21 +72,8 @@ namespace Addon.Logic
 
                 var foldersAsList = new List<StorageFolder>(folders);
                 var subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
-                var addons = addon.Game.Addons;
-                foreach (var name in subFoldersToDelete)
-                {
-                    var subAddon = addons.FirstOrDefault(a => a.FolderName.Equals(name));
-                    if (subAddon != null)
-                    {
-                        addons.Remove(subAddon);
-                    }
-                }
+                await AddSubFolders(addon, subFoldersToDelete);
                 addon.CurrentDownload = download;
-                if (subFoldersToDelete.Count > 0)
-                {
-                    Singleton<Session>.Instance.KnownSubFolders.UnionWith(subFoldersToDelete);
-                  //  await Storage.SaveKnownSubFoldersToUser();
-                }
             }
             catch (Exception e)
             {
@@ -123,6 +109,24 @@ namespace Addon.Logic
 
 
 
+        }
+
+        internal async static Task AddSubFolders(Core.Models.Addon addon, List<string> subFoldersToDelete)
+        {
+            var addons = addon.Game.Addons;
+            foreach (var name in subFoldersToDelete)
+            {
+                var subAddon = addons.FirstOrDefault(a => a.FolderName.Equals(name));
+                if (subAddon != null)
+                {
+                    addons.Remove(subAddon);
+                }
+            }
+            if (subFoldersToDelete.Count > 0)
+            {
+                Singleton<Session>.Instance.KnownSubFolders.UnionWith(subFoldersToDelete);
+            }
+            await Task.CompletedTask;
         }
     }
 }

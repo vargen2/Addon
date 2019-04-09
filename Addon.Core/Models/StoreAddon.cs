@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using Addon.Core.Helpers;
 
 namespace Addon.Core.Models
 {
@@ -38,17 +35,18 @@ namespace Addon.Core.Models
         }
 
 
-        private static string INSTALLED = "Installed";
-        private static string INSTALLING = "Installing";
-        private static string NOTINSTALLED = "Not Installed";
-        private static string UNKNOWN = "Unknown";
+        public const string INSTALLED = "Installed";
+        public const string INSTALLING = "Installing";
+        public const string NOTINSTALLED = "Not Installed";
+        public const string UNKNOWN = "Unknown";
 
         public bool IsInstalled => status.Equals(INSTALLED);
         public bool IsInstalling => status.Equals(INSTALLING);
         public bool IsNotInstalled => status.Equals(NOTINSTALLED);
         public bool IsUnknown => status.Equals(UNKNOWN);
+        public bool IsShowTextBlock => !status.Equals(NOTINSTALLED);
 
-        private string status;
+        private string status=NOTINSTALLED;
         public string Status
         {
             get => status;
@@ -62,7 +60,8 @@ namespace Addon.Core.Models
                 NotifyPropertyChanged("IsInstalling");
                 NotifyPropertyChanged("IsNotInstalled");
                 NotifyPropertyChanged("IsUnknown");
-                
+                NotifyPropertyChanged("IsShowTextBlock");
+
             }
         }
 

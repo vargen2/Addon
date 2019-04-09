@@ -121,6 +121,7 @@
     <Compile Include="Activation\ActivationHandler.cs" />
     <Compile Include="Helpers\FlyoutMenuExtension.cs" />
     <Compile Include="Logic\Common.cs" />
+    <Compile Include="Logic\Install.cs" />
     <Compile Include="Logic\Storage.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderBehavior.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderMode.cs" />

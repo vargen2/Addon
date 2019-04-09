@@ -24,7 +24,6 @@ namespace Addon.Views
             var button = sender as Button;
             var addon = button.Tag as Core.Models.Addon;
             await Tasks.UpdateAddon(addon);
-
         }
 
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -37,11 +36,6 @@ namespace Addon.Views
             var addons = ViewModel.Session.SelectedGame.Addons;
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(addons);
             Debug.WriteLine("Version downloaded for all addons");
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    await Logic.Storage.SaveTask();
-            //}
-            
         }
 
         private async void RefreshTocFileForAllInSelectedGame(object sender, RoutedEventArgs e)
@@ -49,9 +43,7 @@ namespace Addon.Views
             var addons = ViewModel.Session.SelectedGame.Addons.ToList();
             await Tasks.RefreshTocFileFor(addons);
             Debug.WriteLine("Refreshed toc files for all addons");
-            //await Logic.Storage.SaveTask();
         }
-
 
         private void FlyoutBase_OnOpening(object sender, object e)
         {
@@ -92,14 +84,12 @@ namespace Addon.Views
             }
         }
 
-        private async void RemoveAllGames(object sender, RoutedEventArgs e)
+        private void RemoveAllGames(object sender, RoutedEventArgs e)
         {
-
             ViewModel.Session.Games.Clear();
             ViewModel.Session.SelectedGame = new Core.Models.Game("No Game Found");
-            //await Storage.SaveTask();
-
         }
-    }
 
+        
+    }
 }
