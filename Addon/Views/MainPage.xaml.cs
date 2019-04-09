@@ -37,10 +37,10 @@ namespace Addon.Views
             var addons = ViewModel.Session.SelectedGame.Addons;
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(addons);
             Debug.WriteLine("Version downloaded for all addons");
-            for (int i = 0; i < 10; i++)
-            {
-                await Logic.Storage.SaveTask();
-            }
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    await Logic.Storage.SaveTask();
+            //}
             
         }
 
@@ -49,7 +49,7 @@ namespace Addon.Views
             var addons = ViewModel.Session.SelectedGame.Addons.ToList();
             await Tasks.RefreshTocFileFor(addons);
             Debug.WriteLine("Refreshed toc files for all addons");
-            await Logic.Storage.SaveTask();
+            //await Logic.Storage.SaveTask();
         }
 
 
@@ -97,7 +97,7 @@ namespace Addon.Views
 
             ViewModel.Session.Games.Clear();
             ViewModel.Session.SelectedGame = new Core.Models.Game("No Game Found");
-            await Storage.SaveTask();
+            //await Storage.SaveTask();
 
         }
     }

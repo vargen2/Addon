@@ -73,10 +73,10 @@ namespace Addon.Views
                 }
                 Debug.WriteLine("Picked folder: " + folder.Name);
                 await Tasks.RefreshGameFolder(game);
-                await Logic.Storage.SaveTask();
+                //await Logic.Storage.SaveTask();
                 await Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons);
                 //await Tasks.sort(game);
-                await Logic.Storage.SaveTask();
+                //await Logic.Storage.SaveTask();
             }
             else
             {

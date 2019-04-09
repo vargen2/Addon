@@ -86,7 +86,7 @@ namespace Addon.Logic
                 if (subFoldersToDelete.Count > 0)
                 {
                     Singleton<Session>.Instance.KnownSubFolders.UnionWith(subFoldersToDelete);
-                    await Storage.SaveKnownSubFoldersToUser();
+                  //  await Storage.SaveKnownSubFoldersToUser();
                 }
             }
             catch (Exception e)

@@ -86,7 +86,7 @@ namespace Addon.Logic
                 var moveFrom = addons.IndexOf(addon);
                 addons.Move(moveFrom, 0);
             }
-            Debug.WriteLine("kom hit count: " + count);
+           // Debug.WriteLine("kom hit count: " + count);
 
         }
 
@@ -282,7 +282,7 @@ namespace Addon.Logic
             var trash = await Update.UpdateAddon(addon, download, file);
             Debug.WriteLine("Update addon complete: " + addon.FolderName);
             await Sort(addon.Game);
-            await Logic.Storage.SaveTask();
+            //await Logic.Storage.SaveTask();
             await Update.Cleanup(trash);
             Debug.WriteLine("Cleanup complete: " + addon.FolderName);
         }

@@ -84,7 +84,7 @@ namespace Addon.Services
 
 
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
-            
+
 
         }
 
@@ -110,16 +110,15 @@ namespace Addon.Services
         {
             return args is IActivatedEventArgs;
         }
-
-
-        async void App_Suspending(
-        Object sender,
-        Windows.ApplicationModel.SuspendingEventArgs e)
+        
+        async void App_Suspending(Object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
-            Debug.WriteLine("OnBackgroundActivated");
-            //Windows.Storage.StorageFolder localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            //var fil = await localFolder.CreateFileAsync(Util.RandomString(6));
-            await Storage.SaveTask2();
+            var deferral = e.SuspendingOperation.GetDeferral();
+            Debug.WriteLine("OnBackgroundActivated before save");
+            await Storage.SaveSession();
+            await Storage.SaveKnownSubFolders();
+            Debug.WriteLine("OnBackgroundActivated after save");
+            deferral.Complete();
         }
 
     }

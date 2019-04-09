@@ -3,10 +3,8 @@ using Addon.Core.Models;
 using Addon.Core.Storage;
 using Addon.Helpers;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Addon.Logic
@@ -16,23 +14,22 @@ namespace Addon.Logic
     public static class Storage
     {
 
-        private static ConcurrentQueue<string> saveQueue = new ConcurrentQueue<string>();
+        // private static ConcurrentQueue<string> saveQueue = new ConcurrentQueue<string>();
         private static Windows.Storage.StorageFolder localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
 
-        public static async Task SaveTask()
-        {
-            Debug.WriteLine("nothing atm ");
-           // saveQueue.Enqueue("asd");
-        }
+        //public static async Task SaveTask()
+        //{
+        //    Debug.WriteLine("nothing atm ");
+        //    // saveQueue.Enqueue("asd");
+        //}
 
-        public static async Task SaveTask2()
+        public static async Task SaveSession()
         {
-
             try
             {
-                Debug.WriteLine("Saved to " + localFolder.Path);
                 var instance = Singleton<Session>.Instance.AsSaveableSession();
                 await localFolder.SaveAsync("session", instance);
+                Debug.WriteLine("Saved Session to " + localFolder.Path);
             }
             catch (Exception e)
             {
@@ -92,12 +89,13 @@ namespace Addon.Logic
 
         }
 
-        public static async Task SaveKnownSubFoldersToUser()
+        public static async Task SaveKnownSubFolders()
         {
             try
             {
                 var instance = Singleton<Session>.Instance.KnownSubFolders;
                 await localFolder.SaveAsync("knownsubfolders", instance);
+                Debug.WriteLine("Saved knownsubfolders");
             }
             catch (Exception e)
             {
