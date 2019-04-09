@@ -67,7 +67,6 @@ namespace Addon.Services
                 await StartupAsync();
             }
 
-
             var storeAddons = await Tasks.LoadStoreAddons();
             Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(storeAddons);
             Debug.WriteLine("Loaded StoreAddons " + Singleton<Session>.Instance.StoreAddons.Count);
@@ -81,11 +80,7 @@ namespace Addon.Services
             Singleton<Session>.Instance.KnownSubFolders.UnionWith(knownSubFolders);
 
             Debug.WriteLine("Loaded knownsubfolders " + Singleton<Session>.Instance.KnownSubFolders.Count);
-
-
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
-
-
         }
 
         private async Task InitializeAsync()
@@ -110,7 +105,7 @@ namespace Addon.Services
         {
             return args is IActivatedEventArgs;
         }
-        
+
         async void App_Suspending(Object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();

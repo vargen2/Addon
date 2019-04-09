@@ -9,19 +9,9 @@ using System.Threading.Tasks;
 
 namespace Addon.Logic
 {
-
-
     public static class Storage
     {
-
-        // private static ConcurrentQueue<string> saveQueue = new ConcurrentQueue<string>();
         private static Windows.Storage.StorageFolder localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-
-        //public static async Task SaveTask()
-        //{
-        //    Debug.WriteLine("nothing atm ");
-        //    // saveQueue.Enqueue("asd");
-        //}
 
         public static async Task SaveSession()
         {
@@ -52,41 +42,13 @@ namespace Addon.Logic
             {
                 session.Games.Add(saveableGame.AsGame());
             }
-            //foreach (var game in session.Games)
-            //{
-            //    game.Addons.CollectionChanged += (a, b) => Debug.WriteLine("changed");
-            //}
-
             Debug.WriteLine("Loaded from " + localFolder.Path);
-
-            //var t = new Thread(() =>
-            //{
-            //    try
-            //    {
-
-            //        while (true)
-            //        {
-            //            Thread.Sleep(2000);
-            //            if (saveQueue.TryDequeue(out var res))
-            //            {
-            //                SaveTask2();
-            //            }
-            //        }
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Debug.WriteLine("[ABORTED] save thread. " + e.Message);
-
-            //    }
-            //});
-            //t.Start();
         }
 
         public static async Task<HashSet<string>> LoadKnownSubFoldersFromUser()
         {
             var knownFolders = await localFolder.ReadAsync<HashSet<string>>("knownsubfolders");
             return knownFolders;
-
         }
 
         public static async Task SaveKnownSubFolders()
@@ -100,10 +62,7 @@ namespace Addon.Logic
             catch (Exception e)
             {
                 Debug.WriteLine("ERROR when saveing knownsubfolders, " + e.Message);
-
             }
-
         }
-
     }
 }
