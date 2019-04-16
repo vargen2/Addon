@@ -320,25 +320,26 @@
             MasterPaneWidth="600"
             NoSelectionContentTemplate="{StaticResource NoSelectionContentTemplate}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=TwoWay}" />
-        <VisualStateManager.VisualStateGroups>
+        <!--<VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <!--  641 is the default CompactModeThresholdWidth in NavigationView  -->
+                        --><!--  641 is the default CompactModeThresholdWidth in NavigationView  --><!--
                         <AdaptiveTrigger MinWindowWidth="641" />
                     </VisualState.StateTriggers>
-                    <!--<VisualState.Setters>
+                    --><!--<VisualState.Setters>
                         <Setter Target="MasterDetailsViewControl.MasterHeaderTemplate" Value="{StaticResource MasterHeaderTemplate}" />-->
-                    <!--</VisualState.Setters>-->
+                    <!--</VisualState.Setters>--><!--
                 </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+            </VisualStateGroup>-->
+        <!--</VisualStateManager.VisualStateGroups>-->
     </Grid>
 </Page>
 
 
 
 <!--
+    BorderBrush="Transparent"
     MasterHeader="MasterDetail"
     MasterHeaderTemplate="{StaticResource MinimalMasterHeaderTemplate}"
 -->
