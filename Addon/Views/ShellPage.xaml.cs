@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Addon.Core.Models;
+using Addon.Logic;
+using Addon.ViewModels;
+using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
-using Windows.Storage.Search;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Documents;
-using Addon.Core.Models;
-using Addon.Helpers;
-using Addon.Services;
-using Addon.ViewModels;
-using Addon.Core.Helpers;
-using Addon.Logic;
 
 namespace Addon.Views
 {
@@ -38,7 +30,7 @@ namespace Addon.Views
                 return;
 
             ViewModel.Session.SelectedGame = listBox.SelectedValue as Game;
-           // NavigationService.ForceNavigateMainPage();
+            // NavigationService.ForceNavigateMainPage();
 
             GameSelectorFlyout.Hide();
         }
@@ -63,20 +55,16 @@ namespace Addon.Views
                 if (ViewModel.Session.Games.Any(g => g.AbsolutePath.Equals(folder.Path))) return;
 
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-                 
+
                 var game = Common.FolderToGame(folder);
                 ViewModel.Session.Games.Add(game);
                 if (ViewModel.Session.Games.Count == 1)
                 {
                     ViewModel.Session.SelectedGame = game;
-                   // NavigationService.ForceNavigateMainPage();
                 }
                 Debug.WriteLine("Picked folder: " + folder.Name);
                 await Tasks.RefreshGameFolder(game);
-                //await Logic.Storage.SaveTask();
                 await Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons);
-                //await Tasks.sort(game);
-                //await Logic.Storage.SaveTask();
             }
             else
             {

@@ -36,6 +36,10 @@
                 helpers:NavHelper.NavigateTo="views:MainPage"
                 Icon="Home" />
             <winui:NavigationViewItem
+                x:Uid="Shell_Master"
+                helpers:NavHelper.NavigateTo="views:MasterDetailPage"
+                Icon="Download" />
+            <winui:NavigationViewItem
                 x:Uid="Shell_Browse"
                 helpers:NavHelper.NavigateTo="views:BrowsePage"
                 Icon="Download" />
