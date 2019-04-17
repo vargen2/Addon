@@ -11,6 +11,8 @@ namespace Addon.ViewModels
 {
     public class MasterDetailViewModel : Observable
     {
+        public Session Session { get; }
+
         private Addon.Core.Models.Addon _selected;
 
         public Addon.Core.Models.Addon Selected
@@ -19,27 +21,28 @@ namespace Addon.ViewModels
             set { Set(ref _selected, value); }
         }
 
-        public ObservableCollection<Addon.Core.Models.Addon> SampleItems { get; private set; } = new ObservableCollection<Addon.Core.Models.Addon>();
+       // public ObservableCollection<Addon.Core.Models.Addon> SampleItems { get; private set; } = new ObservableCollection<Addon.Core.Models.Addon>();
 
         public MasterDetailViewModel()
         {
+             Session = Singleton<Session>.Instance;
         }
 
-        public async Task LoadDataAsync(MasterDetailsViewState viewState)
-        {
-            SampleItems.Clear();
+        //public async Task LoadDataAsync(MasterDetailsViewState viewState)
+        //{
+        //    SampleItems.Clear();
 
-            var data = Singleton<Session>.Instance.SelectedGame.Addons;
+        //    var data = Singleton<Session>.Instance.SelectedGame.Addons;
 
-            foreach (var item in data)
-            {
-                SampleItems.Add(item);
-            }
+        //    foreach (var item in data)
+        //    {
+        //        SampleItems.Add(item);
+        //    }
 
-            if (viewState == MasterDetailsViewState.Both)
-            {
-                Selected = SampleItems.First();
-            }
-        }
+        //    if (viewState == MasterDetailsViewState.Both)
+        //    {
+        //        Selected = SampleItems.First();
+        //    }
+        //}
     }
 }

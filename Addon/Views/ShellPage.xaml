@@ -30,15 +30,16 @@
 
         <winui:NavigationView.MenuItems>
 
-            <winui:NavigationViewItem
+            <!--<winui:NavigationViewItem
                 Name="navitem1"
                 x:Uid="Shell_Main"
                 helpers:NavHelper.NavigateTo="views:MainPage"
-                Icon="Home" />
+                Icon="Home" />-->
             <winui:NavigationViewItem
+                Name="navitem1"
                 x:Uid="Shell_Master"
                 helpers:NavHelper.NavigateTo="views:MasterDetailPage"
-                Icon="Download" />
+                Icon="Home" />
             <winui:NavigationViewItem
                 x:Uid="Shell_Browse"
                 helpers:NavHelper.NavigateTo="views:BrowsePage"

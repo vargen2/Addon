@@ -400,13 +400,14 @@
 
 
         <DataTemplate x:Key="ItemTemplate" x:DataType="data:Addon">
-            
-                <Grid Height="50">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+
+            <Grid Height="50"
+                      RightTapped="UIElement_OnRightTapped">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" MinWidth="180">
                     <TextBlock
                         Height="25"
@@ -428,6 +429,7 @@
                     <Button
                         Margin="0,9,0,9"
                         Content="Update"
+                        Click="UpdateButtonClick"
                         Tag="{x:Bind}"
                         Visibility="{Binding IsUpdateable}" />
                     <TextBlock
@@ -437,7 +439,7 @@
 
                 </StackPanel>
                 <FlyoutBase.AttachedFlyout>
-                    <MenuFlyout>
+                    <MenuFlyout Opening="FlyoutBase_OnOpening">
                         <MenuFlyoutItem
                             Command="{Binding SetIgnored}"
                             Tag="{x:Bind Mode=OneWay}"
@@ -469,14 +471,14 @@
                 </FlyoutBase.AttachedFlyout>
 
             </Grid>
-                <!--<StackPanel Width="50">
+            <!--<StackPanel Width="50">
                             <Ellipse Height="44" Width="44" VerticalAlignment="Center">
                                 <Ellipse.Fill>
                                     <ImageBrush ImageSource="../Assets/Square44x44Logo.png"/>
                                 </Ellipse.Fill>
                             </Ellipse>
                         </StackPanel>-->
-            
+
         </DataTemplate>
 
 
@@ -551,7 +553,7 @@
             BorderBrush="Transparent"
             DetailsTemplate="{StaticResource DetailsTemplate}"
             ItemTemplate="{StaticResource ItemTemplate}"
-            ItemsSource="{x:Bind ViewModel.SampleItems}"
+            ItemsSource="{x:Bind ViewModel.Session.SelectedGame.Addons}"
             MasterPaneWidth="600"
             NoSelectionContentTemplate="{StaticResource NoSelectionContentTemplate}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=TwoWay}" />

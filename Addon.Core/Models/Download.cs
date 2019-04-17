@@ -27,7 +27,7 @@ namespace Addon.Core.Models
 
         public override string ToString()
         {
-            return $"{nameof(ReleaseType)}: {ReleaseType}, {nameof(Version)}: {Version}, {nameof(FileSize)}: {FileSize}, {nameof(DateUploaded)}: {DateUploaded}, {nameof(GameVersion)}: {GameVersion}, {nameof(NrOfDownloads)}: {NrOfDownloads}, {nameof(DownloadLink)}: {DownloadLink}";
+            return $"{nameof(ReleaseType)}: {ReleaseType},\r\n{nameof(Version)}: {Version},\r\n{nameof(FileSize)}: {FileSize},\r\n{nameof(DateUploaded)}: {DateUploaded},\r\n{nameof(GameVersion)}: {GameVersion},\r\n{nameof(NrOfDownloads)}: {NrOfDownloads},\r\n{nameof(DownloadLink)}: {DownloadLink}";
         }
     }
 }
