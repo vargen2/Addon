@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Addon.Core.Storage;
+using Addon.Helpers;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using Addon.Core.Storage;
-using Addon.Helpers;
 
 
 namespace Addon.Core.Models
@@ -41,5 +38,7 @@ namespace Addon.Core.Models
                 Games = this.Games.Select(g => g.AsSaveableGame()).ToList()
             };
         }
+
+        
     }
 }
