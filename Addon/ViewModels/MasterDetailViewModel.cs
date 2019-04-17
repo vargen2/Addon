@@ -27,7 +27,9 @@ namespace Addon.ViewModels
 
         public MasterDetailViewModel()
         {
+            
             Session = Singleton<Session>.Instance;
+            
         }
 
         public async Task LoadDataAsync(MasterDetailsViewState viewState)

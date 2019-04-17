@@ -33,7 +33,8 @@
              {SuggestedDownload}";-->
 
             <StackPanel Name="block" Padding="0,8,0,0">
-
+                <HyperlinkButton Content="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" NavigateUri="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}"/>
+                
                 <VariableSizedWrapGrid Orientation="Horizontal">
                     <StackPanel Width="200">
                         <TextBlock Text="Title" Style="{StaticResource DetailSubTitleStyle}"/>
@@ -47,7 +48,7 @@
                 
                 <VariableSizedWrapGrid Orientation="Horizontal">
                     <StackPanel Width="200">
-                        <TextBlock  Text="Preffered Release Type" Style="{StaticResource DetailSubTitleStyle}" />
+                        <TextBlock  Text="Preferred Release Type" Style="{StaticResource DetailSubTitleStyle}" />
                         <TextBlock  Text="{x:Bind MasterMenuItem.PreferredReleaseType, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
                     </StackPanel>
                     <StackPanel Width="Auto">

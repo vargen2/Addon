@@ -258,6 +258,20 @@ namespace Addon.Core.Models
         }
 
 
+        private string message = "";
+
+        public string Message
+        {
+            get => message;
+            set
+            {
+                if (value.Equals(message))
+                    return;
+                message = value;
+                NotifyPropertyChanged();              
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

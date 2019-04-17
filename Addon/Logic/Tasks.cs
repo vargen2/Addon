@@ -266,12 +266,13 @@ namespace Addon.Logic
             addon.Progress = 0;
             addon.Status = Core.Models.Addon.UPDATING;
             var file = await Update.DownloadFile(addon, download);
+            addon.Progress=0;
             Debug.WriteLine("file downloaded: " + file.Path);
             var trash = await Update.UpdateAddon(addon, download, file);
             Debug.WriteLine("Update addon complete: " + addon.FolderName);
             await Sort(addon.Game);
-            //await Logic.Storage.SaveTask();
             await Update.Cleanup(trash);
+            addon.Message="";
             Debug.WriteLine("Cleanup complete: " + addon.FolderName);
         }
 

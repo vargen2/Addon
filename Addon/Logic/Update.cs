@@ -15,10 +15,13 @@ namespace Addon.Logic
 
     internal static class Update
     {
+
+
         internal static StorageFolder localFolder = ApplicationData.Current.TemporaryFolder;
 
         internal static async Task<StorageFile> DownloadFile(Core.Models.Addon addon, Download download)
         {
+            addon.Message = "Downloading...";
             var temp = addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects"));
             var downloadLink = temp + download.DownloadLink;
             Debug.WriteLine(downloadLink);
@@ -31,7 +34,28 @@ namespace Addon.Logic
                 BackgroundDownloader downloader = new BackgroundDownloader();
                 DownloadOperation downloadOperation = downloader.CreateDownload(source, destinationFile);
 
-                var aa = await downloadOperation.StartAsync();
+                var fileSize = download.FileSize.Replace("M", "").Replace("K", "").Replace("B", "").Replace(" ", "").Replace(".", ",").Trim();
+                long totalBytes = -1000000;
+                try
+                {
+                    totalBytes = (long)(Double.Parse(fileSize) * 1000000);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("[ERROR] DownloadFile. Parsing FileSize " + ex.Message);
+                }
+
+
+                Progress<DownloadOperation> progressCallback = new Progress<DownloadOperation>(a => { ProgressCallback(a, addon, totalBytes); });
+
+
+                await downloadOperation.StartAsync().AsTask(progressCallback);
+
+
+
+
+                //  var aa = await downloadOperation.StartAsync();
+
                 return destinationFile;
             }
             catch (Exception ex)
@@ -42,15 +66,39 @@ namespace Addon.Logic
             return null;
         }
 
+        private static void ProgressCallback(DownloadOperation obj, Core.Models.Addon addon, long totalBytes)
+        {
+            // Debug.WriteLine("HIT HIT "+obj.Progress.BytesReceived+",,,, total: "+obj.Progress.TotalBytesToReceive);
+            //MessageModel DLItem = listViewCollection.First(p => p.GUID == obj.Guid);
+            if (obj.Progress.TotalBytesToReceive > 0)
+            {
+                double br = obj.Progress.BytesReceived;
+                var result = br / obj.Progress.TotalBytesToReceive * 100;
+                addon.Progress = (int)result;
+                // Debug.WriteLine("progress: "+addon.Progress);
+            }
+            else if (totalBytes > 0)
+            {
+                double br = obj.Progress.BytesReceived;
+                var result = br / totalBytes * 100;
+                addon.Progress = (int)result;
+                //Debug.WriteLine("progress: "+addon.Progress);
+            }
+
+
+        }
+
         internal static async Task<Tuple<string, string>> UpdateAddon(Core.Models.Addon addon, Download download, StorageFile file)
         {
             var extractFolderPath = localFolder.Path + @"\" + file.Name.Replace(".zip", "");
             try
             {
+                addon.Message = "Extracting...";
                 ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
                 var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
                 var folders = await extractFolder.GetFoldersAsync();
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
+                addon.Message = "Removing old...";
                 foreach (var folder in folders)
                 {
                     try
@@ -63,13 +111,13 @@ namespace Addon.Logic
                         Debug.WriteLine("[ERROR] No folder found to delete. " + e.Message);
                     }
                 }
-
+                addon.Message = "Copy new...";
                 foreach (var folder in folders)
                 {
                     await CopyFolderAsync(folder, gameFolder);
                 }
                 Debug.WriteLine("copy ok");
-
+                addon.Message = "Clean up...";
                 var foldersAsList = new List<StorageFolder>(folders);
                 var subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
                 await AddSubFolders(addon, subFoldersToDelete);
@@ -127,6 +175,11 @@ namespace Addon.Logic
                 Singleton<Session>.Instance.KnownSubFolders.UnionWith(subFoldersToDelete);
             }
             await Task.CompletedTask;
+        }
+
+        private static void ProgressOnProgressChanged(object sender, string s)
+        {
+            // your logic here
         }
     }
 }

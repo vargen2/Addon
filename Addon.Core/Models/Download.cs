@@ -25,7 +25,14 @@ namespace Addon.Core.Models
             DownloadLink = downloadLink;
         }
 
-        public override string ToString()
+        
+
+        public string ToString()
+        {
+            return $"{ReleaseType}, {Version}, {FileSize}, Downloaded: {NrOfDownloads},\r\nUploaded: {DateUploaded}, Game: {GameVersion},\r\n{DownloadLink}";
+        }
+
+        public string ToStringManyLines()
         {
             return $"{nameof(ReleaseType)}: {ReleaseType},\r\n{nameof(Version)}: {Version},\r\n{nameof(FileSize)}: {FileSize},\r\n{nameof(DateUploaded)}: {DateUploaded},\r\n{nameof(GameVersion)}: {GameVersion},\r\n{nameof(NrOfDownloads)}: {NrOfDownloads},\r\n{nameof(DownloadLink)}: {DownloadLink}";
         }

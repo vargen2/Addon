@@ -422,6 +422,7 @@
                 </StackPanel>
                 <StackPanel Grid.Column="2" MinWidth="100">
                     <ProgressBar
+                        Margin="{StaticResource XXSmallTopMargin}"
                         Width="100"
                         IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
                         Visibility="{x:Bind IsProgressing, Mode=OneWay}"
@@ -433,8 +434,12 @@
                         Tag="{x:Bind}"
                         Visibility="{Binding IsUpdateable}" />
                     <TextBlock
-                        Height="25"
+                        Height="20"
                         Text="{Binding Status}"
+                        Visibility="{Binding IsNotUpdateable}" />
+                    <TextBlock
+                        Height="20"
+                        Text="{x:Bind Message, Mode=OneWay}"
                         Visibility="{Binding IsNotUpdateable}" />
 
                 </StackPanel>
