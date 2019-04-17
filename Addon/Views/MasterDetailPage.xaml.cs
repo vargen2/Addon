@@ -14,7 +14,7 @@ namespace Addon.Views
     public sealed partial class MasterDetailPage : Page
     {
 
-        public static MasterDetailPage MyMasterDetailPage;
+        //public static MasterDetailPage MyMasterDetailPage;
 
         public MasterDetailViewModel ViewModel { get; } = new MasterDetailViewModel();
 
@@ -27,7 +27,8 @@ namespace Addon.Views
 
         private async void MasterDetailPage_Loaded(object sender, RoutedEventArgs e)
         {
-            //await ViewModel.LoadDataAsync(MasterDetailsViewControl.ViewState);
+             
+            await ViewModel.LoadDataAsync(MasterDetailsViewControl.ViewState);
             //MyMasterDetailPage = this;
             //Window.Current.Content.PointerPressed +=ForegroundElement_PointerPressed;
         }
