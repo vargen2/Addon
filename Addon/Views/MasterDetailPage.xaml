@@ -17,6 +17,231 @@
         </TransitionCollection>
     </Page.Transitions>
     <Page.Resources>
+
+
+        <Style x:Key="mymaster" TargetType="controls:MasterDetailsView">
+            <Setter Property="Background" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource ApplicationForegroundThemeBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="controls:MasterDetailsView">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid x:Name="RootPanel">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition x:Name="MasterColumn"
+                                                  Width="Auto" />
+                                    <ColumnDefinition x:Name="SplitterColumn"
+                                                  Width="3" />
+                                    <ColumnDefinition x:Name="DetailsColumn"
+                                                  Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <!--Width="{TemplateBinding MasterPaneWidth}"-->
+                                <Grid x:Name="MasterPanel"
+                                  
+                                  Background="{TemplateBinding MasterPaneBackground}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="0,0,1,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <ContentPresenter x:Name="HeaderContentPresenter"
+                                                  Margin="12,0"
+                                                  x:DeferLoadStrategy="Lazy"
+                                                  Content="{TemplateBinding MasterHeader}"
+                                                  ContentTemplate="{TemplateBinding MasterHeaderTemplate}"
+                                                  Visibility="Collapsed" />
+                                    <ListView x:Name="MasterList"
+                                          Grid.Row="1"
+                                          IsTabStop="False"
+                                          ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                                          ItemContainerStyleSelector="{TemplateBinding ItemContainerStyleSelector}"
+                                          ItemTemplate="{TemplateBinding ItemTemplate}"
+                                          ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                          ItemsSource="{TemplateBinding ItemsSource}"
+                                          SelectedItem="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    <Grid x:Name="MasterCommandBarPanel" Grid.Row="2"></Grid>
+                                </Grid>
+                                <Grid x:Name="DetailsPanel"
+                                  Grid.Column="2">
+                                    <ContentPresenter x:Name="NoSelectionPresenter"
+                                                  Content="{TemplateBinding NoSelectionContent}"
+                                                  ContentTemplate="{TemplateBinding NoSelectionContentTemplate}" />
+                                    <Grid x:Name="SelectionDetailsPanel">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid Background="{TemplateBinding Background}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button x:Name="MasterDetailsBackButton"
+                                                Background="Transparent"
+                                                Height="44" 
+                                                Width="48" 
+                                                Visibility="Collapsed">
+                                                <SymbolIcon Symbol="Back"/>
+                                            </Button>
+                                            <ContentPresenter x:Name="DetailsHeaderPresenter"
+                                                          Content="{TemplateBinding DetailsHeader}"
+                                                          ContentTemplate="{TemplateBinding DetailsHeaderTemplate}"
+                                                          Grid.Column="1"/>
+                                        </Grid>
+                                        <ContentPresenter x:Name="DetailsPresenter"
+                                                      Background="{TemplateBinding Background}"
+                                                      ContentTemplate="{TemplateBinding DetailsTemplate}"
+                                                      Grid.Row="1">
+                                        </ContentPresenter>
+                                        <Grid x:Name="DetailsCommandBarPanel" Grid.Row="2"></Grid>
+                                        <Grid.RenderTransform>
+                                            <TranslateTransform x:Name="DetailsPresenterTransform" />
+                                        </Grid.RenderTransform>
+                                    </Grid>
+                                </Grid>
+                                <controls:GridSplitter Grid.Column="1" Width="3" ResizeBehavior="BasedOnAlignment"
+            ResizeDirection="Auto" Background="Transparent" Foreground="Transparent" FontSize="13">
+
+                                </controls:GridSplitter>
+                            </Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="SelectionStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition From="NoSelectionWide"
+                                                      To="HasSelection">
+                                            <Storyboard>
+                                                <DrillInThemeAnimation EntranceTargetName="SelectionDetailsPanel"
+                                                                   ExitTargetName="NoSelectionPresenter" />
+                                            </Storyboard>
+                                        </VisualTransition>
+                                        <VisualTransition From="NoSelectionNarrow"
+                                                      To="HasSelection">
+                                            <Storyboard>
+                                                <DoubleAnimation BeginTime="0:0:0"
+                                                             Storyboard.TargetName="DetailsPresenterTransform"
+                                                             Storyboard.TargetProperty="X"
+                                                             From="200"
+                                                             To="0"
+                                                             Duration="0:0:0.25">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuarticEase EasingMode="EaseOut" />
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                                <DoubleAnimation BeginTime="0:0:0"
+                                                             Storyboard.TargetName="SelectionDetailsPanel"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:0.25">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuarticEase EasingMode="EaseOut" />
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                            </Storyboard>
+                                        </VisualTransition>
+                                        <VisualTransition From="HasSelection"
+                                                      To="NoSelectionWide">
+                                            <Storyboard>
+                                                <DrillOutThemeAnimation EntranceTargetName="NoSelectionPresenter"
+                                                                    ExitTargetName="SelectionDetailsPanel" />
+                                            </Storyboard>
+                                        </VisualTransition>
+                                        <VisualTransition From="HasSelection"
+                                                      To="NoSelectionNarrow">
+                                            <Storyboard>
+                                                <DoubleAnimation BeginTime="0:0:0"
+                                                             Storyboard.TargetName="DetailsPresenterTransform"
+                                                             Storyboard.TargetProperty="X"
+                                                             From="0"
+                                                             To="200"
+                                                             Duration="0:0:0.25" />
+                                                <DoubleAnimation BeginTime="0:0:0.08"
+                                                             Storyboard.TargetName="SelectionDetailsPanel"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             From="1"
+                                                             To="0"
+                                                             Duration="0:0:0.17">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuarticEase EasingMode="EaseOut" />
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                                <DoubleAnimation BeginTime="0:0:0.0"
+                                                             Storyboard.TargetName="MasterPanel"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:0.25">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <QuarticEase EasingMode="EaseIn" />
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                            </Storyboard>
+                                        </VisualTransition>
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState x:Name="NoSelectionWide">
+                                        <VisualState.Setters>
+                                            <Setter Target="SelectionDetailsPanel.Visibility" Value="Collapsed" />
+                                            <Setter Target="MasterPanel.Visibility" Value="Visible" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="HasSelectionWide">
+                                        <VisualState.Setters>
+                                            <Setter Target="NoSelectionPresenter.Visibility" Value="Collapsed" />
+                                            <Setter Target="MasterPanel.Visibility" Value="Visible" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="HasSelectionNarrow">
+                                        <VisualState.Setters>
+                                            <Setter Target="MasterPanel.Visibility" Value="Collapsed" />
+                                            <Setter Target="NoSelectionPresenter.Visibility" Value="Collapsed" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="NoSelectionNarrow">
+                                        <VisualState.Setters>
+                                            <Setter Target="NoSelectionPresenter.Visibility" Value="Collapsed" />
+                                            <Setter Target="SelectionDetailsPanel.Visibility" Value="Collapsed" />
+                                            <Setter Target="MasterPanel.Visibility" Value="Visible" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="WidthStates">
+                                    <VisualState x:Name="NarrowState">
+                                        <VisualState.Setters>
+                                            <Setter Target="MasterColumn.Width" Value="*" />
+                                            <Setter Target="DetailsColumn.Width" Value="0" />
+                                            <Setter Target="DetailsPanel.(Grid.Column)" Value="0" />
+                                            <Setter Target="NoSelectionPresenter.Visibility" Value="Collapsed" />
+                                            <Setter Target="MasterPanel.BorderThickness" Value="0" />
+                                            <Setter Target="MasterPanel.Width" Value="NaN" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name="WideState">
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
+
+
+
+
+
+
+
+
         <Style x:Key="mysyle2" TargetType="MenuFlyoutItem">
             <Setter Property="Background" Value="{ThemeResource MenuFlyoutItemRevealBackground}" />
             <Setter Property="BorderBrush" Value="{ThemeResource MenuFlyoutItemRevealBorderBrush}" />
@@ -175,15 +400,14 @@
 
 
         <DataTemplate x:Key="ItemTemplate" x:DataType="data:Addon">
-            <StackPanel Height="50" Orientation="Horizontal">
-                <!--<StackPanel Width="50">
-                            <Ellipse Height="44" Width="44" VerticalAlignment="Center">
-                                <Ellipse.Fill>
-                                    <ImageBrush ImageSource="../Assets/Square44x44Logo.png"/>
-                                </Ellipse.Fill>
-                            </Ellipse>
-                        </StackPanel>-->
-                <StackPanel Width="200">
+            
+                <Grid Height="50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" MinWidth="180">
                     <TextBlock
                         Height="25"
                         FontSize="{StaticResource MediumFontSize}"
@@ -191,13 +415,13 @@
                         Text="{Binding FolderName}" />
                     <TextBlock Height="25" Text="{Binding CurrentReleaseTypeAndVersion}" />
                 </StackPanel>
-                <StackPanel Width="200">
+                <StackPanel Grid.Column="1" MinWidth="150">
                     <TextBlock Height="25" Text="{x:Bind SuggestedDownload.ReleaseType, Mode=OneWay}" />
                     <TextBlock Height="25" Text="{x:Bind SuggestedDownload.Version, Mode=OneWay}" />
                 </StackPanel>
-                <StackPanel Width="200">
+                <StackPanel Grid.Column="2" MinWidth="100">
                     <ProgressBar
-                        Width="200"
+                        Width="100"
                         IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
                         Visibility="{x:Bind IsProgressing, Mode=OneWay}"
                         Value="{x:Bind Progress, Mode=OneWay}" />
@@ -243,7 +467,16 @@
                         </MenuFlyoutSubItem>
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
-            </StackPanel>
+
+            </Grid>
+                <!--<StackPanel Width="50">
+                            <Ellipse Height="44" Width="44" VerticalAlignment="Center">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="../Assets/Square44x44Logo.png"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </StackPanel>-->
+            
         </DataTemplate>
 
 
@@ -277,7 +510,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="NoSelectionContentTemplate">
-            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <Grid  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                 <TextBlock
                     x:Uid="MasterDetail_NoSelection"
                     HorizontalAlignment="Center"
@@ -309,7 +542,9 @@
     </Page.Resources>
 
     <Grid x:Name="ContentArea">
+
         <controls:MasterDetailsView
+           Style="{StaticResource mymaster}"
             x:Name="MasterDetailsViewControl"
             BackButtonBehavior="Automatic"
             Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
@@ -320,6 +555,11 @@
             MasterPaneWidth="600"
             NoSelectionContentTemplate="{StaticResource NoSelectionContentTemplate}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=TwoWay}" />
+
+
+
+
+
         <!--<controls:GridSplitter Grid.Column="1" Width="11" ResizeBehavior="CurrentAndNext"
             ResizeDirection="Columns" Background="Gray" Foreground="White" FontSize="13">
             <controls:GridSplitter.Element>

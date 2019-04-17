@@ -6,7 +6,8 @@
     xmlns:data="using:Addon.Core.Models"
     xmlns:local="using:Addon.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"    
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
     <Page.Resources>
@@ -170,144 +171,171 @@
 
     </Page.Resources>
     <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftMargin}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <StackPanel
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="3" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel
             Height="32"
             Margin="{StaticResource SmallTopBottomMargin}"
             Orientation="Horizontal">
-            <TextBlock
+                <TextBlock
                 Width="400"
                 VerticalAlignment="Center"
                 Text="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath, Mode=OneWay}" />
-            <Button Margin="{StaticResource SmallLeftMargin}" Click="RefreshTocFileForAllInSelectedGame">Refresh Toc</Button>
-            <Button Margin="{StaticResource SmallLeftMargin}" Click="DownloadVersionsForAllAddonsInSelectedGame">Download versions</Button>
-            <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveAllGames">Delete All Games</Button>
-        </StackPanel>
-        <ListView
+                <Button Margin="{StaticResource SmallLeftMargin}" Click="RefreshTocFileForAllInSelectedGame">Refresh Toc</Button>
+                <Button Margin="{StaticResource SmallLeftMargin}" Click="DownloadVersionsForAllAddonsInSelectedGame">Download versions</Button>
+                <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveAllGames">Delete All Games</Button>
+            </StackPanel>
+            <ListView
             Grid.Row="1"
             AllowDrop="True"
             CanReorderItems="True"
             ItemsSource="{x:Bind ViewModel.Session.SelectedGame.Addons, Mode=OneWay}"
             SelectionMode="Single">
-            <ListView.HeaderTemplate>
-                <DataTemplate>
-                    <StackPanel
+                <ListView.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel
                         Height="25"
                         Margin="{StaticResource SmallBottomMargin}"
                         Padding="{StaticResource SmallLeftMargin}"
                         Orientation="Horizontal">
-                        <TextBlock
+                            <TextBlock
                             Width="200"
                             FontSize="{StaticResource MediumFontSize}"
                             Text="Title" />
-                        <TextBlock
+                            <TextBlock
                             Width="200"
                             FontSize="{StaticResource MediumFontSize}"
                             Text="Latest Version" />
-                        <TextBlock
+                            <TextBlock
                             Width="200"
                             FontSize="{StaticResource MediumFontSize}"
                             Text="Status" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.HeaderTemplate>
-            <!--
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.HeaderTemplate>
+                <!--
                 Style="{ThemeResource BaseTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}"
                 Style="{ThemeResource BodyTextBlockStyle}" Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"
                 Style="{ThemeResource CaptionTextBlockStyle}" Opacity=".6"
             -->
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="data:Addon">
-                    <StackPanel
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="data:Addon">
+                        <StackPanel
                         Height="50"
                         Orientation="Horizontal"
                         RightTapped="UIElement_OnRightTapped">
-                        <!--<StackPanel Width="50">
+                            <!--<StackPanel Width="50">
                             <Ellipse Height="44" Width="44" VerticalAlignment="Center">
                                 <Ellipse.Fill>
                                     <ImageBrush ImageSource="../Assets/Square44x44Logo.png"/>
                                 </Ellipse.Fill>
                             </Ellipse>
                         </StackPanel>-->
-                        <StackPanel Width="200">
-                            <TextBlock
+                            <StackPanel Width="200">
+                                <TextBlock
                                 Height="25"
                                 FontSize="{StaticResource MediumFontSize}"
                                 FontWeight="SemiBold"
                                 Text="{Binding FolderName}" />
-                            <TextBlock Height="25" Text="{Binding CurrentReleaseTypeAndVersion}" />
-                        </StackPanel>
-                        <StackPanel Width="200">
-                            <TextBlock Height="25" Text="{x:Bind SuggestedDownload.ReleaseType, Mode=OneWay}" />
-                            <TextBlock Height="25" Text="{x:Bind SuggestedDownload.Version, Mode=OneWay}" />
-                        </StackPanel>
-                        <StackPanel Width="200">
-                            <ProgressBar
+                                <TextBlock Height="25" Text="{Binding CurrentReleaseTypeAndVersion}" />
+                            </StackPanel>
+                            <StackPanel Width="200">
+                                <TextBlock Height="25" Text="{x:Bind SuggestedDownload.ReleaseType, Mode=OneWay}" />
+                                <TextBlock Height="25" Text="{x:Bind SuggestedDownload.Version, Mode=OneWay}" />
+                            </StackPanel>
+                            <StackPanel Width="200">
+                                <ProgressBar
                                 Width="200"
                                 IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
                                 Visibility="{x:Bind IsProgressing, Mode=OneWay}"
                                 Value="{x:Bind Progress, Mode=OneWay}" />
-                            <Button
+                                <Button
                                 Margin="0,9,0,9"
                                 Click="UpdateButtonClick"
                                 Content="Update"
                                 Tag="{x:Bind}"
                                 Visibility="{Binding IsUpdateable}" />
-                            <TextBlock
+                                <TextBlock
                                 Height="25"
                                 Text="{Binding Status}"
                                 Visibility="{Binding IsNotUpdateable}" />
 
-                        </StackPanel>
-                        <FlyoutBase.AttachedFlyout>
-                            <MenuFlyout Opening="FlyoutBase_OnOpening">
-                                <MenuFlyoutItem
+                            </StackPanel>
+                            <FlyoutBase.AttachedFlyout>
+                                <MenuFlyout Opening="FlyoutBase_OnOpening">
+                                    <MenuFlyoutItem
                                     Command="{Binding SetIgnored}"
                                     Tag="{x:Bind Mode=OneWay}"
                                     Text="Ignored">
-                                    <MenuFlyoutItem.Icon>
-                                        <SymbolIcon Symbol="Accept" Visibility="{Binding IsIgnored}" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <MenuFlyoutItem Command="{Binding SetAlpha}" Text="Alpha">
-                                    <MenuFlyoutItem.Icon>
-                                        <SymbolIcon Symbol="Accept" Visibility="{Binding IsAlpha}" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <MenuFlyoutItem Command="{Binding SetBeta}" Text="Beta">
-                                    <MenuFlyoutItem.Icon>
-                                        <SymbolIcon Symbol="Accept" Visibility="{Binding IsBeta}" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <MenuFlyoutItem Command="{Binding SetRelease}" Text="Release">
-                                    <MenuFlyoutItem.Icon>
-                                        <SymbolIcon Symbol="Accept" Visibility="{Binding IsRelease}" />
-                                    </MenuFlyoutItem.Icon>
-                                </MenuFlyoutItem>
-                                <MenuFlyoutSubItem Name="VersionsMenuFlyout" Text="Versions" />
-                                <MenuFlyoutSubItem Text="Info">
-                                    <MenuFlyoutItem Style="{StaticResource mysyle2}" Text="{x:Bind InfoString, Mode=OneWay}" />
-                                </MenuFlyoutSubItem>
-                            </MenuFlyout>
-                        </FlyoutBase.AttachedFlyout>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <!--<ProgressBar Grid.Row="1"
+                                        <MenuFlyoutItem.Icon>
+                                            <SymbolIcon Symbol="Accept" Visibility="{Binding IsIgnored}" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem Command="{Binding SetAlpha}" Text="Alpha">
+                                        <MenuFlyoutItem.Icon>
+                                            <SymbolIcon Symbol="Accept" Visibility="{Binding IsAlpha}" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem Command="{Binding SetBeta}" Text="Beta">
+                                        <MenuFlyoutItem.Icon>
+                                            <SymbolIcon Symbol="Accept" Visibility="{Binding IsBeta}" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutItem Command="{Binding SetRelease}" Text="Release">
+                                        <MenuFlyoutItem.Icon>
+                                            <SymbolIcon Symbol="Accept" Visibility="{Binding IsRelease}" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                    <MenuFlyoutSubItem Name="VersionsMenuFlyout" Text="Versions" />
+                                    <MenuFlyoutSubItem Text="Info">
+                                        <MenuFlyoutItem Style="{StaticResource mysyle2}" Text="{x:Bind InfoString, Mode=OneWay}" />
+                                    </MenuFlyoutSubItem>
+                                </MenuFlyout>
+                            </FlyoutBase.AttachedFlyout>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <!--<ProgressBar Grid.Row="1"
                      IsIndeterminate="{x:Bind ViewModel.Game.IsLoading,Mode=OneWay}"
                      Visibility="{x:Bind ViewModel.Game.IsLoading,Mode=OneWay}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"/>-->
 
-        <ProgressRing
+            <ProgressRing
             Grid.Row="1"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             IsActive="True"
             Visibility="{x:Bind ViewModel.Session.SelectedGame.IsLoading, Mode=OneWay}" />
+        </Grid>
+
+        <Grid Grid.Column="2">
+            <TextBlock Text="Temp Text"></TextBlock>
+        </Grid>
+        <controls:GridSplitter Grid.Column="1" Width="3" ResizeBehavior="BasedOnAlignment"
+            ResizeDirection="Auto" Background="Transparent" Foreground="Transparent" FontSize="13">
+            
+        </controls:GridSplitter>
+
     </Grid>
+
 </Page>
+
+
+<!--<controls:GridSplitter.Element>
+    <Grid>
+        <TextBlock Width="3" HorizontalAlignment="Center" IsHitTestVisible="False" VerticalAlignment="Center"
+                               Text="&#xE784;" Foreground="Gray" FontFamily="Segoe MDL2 Assets">
+        </TextBlock>
+    </Grid>
+</controls:GridSplitter.Element>-->
