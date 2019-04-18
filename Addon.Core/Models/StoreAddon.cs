@@ -65,6 +65,23 @@ namespace Addon.Core.Models
             }
         }
 
+        private int progress;
+
+        public int Progress
+        {
+            get => progress;
+            set
+            {
+                if (value == progress)
+                    return;
+                progress = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged("IsIndeterminate");
+            }
+        }
+
+        public bool IsIndeterminate => progress == 0;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

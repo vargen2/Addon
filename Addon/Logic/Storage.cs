@@ -35,13 +35,21 @@ namespace Addon.Logic
             if (saveableSession == null)
                 return;
 
-            session.SelectedGame = saveableSession.SelectedGame.AsGame();
+            //session.SelectedGame = saveableSession.SelectedGame.AsGame();
             session.Games.Clear();
 
             foreach (var saveableGame in saveableSession.Games)
             {
-                session.Games.Add(saveableGame.AsGame());
+                var game = saveableGame.AsGame();
+                session.Games.Add(game);
+                if (saveableSession.SelectedGame.AbsolutePath.Equals(game.AbsolutePath))
+                {
+                    session.SelectedGame = game;
+                }
             }
+
+            
+
             Debug.WriteLine("Loaded from " + localFolder.Path);
         }
 

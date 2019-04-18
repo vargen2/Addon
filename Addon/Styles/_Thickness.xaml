@@ -25,6 +25,6 @@
 
     <!--Extra Extra Small size margins-->
     <Thickness x:Key="XXSmallTopMargin">0, 4, 0, 0</Thickness>
-
-    <Thickness x:Key="DetailPageMargin">12,12,12,0</Thickness>
+    <Thickness x:Key="XXSmallLeftMargin">4, 0, 0, 0</Thickness>
+    <Thickness x:Key="DetailPageMargin">12,0,12,0</Thickness>
 </ResourceDictionary>

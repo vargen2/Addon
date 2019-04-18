@@ -408,7 +408,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" MinWidth="180">
+                <StackPanel Grid.Column="0" Width="180">
                     <TextBlock
                         Height="25"
                         FontSize="{StaticResource MediumFontSize}"
@@ -416,14 +416,14 @@
                         Text="{Binding FolderName}" />
                     <TextBlock Height="25" Text="{Binding CurrentReleaseTypeAndVersion}" />
                 </StackPanel>
-                <StackPanel Grid.Column="1" MinWidth="150">
+                <StackPanel Grid.Column="1" Width="150" Padding="{StaticResource XXSmallLeftMargin}">
                     <TextBlock Height="25" Text="{x:Bind SuggestedDownload.ReleaseType, Mode=OneWay}" />
                     <TextBlock Height="25" Text="{x:Bind SuggestedDownload.Version, Mode=OneWay}" />
                 </StackPanel>
-                <StackPanel Grid.Column="2" MinWidth="100">
+                <StackPanel Grid.Column="2" Width="100"  Padding="{StaticResource XXSmallLeftMargin}">
                     <ProgressBar
                         Margin="{StaticResource XXSmallTopMargin}"
-                        Width="100"
+                        Width="95"
                         IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
                         Visibility="{x:Bind IsProgressing, Mode=OneWay}"
                         Value="{x:Bind Progress, Mode=OneWay}" />
@@ -528,43 +528,65 @@
         </DataTemplate>
 
         <DataTemplate x:Key="MasterHeaderTemplate">
-            <Grid Height="40">
-                <TextBlock
+            <StackPanel Orientation="Horizontal" Height="40">
+                <!--<TextBlock
                     x:Name="headerText"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Style="{StaticResource ListTitleStyle}"
-                    Text="{Binding}" />
-            </Grid>
+                   
+                    Text="{Binding}" />-->
+                <Button Margin="{StaticResource SmallLeftMargin}" Click="RefreshTocFileForAllInSelectedGame">Toc</Button>
+                <Button Margin="{StaticResource SmallLeftMargin}" Click="DownloadVersionsForAllAddonsInSelectedGame">Versions</Button>
+                <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveAllGames">Delete</Button>
+            </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="MinimalMasterHeaderTemplate">
             <Grid Height="40">
                 <TextBlock
                     x:Name="headerText"
-                    Margin="96,0,0,0"
+                    Margin="0,0,0,0"
                     VerticalAlignment="Center"
-                    Style="{StaticResource ListTitleStyle}"
+                    Style="{StaticResource ListSubTitleStyle}"
                     Text="{Binding}" />
+                <Button Margin="{StaticResource SmallLeftMargin}" Click="RefreshTocFileForAllInSelectedGame">Toc</Button>
+                <Button Margin="{StaticResource SmallLeftMargin}" Click="DownloadVersionsForAllAddonsInSelectedGame">Versions</Button>
+                <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveAllGames">Delete</Button>
             </Grid>
         </DataTemplate>
     </Page.Resources>
 
     <Grid x:Name="ContentArea">
 
-        <controls:MasterDetailsView
+        <controls:MasterDetailsView            
            Style="{StaticResource mymaster}"
+            CompactModeThresholdWidth="1"
             x:Name="MasterDetailsViewControl"
             BackButtonBehavior="Automatic"
             Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
             BorderBrush="Transparent"
             DetailsTemplate="{StaticResource DetailsTemplate}"
             ItemTemplate="{StaticResource ItemTemplate}"
-            ItemsSource="{x:Bind ViewModel.Session.SelectedGame.Addons}"
+            ItemsSource="{x:Bind ViewModel.Session.SelectedGame.Addons,Mode=OneWay}"
             MasterPaneWidth="600"
             NoSelectionContentTemplate="{StaticResource NoSelectionContentTemplate}"
-            SelectedItem="{x:Bind ViewModel.Selected, Mode=TwoWay}" />
+            SelectedItem="{x:Bind ViewModel.Selected, Mode=TwoWay}"
+           
+    MasterHeader="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath}"
+    MasterHeaderTemplate="{StaticResource MinimalMasterHeaderTemplate}"/>
 
 
-
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>       
+                        <AdaptiveTrigger MinWindowWidth="1" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MasterDetailsViewControl.MasterHeaderTemplate" Value="{StaticResource MasterHeaderTemplate}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
 
         <!--<controls:GridSplitter Grid.Column="1" Width="11" ResizeBehavior="CurrentAndNext"

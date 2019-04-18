@@ -20,7 +20,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                 <FontIcon
                     FontSize="48"
-                    Glyph=""
+                    Glyph="&#xF000;"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"/>
                 <TextBlock

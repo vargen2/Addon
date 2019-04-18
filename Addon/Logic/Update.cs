@@ -49,10 +49,12 @@ namespace Addon.Logic
                 Progress<DownloadOperation> progressCallback = new Progress<DownloadOperation>(a => { ProgressCallback(a, addon, totalBytes); });
 
 
-                await downloadOperation.StartAsync().AsTask(progressCallback);
+                
 
-
-
+                Debug.WriteLine("BEFORE-----------");
+               await Task.Run(async () =>{ await downloadOperation.StartAsync().AsTask(progressCallback); });
+               // t.Wait();
+                Debug.WriteLine("AFTER-----------");
 
                 //  var aa = await downloadOperation.StartAsync();
 

@@ -16,6 +16,7 @@ namespace Addon.Logic
     {
         internal static async Task InstallAddon(StoreAddon storeAddon)
         {
+            //TODO add functionality for storeaddon to progress
             storeAddon.Status = StoreAddon.INSTALLING;
             var game = Singleton<Session>.Instance.SelectedGame;
             var tempAddon = new Core.Models.Addon(game, storeAddon.Url, game.AbsolutePath + @"\" + storeAddon.Url) { };
@@ -23,6 +24,7 @@ namespace Addon.Logic
             var download = tempAddon.SuggestedDownload;
             var file = await Update.DownloadFile(tempAddon, download);
             var trash = await InstallAddon(tempAddon, download, file);
+            tempAddon.Message="";
             tempAddon.CurrentDownload = download;
             try
             {

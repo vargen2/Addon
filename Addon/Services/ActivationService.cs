@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -81,6 +82,17 @@ namespace Addon.Services
 
             Debug.WriteLine("Loaded knownsubfolders " + Singleton<Session>.Instance.KnownSubFolders.Count);
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
+
+
+            ApplicationView.GetForCurrentView().Title = Singleton<Session>.Instance.SelectedGame.AbsolutePath;
+            Singleton<Session>.Instance.PropertyChanged += Session_PropertyChanged;
+
+
+            foreach (var item in Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Entries)
+            {
+             Debug.WriteLine(item.Token);
+            }
+
         }
 
         private async Task InitializeAsync()
@@ -116,5 +128,17 @@ namespace Addon.Services
             deferral.Complete();
         }
 
+
+        private void Session_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("SelectedGame"))
+            {
+                var game = Singleton<Session>.Instance.SelectedGame;
+                if (game != null)
+                {
+                    ApplicationView.GetForCurrentView().Title = Singleton<Session>.Instance.SelectedGame.AbsolutePath;
+                }
+            }
+        }
     }
 }

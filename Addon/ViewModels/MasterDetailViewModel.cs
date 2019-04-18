@@ -5,6 +5,8 @@ using Microsoft.Toolkit.Uwp.UI.Controls;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 
 namespace Addon.ViewModels
 {
@@ -34,13 +36,15 @@ namespace Addon.ViewModels
 
         public async Task LoadDataAsync(MasterDetailsViewState viewState)
         {
-
+           
 
             if (viewState == MasterDetailsViewState.Both && Session.SelectedGame != null && Session.SelectedGame.Addons.Count > 0)
             {
                 Selected = Session.SelectedGame.Addons.First();
             }
         }
+
+       
 
         //public async Task LoadDataAsync(MasterDetailsViewState viewState)
         //{

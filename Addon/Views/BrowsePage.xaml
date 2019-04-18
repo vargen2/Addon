@@ -85,8 +85,9 @@
                         <StackPanel Width="120">
                             <ProgressBar
                                 Width="120"
-                                IsIndeterminate="True"
-                                Visibility="{x:Bind IsInstalling, Mode=OneWay}" />
+                                IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
+                                Visibility="{x:Bind IsInstalling, Mode=OneWay}"
+                                Value="{x:Bind Progress, Mode=OneWay}" />
                             <Button
                                 Margin="0,14,0,14"
                                 Click="Install_Button_Click"

@@ -54,8 +54,10 @@ namespace Addon.Views
 
                 if (ViewModel.Session.Games.Any(g => g.AbsolutePath.Equals(folder.Path))) return;
 
-                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+                Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(folder);
 
+                
+                
                 var game = Common.FolderToGame(folder);
                 ViewModel.Session.Games.Add(game);
                 if (ViewModel.Session.Games.Count == 1)
