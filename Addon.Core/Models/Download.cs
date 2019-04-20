@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Addon.Core.Models
 {
@@ -25,9 +23,14 @@ namespace Addon.Core.Models
             DownloadLink = downloadLink;
         }
 
-        
 
-        public string ToString()
+
+        public override string ToString()
+        {
+            return $"{ReleaseType}, {Version}, {FileSize},\r\nUploaded: {DateUploaded}";
+        }
+
+         public string ToStringThreeLines()
         {
             return $"{ReleaseType}, {Version}, {FileSize}, Downloaded: {NrOfDownloads},\r\nUploaded: {DateUploaded}, Game: {GameVersion},\r\n{DownloadLink}";
         }

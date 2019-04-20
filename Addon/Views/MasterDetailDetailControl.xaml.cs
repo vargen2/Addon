@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -60,6 +59,10 @@ namespace Addon.Views
             var control = d as MasterDetailDetailControl;
             control.ForegroundElement.ChangeView(0, 0, 1);
         }
+
+        
+
+
 
         //private async void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         //{

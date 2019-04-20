@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Addon.Logic
 {
@@ -127,6 +128,10 @@ namespace Addon.Logic
             try
             {
                 string section = Util.Parse2(htmlPage, "<section class=\"project-content", "</section>");
+
+               section= Regex.Replace(section,"href=\".*\"","href=\"#\"");
+
+
                 return section.Substring(section.IndexOf(">") + 1);
             }
             catch (Exception e)
