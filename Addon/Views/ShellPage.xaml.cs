@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Addon.Views
 {
-    // TODO WTS: Change the icons and titles for all NavigationViewItems in ShellPage.xaml.
+    // TODO Acrylic
     public sealed partial class ShellPage : Page
     {
         public ShellViewModel ViewModel { get; } = new ShellViewModel();
@@ -56,8 +56,8 @@ namespace Addon.Views
 
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(folder);
 
-                
-                
+
+
                 var game = Common.FolderToGame(folder);
                 ViewModel.Session.Games.Add(game);
                 if (ViewModel.Session.Games.Count == 1)

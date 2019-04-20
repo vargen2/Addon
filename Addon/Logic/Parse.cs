@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Addon.Core.Helpers;
+﻿using Addon.Core.Helpers;
 using Addon.Core.Models;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Addon.Logic
 {
@@ -69,7 +70,7 @@ namespace Addon.Logic
             long dls = Long.valueOf(Util.parse(subString, "<td class=\"project-file-downloads\">", "</td>").replaceAll(",", "").trim());
             String downloadLink = Util.parse(subString, " href=\"", "\"");
                          */
-                         
+
             var downloads = new List<Download>();
             int index1 = htmlPage.IndexOf("<div class=\"listing-body\">");
             int index2 = htmlPage.IndexOf("</table>");
@@ -97,6 +98,42 @@ namespace Addon.Logic
                 downloads.Add(new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink));
             }
             return downloads;
+        }
+
+        //public static List<string> FromPageToChanges(string htmlPage)
+        //{
+        //    try
+        //    {
+        //        string section = Util.Parse2(htmlPage, "<section class=\"project-content", "</section>");
+        //        section = section.Substring(section.IndexOf("<p>"));
+        //        return section.Split("<p>")
+        //            .Select(line => line
+        //            .Replace("</p>", "")
+        //            .Replace("<br>", "\r\n")
+        //            .Replace("&nbsp;", " ")
+        //            .Replace("&#x27;", "'")
+        //            .Replace("&quot;", "\"")
+        //            .Trim()).ToList();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine("[ERROR] FromPageToChanges, " + e.Message);
+        //        return new List<string>();
+        //    }
+        //}
+
+        public static string FromPageToChanges(string htmlPage)
+        {
+            try
+            {
+                string section = Util.Parse2(htmlPage, "<section class=\"project-content", "</section>");
+                return section.Substring(section.IndexOf(">") + 1);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("[ERROR] FromPageToChanges, " + e.Message);
+                return string.Empty;
+            }
         }
     }
 }

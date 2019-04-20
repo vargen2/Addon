@@ -1,12 +1,10 @@
 ﻿using Addon.Core.Helpers;
 using Addon.Core.Models;
 using Addon.Helpers;
+using Addon.Logic;
 using Microsoft.Toolkit.Uwp.UI.Controls;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
 
 namespace Addon.ViewModels
 {
@@ -29,14 +27,27 @@ namespace Addon.ViewModels
 
         public MasterDetailViewModel()
         {
-            
+
             Session = Singleton<Session>.Instance;
-            
+            PropertyChanged += MasterDetailViewModel_PropertyChanged;
+
+        }
+
+        private async void MasterDetailViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("Selected") && Selected != null)
+            {
+                if (string.IsNullOrEmpty(Selected.ChangeLog))
+                {
+                    Selected.ChangeLog = await Changes.DownloadChangesFor(Selected);
+                }
+
+            }
         }
 
         public async Task LoadDataAsync(MasterDetailsViewState viewState)
         {
-           
+
 
             if (viewState == MasterDetailsViewState.Both && Session.SelectedGame != null && Session.SelectedGame.Addons.Count > 0)
             {
@@ -44,7 +55,7 @@ namespace Addon.ViewModels
             }
         }
 
-       
+
 
         //public async Task LoadDataAsync(MasterDetailsViewState viewState)
         //{

@@ -1,14 +1,11 @@
-﻿using System;
+﻿using Addon.Core.Helpers;
+using Addon.Core.Storage;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows.Input;
-using Addon.Core.Helpers;
-using Addon.Core.Storage;
 using static System.String;
 
 
@@ -82,7 +79,7 @@ namespace Addon.Core.Models
                 NotifyPropertyChanged("IsRelease");
                 NotifyPropertyChanged("InfoString");
                 NotifyPropertyChanged("SuggestedDownload");
-                
+
             }
         }
 
@@ -217,7 +214,7 @@ namespace Addon.Core.Models
                 {
                     return null;
                 }
-                
+
                 return downloads.FirstOrDefault(dl => dl.ReleaseType.ToLower().Equals(this.preferredReleaseType.ToLower()));
             }
         }
@@ -268,9 +265,23 @@ namespace Addon.Core.Models
                 if (value.Equals(message))
                     return;
                 message = value;
-                NotifyPropertyChanged();              
+                NotifyPropertyChanged();
             }
         }
+
+        private string changeLog;
+
+        public string ChangeLog
+        {
+            get => changeLog;
+            set
+            {
+                changeLog = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
 
 
         public event PropertyChangedEventHandler PropertyChanged;

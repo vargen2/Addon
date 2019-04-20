@@ -1,9 +1,8 @@
 ﻿using Addon.Logic;
 using Addon.ViewModels;
-using Microsoft.Toolkit.Uwp.UI.Controls;
+using System;
 using System.Diagnostics;
 using System.Linq;
-using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,13 +26,13 @@ namespace Addon.Views
 
         private async void MasterDetailPage_Loaded(object sender, RoutedEventArgs e)
         {
-             
+
             await ViewModel.LoadDataAsync(MasterDetailsViewControl.ViewState);
             //MyMasterDetailPage = this;
             //Window.Current.Content.PointerPressed +=ForegroundElement_PointerPressed;
         }
 
-         private async void UpdateButtonClick(object sender, RoutedEventArgs e)
+        private async void UpdateButtonClick(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
             var addon = button.Tag as Core.Models.Addon;
@@ -123,7 +122,7 @@ namespace Addon.Views
 
         // private void ForegroundElement_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         //{
-            
+
         //    Debug.WriteLine("pressed");
         //    //isPressed = true;
         //    //xPrev = e.GetCurrentPoint(sender as UIElement).Position.X;

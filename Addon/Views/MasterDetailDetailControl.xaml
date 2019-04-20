@@ -1,97 +1,109 @@
-﻿<!--PointerPressed="ForegroundElement_PointerPressed"
-        PointerMoved="ForegroundElement_PointerMoved"
-        PointerReleased="ForegroundElement_PointerReleased"-->
+﻿<!--
+    PointerPressed="ForegroundElement_PointerPressed"
+    PointerMoved="ForegroundElement_PointerMoved"
+    PointerReleased="ForegroundElement_PointerReleased"
+-->
 <UserControl
     x:Class="Addon.Views.MasterDetailDetailControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Addon.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"    
-    d:DesignWidth="600">
+    d:DesignWidth="600"
+    mc:Ignorable="d">
 
-    <ScrollViewer       
+    <ScrollViewer
         Name="ForegroundElement"
-        VerticalScrollMode="Enabled"
+        Padding="{StaticResource DetailPageMargin}"
         HorizontalAlignment="Stretch"
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-        Padding="{StaticResource DetailPageMargin}">
-        <StackPanel HorizontalAlignment="Left"                    >
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+        VerticalScrollMode="Enabled">
+        <StackPanel HorizontalAlignment="Stretch">
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
                 <FontIcon
-                    FontSize="48"
-                    Glyph="&#xF000;"
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    HorizontalAlignment="Center"/>
+                    FontSize="48"
+                    Glyph="&#xF000;" />
                 <TextBlock
                     VerticalAlignment="Center"
-                    Text="{x:Bind MasterMenuItem.FolderName, Mode=OneWay}"
-                    Style="{ThemeResource TitleTextBlockStyle}"/>
+                    Style="{ThemeResource TitleTextBlockStyle}"
+                    Text="{x:Bind MasterMenuItem.FolderName, Mode=OneWay}" />
             </StackPanel>
-            <!-- {AbsolutePath}, {Title},\{ProjectUrl}, {PreferredReleaseType}Version},
-             {CurrentReleaseTypeAndVersion} {IsIgnored}, {GameVersion}, {Status},\r {CurrentDownload}
-             {SuggestedDownload}";-->
+            <!--
+                {AbsolutePath}, {Title},\{ProjectUrl}, {PreferredReleaseType}Version},
+                {CurrentReleaseTypeAndVersion} {IsIgnored}, {GameVersion}, {Status},\r {CurrentDownload}
+                {SuggestedDownload}";
+            -->
 
-            <StackPanel Name="block" Padding="0,8,0,0">
-                <HyperlinkButton Content="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" NavigateUri="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}"/>
-                
+            <StackPanel
+                Name="block"
+                Padding="0,8,0,0"
+                HorizontalAlignment="Stretch">
+                <HyperlinkButton Content="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" NavigateUri="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" />
+
                 <VariableSizedWrapGrid Orientation="Horizontal">
                     <StackPanel Width="200">
-                        <TextBlock Text="Title" Style="{StaticResource DetailSubTitleStyle}"/>
-                        <TextBlock  Text="{x:Bind MasterMenuItem.Title, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-                    </StackPanel>
-                    <StackPanel Width="Auto"  >
-                        <TextBlock  Text="Status" Style="{StaticResource DetailSubTitleStyle}" />
-                        <TextBlock  Text="{x:Bind MasterMenuItem.Status, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-                    </StackPanel>
-                </VariableSizedWrapGrid>
-                
-                <VariableSizedWrapGrid Orientation="Horizontal">
-                    <StackPanel Width="200">
-                        <TextBlock  Text="Preferred Release Type" Style="{StaticResource DetailSubTitleStyle}" />
-                        <TextBlock  Text="{x:Bind MasterMenuItem.PreferredReleaseType, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
+                        <TextBlock Style="{StaticResource DetailSubTitleStyle}" Text="Title" />
+                        <TextBlock Style="{StaticResource DetailBodyBaseMediumStyle}" Text="{x:Bind MasterMenuItem.Title, Mode=OneWay}" />
                     </StackPanel>
                     <StackPanel Width="Auto">
-                        <TextBlock  Text="Version" Style="{StaticResource DetailSubTitleStyle}" />
-                        <TextBlock  Text="{x:Bind MasterMenuItem.Version, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
+                        <TextBlock Style="{StaticResource DetailSubTitleStyle}" Text="Status" />
+                        <TextBlock Style="{StaticResource DetailBodyBaseMediumStyle}" Text="{x:Bind MasterMenuItem.Status, Mode=OneWay}" />
+                    </StackPanel>
+                </VariableSizedWrapGrid>
+
+                <VariableSizedWrapGrid Orientation="Horizontal">
+                    <StackPanel Width="200">
+                        <TextBlock Style="{StaticResource DetailSubTitleStyle}" Text="Preferred Release Type" />
+                        <TextBlock Style="{StaticResource DetailBodyBaseMediumStyle}" Text="{x:Bind MasterMenuItem.PreferredReleaseType, Mode=OneWay}" />
+                    </StackPanel>
+                    <StackPanel Width="Auto">
+                        <TextBlock Style="{StaticResource DetailSubTitleStyle}" Text="Version" />
+                        <TextBlock Style="{StaticResource DetailBodyBaseMediumStyle}" Text="{x:Bind MasterMenuItem.Version, Mode=OneWay}" />
                     </StackPanel>
                 </VariableSizedWrapGrid>
 
 
-                <TextBlock  Text="Current Release Type And Version" Style="{StaticResource DetailSubTitleStyle}" />
-                <TextBlock  Text="{x:Bind MasterMenuItem.CurrentReleaseTypeAndVersion, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-                <TextBlock  Text="Game Version" Style="{StaticResource DetailSubTitleStyle}"/>
-                <TextBlock  Text="{x:Bind MasterMenuItem.GameVersion, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-                <TextBlock  Text="Absolute Path" Style="{StaticResource DetailSubTitleStyle}" />
-                <TextBlock  Text="{x:Bind MasterMenuItem.AbsolutePath, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
+                <TextBlock Style="{StaticResource DetailSubTitleStyle}" Text="Current Release Type And Version" />
+                <TextBlock Style="{StaticResource DetailBodyBaseMediumStyle}" Text="{x:Bind MasterMenuItem.CurrentReleaseTypeAndVersion, Mode=OneWay}" />
+                <TextBlock Style="{StaticResource DetailSubTitleStyle}" Text="Game Version" />
+                <TextBlock Style="{StaticResource DetailBodyBaseMediumStyle}" Text="{x:Bind MasterMenuItem.GameVersion, Mode=OneWay}" />
+                <TextBlock Style="{StaticResource DetailSubTitleStyle}" Text="Absolute Path" />
+                <TextBlock Style="{StaticResource DetailBodyBaseMediumStyle}" Text="{x:Bind MasterMenuItem.AbsolutePath, Mode=OneWay}" />
 
-                <TextBlock Text="Change Log" Style="{StaticResource DetailSubTitleStyle}" Margin="{StaticResource SmallTopMargin}" />
-                <TextBlock Style="{StaticResource DetailBodyStyle}" Text="commit be966f74369dc95891c6f9d26d5dd205c26f482b
-Author: Tercioo &lt;terciob19@hotmail.com&gt;
-Date:   Tue Apr 16 13:20:28 2019 -0300
 
-    Added support for Combat Log Event Recording (in game)
+                <WebView
+                    Height="400"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    local:MyExtensions.HtmlString="{x:Bind MasterMenuItem.ChangeLog, Mode=OneWay}"
+                    DefaultBackgroundColor="Transparent" />
 
-    Further versions will support ingame time line analysis using the combat log event records, at the moment it is available for early adopters.
-    To enable, edit the line '_is_storing_cleu' to true in Parser.lua.
 
-    Also on this version: added early implementation of damage chart in the Player Detail Breakdown window, it is disabled by default for users.
-
-commit d18fa8c1384682f593026b86158e814ee75a0664
-Author: Tercioo &lt;terciob19@hotmail.com&gt;
-Date:   Sat Apr 13 13:00:51 2019 -0300
-
-    Moving rank text to a new Statusbar in the Player Detail Window
-
-    Rank information was shown in the header above the tabs, now the player details window has a statusbar and the rank information is shown there." />
+                <!--<TextBlock
+                    Margin="{StaticResource SmallTopMargin}"
+                    Style="{StaticResource DetailSubTitleStyle}"
+                    Text="Change Log" />
+                <TextBlock Style="{StaticResource DetailBodyStyle}" Text="{x:Bind MasterMenuItem.ChangeLog, Mode=OneWay}" />-->
 
 
 
-                <TextBlock Text="Current Download" Style="{StaticResource DetailSubTitleStyle}" Margin="{StaticResource SmallTopMargin}" />
+                <TextBlock
+                    Margin="{StaticResource SmallTopMargin}"
+                    Style="{StaticResource DetailSubTitleStyle}"
+                    Text="Current Download" />
                 <TextBlock Style="{StaticResource DetailBodyStyle}" Text="{x:Bind MasterMenuItem.CurrentDownload, Mode=OneWay}" />
 
-                <TextBlock Text="Suggested Download" Style="{StaticResource DetailSubTitleStyle}" Margin="{StaticResource SmallTopMargin}" />
-                <TextBlock Style="{StaticResource DetailBodyStyle}" Margin="{StaticResource MediumBottomMargin}" Text="{x:Bind MasterMenuItem.SuggestedDownload, Mode=OneWay}" />
+                <TextBlock
+                    Margin="{StaticResource SmallTopMargin}"
+                    Style="{StaticResource DetailSubTitleStyle}"
+                    Text="Suggested Download" />
+                <TextBlock
+                    Margin="{StaticResource MediumBottomMargin}"
+                    Style="{StaticResource DetailBodyStyle}"
+                    Text="{x:Bind MasterMenuItem.SuggestedDownload, Mode=OneWay}" />
             </StackPanel>
 
         </StackPanel>
@@ -128,4 +140,4 @@ Date:   Sat Apr 13 13:00:51 2019 -0300
 
 
 
-<!--VariableSizedWrapGrid.ColumnSpan="1" VariableSizedWrapGrid.RowSpan="0"-->
+<!--  VariableSizedWrapGrid.ColumnSpan="1" VariableSizedWrapGrid.RowSpan="0"  -->

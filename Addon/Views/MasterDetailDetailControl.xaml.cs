@@ -4,9 +4,44 @@ using Windows.UI.Xaml.Controls;
 
 namespace Addon.Views
 {
+    //
+    // https://stackoverflow.com/questions/22505461/binding-html-string-content-to-webview-in-xaml
+    //
+    public class MyExtensions
+    {
+        // "HtmlString" attached property for a WebView
+        public static readonly DependencyProperty HtmlStringProperty =
+           DependencyProperty.RegisterAttached("HtmlString", typeof(string), typeof(MyExtensions), new PropertyMetadata("", OnHtmlStringChanged));
+
+        // Getter and Setter
+        public static string GetHtmlString(DependencyObject obj) { return (string)obj.GetValue(HtmlStringProperty); }
+        public static void SetHtmlString(DependencyObject obj, string value) { obj.SetValue(HtmlStringProperty, value); }
+
+        private static void OnHtmlStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Debug.WriteLine("OnHTMLChanged");
+            if (d is WebView webView)
+            {
+                var head = "<head><meta charset=\"UTF-8\"></head>";
+                var styles = "<style>html{font-family:'Segoe UI';}</style>";
+                var html = (string)e.NewValue;
+                //Frame rootFrame = Window.Current.Content as Frame;
+                //if (rootFrame != null && rootFrame.RequestedTheme == ElementTheme.Dark)
+                //{
+                //    styles += "";
+                //}
+                webView.NavigateToString(head + styles + html);
+                
+            }
+        }
+    }
+
     public sealed partial class MasterDetailDetailControl : UserControl
     {
-      
+
+
+
+
         public Core.Models.Addon MasterMenuItem
         {
             get { return GetValue(MasterMenuItemProperty) as Core.Models.Addon; }
@@ -31,7 +66,7 @@ namespace Addon.Views
 
         //private void ForegroundElement_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         //{
-            
+
         //   // Debug.WriteLine("pressed");
         //    isPressed = true;
         //    xPrev = e.GetCurrentPoint(sender as UIElement).Position.X;

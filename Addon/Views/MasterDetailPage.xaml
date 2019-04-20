@@ -420,10 +420,10 @@
                     <TextBlock Height="25" Text="{x:Bind SuggestedDownload.ReleaseType, Mode=OneWay}" />
                     <TextBlock Height="25" Text="{x:Bind SuggestedDownload.Version, Mode=OneWay}" />
                 </StackPanel>
-                <StackPanel Grid.Column="2" Width="100"  Padding="{StaticResource XXSmallLeftMargin}">
+                <StackPanel Grid.Column="2" Width="150"  Padding="{StaticResource XXSmallLeftMargin}">
                     <ProgressBar
                         Margin="{StaticResource XXSmallTopMargin}"
-                        Width="95"
+                        Width="145"
                         IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
                         Visibility="{x:Bind IsProgressing, Mode=OneWay}"
                         Value="{x:Bind Progress, Mode=OneWay}" />
