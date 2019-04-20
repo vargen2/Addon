@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Addon.Helpers;
+using Addon.Services;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel;
 using Windows.UI.Xaml;
-using Addon.Helpers;
-using Addon.Services;
 
 namespace Addon.ViewModels
 {
@@ -31,7 +30,7 @@ namespace Addon.ViewModels
 
         private ICommand _switchThemeCommand;
 
-       
+
 
         public ICommand SwitchThemeCommand
         {
@@ -73,20 +72,22 @@ namespace Addon.ViewModels
         }
 
 
-        private bool? _isAutoSaveWTFEnabled;
 
-        public bool? IsAutoSaveWTFEnabled
+
+        private bool? _isAutoRefreshVersions;
+
+        public bool? IsAutoRefreshVersions
         {
-            get => _isAutoSaveWTFEnabled ?? false;
+            get => _isAutoRefreshVersions ?? true;
 
             set
             {
-                if (value != _isAutoSaveWTFEnabled)
+                if (value != _isAutoRefreshVersions)
                 {
-                    Task.Run(async () => await Windows.Storage.ApplicationData.Current.LocalSettings.SaveAsync(nameof(IsAutoSaveWTFEnabled), value ?? false));
+                    Task.Run(async () => await Windows.Storage.ApplicationData.Current.LocalSettings.SaveAsync(nameof(IsAutoRefreshVersions), value ?? false));
                 }
 
-                Set(ref _isAutoSaveWTFEnabled, value);
+                Set(ref _isAutoRefreshVersions, value);
             }
         }
 
@@ -96,8 +97,9 @@ namespace Addon.ViewModels
         {
             if (!_hasInstanceBeenInitialized)
             {
-                IsAutoSaveWTFEnabled =
-                await Windows.Storage.ApplicationData.Current.LocalSettings.ReadAsync<bool>(nameof(IsAutoSaveWTFEnabled));
+
+                IsAutoRefreshVersions = await Windows.Storage.ApplicationData.Current.LocalSettings.ReadAsync<bool>(nameof(IsAutoRefreshVersions));
+
 
                 Initialize();
 

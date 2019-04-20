@@ -12,8 +12,7 @@ namespace Addon.Views
 {
     public sealed partial class MasterDetailPage : Page
     {
-
-        //public static MasterDetailPage MyMasterDetailPage;
+       // private Object oldSelected;
 
         public MasterDetailViewModel ViewModel { get; } = new MasterDetailViewModel();
 
@@ -30,7 +29,26 @@ namespace Addon.Views
             await ViewModel.LoadDataAsync(MasterDetailsViewControl.ViewState);
             //MyMasterDetailPage = this;
             //Window.Current.Content.PointerPressed +=ForegroundElement_PointerPressed;
+            //MasterDetailsViewControl.SelectionChanged += MasterDetailsViewControl_SelectionChanged;
         }
+
+        //private void MasterDetailsViewControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    Debug.WriteLine("SELECTION CHANGED "+e.ToString());
+        //    if (MasterDetailsViewControl.SelectedItem != null)
+        //    {
+        //        oldSelected = MasterDetailsViewControl.SelectedItem;
+        //    }
+        //    else if (MasterDetailsViewControl.SelectedItem == null)
+        //    {
+        //        Debug.WriteLine("NULL selected");
+        //        if (ViewModel.Session.SelectedGame != null && ViewModel.Session.SelectedGame.Addons.Count > 0 && oldSelected != null)
+        //        {
+        //            MasterDetailsViewControl.SelectedItem = oldSelected;
+
+        //        }
+        //    }
+        //}
 
         private async void UpdateButtonClick(object sender, RoutedEventArgs e)
         {

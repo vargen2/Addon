@@ -138,7 +138,7 @@
     <comment>File name is null or empty to save file in settings storage extensions</comment>
   </data>
   <data name="Settings_Theme.Text" xml:space="preserve">
-    <value>Choose Theme</value>
+    <value>Theme</value>
     <comment>Choose theme text for Settings</comment>
   </data>
   <data name="Settings_Theme_Dark.Content" xml:space="preserve">
@@ -170,7 +170,7 @@
     <comment>Here is your Privacy Statement url for Settings</comment>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
-    <value>Personalization</value>
+    <value>Settings</value>
     <comment>Personalization text for Settings</comment>
   </data>
   <data name="ExceptionEnumToBooleanConverterValueMustBeAnEnum" xml:space="preserve">
@@ -180,8 +180,8 @@
   <data name="ExceptionEnumToBooleanConverterParameterMustBeAnEnumName" xml:space="preserve">
     <value>parameter must be an Enum name!</value>
     <comment>Parameter must be an Enum name in enum to boolean converter</comment>
-  </data>
-  <data name="Settings_EnableAutoSaveWTF.Content" xml:space="preserve">
-    <value>Automatically Save WTF Folder</value>
+  </data>  
+  <data name="Settings_EnableAutoRefreshVersions.Content" xml:space="preserve">
+    <value>Refresh versions on start up</value>
   </data>
 </root>

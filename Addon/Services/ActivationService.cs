@@ -2,6 +2,7 @@
 using Addon.Core.Helpers;
 using Addon.Core.Models;
 using Addon.Logic;
+using Addon.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -87,11 +88,12 @@ namespace Addon.Services
             ApplicationView.GetForCurrentView().Title = Singleton<Session>.Instance.SelectedGame.AbsolutePath;
             Singleton<Session>.Instance.PropertyChanged += Session_PropertyChanged;
 
-
-            foreach (var item in Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Entries)
+            var settings = Singleton<SettingsViewModel>.Instance;
+            if (settings.IsAutoRefreshVersions ?? false)
             {
-             Debug.WriteLine(item.Token);
+                await Tasks.FindProjectUrlAndDownLoadVersionsFor(Singleton<Session>.Instance.SelectedGame.Addons);
             }
+
 
         }
 

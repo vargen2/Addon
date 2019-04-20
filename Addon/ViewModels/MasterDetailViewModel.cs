@@ -3,6 +3,7 @@ using Addon.Core.Models;
 using Addon.Helpers;
 using Addon.Logic;
 using Microsoft.Toolkit.Uwp.UI.Controls;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +11,8 @@ namespace Addon.ViewModels
 {
     public class MasterDetailViewModel : Observable
     {
+        private Addon.Core.Models.Addon oldSelected;
+
         public Session Session { get; }
 
         private Addon.Core.Models.Addon _selected;
@@ -39,16 +42,23 @@ namespace Addon.ViewModels
             {
                 if (string.IsNullOrEmpty(Selected.ChangeLog))
                 {
+                    Debug.WriteLine("Download changes");
                     Selected.ChangeLog = await Changes.DownloadChangesFor(Selected);
                 }
-
+                oldSelected = Selected;
+            }
+            else if (e.PropertyName.Equals("Selected") && Selected == null)
+            {
+                Debug.WriteLine("NULL selected");
+                if (Session.SelectedGame != null && Session.SelectedGame.Addons.Count > 0 && oldSelected != null)
+                {
+                    Selected = oldSelected;
+                }
             }
         }
 
         public async Task LoadDataAsync(MasterDetailsViewState viewState)
         {
-
-
             if (viewState == MasterDetailsViewState.Both && Session.SelectedGame != null && Session.SelectedGame.Addons.Count > 0)
             {
                 Selected = Session.SelectedGame.Addons.First();

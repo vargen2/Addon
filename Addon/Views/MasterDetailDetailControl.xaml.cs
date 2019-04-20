@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -19,19 +20,17 @@ namespace Addon.Views
 
         private static void OnHtmlStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            Debug.WriteLine("OnHTMLChanged");
+            //Debug.WriteLine("OnHTMLChanged");
             if (d is WebView webView)
             {
                 var head = "<head><meta charset=\"UTF-8\"></head>";
                 var styles = "<style>html{font-family:'Segoe UI';}</style>";
                 var html = (string)e.NewValue;
-                //Frame rootFrame = Window.Current.Content as Frame;
-                //if (rootFrame != null && rootFrame.RequestedTheme == ElementTheme.Dark)
-                //{
-                //    styles += "";
-                //}
+                if (Window.Current.Content is Page rootFrame && rootFrame.RequestedTheme == ElementTheme.Dark)
+                {
+                    styles = "<style>html{font-family:'Segoe UI'; color:#fff;}</style>";
+                }
                 webView.NavigateToString(head + styles + html);
-                
             }
         }
     }
@@ -61,6 +60,25 @@ namespace Addon.Views
             var control = d as MasterDetailDetailControl;
             control.ForegroundElement.ChangeView(0, 0, 1);
         }
+
+        //private async void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        //{
+
+        //    var heightString = await sender.InvokeScriptAsync("eval", new[] { "document.body.scrollHeight.toString()" });
+
+        //    int height;
+        //    Debug.WriteLine("Navigation completed " + heightString);
+        //    if (int.TryParse(heightString, out height))
+        //    {
+        //        if (height < 10000)
+        //        {
+        //            sender.Height = height;
+        //        }
+        //    }
+        //}
+
+
+
 
 
 

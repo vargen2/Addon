@@ -15,6 +15,11 @@
     <Grid Margin="{StaticResource MediumLeftRightMargin}">
         <StackPanel x:Name="ContentArea">
             <TextBlock x:Uid="Settings_Personalization" Style="{ThemeResource SubtitleTextBlockStyle}" />
+            <CheckBox
+                    x:Uid="Settings_EnableAutoRefreshVersions"
+                    Margin="0,8,0,0"
+                    IsChecked="{x:Bind ViewModel.IsAutoRefreshVersions, Mode=TwoWay}" />
+
             <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
                 <TextBlock x:Uid="Settings_Theme" />
 
@@ -50,12 +55,6 @@
                         </RadioButton.CommandParameter>
                     </RadioButton>
                 </StackPanel>
-                <CheckBox
-                    x:Uid="Settings_EnableAutoSaveWTF"
-                    Margin="0,8,0,0"
-                    IsChecked="{x:Bind ViewModel.IsAutoSaveWTFEnabled, Mode=TwoWay}" />
-                <ToggleButton />
-                <ToggleSwitch />
             </StackPanel>
 
             <TextBlock x:Uid="Settings_About" Style="{ThemeResource SubtitleTextBlockStyle}" />

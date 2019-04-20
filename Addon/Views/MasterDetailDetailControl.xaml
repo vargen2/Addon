@@ -75,7 +75,7 @@
 
 
                 <WebView
-                    Height="400"
+                    Height="600"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     local:MyExtensions.HtmlString="{x:Bind MasterMenuItem.ChangeLog, Mode=OneWay}"
