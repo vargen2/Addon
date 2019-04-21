@@ -118,19 +118,23 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppDisplayName" xml:space="preserve">
-    <value>Addon</value>
+    <value>Addon Manager</value>
     <comment>Application display name</comment>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>Addon</value>
+    <value>Addon Manager for Wow.</value>
     <comment>Application description</comment>
   </data>
   <data name="Shell_Main.Content" xml:space="preserve">
     <value>Main</value>
     <comment>Navigation view item name for Main</comment>
   </data>
+   <data name="Shell_Master.Content" xml:space="preserve">
+    <value>Your Addons</value>
+    <comment>Navigation view item name for Master</comment>
+  </data>
   <data name="Shell_Browse.Content" xml:space="preserve">
-    <value>Browse</value>
+    <value>Install Addons</value>
     <comment>Navigation view item name for Browse</comment>
   </data>
   <data name="ExceptionSettingsStorageExtensionsFileNameIsNullOrEmpty" xml:space="preserve">
@@ -154,11 +158,11 @@
     <comment>Light theme text for Settings</comment>
   </data>
   <data name="Settings_About.Text" xml:space="preserve">
-    <value>About this application</value>
+    <value>About Addon Manager</value>
     <comment>About this application title for Settings</comment>
   </data>
   <data name="Settings_AboutDescription.Text" xml:space="preserve">
-    <value>Settings page placeholder text.  Your app description goes here.</value>
+    <value>Addon Manager for Wow.</value>
     <comment>About this application description for Settings</comment>
   </data>
   <data name="Settings_PrivacyTermsLink.Content" xml:space="preserve">

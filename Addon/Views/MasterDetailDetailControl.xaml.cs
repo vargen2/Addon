@@ -23,11 +23,11 @@ namespace Addon.Views
             if (d is WebView webView)
             {
                 var head = "<head><meta charset=\"UTF-8\"></head>";
-                var styles = "<style>html{font-family:'Segoe UI';}</style>";
+                var styles = "<style>html{font-family:'Segoe UI'; font-size:14px;}</style>";
                 var html = (string)e.NewValue;
                 if (Window.Current.Content is Page rootFrame && rootFrame.RequestedTheme == ElementTheme.Dark)
                 {
-                    styles = "<style>html{font-family:'Segoe UI'; color:#fff;}</style>";
+                    styles = "<style>html{font-family:'Segoe UI';  font-size:14px; color:#fff;}</style>";
                 }
                 webView.NavigateToString(head + styles + html);
             }

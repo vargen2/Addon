@@ -207,7 +207,7 @@ namespace Addon.Logic
                         int index2 = response.Substring(index1).IndexOf("</p>");
                         string data = response.Substring(index1, index2);
                         return Util.Parse(data, "<a href=\"", "\">");
-                    }
+                    }                   
                     catch (Exception ex)
                     {
                         var error = WebSocketError.GetStatus(ex.HResult);

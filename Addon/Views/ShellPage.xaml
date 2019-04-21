@@ -157,7 +157,7 @@
                     </Button.Flyout>
                     <SymbolIcon Symbol="More" />
                     <ToolTipService.ToolTip>
-                        <ToolTip Content="Menu" />
+                        <ToolTip Content="Select Game" />
                     </ToolTipService.ToolTip>
                 </Button>
             </StackPanel>

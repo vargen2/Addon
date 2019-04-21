@@ -3,6 +3,7 @@ using Addon.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -12,7 +13,7 @@ namespace Addon.Views
 {
     public sealed partial class MasterDetailPage : Page
     {
-       // private Object oldSelected;
+        // private Object oldSelected;
 
         public MasterDetailViewModel ViewModel { get; } = new MasterDetailViewModel();
 
@@ -115,10 +116,38 @@ namespace Addon.Views
             }
         }
 
-        private void RemoveAllGames(object sender, RoutedEventArgs e)
+        private async void RemoveSelectedGame(object sender, RoutedEventArgs e)
         {
-            ViewModel.Session.Games.Clear();
-            ViewModel.Session.SelectedGame = new Core.Models.Game("No Game Found");
+            var res = ResourceLoader.GetForCurrentView();
+            var appName = res.GetString("AppDisplayName");
+            ContentDialog dialog = new ContentDialog()
+            {
+                Title = "Remove Game?",
+                Content = "Remove " + ViewModel.Session.SelectedGame.AbsolutePath + " from " + appName + "?",
+                PrimaryButtonText = "Ok",
+                CloseButtonText = "Cancel"
+            };
+
+            var response = await dialog.ShowAsync();
+            if (response == ContentDialogResult.Primary)
+            {
+                var game = ViewModel.Session.SelectedGame;
+                if (game != null && ViewModel.Session.Games.Contains(game))
+                {
+                    ViewModel.Session.Games.Remove(game);
+                    if (ViewModel.Session.Games.Count == 0)
+                    {
+                        ViewModel.Session.SelectedGame = new Core.Models.Game("No Game Found");
+                    }
+                    else
+                    {
+                        ViewModel.Session.SelectedGame=ViewModel.Session.Games.First();
+                    }
+
+                }
+
+            }
+
         }
 
 

@@ -15,7 +15,7 @@
   <mp:PhoneIdentity PhoneProductId="C365E4D1-EBB9-449A-80BE-93D58F47E278" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Addon</DisplayName>
+    <DisplayName>Addon Manager</DisplayName>
     <PublisherDisplayName>hjalmar</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -43,20 +43,6 @@
         <uap:InitialRotationPreference>
           <uap:Rotation Preference="landscape"/></uap:InitialRotationPreference>
       </uap:VisualElements>
-
-      <Extensions>
-
-        <uap:Extension Category="windows.fileTypeAssociation">
-
-          <uap:FileTypeAssociation Name="aaaa">
-
-            <uap:SupportedFileTypes>
-
-              <uap:FileType ContentType="txt/txt">.txt</uap:FileType>
-            </uap:SupportedFileTypes>
-          </uap:FileTypeAssociation>
-        </uap:Extension>
-      </Extensions>
     </Application>
   </Applications>
 

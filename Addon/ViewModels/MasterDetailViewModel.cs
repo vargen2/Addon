@@ -52,7 +52,11 @@ namespace Addon.ViewModels
                 Debug.WriteLine("NULL selected");
                 if (Session.SelectedGame != null && Session.SelectedGame.Addons.Count > 0 && oldSelected != null)
                 {
-                    Selected = oldSelected;
+                    if (oldSelected.Game == Session.SelectedGame)
+                    {
+                        Selected = oldSelected;
+                    }
+
                 }
             }
         }

@@ -1,9 +1,4 @@
-﻿<!--
-    PointerPressed="ForegroundElement_PointerPressed"
-    PointerMoved="ForegroundElement_PointerMoved"
-    PointerReleased="ForegroundElement_PointerReleased"
--->
-<UserControl
+﻿<UserControl
     x:Class="Addon.Views.MasterDetailDetailControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -12,7 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignWidth="600"
     mc:Ignorable="d">
-
     <ScrollViewer
         Name="ForegroundElement"
         Padding="{StaticResource DetailPageMargin}"
@@ -20,57 +14,31 @@
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
         VerticalScrollMode="Enabled">
         <StackPanel HorizontalAlignment="Stretch">
-            <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
-                <!--<FontIcon
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="48"
-                    Glyph="&#xF000;" />-->
+            <StackPanel
+                Name="block"
+                Padding="0,8,0,0"
+                HorizontalAlignment="Stretch">
                 <TextBlock
                     VerticalAlignment="Center"
                     Style="{ThemeResource TitleTextBlockStyle}"
                     Text="{x:Bind MasterMenuItem.FolderName, Mode=OneWay}" />
-            </StackPanel>
-            <!--
-                {AbsolutePath}, {Title},\{ProjectUrl}, {PreferredReleaseType}Version},
-                {CurrentReleaseTypeAndVersion} {IsIgnored}, {GameVersion}, {Status},\r {CurrentDownload}
-                {SuggestedDownload}";
-            -->
-
-            <StackPanel
-                Name="block"
-                Padding="0,0,0,0"
-                HorizontalAlignment="Stretch">
                 <HyperlinkButton Content="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" NavigateUri="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" />
-                <TextBlock Text="{x:Bind MasterMenuItem.CurrentReleaseTypeAndVersion, Mode=OneWay}" />
                 <TextBlock Text="{x:Bind MasterMenuItem.AbsolutePath, Mode=OneWay}" />
-
                 <VariableSizedWrapGrid HorizontalAlignment="Stretch" Orientation="Horizontal">
-                    <StackPanel Width="250">
-                        <TextBlock
-                            Margin="{StaticResource SmallTopMargin}"
-                            Style="{StaticResource DetailBodyStyle}"
-                            Text="Current Download" />
-                        <TextBlock Text="{x:Bind MasterMenuItem.CurrentDownload, Mode=OneWay}" />
-
+                    <StackPanel Width="250" Height="60">
+                        <TextBlock Text="Current Version" />
+                        <TextBlock Height="40" Text="{x:Bind MasterMenuItem.CurrentDownload, Mode=OneWay}" />
                     </StackPanel>
-                    <StackPanel>
-                        <TextBlock
-                            Margin="{StaticResource SmallTopMargin}"
-                            Style="{StaticResource DetailBodyStyle}"
-                            Text="Suggested Download" />
-                        <TextBlock Style="{StaticResource DetailBodyStyle}" Text="{x:Bind MasterMenuItem.SuggestedDownload, Mode=OneWay}" />
-
+                    <StackPanel Height="60">
+                        <TextBlock Text="Suggested Version" />
+                        <TextBlock Height="40" Text="{x:Bind MasterMenuItem.SuggestedDownload, Mode=OneWay}" />
                     </StackPanel>
                 </VariableSizedWrapGrid>
-
-
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="9*" />
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
-
                     <WebView
                         Height="1000"
                         HorizontalAlignment="Stretch"
@@ -78,44 +46,12 @@
                         local:MyExtensions.HtmlString="{x:Bind MasterMenuItem.ChangeLog, Mode=OneWay}"
                         DefaultBackgroundColor="Transparent" />
                 </Grid>
-
-
-
-
             </StackPanel>
-
         </StackPanel>
     </ScrollViewer>
 </UserControl>
-
-
-
-<!--<Grid HorizontalAlignment="Stretch">
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto"></ColumnDefinition>
-        <ColumnDefinition Width="*"></ColumnDefinition>
-    </Grid.ColumnDefinitions>
-    <StackPanel  Grid.Column="0">
-        <TextBlock Text="Title" Style="{StaticResource DetailSubTitleStyle}"/>
-        <TextBlock  Text="{x:Bind MasterMenuItem.Title, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-        <TextBlock  Text="Preffered Release Type" Style="{StaticResource DetailSubTitleStyle}" Margin="{StaticResource SmallTopMargin}"/>
-        <TextBlock  Text="{x:Bind MasterMenuItem.PreferredReleaseType, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-        <TextBlock  Text="Current Release Type And Version" Style="{StaticResource DetailSubTitleStyle}" Margin="{StaticResource SmallTopMargin}"/>
-        <TextBlock  Text="{x:Bind MasterMenuItem.CurrentReleaseTypeAndVersion, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-        <TextBlock  Text="Game Version" Style="{StaticResource DetailSubTitleStyle}" Margin="{StaticResource SmallTopMargin}"/>
-        <TextBlock  Text="{x:Bind MasterMenuItem.GameVersion, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-        <TextBlock  Text="Absolute Path" Style="{StaticResource DetailSubTitleStyle}" Margin="{StaticResource SmallTopMargin}"/>
-        <TextBlock  Text="{x:Bind MasterMenuItem.AbsolutePath, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-    </StackPanel>
-    <StackPanel Margin="{StaticResource SmallLeftMargin}" Grid.Column="1">
-        <TextBlock  Text="Status" Style="{StaticResource DetailSubTitleStyle}" />
-        <TextBlock  Text="{x:Bind MasterMenuItem.Status, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-        <TextBlock  Text="Version" Style="{StaticResource DetailSubTitleStyle}" Margin="{StaticResource SmallTopMargin}"/>
-        <TextBlock  Text="{x:Bind MasterMenuItem.Version, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-    </StackPanel>
-
-</Grid>-->
-
-
-
-<!--  VariableSizedWrapGrid.ColumnSpan="1" VariableSizedWrapGrid.RowSpan="0"  -->
+<!--<FontIcon
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="48"
+                    Glyph="&#xF000;" />-->
