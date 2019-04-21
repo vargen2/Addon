@@ -1,5 +1,6 @@
 ﻿using Addon.Core.Helpers;
 using Addon.Core.Models;
+using Addon.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,9 +31,6 @@ namespace Addon.Logic
             {"healbot", new List<string>{"heal-bot-continued"}},
             {"tradeskillmaster", new List<string>{"tradeskill-master"}}
         };
-
-        private const string KnownSubFoldersFile = @"Assets\knownsubfolders.txt";
-
 
         public class TocFile
         {
@@ -74,7 +72,6 @@ namespace Addon.Logic
                 var moveFrom = addons.IndexOf(addon);
                 addons.Move(moveFrom, 0);
             }
-            // Debug.WriteLine("kom hit count: " + count);
             await Task.CompletedTask;
         }
 
@@ -110,7 +107,6 @@ namespace Addon.Logic
             var version = String.Empty;
             var gameVersion = String.Empty;
             var title = String.Empty;
-            //var folderFromPathAsync = await StorageFolder.GetFolderFromPathAsync(folder.Path);
             var files = await folder.GetFilesAsync(CommonFileQuery.DefaultQuery);
             var file = files.First(f => f.FileType.Equals(".toc"));
 
@@ -156,10 +152,8 @@ namespace Addon.Logic
 
         public static async Task<HashSet<string>> LoadKnownSubFolders()
         {
-            var packageFolder = Package.Current.InstalledLocation;
-            var sampleFile = await packageFolder.GetFileAsync(KnownSubFoldersFile);
-            var lines = await FileIO.ReadLinesAsync(sampleFile);
-            return new HashSet<string>(lines);
+            var assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            return await assets.ReadAsync<HashSet<string>>("knownsubfolders");
         }
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(ObservableCollection<Core.Models.Addon> addons)
@@ -167,10 +161,6 @@ namespace Addon.Logic
             var tasks = addons.Select(FindProjectUrlAndDownLoadVersionsFor).ToArray();
             await Task.WhenAll(tasks);
             await Tasks.Sort(addons);
-            //foreach (var addon in addons)
-            //{
-            //    await FindProjectUrlAndDownLoadVersionsFor(addon);
-            //}
         }
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(Core.Models.Addon addon)
@@ -207,7 +197,7 @@ namespace Addon.Logic
                         int index2 = response.Substring(index1).IndexOf("</p>");
                         string data = response.Substring(index1, index2);
                         return Util.Parse(data, "<a href=\"", "\">");
-                    }                   
+                    }
                     catch (Exception ex)
                     {
                         var error = WebSocketError.GetStatus(ex.HResult);
@@ -266,13 +256,13 @@ namespace Addon.Logic
             addon.Progress = 0;
             addon.Status = Core.Models.Addon.UPDATING;
             var file = await Update.DownloadFile(addon, download);
-            addon.Progress=0;
+            addon.Progress = 0;
             Debug.WriteLine("file downloaded: " + file.Path);
             var trash = await Update.UpdateAddon(addon, download, file);
             Debug.WriteLine("Update addon complete: " + addon.FolderName);
             await Sort(addon.Game);
             await Update.Cleanup(trash);
-            addon.Message="";
+            addon.Message = "";
             Debug.WriteLine("Cleanup complete: " + addon.FolderName);
         }
 
