@@ -10,7 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:Addon.Views"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
-    mc:Ignorable="d">
+    mc:Ignorable="d"    >
 
     <i:Interaction.Behaviors>
         <ic:EventTriggerBehavior EventName="Loaded">
@@ -20,15 +20,16 @@
 
     <winui:NavigationView
         x:Name="navigationView"
-        Background="{ThemeResource SystemControlBackgroundAltHighBrush}"
+          Background="{ThemeResource SystemControlChromeHighAcrylicWindowMediumBrush}" 
         IsBackButtonVisible="Collapsed"
         IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
         IsPaneToggleButtonVisible="False"
         IsSettingsVisible="True"
         PaneDisplayMode="LeftCompact"
-        SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}">
-
-        <winui:NavigationView.MenuItems>
+        SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
+        >
+        
+        <winui:NavigationView.MenuItems       >
 
             <!--<winui:NavigationViewItem
                 Name="navitem1"
@@ -111,7 +112,8 @@
                             <StackPanel
                                 Width="300"
                                 VerticalAlignment="Stretch"
-                                Background="{ThemeResource AppBarBackgroundThemeBrush}">
+                                Background="{ThemeResource SystemControlChromeHighAcrylicWindowMediumBrush}">
+                                <!--  Background="{ThemeResource AppBarBackgroundThemeBrush}"  -->
                                 <Button
                                     Height="40"
                                     HorizontalAlignment="Stretch"
@@ -169,3 +171,6 @@
 
     </winui:NavigationView>
 </Page>
+
+
+<!--  Background="{ThemeResource SystemControlBackgroundAltHighBrush}"  -->

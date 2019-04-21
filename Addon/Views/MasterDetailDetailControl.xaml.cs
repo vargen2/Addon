@@ -57,7 +57,7 @@ namespace Addon.Views
         private static void OnMasterMenuItemPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as MasterDetailDetailControl;
-            control.ForegroundElement.ChangeView(0, 0, 1);
+            control.ForegroundElement.ChangeView(0, 0, 1);            
         }
 
         

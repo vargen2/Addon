@@ -402,11 +402,12 @@
         <DataTemplate x:Key="ItemTemplate" x:DataType="data:Addon">
 
             <Grid Height="50"
-                      RightTapped="UIElement_OnRightTapped">
+                      RightTapped="UIElement_OnRightTapped"
+                  HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="18*" />
+                    <ColumnDefinition Width="15*" />
+                    <ColumnDefinition Width="15*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Width="180">
                     <TextBlock
@@ -535,7 +536,7 @@
                     VerticalAlignment="Center"
                    
                     Text="{Binding}" />-->
-                <Button Margin="{StaticResource SmallLeftMargin}" Click="RefreshTocFileForAllInSelectedGame">Toc</Button>
+                <Button Click="RefreshTocFileForAllInSelectedGame">Toc</Button>
                 <Button Margin="{StaticResource SmallLeftMargin}" Click="DownloadVersionsForAllAddonsInSelectedGame">Versions</Button>
                 <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveAllGames">Delete</Button>
             </StackPanel>
