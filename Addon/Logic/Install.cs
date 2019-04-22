@@ -31,7 +31,7 @@ namespace Addon.Logic
                 await Tasks.RefreshTocFileFor(new List<Core.Models.Addon>() { tempAddon });
                 game.Addons.Add(tempAddon);
                 await Update.AddSubFolders(tempAddon, trash.Item3);
-                await Tasks.Sort(game.Addons);
+                //await Tasks.Sort(game.Addons);
                 storeAddon.Status = StoreAddon.INSTALLED;
             }
             catch (FileNotFoundException e)

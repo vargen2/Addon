@@ -60,10 +60,9 @@ namespace Addon.Views
 
                 var game = Common.FolderToGame(folder);
                 ViewModel.Session.Games.Add(game);
-                if (ViewModel.Session.Games.Count == 1)
-                {
+               
                     ViewModel.Session.SelectedGame = game;
-                }
+                
                 Debug.WriteLine("Picked folder: " + folder.Name);
                 await Tasks.RefreshGameFolder(game);
                 await Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons);

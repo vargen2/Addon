@@ -260,7 +260,7 @@ namespace Addon.Logic
             Debug.WriteLine("file downloaded: " + file.Path);
             var trash = await Update.UpdateAddon(addon, download, file);
             Debug.WriteLine("Update addon complete: " + addon.FolderName);
-            await Sort(addon.Game);
+           // await Sort(addon.Game);
             await Update.Cleanup(trash);
             addon.Message = "";
             Debug.WriteLine("Cleanup complete: " + addon.FolderName);
