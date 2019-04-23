@@ -142,6 +142,7 @@ namespace Addon.Views
                     if (ViewModel.Session.Games.Count == 0)
                     {
                         ViewModel.Session.SelectedGame = new Core.Models.Game("No Game Found");
+                        ViewModel.Selected=null;
                     }
                     else
                     {

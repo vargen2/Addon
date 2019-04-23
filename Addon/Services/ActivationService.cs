@@ -69,12 +69,12 @@ namespace Addon.Services
                 await StartupAsync();
             }
 
-            var storeAddons = await Tasks.LoadStoreAddons();
+            var storeAddons = await Task.Run(()=>Storage.LoadStoreAddons());
             Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(storeAddons);
             Debug.WriteLine("Loaded StoreAddons " + Singleton<Session>.Instance.StoreAddons.Count);
 
-            var knownSubFolders = await Tasks.LoadKnownSubFolders();
-            var userKnownSubFolders = await Storage.LoadKnownSubFoldersFromUser();
+            var knownSubFolders = await Task.Run(()=>Storage.LoadKnownSubFolders());
+            var userKnownSubFolders = await Task.Run(()=>Storage.LoadKnownSubFoldersFromUser());
             if (userKnownSubFolders != null)
             {
                 knownSubFolders.UnionWith(userKnownSubFolders);

@@ -60,7 +60,7 @@ namespace Addon.Logic
                     Debug.WriteLine(item.Name + " " + item.Path);
                 }
 
-                var tasks = await Task.WhenAll(folders.Select(Tasks.FolderToTocFile));
+                var tasks = await Task.WhenAll(folders.Select(Toc.FolderToTocFile));
 
                 var newAddons = tasks.Where(tf => tf != null && !tf.IsKnownSubFolder)
                      .Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)

@@ -4,6 +4,7 @@ using Addon.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -56,16 +57,14 @@ namespace Addon.Views
 
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(folder);
 
+                var game = new Game(folder.Path);
 
-
-                var game = Common.FolderToGame(folder);
+             //   Debug.WriteLine("Picked folder: " + folder.Name);
+                await Task.Run(() => Tasks.RefreshGameFolder(game));
+                await Task.Run(() => Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons));
                 ViewModel.Session.Games.Add(game);
-               
-                    ViewModel.Session.SelectedGame = game;
-                
-                Debug.WriteLine("Picked folder: " + folder.Name);
-                await Tasks.RefreshGameFolder(game);
-                await Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons);
+
+                ViewModel.Session.SelectedGame = game;
             }
             else
             {

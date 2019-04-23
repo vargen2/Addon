@@ -129,7 +129,7 @@ namespace Addon.Logic
             {
                 string section = Util.Parse2(htmlPage, "<section class=\"project-content", "</section>");
 
-               section= Regex.Replace(section,"href=\".*\"","href=\"#\"");
+                section = Regex.Replace(section, "href=\".*\"", "href=\"#\"");
 
 
                 return section.Substring(section.IndexOf(">") + 1);

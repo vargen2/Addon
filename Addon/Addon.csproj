@@ -124,7 +124,6 @@
     <Compile Include="Activation\ActivationHandler.cs" />
     <Compile Include="Helpers\FlyoutMenuExtension.cs" />
     <Compile Include="Logic\Changes.cs" />
-    <Compile Include="Logic\Common.cs" />
     <Compile Include="Logic\Install.cs" />
     <Compile Include="Logic\Storage.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderBehavior.cs" />
@@ -135,7 +134,9 @@
     <Compile Include="Logic\Parse.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\SettingsStorageExtensions.cs" />
+    <Compile Include="Logic\Toc.cs" />
     <Compile Include="Logic\Update.cs" />
+    <Compile Include="Logic\Version.cs" />
     <Compile Include="Services\ActivationService.cs" />
     <Compile Include="Activation\DefaultLaunchActivationHandler.cs" />
     <Compile Include="Services\LiveTileService.cs" />

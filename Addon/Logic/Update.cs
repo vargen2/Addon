@@ -15,13 +15,8 @@ using Windows.Storage;
 
 namespace Addon.Logic
 {
-
-
     internal static class Update
     {
-
-
-
         internal static async Task<StorageFile> DLWithHttp(Core.Models.Addon addon, Download download)
         {
             var temp = addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects"));
@@ -41,7 +36,7 @@ namespace Addon.Logic
                 }
                 catch (Exception ex)
                 {
-                     Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
+                    Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
                 }
             }
             return destinationFile;
@@ -55,7 +50,7 @@ namespace Addon.Logic
             addon.Message = "Downloading...";
             var temp = addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects"));
             var downloadLink = temp + download.DownloadLink;
-            Debug.WriteLine(downloadLink);
+           // Debug.WriteLine(downloadLink);
             try
             {
                 Uri source = new Uri(downloadLink);

@@ -38,18 +38,19 @@ namespace Addon.ViewModels
 
         private async void MasterDetailViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            
             if (e.PropertyName.Equals("Selected") && Selected != null)
             {
                 if (string.IsNullOrEmpty(Selected.ChangeLog))
                 {
-                    Debug.WriteLine("Download changes");
+                    //Debug.WriteLine("Download changes");
                     Selected.ChangeLog = await Changes.DownloadChangesFor(Selected);
                 }
                 oldSelected = Selected;
             }
             else if (e.PropertyName.Equals("Selected") && Selected == null)
             {
-                Debug.WriteLine("NULL selected");
+               // Debug.WriteLine("NULL selected");
                 if (Session.SelectedGame != null && Session.SelectedGame.Addons.Count > 0 && oldSelected != null)
                 {
                     if (oldSelected.Game == Session.SelectedGame)

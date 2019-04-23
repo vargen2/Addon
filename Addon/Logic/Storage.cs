@@ -5,7 +5,10 @@ using Addon.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Windows.Storage;
 
 namespace Addon.Logic
 {
@@ -19,7 +22,7 @@ namespace Addon.Logic
             {
                 var instance = Singleton<Session>.Instance.AsSaveableSession();
                 await localFolder.SaveAsync("session", instance);
-                Debug.WriteLine("Saved Session to " + localFolder.Path);
+            //    Debug.WriteLine("Saved Session to " + localFolder.Path);
             }
             catch (Exception e)
             {
@@ -48,10 +51,17 @@ namespace Addon.Logic
                 }
             }
 
-            
 
-            Debug.WriteLine("Loaded from " + localFolder.Path);
+
+           // Debug.WriteLine("Loaded from " + localFolder.Path);
         }
+
+        public static async Task<HashSet<string>> LoadKnownSubFolders()
+        {
+            var assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            return await assets.ReadAsync<HashSet<string>>("knownsubfolders");
+        }
+
 
         public static async Task<HashSet<string>> LoadKnownSubFoldersFromUser()
         {
@@ -65,12 +75,24 @@ namespace Addon.Logic
             {
                 var instance = Singleton<Session>.Instance.KnownSubFolders;
                 await localFolder.SaveAsync("knownsubfolders", instance);
-                Debug.WriteLine("Saved knownsubfolders");
+               // Debug.WriteLine("Saved knownsubfolders");
             }
             catch (Exception e)
             {
                 Debug.WriteLine("ERROR when saveing knownsubfolders, " + e.Message);
             }
+        }
+
+        public static async Task<IList<StoreAddon>> LoadStoreAddons()
+        {
+            var packageFolder = Package.Current.InstalledLocation;
+            var sampleFile = await packageFolder.GetFileAsync(@"Assets\curseaddons.txt");
+            var text = await FileIO.ReadTextAsync(sampleFile);
+            // TODO fix time
+            IList<CurseAddon> curseAddons = await Json.ToObjectAsync<List<CurseAddon>>(@text);
+            return curseAddons
+                .Select(ca => new StoreAddon(ca.addonURL, ca.title, ca.description, ca.downloads, DateTime.Now, DateTime.Now))
+                .ToList();
         }
     }
 }
