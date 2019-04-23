@@ -253,15 +253,22 @@ namespace Addon.Logic
 
         public static async Task UpdateAddon(Core.Models.Addon addon, Download download)
         {
+            //testa göra Task run på alla
+            //ända inget i addon i metoderna
+            addon.Message = "Downloading...";
             addon.Progress = 0;
             addon.Status = Core.Models.Addon.UPDATING;
-            var file = await Update.DownloadFile(addon, download);
+            //var file = await Update.DownloadFile(addon, download);
+            var file = await Task.Run(() => Update.DLWithHttp(addon, download));
+            addon.Message = "Extract/copy...";
             addon.Progress = 0;
-            Debug.WriteLine("file downloaded: " + file.Path);
-            var trash = await Update.UpdateAddon(addon, download, file);
-            Debug.WriteLine("Update addon complete: " + addon.FolderName);
-           // await Sort(addon.Game);
-            await Update.Cleanup(trash);
+            //Debug.WriteLine("file downloaded: " + file.Path);
+            var trash = await Task.Run(() => Update.UpdateAddon(addon, download, file));
+            addon.CurrentDownload = download;
+            //Debug.WriteLine("Update addon complete: " + addon.FolderName);
+            // await Sort(addon.Game);
+            addon.Message="Cleanup...";
+            await Task.Run(() => Update.Cleanup(trash));
             addon.Message = "";
             Debug.WriteLine("Cleanup complete: " + addon.FolderName);
         }

@@ -3,6 +3,7 @@ using Addon.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -55,7 +56,10 @@ namespace Addon.Views
         {
             var button = sender as Button;
             var addon = button.Tag as Core.Models.Addon;
+            //var nonUiAddon=ViewModel.Session.SelectedGame.Addons.First(adn=>adn.FolderName.Equals(addon.FolderName));
             await Tasks.UpdateAddon(addon);
+
+           // await Task.Run(() => Tasks.UpdateAddon(nonUiAddon));
         }
 
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -141,7 +145,7 @@ namespace Addon.Views
                     }
                     else
                     {
-                        ViewModel.Session.SelectedGame=ViewModel.Session.Games.First();
+                        ViewModel.Session.SelectedGame = ViewModel.Session.Games.First();
                     }
 
                 }

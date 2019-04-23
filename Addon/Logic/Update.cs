@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Windows.Networking.BackgroundTransfer;
@@ -18,6 +19,33 @@ namespace Addon.Logic
 
     internal static class Update
     {
+
+
+
+        internal static async Task<StorageFile> DLWithHttp(Core.Models.Addon addon, Download download)
+        {
+            var temp = addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects"));
+            var downloadLink = temp + download.DownloadLink;
+            //Debug.WriteLine(downloadLink);
+
+            Uri source = new Uri(downloadLink);
+            StorageFile destinationFile = await localFolder.CreateFileAsync(Util.RandomString(12) + ".zip", CreationCollisionOption.GenerateUniqueName);
+
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    var htmlPage = await httpClient.GetByteArrayAsync(source);
+                    await FileIO.WriteBytesAsync(destinationFile, htmlPage);
+                    //Debug.WriteLine(htmlPage.Length);
+                }
+                catch (Exception ex)
+                {
+                     Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
+                }
+            }
+            return destinationFile;
+        }
 
         internal static BackgroundDownloader downloader = new BackgroundDownloader();
         internal static StorageFolder localFolder = ApplicationData.Current.TemporaryFolder;
@@ -55,10 +83,10 @@ namespace Addon.Logic
 
 
 
-                Debug.WriteLine("BEFORE-----------");
+                // Debug.WriteLine("BEFORE-----------");
                 await Task.Run(async () => { await downloadOperation.StartAsync().AsTask(progressCallback); });
                 // t.Wait();
-                Debug.WriteLine("AFTER-----------");
+                // Debug.WriteLine("AFTER-----------");
 
                 //  var aa = await downloadOperation.StartAsync();
 
@@ -99,12 +127,12 @@ namespace Addon.Logic
             var extractFolderPath = localFolder.Path + @"\" + file.Name.Replace(".zip", "");
             try
             {
-                addon.Message = "Extracting...";
+                ////////////////////addon.Message = "Extracting...";
                 ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
                 var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
                 var folders = await extractFolder.GetFoldersAsync();
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
-                addon.Message = "Removing old...";
+                ////////////////// addon.Message = "Removing old...";
                 foreach (var folder in folders)
                 {
                     try
@@ -117,18 +145,18 @@ namespace Addon.Logic
                         Debug.WriteLine("[ERROR] No folder found to delete. " + e.Message);
                     }
                 }
-                addon.Message = "Copy new...";
+                ////////////////////////////////   addon.Message = "Copy new...";
                 //foreach (var folder in folders)
                 //{
                 await MoveContentFast(extractFolder, gameFolder);
                 //await CopyFolderAsync(folder, gameFolder);
                 //}
                 //Debug.WriteLine("copy ok");
-                addon.Message = "Clean up...";
+                /////////////////////////////////   addon.Message = "Clean up...";
                 var foldersAsList = new List<StorageFolder>(folders);
                 var subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
                 await AddSubFolders(addon, subFoldersToDelete);
-                addon.CurrentDownload = download;
+                //addon.CurrentDownload = download;
             }
             catch (Exception e)
             {

@@ -23,8 +23,15 @@ namespace Addon.Logic
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(tempAddon);
             var download = tempAddon.SuggestedDownload;
             var file = await Update.DownloadFile(tempAddon, download);
-            var trash = await InstallAddon(tempAddon, download, file);
-            tempAddon.Message="";
+            var trash = await InstallAddon(tempAddon, file);
+            tempAddon.Message = "";
+            if (trash.Item3 == null)
+            {
+                 await Update.Cleanup(new Tuple<string, string>(trash.Item1, trash.Item2));
+                storeAddon.Status = StoreAddon.INSTALLED;
+                return;
+            }
+
             tempAddon.CurrentDownload = download;
             try
             {
@@ -70,7 +77,7 @@ namespace Addon.Logic
                 }
                 var dlVersionTasks = newAddons.Select(Tasks.FindProjectUrlAndDownLoadVersionsFor).ToArray();
                 await Task.WhenAll(dlVersionTasks);
-                await Tasks.Sort(game);
+               // await Tasks.Sort(game);
                 storeAddon.Status = StoreAddon.UNKNOWN;
             }
             await Update.Cleanup(new Tuple<string, string>(trash.Item1, trash.Item2));
@@ -78,7 +85,7 @@ namespace Addon.Logic
 
 
 
-        private static async Task<Tuple<string, string, List<string>>> InstallAddon(Core.Models.Addon addon, Download download, StorageFile file)
+        private static async Task<Tuple<string, string, List<string>>> InstallAddon(Core.Models.Addon addon, StorageFile file)
         {
             var subFoldersToDelete = new List<string>();
             var extractFolderPath = Update.localFolder.Path + @"\" + file.Name.Replace(".zip", "");
@@ -87,6 +94,14 @@ namespace Addon.Logic
                 ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
                 var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
                 var folders = await extractFolder.GetFoldersAsync();
+                var foldersHashSet = folders.Select(f => f.Name).ToHashSet();
+                if (addon.Game.Addons.Any(adn => foldersHashSet.Contains(adn.FolderName)))
+                {
+                    //abbort if allready installed
+                    return new Tuple<string, string, List<string>>(file.Path, extractFolderPath, null);
+
+                }
+
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
                 foreach (var folder in folders)
                 {
