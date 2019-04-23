@@ -58,7 +58,7 @@ namespace Addon.Views
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(folder);
 
                 var game = new Game(folder.Path);
-
+                
              //   Debug.WriteLine("Picked folder: " + folder.Name);
                 await Task.Run(() => Tasks.RefreshGameFolder(game));
                 await Task.Run(() => Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons));

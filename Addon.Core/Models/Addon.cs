@@ -278,9 +278,11 @@ namespace Addon.Core.Models
             {
                 changeLog = value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("IsChangeLogEmpty");
             }
         }
 
+        public bool IsChangeLogEmpty => string.IsNullOrEmpty(ChangeLog);
 
 
 

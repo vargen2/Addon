@@ -1,9 +1,7 @@
-﻿using Addon.Core.Helpers;
-using Addon.Core.Models;
+﻿using Addon.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -13,34 +11,6 @@ namespace Addon.Logic
 {
     public static class Tasks
     {
-        public static async Task Sort(ObservableCollection<Core.Models.Addon> addons)
-        {
-            if (addons.Count == 0)
-                return;
-
-            var count = addons.Where(a => a.IsUpdateable).Count();
-            if (count == 0)
-                return;
-
-            for (int i = 0; i < count; i++)
-            {
-                var addon = addons.LastOrDefault(a => a.IsUpdateable);
-                if (addon == null)
-                {
-                    return;
-                }
-                var moveFrom = addons.IndexOf(addon);
-                addons.Move(moveFrom, 0);
-            }
-            await Task.CompletedTask;
-        }
-
-        public static async Task Sort(Game game)
-        {
-            await Sort(game.Addons);
-        }
-
-
         public static async Task RefreshGameFolder(Game game)
         {
             game.IsLoading = true;
@@ -61,8 +31,6 @@ namespace Addon.Logic
             game.IsLoading = false;
         }
 
-
-
         public static async Task RefreshTocFileFor(IList<Core.Models.Addon> addons)
         {
             foreach (var addon in addons)
@@ -75,16 +43,11 @@ namespace Addon.Logic
             }
         }
 
-
-
-
-
-
         public static async Task FindProjectUrlAndDownLoadVersionsFor(ObservableCollection<Core.Models.Addon> addons)
         {
             var tasks = addons.Select(FindProjectUrlAndDownLoadVersionsFor).ToArray();
             await Task.WhenAll(tasks);
-            await Tasks.Sort(addons);
+            await Sorter.Sort(addons);
         }
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(Core.Models.Addon addon)
@@ -97,10 +60,6 @@ namespace Addon.Logic
             }
             addon.Downloads = await Task.Run(() => Version.DownloadVersionsFor(addon));
         }
-
-
-
-
 
         public static async Task UpdateAddon(Core.Models.Addon addon)
         {
@@ -126,10 +85,8 @@ namespace Addon.Logic
             addon.Message = "";
             await Task.Run(() => Update.Cleanup(trash));
             //addon.Message = "";
-           // Debug.WriteLine("Cleanup complete: " + addon.FolderName);
+            // Debug.WriteLine("Cleanup complete: " + addon.FolderName);
         }
 
-
-        
     }
 }

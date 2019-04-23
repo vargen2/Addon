@@ -17,6 +17,7 @@ namespace Addon.Logic
         internal static async Task InstallAddon(StoreAddon storeAddon)
         {
             //TODO add functionality for storeaddon to progress
+            //TODO fix blocking ui thread 
             storeAddon.Status = StoreAddon.INSTALLING;
             var game = Singleton<Session>.Instance.SelectedGame;
             var tempAddon = new Core.Models.Addon(game, storeAddon.Url, game.AbsolutePath + @"\" + storeAddon.Url) { };

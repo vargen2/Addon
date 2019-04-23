@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -19,7 +20,7 @@ namespace Addon.Views
 
         private static void OnHtmlStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            //Debug.WriteLine("OnHTMLChanged");
+            Debug.WriteLine("OnHTMLChanged");
             if (d is WebView webView)
             {
                 var head = "<head><meta charset=\"UTF-8\"></head>";

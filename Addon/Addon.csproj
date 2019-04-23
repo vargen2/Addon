@@ -125,6 +125,7 @@
     <Compile Include="Helpers\FlyoutMenuExtension.cs" />
     <Compile Include="Logic\Changes.cs" />
     <Compile Include="Logic\Install.cs" />
+    <Compile Include="Logic\Sorter.cs" />
     <Compile Include="Logic\Storage.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderBehavior.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderMode.cs" />
