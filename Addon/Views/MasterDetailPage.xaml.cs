@@ -1,4 +1,5 @@
-﻿using Addon.Logic;
+﻿using Addon.Core.Models;
+using Addon.Logic;
 using Addon.ViewModels;
 using System;
 using System.Diagnostics;
@@ -69,17 +70,21 @@ namespace Addon.Views
 
         private async void DownloadVersionsForAllAddonsInSelectedGame(object sender, RoutedEventArgs e)
         {
+            if (ViewModel.Session.SelectedGame.AbsolutePath.Equals(Session.EMPTY_GAME))
+            {
+                return;
+            }
             var addons = ViewModel.Session.SelectedGame.Addons;
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(addons);
             Debug.WriteLine("Version downloaded for all addons");
         }
 
-        private async void RefreshTocFileForAllInSelectedGame(object sender, RoutedEventArgs e)
-        {
-            var addons = ViewModel.Session.SelectedGame.Addons.ToList();
-            await Tasks.RefreshTocFileFor(addons);
-            Debug.WriteLine("Refreshed toc files for all addons");
-        }
+        //private async void RefreshTocFileForAllInSelectedGame(object sender, RoutedEventArgs e)
+        //{
+        //    var addons = ViewModel.Session.SelectedGame.Addons.ToList();
+        //    await Tasks.RefreshTocFileFor(addons);
+        //    Debug.WriteLine("Refreshed toc files for all addons");
+        //}
 
         private void FlyoutBase_OnOpening(object sender, object e)
         {
@@ -122,6 +127,11 @@ namespace Addon.Views
 
         private async void RemoveSelectedGame(object sender, RoutedEventArgs e)
         {
+            if (ViewModel.Session.SelectedGame.AbsolutePath.Equals(Session.EMPTY_GAME))
+            {
+                return;
+            }
+
             var res = ResourceLoader.GetForCurrentView();
             var appName = res.GetString("AppDisplayName");
             ContentDialog dialog = new ContentDialog()
@@ -141,7 +151,7 @@ namespace Addon.Views
                     ViewModel.Session.Games.Remove(game);
                     if (ViewModel.Session.Games.Count == 0)
                     {
-                        ViewModel.Session.SelectedGame = new Core.Models.Game("No Game Found");
+                        ViewModel.Session.SelectedGame = new Game(Session.EMPTY_GAME);
                         ViewModel.Selected=null;
                     }
                     else

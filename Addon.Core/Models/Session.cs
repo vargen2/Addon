@@ -9,6 +9,7 @@ namespace Addon.Core.Models
 {
     public class Session : Observable
     {
+        public const string EMPTY_GAME = "No Game found";
         private Game _selectedGame;
         public Game SelectedGame
         {
@@ -18,7 +19,7 @@ namespace Addon.Core.Models
 
         public Session()
         {
-            _selectedGame = new Game("No Game Found")
+            _selectedGame = new Game(EMPTY_GAME)
             {
                 IsLoading = false
             };
@@ -39,6 +40,6 @@ namespace Addon.Core.Models
             };
         }
 
-        
+
     }
 }

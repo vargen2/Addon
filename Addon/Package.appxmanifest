@@ -8,15 +8,15 @@
     IgnorableNamespaces="uap mp genTemplate">
 
   <Identity
-    Name="C365E4D1-EBB9-449A-80BE-93D58F47E278"
-    Publisher="CN=hjalmar"
-    Version="1.0.0.0" />
+    Name="13993HjalmarArnell.AddonManager"
+    Publisher="CN=DE9CB790-EC8A-4217-8A48-22E3C5B78271"
+    Version="1.0.2.0" />
 
-  <mp:PhoneIdentity PhoneProductId="C365E4D1-EBB9-449A-80BE-93D58F47E278" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="337a0dd0-1dd8-4f34-8a15-faaf1777892e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Addon Manager</DisplayName>
-    <PublisherDisplayName>hjalmar</PublisherDisplayName>
+    <PublisherDisplayName>Hjalmar Arnell</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
