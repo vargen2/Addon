@@ -12,3 +12,8 @@ Trying to upload to Microsoft Store
 - New addons are missing from browse/store page
 - Addons with to big difference from their web name to folder name might not install
 - Copy/move extracted files can be very slow
+
+### Screens
+
+![Alt text](img/img1.png?raw=true "imgage 1")
+![Alt text](img/img1.png?raw=true "image 2")
