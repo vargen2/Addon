@@ -541,29 +541,15 @@
 
         <DataTemplate x:Key="MasterHeaderTemplate">
             <StackPanel Height="40" Orientation="Horizontal">
-                <!--<TextBlock
-                    x:Name="headerText"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-
-                    Text="{Binding}" />-->
-                <!--<Button ToolTipService.ToolTip="Refres" Click="RefreshTocFileForAllInSelectedGame">Toc</Button>-->
                 <Button Click="DownloadVersionsForAllAddonsInSelectedGame">Refresh</Button>
                 <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveSelectedGame">Remove Game...</Button>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="MinimalMasterHeaderTemplate">
-            <Grid Height="40">
-                <TextBlock
-                    x:Name="headerText"
-                    Margin="0,0,0,0"
-                    VerticalAlignment="Center"
-                    Style="{StaticResource ListSubTitleStyle}"
-                    Text="{Binding}" />
-                <Button Margin="{StaticResource SmallLeftMargin}" Click="RefreshTocFileForAllInSelectedGame">Toc</Button>
-                <Button Margin="{StaticResource SmallLeftMargin}" Click="DownloadVersionsForAllAddonsInSelectedGame">Versions</Button>
-                <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveSelectedGame">Delete</Button>
-            </Grid>
+            <StackPanel Height="40" Orientation="Horizontal">
+                <Button Click="DownloadVersionsForAllAddonsInSelectedGame">Refresh</Button>
+                <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveSelectedGame">Remove Game...</Button>
+            </StackPanel>
         </DataTemplate>
     </Page.Resources>
 

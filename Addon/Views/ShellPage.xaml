@@ -122,13 +122,13 @@
                                     BorderThickness="0"
                                     Click="OpenFolder_OnClick"
                                     Content="Open Folder..." />
-                                <Button
+                                <!--<Button
                                     Height="40"
                                     HorizontalAlignment="Stretch"
                                     HorizontalContentAlignment="Left"
                                     Background="Transparent"
                                     BorderThickness="0"
-                                    Content="Scan for Games" />
+                                    Content="Scan for Games" />-->
                                 <NavigationViewItemSeparator />
                                 <ListBox
                                     DisplayMemberPath="AbsolutePath"

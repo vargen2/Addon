@@ -18,8 +18,13 @@ namespace Addon.Logic
         {
             //TODO add functionality for storeaddon to progress
             //TODO fix blocking ui thread 
-            storeAddon.Status = StoreAddon.INSTALLING;
             var game = Singleton<Session>.Instance.SelectedGame;
+            if(game.AbsolutePath.Equals(Session.EMPTY_GAME))
+            {
+                return;
+            }
+            storeAddon.Status = StoreAddon.INSTALLING;
+            
             var tempAddon = new Core.Models.Addon(game, storeAddon.Url, game.AbsolutePath + @"\" + storeAddon.Url) { };
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(tempAddon);
             var download = tempAddon.SuggestedDownload;
