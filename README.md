@@ -15,5 +15,5 @@ Trying to upload to Microsoft Store
 
 ### Screens
 
-![Alt text](img/img1.png?raw=true "imgage 1")
-![Alt text](img/img1.png?raw=true "image 2")
+![Alt text](img/img1.png?raw=true "A user's addons in a game installation")
+![Alt text](img/img1.png?raw=true "A user's addons in a game installation")
