@@ -12,7 +12,7 @@ namespace Addon.Logic
 {
     internal static class Version
     {
-        private static Dictionary<string, List<string>> PROJECT_URLS = new Dictionary<string, List<string>>()
+        public static Dictionary<string, List<string>> PROJECT_URLS = new Dictionary<string, List<string>>()
         {
             {"bigwigs", new List<string>{"big-wigs"}},
             {"dbm-core", new List<string>{"deadly-boss-mods"}},
@@ -22,7 +22,17 @@ namespace Addon.Logic
             {"elvui_sle", new List<string>{"elvui-shadow-light"}},
             {"atlasloot", new List<string>{"atlasloot-enhanced"}},
             {"healbot", new List<string>{"heal-bot-continued"}},
-            {"tradeskillmaster", new List<string>{"tradeskill-master"}}
+            {"tradeskillmaster", new List<string>{"tradeskill-master"}},
+            {"auc-advanced", new List<string>{"auctioneer"}},
+            {"titan", new List<string>{"titan-panel"}},
+            {"tidyplates_threatplates", new List<string>{"tidy-plates-threat-plates"}},
+            {"maxdps", new List<string>{"maxdps-rotation-helper"}},
+            {"allthethings", new List<string>{"all-the-things"}},
+            {"dbm-dragonsoul", new List<string>{"deadly-boss-mods-cataclysm-mods"}},
+            {"dbm-icecrown", new List<string>{"deadly-boss-mods-wotlk"}},
+            {"dbm-pandaria", new List<string>{"deadly-boss-mods-mop"}},
+            {"dbm-outlands", new List<string>{"dbm-bc"}}
+            
         };
 
         internal static async Task<string> FindProjectUrlFor(Core.Models.Addon addon)

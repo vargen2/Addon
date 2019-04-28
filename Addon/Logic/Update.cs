@@ -8,7 +8,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
-using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 
 namespace Addon.Logic
@@ -120,17 +119,17 @@ namespace Addon.Logic
 
         //}
 
-        internal static async Task<Tuple<string, string>> UpdateAddon(Core.Models.Addon addon, Download download, StorageFile file)
+        internal static async Task<(string, string, List<string>)> UpdateAddon(Core.Models.Addon addon, Download download, StorageFile file)
         {
             var extractFolderPath = localFolder.Path + @"\" + file.Name.Replace(".zip", "");
+            var subFoldersToDelete = new List<string>();
             try
             {
-                ////////////////////addon.Message = "Extracting...";
                 ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
                 var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
                 var folders = await extractFolder.GetFoldersAsync();
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
-                ////////////////// addon.Message = "Removing old...";
+
                 foreach (var folder in folders)
                 {
                     try
@@ -144,24 +143,23 @@ namespace Addon.Logic
                     }
                 }
                 //await MoveContentFast(extractFolder, gameFolder);
-                ////////////////////////////////   addon.Message = "Copy new...";
+
                 foreach (var folder in folders)
                 {
 
                     await CopyFolderAsync(folder, gameFolder);
                 }
-                //Debug.WriteLine("copy ok");
-                /////////////////////////////////   addon.Message = "Clean up...";
+
                 var foldersAsList = new List<StorageFolder>(folders);
-                var subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
-                await AddSubFolders(addon, subFoldersToDelete);
-                //addon.CurrentDownload = download;
+                subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
+                //await AddSubFolders(addon, subFoldersToDelete);
+
             }
             catch (Exception e)
             {
                 Debug.WriteLine("[ERROR] UpdateAddon. " + e.Message + ", " + e.StackTrace);
             }
-            return new Tuple<string, string>(file.Path, extractFolderPath);
+            return (file.Path, extractFolderPath, subFoldersToDelete);
         }
 
 
@@ -180,12 +178,12 @@ namespace Addon.Logic
             }
         }
 
-        internal async static Task Cleanup(Tuple<string, string> trash)
+        internal async static Task Cleanup(string filePath, string folderPath)
         {
-            var zipFile = await StorageFile.GetFileFromPathAsync(trash.Item1);
+            var zipFile = await StorageFile.GetFileFromPathAsync(filePath);
             await zipFile.DeleteAsync();
 
-            var extractFolder = await StorageFolder.GetFolderFromPathAsync(trash.Item2);
+            var extractFolder = await StorageFolder.GetFolderFromPathAsync(folderPath);
             await extractFolder.DeleteAsync();
 
 

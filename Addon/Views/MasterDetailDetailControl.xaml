@@ -22,6 +22,7 @@
                     VerticalAlignment="Center"
                     Style="{ThemeResource TitleTextBlockStyle}"
                     Text="{x:Bind MasterMenuItem.FolderName, Mode=OneWay}" />
+                <TextBlock Text="{x:Bind MasterMenuItem.Title, Mode=OneWay}" />
                 <HyperlinkButton Content="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" NavigateUri="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" />
                 <TextBlock Text="{x:Bind MasterMenuItem.AbsolutePath, Mode=OneWay}" />
                 <VariableSizedWrapGrid HorizontalAlignment="Stretch" Orientation="Horizontal">

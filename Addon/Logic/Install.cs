@@ -40,7 +40,7 @@ namespace Addon.Logic
             tempAddon.Message = "";
             if (trash.Item3 == null)
             {
-                await Task.Run(() => Update.Cleanup(new Tuple<string, string>(trash.Item1, trash.Item2)));
+                await Task.Run(() => Update.Cleanup(trash.Item1, trash.Item2));
                 storeAddon.Status = StoreAddon.INSTALLED;
                 return;
             }
@@ -66,12 +66,12 @@ namespace Addon.Logic
                 // await Tasks.Sort(game);
                 storeAddon.Status = StoreAddon.UNKNOWN;
             }
-            await Task.Run(() => Update.Cleanup(new Tuple<string, string>(trash.Item1, trash.Item2)));
+            await Task.Run(() => Update.Cleanup(trash.Item1, trash.Item2));
         }
 
 
 
-        private static async Task<Tuple<string, string, List<string>>> InstallAddon(Core.Models.Addon addon, StorageFile file)
+        private static async Task<(string, string, List<string>)> InstallAddon(Core.Models.Addon addon, StorageFile file)
         {
             var subFoldersToDelete = new List<string>();
             var extractFolderPath = Update.localFolder.Path + @"\" + file.Name.Replace(".zip", "");
@@ -84,7 +84,7 @@ namespace Addon.Logic
                 if (addon.Game.Addons.Any(adn => foldersHashSet.Contains(adn.FolderName)))
                 {
                     //abbort if allready installed
-                    return new Tuple<string, string, List<string>>(file.Path, extractFolderPath, null);
+                    return (file.Path, extractFolderPath, null);
 
                 }
 
@@ -117,7 +117,7 @@ namespace Addon.Logic
             {
                 Debug.WriteLine("[ERROR] InstallAddon. " + e.Message + ", " + e.StackTrace);
             }
-            return new Tuple<string, string, List<string>>(file.Path, extractFolderPath, subFoldersToDelete);
+            return (file.Path, extractFolderPath, subFoldersToDelete);
         }
 
         private static async Task<List<Core.Models.Addon>> AnotherInstall(StorageFile file,Game game)

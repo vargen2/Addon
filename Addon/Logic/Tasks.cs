@@ -68,12 +68,11 @@ namespace Addon.Logic
 
         public static async Task UpdateAddon(Core.Models.Addon addon, Download download)
         {
-            //testa göra Task run på alla
-            //ända inget i addon i metoderna
+            
             addon.Message = "Downloading...";
             addon.Progress = 0;
             addon.Status = Core.Models.Addon.UPDATING;
-            //var file = await Update.DownloadFile(addon, download);
+           
             var file = await Task.Run(() => Update.DLWithHttp(addon, download));
 
             if (file == null)
@@ -85,15 +84,14 @@ namespace Addon.Logic
 
             addon.Message = "Extract/Copy...";
             addon.Progress = 0;
-            //Debug.WriteLine("file downloaded: " + file.Path);
+           
             var trash = await Task.Run(() => Update.UpdateAddon(addon, download, file));
             addon.CurrentDownload = download;
-            //Debug.WriteLine("Update addon complete: " + addon.FolderName);
-            // await Sort(addon.Game);
-            addon.Message = "";
-            await Task.Run(() => Update.Cleanup(trash));
-            //addon.Message = "";
-            // Debug.WriteLine("Cleanup complete: " + addon.FolderName);
+            await Update.AddSubFolders(addon, trash.Item3);
+           
+            addon.Message = "";            
+            await Task.Run(() => Update.Cleanup(trash.Item1,trash.Item2));
+           
         }
 
     }
