@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Addon.Views
@@ -20,21 +18,21 @@ namespace Addon.Views
 
         private static void OnHtmlStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-          //  Debug.WriteLine("OnHTMLChanged");
+            //  Debug.WriteLine("OnHTMLChanged");
             if (d is WebView webView)
             {
-                Debug.WriteLine("hit7");
+
                 var head = "<head><meta charset=\"UTF-8\"></head>";
                 var styles = "<style>html{font-family:'Segoe UI'; font-size:14px;}</style>";
                 var html = (string)e.NewValue;
-                Debug.WriteLine("hit8");
+
                 if (Window.Current.Content is Page rootFrame && rootFrame.RequestedTheme == ElementTheme.Dark)
                 {
                     styles = "<style>html{font-family:'Segoe UI';  font-size:14px; color:#fff;}</style>";
                 }
-                Debug.WriteLine("hit9");
+
                 webView.NavigateToString(head + styles + html);
-                Debug.WriteLine("hit10");
+
             }
         }
     }
@@ -62,10 +60,10 @@ namespace Addon.Views
         private static void OnMasterMenuItemPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as MasterDetailDetailControl;
-            control.ForegroundElement.ChangeView(0, 0, 1);            
+            control.ForegroundElement.ChangeView(0, 0, 1);
         }
 
-        
+
 
 
 

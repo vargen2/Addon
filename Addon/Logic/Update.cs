@@ -45,80 +45,80 @@ namespace Addon.Logic
             return destinationFile;
         }
 
-        internal static BackgroundDownloader downloader = new BackgroundDownloader();
+        //internal static BackgroundDownloader downloader = new BackgroundDownloader();
         internal static StorageFolder localFolder = ApplicationData.Current.TemporaryFolder;
 
-        internal static async Task<StorageFile> DownloadFile(Core.Models.Addon addon, Download download)
-        {
-            addon.Message = "Downloading...";
-            var temp = addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects"));
-            var downloadLink = temp + download.DownloadLink;
-            // Debug.WriteLine(downloadLink);
-            try
-            {
-                Uri source = new Uri(downloadLink);
+        //internal static async Task<StorageFile> DownloadFile(Core.Models.Addon addon, Download download)
+        //{
+        //    addon.Message = "Downloading...";
+        //    var temp = addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects"));
+        //    var downloadLink = temp + download.DownloadLink;
+        //    // Debug.WriteLine(downloadLink);
+        //    try
+        //    {
+        //        Uri source = new Uri(downloadLink);
 
-                StorageFile destinationFile = await localFolder.CreateFileAsync(Util.RandomString(12) + ".zip", CreationCollisionOption.GenerateUniqueName);
+        //        StorageFile destinationFile = await localFolder.CreateFileAsync(Util.RandomString(12) + ".zip", CreationCollisionOption.GenerateUniqueName);
 
-                //BackgroundDownloader downloader = new BackgroundDownloader();
-                DownloadOperation downloadOperation = await Task.Run(() => { return downloader.CreateDownload(source, destinationFile); });
-                //DownloadOperation downloadOperation = downloader.CreateDownload(source, destinationFile);
+        //        //BackgroundDownloader downloader = new BackgroundDownloader();
+        //        DownloadOperation downloadOperation = await Task.Run(() => { return downloader.CreateDownload(source, destinationFile); });
+        //        //DownloadOperation downloadOperation = downloader.CreateDownload(source, destinationFile);
 
-                var fileSize = download.FileSize.Replace("M", "").Replace("K", "").Replace("B", "").Replace(" ", "").Replace(".", ",").Trim();
-                long totalBytes = -1000000;
-                try
-                {
-                    totalBytes = (long)(Double.Parse(fileSize) * 1000000);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("[ERROR] DownloadFile. Parsing FileSize " + ex.Message);
-                }
-
-
-                Progress<DownloadOperation> progressCallback = new Progress<DownloadOperation>(a => { ProgressCallback(a, addon, totalBytes); });
+        //        var fileSize = download.FileSize.Replace("M", "").Replace("K", "").Replace("B", "").Replace(" ", "").Replace(".", ",").Trim();
+        //        long totalBytes = -1000000;
+        //        try
+        //        {
+        //            totalBytes = (long)(Double.Parse(fileSize) * 1000000);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Debug.WriteLine("[ERROR] DownloadFile. Parsing FileSize " + ex.Message);
+        //        }
 
 
+        //        Progress<DownloadOperation> progressCallback = new Progress<DownloadOperation>(a => { ProgressCallback(a, addon, totalBytes); });
 
 
-                // Debug.WriteLine("BEFORE-----------");
-                await Task.Run(async () => { await downloadOperation.StartAsync().AsTask(progressCallback); });
-                // t.Wait();
-                // Debug.WriteLine("AFTER-----------");
-
-                //  var aa = await downloadOperation.StartAsync();
-
-                return destinationFile;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
-            }
-
-            return null;
-        }
-
-        private static void ProgressCallback(DownloadOperation obj, Core.Models.Addon addon, long totalBytes)
-        {
-            // Debug.WriteLine("HIT HIT "+obj.Progress.BytesReceived+",,,, total: "+obj.Progress.TotalBytesToReceive);
-            //MessageModel DLItem = listViewCollection.First(p => p.GUID == obj.Guid);
-            if (obj.Progress.TotalBytesToReceive > 0)
-            {
-                double br = obj.Progress.BytesReceived;
-                var result = br / obj.Progress.TotalBytesToReceive * 100;
-                addon.Progress = (int)result;
-                // Debug.WriteLine("progress: "+addon.Progress);
-            }
-            else if (totalBytes > 0)
-            {
-                double br = obj.Progress.BytesReceived;
-                var result = br / totalBytes * 100;
-                addon.Progress = (int)result;
-                //Debug.WriteLine("progress: "+addon.Progress);
-            }
 
 
-        }
+        //        // Debug.WriteLine("BEFORE-----------");
+        //        await Task.Run(async () => { await downloadOperation.StartAsync().AsTask(progressCallback); });
+        //        // t.Wait();
+        //        // Debug.WriteLine("AFTER-----------");
+
+        //        //  var aa = await downloadOperation.StartAsync();
+
+        //        return destinationFile;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
+        //    }
+
+        //    return null;
+        //}
+
+        //private static void ProgressCallback(DownloadOperation obj, Core.Models.Addon addon, long totalBytes)
+        //{
+        //    // Debug.WriteLine("HIT HIT "+obj.Progress.BytesReceived+",,,, total: "+obj.Progress.TotalBytesToReceive);
+        //    //MessageModel DLItem = listViewCollection.First(p => p.GUID == obj.Guid);
+        //    if (obj.Progress.TotalBytesToReceive > 0)
+        //    {
+        //        double br = obj.Progress.BytesReceived;
+        //        var result = br / obj.Progress.TotalBytesToReceive * 100;
+        //        addon.Progress = (int)result;
+        //        // Debug.WriteLine("progress: "+addon.Progress);
+        //    }
+        //    else if (totalBytes > 0)
+        //    {
+        //        double br = obj.Progress.BytesReceived;
+        //        var result = br / totalBytes * 100;
+        //        addon.Progress = (int)result;
+        //        //Debug.WriteLine("progress: "+addon.Progress);
+        //    }
+
+
+        //}
 
         internal static async Task<Tuple<string, string>> UpdateAddon(Core.Models.Addon addon, Download download, StorageFile file)
         {

@@ -11,7 +11,7 @@ namespace Addon.ViewModels
         public BrowseViewModel()
         {
             Session = Singleton<Session>.Instance;
-            
+
         }
     }
 }

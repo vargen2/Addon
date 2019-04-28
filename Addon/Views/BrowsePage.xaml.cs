@@ -30,9 +30,18 @@ namespace Addon.Views
 
         private async void Install_Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
+            //if (ViewModel.Session.IsInstalling)
+            //{
+            //    return;
+            //}
             var button = sender as Button;
             var storeAddon = button.Tag as StoreAddon;
+
+            //ViewModel.Session.IsInstalling = true;
+
             await Install.InstallAddon(storeAddon);
+
+            //ViewModel.Session.IsInstalling = false;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
