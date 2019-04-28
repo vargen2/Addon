@@ -10,7 +10,7 @@
   <Identity
     Name="13993HjalmarArnell.AddonManager"
     Publisher="CN=DE9CB790-EC8A-4217-8A48-22E3C5B78271"
-    Version="1.0.3.0" />
+    Version="1.0.5.0" />
 
   <mp:PhoneIdentity PhoneProductId="337a0dd0-1dd8-4f34-8a15-faaf1777892e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

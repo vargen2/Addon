@@ -17,15 +17,15 @@ namespace Addon.Core.Models
             set => Set(ref _selectedGame, value);
         }
 
-        private bool isInstalling = false;
-        public bool IsInstalling
-        {
-            get { return isInstalling; }
-            set
-            {
-                Set(ref isInstalling, value);
-            }
-        }
+        //private bool isInstalling = false;
+        //public bool IsInstalling
+        //{
+        //    get { return isInstalling; }
+        //    set
+        //    {
+        //        Set(ref isInstalling, value);
+        //    }
+        //}
 
         public Session()
         {
