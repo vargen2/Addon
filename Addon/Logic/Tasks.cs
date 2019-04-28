@@ -18,7 +18,7 @@ namespace Addon.Logic
             var storageFolderQueryResult = folder.CreateFolderQuery(CommonFolderQuery.DefaultQuery);
             var folders = await storageFolderQueryResult.GetFoldersAsync();
 
-            var tasks = await Task.WhenAll(folders.Select(Toc.FolderToTocFile));
+            var tasks = await Task.WhenAll(folders.Select(Toc.FolderToTocFile).Where(task=> task!=null));
 
             tasks.Where(tf => tf != null && !tf.IsKnownSubFolder)
                 .Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)

@@ -38,7 +38,12 @@ namespace Addon.Logic
             var gameVersion = String.Empty;
             var title = String.Empty;
             var files = await folder.GetFilesAsync(CommonFileQuery.DefaultQuery);
-            var file = files.First(f => f.FileType.Equals(".toc"));
+            var file = files.FirstOrDefault(f => f.FileType.Equals(".toc"));
+
+            if(file==null)
+            {
+                return null;
+            }
 
             var lines = await FileIO.ReadLinesAsync(file);
             foreach (var line in lines)
