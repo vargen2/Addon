@@ -75,6 +75,14 @@ namespace Addon.Logic
             addon.Status = Core.Models.Addon.UPDATING;
             //var file = await Update.DownloadFile(addon, download);
             var file = await Task.Run(() => Update.DLWithHttp(addon, download));
+
+            if (file == null)
+            {
+                addon.Status= Core.Models.Addon.UNKNOWN;
+                addon.Message="";
+                return;
+            }
+
             addon.Message = "Extract/Copy...";
             addon.Progress = 0;
             //Debug.WriteLine("file downloaded: " + file.Path);

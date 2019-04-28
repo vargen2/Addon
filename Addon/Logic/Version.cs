@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 
@@ -34,6 +35,11 @@ namespace Addon.Logic
                 urlNames.InsertRange(0, list);
             }
 
+            if(!NetworkInterface.GetIsNetworkAvailable())
+            {                
+                return string.Empty;
+            }
+
             foreach (var urlName in urlNames)
             {
                 var uri = new Uri(@"https://www.curseforge.com/wow/addons/" + urlName);
@@ -53,7 +59,7 @@ namespace Addon.Logic
                         if (error == Windows.Web.WebErrorStatus.Unknown)
                         {
                             Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + ex.Message);
-                        }
+                        }                       
                         else
                         {
                             Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + error);
@@ -68,6 +74,11 @@ namespace Addon.Logic
         {
             if (string.IsNullOrEmpty(addon.ProjectUrl))
             {
+                return new List<Download>();
+            }
+
+            if(!NetworkInterface.GetIsNetworkAvailable())
+            {                
                 return new List<Download>();
             }
 

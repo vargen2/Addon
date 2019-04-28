@@ -3,7 +3,6 @@ using Addon.Core.Models;
 using Addon.Helpers;
 using Addon.Logic;
 using Microsoft.Toolkit.Uwp.UI.Controls;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,7 +37,7 @@ namespace Addon.ViewModels
 
         private async void MasterDetailViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            
+
             if (e.PropertyName.Equals("Selected") && Selected != null)
             {
                 if (string.IsNullOrEmpty(Selected.ChangeLog))
@@ -50,7 +49,7 @@ namespace Addon.ViewModels
             }
             else if (e.PropertyName.Equals("Selected") && Selected == null)
             {
-               // Debug.WriteLine("NULL selected");
+                // Debug.WriteLine("NULL selected");
                 if (Session.SelectedGame != null && Session.SelectedGame.Addons.Count > 0 && oldSelected != null)
                 {
                     if (oldSelected.Game == Session.SelectedGame)

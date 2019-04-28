@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Search;
@@ -23,6 +24,12 @@ namespace Addon.Logic
             {
                 return;
             }
+
+             if(!NetworkInterface.GetIsNetworkAvailable())
+            {                
+                return;
+            }
+
             storeAddon.Status = StoreAddon.INSTALLING;
             
             var tempAddon = new Core.Models.Addon(game, storeAddon.Url, game.AbsolutePath + @"\" + storeAddon.Url) { };

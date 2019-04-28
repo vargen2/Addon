@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 using Windows.Web;
@@ -14,6 +15,13 @@ namespace Addon.Logic
         {
             if (string.IsNullOrEmpty(addon.ProjectUrl))
             {
+                Debug.WriteLine("No project url found");
+                return string.Empty;
+            
+            }
+            if(!NetworkInterface.GetIsNetworkAvailable())
+            {
+                Debug.WriteLine("No Internet connection available");
                 return string.Empty;
             }
 
@@ -31,17 +39,10 @@ namespace Addon.Logic
                 catch (Exception ex)
                 {
                     var error = WebSocketError.GetStatus(ex.HResult);
-                    if (error == WebErrorStatus.Unknown)
-                    {
-                        Debug.WriteLine("[ERROR] DownloadChangesFor " + uri + " " + ex.Message);
-                    }
-                    else
-                    {
-                        Debug.WriteLine("[ERROR] DownloadChangesFor " + uri + " " + error);
-                    }
+                    Debug.WriteLine("[ERROR] DownloadChangesFor " + uri + " " + error);
+                    return string.Empty;
                 }
             }
-            return string.Empty;
         }
     }
 }

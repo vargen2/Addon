@@ -34,12 +34,13 @@
                         <TextBlock Height="40" Text="{x:Bind MasterMenuItem.SuggestedDownload, Mode=OneWay}" />
                     </StackPanel>
                 </VariableSizedWrapGrid>
-                <ProgressRing
+                <!--<ProgressRing
                     Width="100"
                     Height="100"
                     HorizontalAlignment="Left"
                     IsActive="True"
-                    Visibility="{x:Bind MasterMenuItem.IsChangeLogEmpty, Mode=OneWay}" />
+                    Visibility="{x:Bind MasterMenuItem.IsChangeLogEmpty, Mode=OneWay}" />-->
+
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="9*" />

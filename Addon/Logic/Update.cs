@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
@@ -16,6 +17,11 @@ namespace Addon.Logic
     {
         internal static async Task<StorageFile> DLWithHttp(Core.Models.Addon addon, Download download)
         {
+            if (!NetworkInterface.GetIsNetworkAvailable())
+            {
+                return null;
+            }
+
             var temp = addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects"));
             var downloadLink = temp + download.DownloadLink;
             //Debug.WriteLine(downloadLink);
