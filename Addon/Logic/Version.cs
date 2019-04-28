@@ -27,6 +27,8 @@ namespace Addon.Logic
             {"titan", new List<string>{"titan-panel"}},
             {"tidyplates_threatplates", new List<string>{"tidy-plates-threat-plates"}},
             {"maxdps", new List<string>{"maxdps-rotation-helper"}},
+            {"easydelete", new List<string>{"easy-delete"}},
+            {"raidframeicons", new List<string>{"enhanced-raid-frame-icons"}},
             {"allthethings", new List<string>{"all-the-things"}},
             {"dbm-dragonsoul", new List<string>{"deadly-boss-mods-cataclysm-mods"}},
             {"dbm-icecrown", new List<string>{"deadly-boss-mods-wotlk"}},
