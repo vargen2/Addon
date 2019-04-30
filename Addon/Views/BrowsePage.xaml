@@ -8,118 +8,124 @@
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
     <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftMargin}">
-        
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
 
-            <AutoSuggestBox
-                Margin="0,12,12,12"
-                HorizontalAlignment="Stretch"
-                PlaceholderText="Search"
-                TextChanged="AutoSuggestBox_OnTextChanged" />
-            <ListView
-                x:Name="ListView"
-                Grid.Row="1"
-                ItemsSource="{x:Bind ViewModel.Session.StoreAddons, Mode=OneWay}"
-                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                SelectionMode="Single">
-                <ListView.HeaderTemplate>
-                    <DataTemplate>
-                        <StackPanel
-                            Height="25"
-                            Margin="{StaticResource SmallBottomMargin}"
-                            Padding="{StaticResource SmallLeftMargin}"
-                            Orientation="Horizontal">
-                            <TextBlock
-                                Width="200"
-                                FontSize="{StaticResource MediumFontSize}"
-                                Text="Title" />
-                            <TextBlock
-                                Width="400"
-                                FontSize="{StaticResource MediumFontSize}"
-                                Text="Description" />
-                            <TextBlock
-                                Width="120"
-                                FontSize="{StaticResource MediumFontSize}"
-                                Text="Downloads" />
-                            <TextBlock
-                                Width="120"
-                                FontSize="{StaticResource MediumFontSize}"
-                                Text="Install" />
-                            <TextBlock
-                                Width="120"
-                                FontSize="{StaticResource MediumFontSize}"
-                                Text="Updated" />
-                            <TextBlock
-                                Width="120"
-                                FontSize="{StaticResource MediumFontSize}"
-                                Text="Created" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.HeaderTemplate>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="data:StoreAddon">
-                        <StackPanel Height="60" Orientation="Horizontal">
-                            <StackPanel Width="200">
-                                <TextBlock
-                                    Height="30"
-                                    Margin="0,15,0,15"
-                                    FontSize="{StaticResource MediumFontSize}"
-                                    Text="{x:Bind Title}" />
-                            </StackPanel>
-                            <StackPanel Width="400">
-                                <TextBlock
-                                    Height="60"
-                                    Margin="{StaticResource SmallRightMargin}"
-                                    Text="{x:Bind Description}"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock
-                                    Height="30"
-                                    Margin="0,15,0,15"
-                                    Text="{x:Bind NrOfDownloads}" />
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <ProgressBar
-                                    Width="120"
-                                    IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
-                                    Visibility="{x:Bind IsInstalling, Mode=OneWay}"
-                                    Value="{x:Bind Progress, Mode=OneWay}" />
-                                <Button
-                                    Margin="0,14,0,14"
-                                    Click="Install_Button_Click"
-                                    Content="Install"
-                                    Tag="{x:Bind}"                                    
-                                    Visibility="{x:Bind IsNotInstalled, Mode=OneWay}" />
-                                <TextBlock
-                                    Height="30"
-                                    Margin="0,15,0,15"
-                                    Text="{x:Bind Status, Mode=OneWay}"
-                                    Visibility="{x:Bind IsShowTextBlock, Mode=OneWay}" />
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock
-                                    Height="30"
-                                    Margin="0,15,0,15"
-                                    Text="{x:Bind UpdatedFormated}" />
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock
-                                    Height="30"
-                                    Margin="0,15,0,15"
-                                    Text="{x:Bind CreatedFormated}" />
-                            </StackPanel>
+        <AutoSuggestBox
+            Margin="0,12,12,12"
+            HorizontalAlignment="Stretch"
+            PlaceholderText="Search"
+            TextChanged="AutoSuggestBox_OnTextChanged" />
+        <TextBlock
+            Grid.Row="1"
+            Text="No Game Found"
+            Visibility="{x:Bind ViewModel.Session.IsNoGameSelected, Mode=OneWay}" />
+        <ListView
+            x:Name="ListView"
+            Grid.Row="1"
+            IsEnabled="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}"
+            ItemsSource="{x:Bind ViewModel.Session.StoreAddons, Mode=OneWay}"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            SelectionMode="Single"
+            Visibility="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel
+                        Height="25"
+                        Margin="{StaticResource SmallBottomMargin}"
+                        Padding="{StaticResource SmallLeftMargin}"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Width="200"
+                            FontSize="{StaticResource MediumFontSize}"
+                            Text="Title" />
+                        <TextBlock
+                            Width="400"
+                            FontSize="{StaticResource MediumFontSize}"
+                            Text="Description" />
+                        <TextBlock
+                            Width="120"
+                            FontSize="{StaticResource MediumFontSize}"
+                            Text="Downloads" />
+                        <TextBlock
+                            Width="120"
+                            FontSize="{StaticResource MediumFontSize}"
+                            Text="Install" />
+                        <TextBlock
+                            Width="120"
+                            FontSize="{StaticResource MediumFontSize}"
+                            Text="Updated" />
+                        <TextBlock
+                            Width="120"
+                            FontSize="{StaticResource MediumFontSize}"
+                            Text="Created" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="data:StoreAddon">
+                    <StackPanel Height="60" Orientation="Horizontal">
+                        <StackPanel Width="200">
+                            <TextBlock
+                                Height="30"
+                                Margin="0,15,0,15"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Text="{x:Bind Title}" />
                         </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        
+                        <StackPanel Width="400">
+                            <TextBlock
+                                Height="60"
+                                Margin="{StaticResource SmallRightMargin}"
+                                Text="{x:Bind Description}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock
+                                Height="30"
+                                Margin="0,15,0,15"
+                                Text="{x:Bind NrOfDownloads}" />
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <ProgressBar
+                                Width="120"
+                                IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
+                                Visibility="{x:Bind IsInstalling, Mode=OneWay}"
+                                Value="{x:Bind Progress, Mode=OneWay}" />
+                            <Button
+                                Margin="0,14,0,14"
+                                Click="Install_Button_Click"
+                                Content="Install"
+                                Tag="{x:Bind}"
+                                Visibility="{x:Bind IsNotInstalled, Mode=OneWay}" />
+                            <TextBlock
+                                Height="30"
+                                Margin="0,15,0,15"
+                                Text="{x:Bind Status, Mode=OneWay}"
+                                Visibility="{x:Bind IsShowTextBlock, Mode=OneWay}" />
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock
+                                Height="30"
+                                Margin="0,15,0,15"
+                                Text="{x:Bind UpdatedFormated}" />
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock
+                                Height="30"
+                                Margin="0,15,0,15"
+                                Text="{x:Bind CreatedFormated}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
         <!--<controls:Loading
-            x:Name="LoadingControl"            
+            x:Name="LoadingControl"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             IsLoading="{x:Bind ViewModel.Session.IsInstalling, Mode=OneWay}">
@@ -127,7 +133,7 @@
                 <SolidColorBrush Color="Black" Opacity="0.5" />
             </controls:Loading.Background>
             <StackPanel
-                Padding="12"                      
+                Padding="12"
                 Orientation="Horizontal">
                 <Grid Margin="0,0,8,0">
                     <ProgressRing Foreground="White" IsActive="True" />

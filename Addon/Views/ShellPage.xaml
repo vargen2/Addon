@@ -11,7 +11,9 @@
     xmlns:views="using:Addon.Views"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d">
-
+    <Page.Resources>
+        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="black" Opacity="0.0" />
+    </Page.Resources>
     <i:Interaction.Behaviors>
         <ic:EventTriggerBehavior EventName="Loaded">
             <ic:InvokeCommandAction Command="{x:Bind ViewModel.LoadedCommand}" />
@@ -20,7 +22,7 @@
 
     <winui:NavigationView
         x:Name="navigationView"
-        Background="{ThemeResource SystemControlChromeHighAcrylicWindowMediumBrush}"
+        Background="{StaticResource MySystemControlChromeHighAcrylicWindowMediumBrushfive}"
         IsBackButtonVisible="Collapsed"
         IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
         IsPaneToggleButtonVisible="False"
@@ -132,8 +134,8 @@
                                 <NavigationViewItemSeparator />
                                 <ListBox
                                     DisplayMemberPath="AbsolutePath"
-                                    ItemsSource="{x:Bind ViewModel.Session.Games}"
-                                    SelectedItem="{x:Bind ViewModel.Session.SelectedGame}"
+                                    ItemsSource="{x:Bind ViewModel.Session.Games,Mode=OneWay}"
+                                    SelectedItem="{x:Bind ViewModel.Session.SelectedGame,Mode=OneWay}"
                                     SelectionChanged="ListBox_SelectionChanged"
                                     SelectionMode="Single"
                                     Tapped="ListBox_Tapped" />

@@ -14,8 +14,17 @@ namespace Addon.Core.Models
         public Game SelectedGame
         {
             get => _selectedGame;
-            set => Set(ref _selectedGame, value);
+            set
+            {
+
+                Set(ref _selectedGame, value);
+                OnPropertyChanged("IsNoGameSelected");
+                OnPropertyChanged("IsGameSelected");
+            }
         }
+
+        public bool IsNoGameSelected => SelectedGame.AbsolutePath.Equals(EMPTY_GAME);
+        public bool IsGameSelected => !SelectedGame.AbsolutePath.Equals(EMPTY_GAME);
 
         //private bool isInstalling = false;
         //public bool IsInstalling

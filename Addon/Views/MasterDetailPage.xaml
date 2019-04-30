@@ -402,6 +402,7 @@
             </Setter>
         </Style>
 
+        
 
         <DataTemplate x:Key="ItemTemplate" x:DataType="data:Addon">
 
@@ -556,8 +557,8 @@
     <Grid x:Name="ContentArea">
         <controls:MasterDetailsView
             x:Name="MasterDetailsViewControl"
-            BackButtonBehavior="Manual"
-            Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
+            BackButtonBehavior="Manual"            
+            Background="{StaticResource MySystemControlChromeHighAcrylicWindowMediumBrusheight}" 
             BorderBrush="Transparent"
             CompactModeThresholdWidth="1"
             DetailsTemplate="{StaticResource DetailsTemplate}"
@@ -570,7 +571,7 @@
             SelectedItem="{x:Bind ViewModel.Selected, Mode=TwoWay}"
             Style="{StaticResource mymaster}" />
 
-
+        <TextBlock  Margin="12 40 0 0" Visibility="{x:Bind ViewModel.Session.IsNoGameSelected,Mode=OneWay}" Text="No Game Found"></TextBlock>
         <!--<controls:GridSplitter Grid.Column="1" Width="11" ResizeBehavior="CurrentAndNext"
             ResizeDirection="Columns" Background="Gray" Foreground="White" FontSize="13">
             <controls:GridSplitter.Element>
@@ -623,3 +624,5 @@
     MasterHeader="MasterDetail"
     MasterHeaderTemplate="{StaticResource MinimalMasterHeaderTemplate}"
 -->
+
+<!--Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"-->
