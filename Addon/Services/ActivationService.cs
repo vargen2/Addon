@@ -85,9 +85,7 @@ namespace Addon.Services
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
 
 
-            ApplicationView.GetForCurrentView().Title = Singleton<Session>.Instance.SelectedGame.AbsolutePath;
-            Singleton<Session>.Instance.PropertyChanged += Session_PropertyChanged;
-
+           
             var settings = Singleton<SettingsViewModel>.Instance;
             if (settings.IsAutoRefreshVersions ?? false)
             {
@@ -131,16 +129,6 @@ namespace Addon.Services
         }
 
 
-        private void Session_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName.Equals("SelectedGame"))
-            {
-                var game = Singleton<Session>.Instance.SelectedGame;
-                if (game != null)
-                {
-                    ApplicationView.GetForCurrentView().Title = Singleton<Session>.Instance.SelectedGame.AbsolutePath;
-                }
-            }
-        }
+        
     }
 }

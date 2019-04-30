@@ -11,64 +11,103 @@
     xmlns:views="using:Addon.Views"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d">
+
     <Page.Resources>
-        <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="black" Opacity="0.0" />
+        <SolidColorBrush
+            x:Key="NavigationViewDefaultPaneBackground"
+            Opacity="0.0"
+            Color="black" />
     </Page.Resources>
     <i:Interaction.Behaviors>
         <ic:EventTriggerBehavior EventName="Loaded">
             <ic:InvokeCommandAction Command="{x:Bind ViewModel.LoadedCommand}" />
         </ic:EventTriggerBehavior>
     </i:Interaction.Behaviors>
+    <Grid Background="{StaticResource MySystemControlChromeHighAcrylicWindowMediumBrushsix}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
-    <winui:NavigationView
-        x:Name="navigationView"
-        Background="{StaticResource MySystemControlChromeHighAcrylicWindowMediumBrushfive}"
-        IsBackButtonVisible="Collapsed"
-        IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
-        IsPaneToggleButtonVisible="False"
-        IsSettingsVisible="True"
-        PaneDisplayMode="LeftCompact"
-        SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}">
+        <Grid x:Name="AppTitleBar" Background="Transparent">
+            <!--  Width of the padding columns is set in LayoutMetricsChanged handler.  -->
+            <!--
+                Using padding columns instead of Margin ensures that the background
+                paints the area under the caption control buttons (for transparent buttons).
+            -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
+                <ColumnDefinition />
+                <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
+            </Grid.ColumnDefinitions>
+            <Image
+                Grid.Column="1"
+                Width="20"
+                Height="20"
+                Margin="12,0"
+                HorizontalAlignment="Left"
+                Source="Assets\Square44x44Logo.targetsize-16.png" />
+            <TextBlock
+                Grid.Column="1"
+                Margin="44,8,0,0"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath, Mode=OneWay}" />
+        </Grid>
 
-        <winui:NavigationView.MenuItems>
+        
 
-            <!--<winui:NavigationViewItem
+
+
+        <winui:NavigationView
+            x:Name="navigationView"
+            Grid.Row="1"
+            Background="{StaticResource MySystemControlChromeHighAcrylicWindowMediumBrushsix}"
+            IsBackButtonVisible="Collapsed"
+            IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
+            IsPaneToggleButtonVisible="False"
+            IsSettingsVisible="True"
+            PaneDisplayMode="LeftCompact"
+            SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}">
+
+            <winui:NavigationView.MenuItems>
+
+                <!--<winui:NavigationViewItem
                 Name="navitem1"
                 x:Uid="Shell_Main"
                 helpers:NavHelper.NavigateTo="views:MainPage"
                 Icon="Home" />-->
-            <winui:NavigationViewItem
-                Name="navitem1"
-                x:Uid="Shell_Master"
-                helpers:NavHelper.NavigateTo="views:MasterDetailPage"
-                Icon="Home" />
-            <winui:NavigationViewItem
-                x:Uid="Shell_Browse"
-                helpers:NavHelper.NavigateTo="views:BrowsePage"
-                Icon="Download" />
-        </winui:NavigationView.MenuItems>
-        <i:Interaction.Behaviors>
-            <behaviors:NavigationViewHeaderBehavior>
-                <!--  DefaultHeader="{x:Bind ViewModel.Selected.Content, Mode=OneWay}"  -->
-                <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <TextBlock
-                                Margin="{StaticResource SmallLeftRightMargin}"
-                                Style="{ThemeResource TitleTextBlockStyle}"
-                                Text="{Binding}" />
-                        </Grid>
-                    </DataTemplate>
-                </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
-            </behaviors:NavigationViewHeaderBehavior>
-            <ic:EventTriggerBehavior EventName="ItemInvoked">
-                <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
-            </ic:EventTriggerBehavior>
-        </i:Interaction.Behaviors>
+                <winui:NavigationViewItem
+                    Name="navitem1"
+                    x:Uid="Shell_Master"
+                    helpers:NavHelper.NavigateTo="views:MasterDetailPage"
+                    Icon="Home" />
+                <winui:NavigationViewItem
+                    x:Uid="Shell_Browse"
+                    helpers:NavHelper.NavigateTo="views:BrowsePage"
+                    Icon="Download" />
+            </winui:NavigationView.MenuItems>
+            <i:Interaction.Behaviors>
+                <behaviors:NavigationViewHeaderBehavior>
+                    <!--  DefaultHeader="{x:Bind ViewModel.Selected.Content, Mode=OneWay}"  -->
+                    <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock
+                                    Margin="{StaticResource SmallLeftRightMargin}"
+                                    Style="{ThemeResource TitleTextBlockStyle}"
+                                    Text="{Binding}" />
+                            </Grid>
+                        </DataTemplate>
+                    </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
+                </behaviors:NavigationViewHeaderBehavior>
+                <ic:EventTriggerBehavior EventName="ItemInvoked">
+                    <ic:InvokeCommandAction Command="{x:Bind ViewModel.ItemInvokedCommand}" />
+                </ic:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
 
-        <winui:NavigationView.PaneCustomContent>
-            <StackPanel>
-                <!--<Button
+            <winui:NavigationView.PaneCustomContent>
+                <StackPanel>
+                    <!--<Button
                     Height="40"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Left"
@@ -100,78 +139,80 @@
                         <TextBlock Margin="20,0">Add Game</TextBlock>
                     </StackPanel>
                 </Button>-->
-                <Button
-                    Height="40"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Left"
-                    Background="Transparent"
-                    BorderThickness="0">
-                    <Button.Flyout>
+                    <Button
+                        Height="40"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Background="Transparent"
+                        BorderThickness="0">
+                        <Button.Flyout>
 
-                        <Flyout x:Name="GameSelectorFlyout" Placement="Right">
+                            <Flyout x:Name="GameSelectorFlyout" Placement="Right">
 
-                            <StackPanel
-                                Width="300"
-                                VerticalAlignment="Stretch"
-                                Background="{ThemeResource AppBarBackgroundThemeBrush}">
-                                <!--  Background="{ThemeResource SystemControlChromeHighAcrylicWindowMediumBrush}">  -->
+                                <StackPanel
+                                    Width="300"
+                                    VerticalAlignment="Stretch"
+                                    Background="{ThemeResource AppBarBackgroundThemeBrush}">
+                                    <!--  Background="{ThemeResource SystemControlChromeHighAcrylicWindowMediumBrush}">  -->
 
-                                <Button
-                                    Height="40"
-                                    HorizontalAlignment="Stretch"
-                                    HorizontalContentAlignment="Left"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Click="OpenFolder_OnClick"
-                                    Content="Open Folder..." />
-                                <!--<Button
+                                    <Button
+                                        Height="40"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Left"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Click="OpenFolder_OnClick"
+                                        Content="Open Folder..." />
+                                    <!--<Button
                                     Height="40"
                                     HorizontalAlignment="Stretch"
                                     HorizontalContentAlignment="Left"
                                     Background="Transparent"
                                     BorderThickness="0"
                                     Content="Scan for Games" />-->
-                                <NavigationViewItemSeparator />
-                                <ListBox
-                                    DisplayMemberPath="AbsolutePath"
-                                    ItemsSource="{x:Bind ViewModel.Session.Games,Mode=OneWay}"
-                                    SelectedItem="{x:Bind ViewModel.Session.SelectedGame,Mode=OneWay}"
-                                    SelectionChanged="ListBox_SelectionChanged"
-                                    SelectionMode="Single"
-                                    Tapped="ListBox_Tapped" />
+                                    <NavigationViewItemSeparator />
+                                    <ListBox
+                                        DisplayMemberPath="AbsolutePath"
+                                        ItemsSource="{x:Bind ViewModel.Session.Games, Mode=OneWay}"
+                                        SelectedItem="{x:Bind ViewModel.Session.SelectedGame, Mode=OneWay}"
+                                        SelectionChanged="ListBox_SelectionChanged"
+                                        SelectionMode="Single"
+                                        Tapped="ListBox_Tapped" />
 
 
 
-                            </StackPanel>
+                                </StackPanel>
 
-                            <Flyout.FlyoutPresenterStyle>
-                                <Style TargetType="FlyoutPresenter">
-                                    <Setter Property="Background" Value="Transparent" />
-                                    <Setter Property="BorderThickness" Value="0" />
-                                    <Setter Property="MaxHeight" Value="NaN" />
-                                    <Setter Property="Height" Value="2000" />
-                                    <Setter Property="MinHeight" Value="2000" />
-                                    <Setter Property="Padding" Value="0,0,0,0" />
-                                    <Setter Property="Margin" Value="-4,0,0,0" />
-                                </Style>
-                            </Flyout.FlyoutPresenterStyle>
-                        </Flyout>
-                    </Button.Flyout>
-                    <SymbolIcon Symbol="More" />
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="Select Game" />
-                    </ToolTipService.ToolTip>
-                </Button>
-            </StackPanel>
+                                <Flyout.FlyoutPresenterStyle>
+                                    <Style TargetType="FlyoutPresenter">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="BorderThickness" Value="0" />
+                                        <Setter Property="MaxHeight" Value="NaN" />
+                                        <Setter Property="Height" Value="2000" />
+                                        <Setter Property="MinHeight" Value="2000" />
+                                        <Setter Property="Padding" Value="0,0,0,0" />
+                                        <Setter Property="Margin" Value="-4,0,0,0" />
+                                    </Style>
+                                </Flyout.FlyoutPresenterStyle>
+                            </Flyout>
+                        </Button.Flyout>
+                        <SymbolIcon Symbol="More" />
+                        <ToolTipService.ToolTip>
+                            <ToolTip Content="Select Game" />
+                        </ToolTipService.ToolTip>
+                    </Button>
+                </StackPanel>
 
-        </winui:NavigationView.PaneCustomContent>
+            </winui:NavigationView.PaneCustomContent>
 
 
-        <Grid>
-            <Frame x:Name="shellFrame" />
-        </Grid>
+            <Grid>
+                <Frame x:Name="shellFrame" />
+            </Grid>
 
-    </winui:NavigationView>
+        </winui:NavigationView>
+    </Grid>
+
 </Page>
 
 

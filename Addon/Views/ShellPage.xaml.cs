@@ -5,6 +5,8 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -19,7 +21,51 @@ namespace Addon.Views
         {
             InitializeComponent();
             DataContext = ViewModel;
+
+
+
+
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            var half = Windows.UI.Colors.White;
+            half.A = 90;
+            // Set active window colors
+            titleBar.ButtonForegroundColor = Windows.UI.Colors.Black;
+            titleBar.ButtonBackgroundColor = Windows.UI.Colors.Transparent;
+            titleBar.ButtonHoverForegroundColor = Windows.UI.Colors.Black;
+            titleBar.ButtonHoverBackgroundColor = half;
+            titleBar.ButtonPressedForegroundColor = Windows.UI.Colors.Gray;
+            titleBar.ButtonPressedBackgroundColor = Windows.UI.Colors.Transparent;
+
+            // Set inactive window colors
+            titleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.Gray;
+            titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
+
+
+
+
+            // Hide default title bar.
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+            UpdateTitleBarLayout(coreTitleBar);
+
+            // Set XAML element as a draggable region.
+            Window.Current.SetTitleBar(AppTitleBar);
+
+            // Register a handler for when the size of the overlaid caption control changes.
+            // For example, when the app moves to a screen with a different DPI.
+            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
+
+            // Register a handler for when the title bar visibility changes.
+            // For example, when the title bar is invoked in full screen mode.
+            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
+
+
             ViewModel.Initialize(shellFrame, navigationView, KeyboardAccelerators);
+
+            //ApplicationView.GetForCurrentView().Title = Singleton<Session>.Instance.SelectedGame.AbsolutePath;
+            // Singleton<Session>.Instance.PropertyChanged += Session_PropertyChanged;
+
 
         }
 
@@ -58,8 +104,8 @@ namespace Addon.Views
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(folder);
 
                 var game = new Game(folder.Path);
-                
-             //   Debug.WriteLine("Picked folder: " + folder.Name);
+
+                //   Debug.WriteLine("Picked folder: " + folder.Name);
                 await Task.Run(() => Tasks.RefreshGameFolder(game));
                 await Task.Run(() => Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons));
                 ViewModel.Session.Games.Add(game);
@@ -73,5 +119,47 @@ namespace Addon.Views
 
 
         }
+
+
+        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
+        {
+            UpdateTitleBarLayout(sender);
+        }
+
+        private void UpdateTitleBarLayout(CoreApplicationViewTitleBar coreTitleBar)
+        {
+            // Get the size of the caption controls area and back button 
+            // (returned in logical pixels), and move your content around as necessary.
+            LeftPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayLeftInset);
+            RightPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayRightInset);
+            // TitleBarButton.Margin = new Thickness(0, 0, coreTitleBar.SystemOverlayRightInset, 0);
+
+            // Update title bar control size as needed to account for system size changes.
+            AppTitleBar.Height = coreTitleBar.Height;
+        }
+
+        private void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args)
+        {
+            if (sender.IsVisible)
+            {
+                AppTitleBar.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AppTitleBar.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        //private void Session_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        //{
+        //    if (e.PropertyName.Equals("SelectedGame"))
+        //    {
+        //        var game = Singleton<Session>.Instance.SelectedGame;
+        //        if (game != null)
+        //        {
+        //            ApplicationView.GetForCurrentView().Title = Singleton<Session>.Instance.SelectedGame.AbsolutePath;
+        //        }
+        //    }
+        //}
     }
 }
