@@ -23,8 +23,8 @@ namespace Addon.Core.Models
             }
         }
 
-        public bool IsNoGameSelected => SelectedGame.AbsolutePath.Equals(EMPTY_GAME);
-        public bool IsGameSelected => !SelectedGame.AbsolutePath.Equals(EMPTY_GAME);
+        public bool IsNoGameSelected => SelectedGame == null ? true : SelectedGame.AbsolutePath.Equals(EMPTY_GAME);
+        public bool IsGameSelected => SelectedGame == null ? false : !SelectedGame.AbsolutePath.Equals(EMPTY_GAME);
 
         //private bool isInstalling = false;
         //public bool IsInstalling

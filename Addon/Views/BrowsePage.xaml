@@ -17,6 +17,7 @@
         <AutoSuggestBox
             Margin="0,12,12,12"
             HorizontalAlignment="Stretch"
+            IsEnabled="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}"
             PlaceholderText="Search"
             TextChanged="AutoSuggestBox_OnTextChanged" />
         <TextBlock

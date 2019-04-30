@@ -57,7 +57,7 @@ namespace Addon.Services
 
         public static bool Navigate(Type pageType, object parameter = null, NavigationTransitionInfo infoOverride = null)
         {
-            Debug.WriteLine("pagetype: " + pageType.ToString());
+            //Debug.WriteLine("pagetype: " + pageType.ToString());
             // Don't open the same page multiple times
             if (Frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParamUsed)))
             {

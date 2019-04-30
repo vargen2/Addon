@@ -11,7 +11,7 @@
         Name="ForegroundElement"
         Padding="{StaticResource DetailPageMargin}"
         HorizontalAlignment="Stretch"
-        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+        Background="{ThemeResource SystemChromeLowColor}"
         VerticalScrollMode="Enabled">
         <StackPanel HorizontalAlignment="Stretch">
             <StackPanel
