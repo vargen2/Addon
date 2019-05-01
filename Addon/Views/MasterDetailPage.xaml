@@ -481,7 +481,7 @@
                                 <SymbolIcon Symbol="Accept" Visibility="{Binding IsRelease}" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
-                        <MenuFlyoutItem Tag="{x:Bind Mode=OneWay}" Click="MenuFlyoutItem_Click_Open_Edit_URL_DIALOG"  Text="Edit URL...">
+                        <MenuFlyoutItem Tag="{x:Bind Mode=OneWay}" Click="MenuFlyoutItem_Click_Open_Edit_URL_DIALOG"  Text="Set URL...">
                             
                         </MenuFlyoutItem>
                         <MenuFlyoutSubItem Name="VersionsMenuFlyout" Text="Versions" />

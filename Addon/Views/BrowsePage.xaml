@@ -92,6 +92,7 @@
                         </StackPanel>
                         <StackPanel Width="120">
                             <ProgressBar
+                                Margin="0 8 0 0"
                                 Width="120"
                                 IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
                                 Visibility="{x:Bind IsInstalling, Mode=OneWay}"

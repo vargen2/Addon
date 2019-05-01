@@ -22,24 +22,20 @@ namespace Addon.Views
             InitializeComponent();
             DataContext = ViewModel;
 
+            var hoverbgColor = ((Windows.UI.Xaml.Media.SolidColorBrush)Application.Current.Resources["SystemControlBackgroundListLowBrush"]).Color;
+            var hoverfgColor = ((Windows.UI.Xaml.Media.SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
+            var pressedBgColor = ((Windows.UI.Xaml.Media.SolidColorBrush)Application.Current.Resources["SystemControlBackgroundListMediumBrush"]).Color;
+            var pressedFgColor = ((Windows.UI.Xaml.Media.SolidColorBrush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"]).Color;
+            var inactivefgColor = ((Windows.UI.Xaml.Media.SolidColorBrush)Application.Current.Resources["SystemControlForegroundChromeDisabledLowBrush"]).Color;
+
             /*
-             *
-             *      Color fgColor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlPageTextBaseHighBrush"))->Color;
-            Color inactivefgColor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlForegroundChromeDisabledLowBrush"))->Color;
-            Color hoverbgColor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlBackgroundListLowBrush"))->Color;
-            Color hoverfgColor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlForegroundBaseHighBrush"))->Color;
-            Color pressedbgColor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlBackgroundListMediumBrush"))->Color;
-            Color pressedfgCoolor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlForegroundBaseHighBrush"))->Color;
+             * From Microsoft UWP app
+            Color fgColor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlPageTextBaseHighBrush"))->Color;
             applicationTitleBar->ButtonBackgroundColor = bgColor;
             applicationTitleBar->ButtonForegroundColor = fgColor;
             applicationTitleBar->ButtonInactiveBackgroundColor = bgColor;
-            applicationTitleBar->ButtonInactiveForegroundColor = inactivefgColor;
-            applicationTitleBar->ButtonHoverBackgroundColor = hoverbgColor;
-            applicationTitleBar->ButtonHoverForegroundColor = hoverfgColor;
-            applicationTitleBar->ButtonPressedBackgroundColor = pressedbgColor;
-            applicationTitleBar->ButtonPressedForegroundColor = pressedfgCoolor;
-             *
-             */
+            */
+
 
 
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
@@ -48,13 +44,13 @@ namespace Addon.Views
             // Set active window colors
             titleBar.ButtonForegroundColor = Windows.UI.Colors.Black;
             titleBar.ButtonBackgroundColor = Windows.UI.Colors.Transparent;
-            titleBar.ButtonHoverForegroundColor = Windows.UI.Colors.Black;
-            titleBar.ButtonHoverBackgroundColor = half;
-            titleBar.ButtonPressedForegroundColor = Windows.UI.Colors.Gray;
-            titleBar.ButtonPressedBackgroundColor = Windows.UI.Colors.Transparent;
+            titleBar.ButtonHoverForegroundColor = hoverfgColor;
+            titleBar.ButtonHoverBackgroundColor = hoverbgColor;
+            titleBar.ButtonPressedForegroundColor = pressedFgColor;
+            titleBar.ButtonPressedBackgroundColor = pressedBgColor;
 
             // Set inactive window colors
-            titleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.Gray;
+            titleBar.ButtonInactiveForegroundColor = inactivefgColor;
             titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
 
 
