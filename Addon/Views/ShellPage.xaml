@@ -23,7 +23,7 @@
             <ic:InvokeCommandAction Command="{x:Bind ViewModel.LoadedCommand}" />
         </ic:EventTriggerBehavior>
     </i:Interaction.Behaviors>
-    <Grid Background="{StaticResource MySystemControlChromeHighAcrylicWindowMediumBrushsix}">
+    <Grid Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -61,7 +61,7 @@
         <winui:NavigationView
             x:Name="navigationView"
             Grid.Row="1"
-            Background="{StaticResource MySystemControlChromeHighAcrylicWindowMediumBrushsix}"
+            Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}"
             IsBackButtonVisible="Collapsed"
             IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
             IsPaneToggleButtonVisible="False"

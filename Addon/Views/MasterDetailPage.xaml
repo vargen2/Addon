@@ -481,6 +481,9 @@
                                 <SymbolIcon Symbol="Accept" Visibility="{Binding IsRelease}" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
+                        <MenuFlyoutItem Tag="{x:Bind Mode=OneWay}" Click="MenuFlyoutItem_Click_Open_Edit_URL_DIALOG"  Text="Edit URL...">
+                            
+                        </MenuFlyoutItem>
                         <MenuFlyoutSubItem Name="VersionsMenuFlyout" Text="Versions" />
                         <MenuFlyoutSubItem Text="Info">
                             <MenuFlyoutItem Style="{StaticResource mysyle2}" Text="{x:Bind InfoString, Mode=OneWay}" />
@@ -558,7 +561,7 @@
         <controls:MasterDetailsView
             x:Name="MasterDetailsViewControl"
             BackButtonBehavior="Manual"            
-            Background="{StaticResource MySystemControlChromeHighAcrylicWindowMediumBrusheight}" 
+            Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}" 
             BorderBrush="Transparent"
             CompactModeThresholdWidth="1"
             DetailsTemplate="{StaticResource DetailsTemplate}"

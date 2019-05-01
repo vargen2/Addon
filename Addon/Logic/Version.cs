@@ -34,7 +34,7 @@ namespace Addon.Logic
             {"dbm-icecrown", new List<string>{"deadly-boss-mods-wotlk"}},
             {"dbm-pandaria", new List<string>{"deadly-boss-mods-mop"}},
             {"dbm-outlands", new List<string>{"dbm-bc"}}
-            
+
         };
 
         internal static async Task<string> FindProjectUrlFor(Core.Models.Addon addon)
@@ -47,36 +47,17 @@ namespace Addon.Logic
                 urlNames.InsertRange(0, list);
             }
 
-            if(!NetworkInterface.GetIsNetworkAvailable())
-            {                
+            if (!NetworkInterface.GetIsNetworkAvailable())
+            {
                 return string.Empty;
             }
 
             foreach (var urlName in urlNames)
             {
-                var uri = new Uri(@"https://www.curseforge.com/wow/addons/" + urlName);
-                using (var httpClient = new HttpClient())
+                var url = await GetUrl(urlName);
+                if (!string.IsNullOrEmpty(url))
                 {
-                    try
-                    {
-                        var response = await httpClient.GetStringAsync(uri);
-                        int index1 = response.IndexOf("<p class=\"infobox__cta\"");
-                        int index2 = response.Substring(index1).IndexOf("</p>");
-                        string data = response.Substring(index1, index2);
-                        return Util.Parse(data, "<a href=\"", "\">");
-                    }
-                    catch (Exception ex)
-                    {
-                        var error = WebSocketError.GetStatus(ex.HResult);
-                        if (error == Windows.Web.WebErrorStatus.Unknown)
-                        {
-                            Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + ex.Message);
-                        }                       
-                        else
-                        {
-                            Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + error);
-                        }
-                    }
+                    return url;
                 }
             }
             return String.Empty;
@@ -89,8 +70,8 @@ namespace Addon.Logic
                 return new List<Download>();
             }
 
-            if(!NetworkInterface.GetIsNetworkAvailable())
-            {                
+            if (!NetworkInterface.GetIsNetworkAvailable())
+            {
                 return new List<Download>();
             }
 
@@ -117,5 +98,44 @@ namespace Addon.Logic
             }
             return new List<Download>();
         }
+
+        internal static async Task<string> FindProjectUrlFor(string urlName)
+        {
+            if (!NetworkInterface.GetIsNetworkAvailable())
+            {
+                return string.Empty;
+            }
+            return await GetUrl(urlName);
+        }
+
+        private static async Task<string> GetUrl(string urlName)
+        {
+            var uri = new Uri(@"https://www.curseforge.com/wow/addons/" + urlName);
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    var response = await httpClient.GetStringAsync(uri);
+                    int index1 = response.IndexOf("<p class=\"infobox__cta\"");
+                    int index2 = response.Substring(index1).IndexOf("</p>");
+                    string data = response.Substring(index1, index2);
+                    return Util.Parse(data, "<a href=\"", "\">");
+                }
+                catch (Exception ex)
+                {
+                    var error = WebSocketError.GetStatus(ex.HResult);
+                    if (error == Windows.Web.WebErrorStatus.Unknown)
+                    {
+                        Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + ex.Message);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + error);
+                    }
+                }
+            }
+            return String.Empty;
+        }
+
     }
 }

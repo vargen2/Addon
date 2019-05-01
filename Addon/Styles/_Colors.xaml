@@ -1,7 +1,34 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key="ThemeControlForegroundBaseHighBrush" Color="{ThemeResource SystemBaseHighColor}" />
-    <AcrylicBrush x:Key="MySystemControlChromeHighAcrylicWindowMediumBrushfour" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeHighColor}" TintOpacity="0.4" FallbackColor="{ThemeResource SystemChromeHighColor}" />
-    <AcrylicBrush x:Key="MySystemControlChromeHighAcrylicWindowMediumBrushfive" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeHighColor}" TintOpacity="0.5" FallbackColor="{ThemeResource SystemChromeHighColor}" />
-    <AcrylicBrush x:Key="MySystemControlChromeHighAcrylicWindowMediumBrushsix" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeHighColor}" TintOpacity="0.6" FallbackColor="{ThemeResource SystemChromeHighColor}" />
-    <AcrylicBrush x:Key="MySystemControlChromeHighAcrylicWindowMediumBrusheight" BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeHighColor}" TintOpacity="0.8" FallbackColor="{ThemeResource SystemChromeMediumColor}" />
+    <AcrylicBrush
+        x:Key="MySystemControlChromeHighAcrylicWindowMediumBrushfour"
+        BackgroundSource="HostBackdrop"
+        FallbackColor="{ThemeResource SystemChromeHighColor}"
+        TintColor="{ThemeResource SystemChromeHighColor}"
+        TintOpacity="0.4" />
+    <AcrylicBrush
+        x:Key="MySystemControlChromeHighAcrylicWindowMediumBrushfive"
+        BackgroundSource="HostBackdrop"
+        FallbackColor="{ThemeResource SystemChromeHighColor}"
+        TintColor="{ThemeResource SystemChromeHighColor}"
+        TintOpacity="0.5" />
+    <AcrylicBrush
+        x:Key="MySystemControlChromeHighAcrylicWindowMediumBrushsix"
+        BackgroundSource="HostBackdrop"
+        FallbackColor="{ThemeResource SystemChromeHighColor}"
+        TintColor="{ThemeResource SystemChromeHighColor}"
+        TintOpacity="0.6" />
+    <AcrylicBrush
+        x:Key="MySystemControlChromeHighAcrylicWindowMediumBrusheight"
+        BackgroundSource="HostBackdrop"
+        FallbackColor="{ThemeResource SystemChromeMediumColor}"
+        TintColor="{ThemeResource SystemChromeHighColor}"
+        TintOpacity="0.8" />
+
+    <AcrylicBrush
+        x:Key="AppChromeAcrylicHostBackdropMediumLowBrush"
+        BackgroundSource="HostBackdrop"
+        FallbackColor="{ThemeResource SystemChromeMediumColor}"
+        TintColor="{ThemeResource SystemChromeLowColor}"
+        TintOpacity="0.7" />
 </ResourceDictionary>

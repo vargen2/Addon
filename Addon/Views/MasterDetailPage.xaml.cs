@@ -4,7 +4,6 @@ using Addon.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -60,7 +59,7 @@ namespace Addon.Views
             //var nonUiAddon=ViewModel.Session.SelectedGame.Addons.First(adn=>adn.FolderName.Equals(addon.FolderName));
             await Tasks.UpdateAddon(addon);
 
-           // await Task.Run(() => Tasks.UpdateAddon(nonUiAddon));
+            // await Task.Run(() => Tasks.UpdateAddon(nonUiAddon));
         }
 
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -152,7 +151,7 @@ namespace Addon.Views
                     if (ViewModel.Session.Games.Count == 0)
                     {
                         ViewModel.Session.SelectedGame = new Game(Session.EMPTY_GAME);
-                        ViewModel.Selected=null;
+                        ViewModel.Selected = null;
                     }
                     else
                     {
@@ -164,6 +163,98 @@ namespace Addon.Views
             }
 
         }
+
+        private async void MenuFlyoutItem_Click_Open_Edit_URL_DIALOG(object sender, RoutedEventArgs e)
+        {
+            var menuItem = sender as MenuFlyoutItem;
+            Core.Models.Addon addon = menuItem.Tag as Core.Models.Addon;
+
+            TextBlock textBlock = new TextBlock()
+            {
+                Margin = new Thickness(0, 0, 0, 16),
+                TextWrapping = TextWrapping.Wrap,
+                Text = "Example: For https://www.curseforge.com/wow/addons/deadly-boss-mods You would type: deadly-boss-mods"
+            };
+            TextBlock currentValueTextBlock = new TextBlock()
+            {
+                Margin = new Thickness(0, 0, 0, 16),
+                TextWrapping = TextWrapping.Wrap,
+                Text = "Current URL: " + addon.ProjectUrl
+            };
+            TextBlock testResultTextBlock = new TextBlock()
+            {
+                Margin = new Thickness(0, 0, 0, 16),
+                TextWrapping = TextWrapping.Wrap,
+                Text = ""
+            };
+            TextBox textBox = new TextBox() { HorizontalAlignment = HorizontalAlignment.Stretch };
+            Button testButton = new Button() { HorizontalAlignment = HorizontalAlignment.Stretch, Content = "Test", Margin = new Thickness(8, 0, 0, 0) };
+
+
+            Grid.SetColumn(testButton, 1);
+            Grid row = new Grid()
+            {
+                Margin = new Thickness(0, 0, 0, 16),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch
+            };
+            row.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            row.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(100, GridUnitType.Pixel) });
+            row.Children.Add(textBox);
+            row.Children.Add(testButton);
+
+            StackPanel stackPanel = new StackPanel()
+            {  
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch
+            };
+
+            stackPanel.Children.Add(textBlock);
+            stackPanel.Children.Add(currentValueTextBlock);
+            stackPanel.Children.Add(row);
+            stackPanel.Children.Add(testResultTextBlock);
+
+            ContentDialog dialog = new ContentDialog()
+            {
+                Title = "Set URL for " + addon.FolderName,
+                Content = stackPanel,
+                PrimaryButtonText = "Save",
+                CloseButtonText = "Cancel",
+                IsPrimaryButtonEnabled = false
+            };
+            string successUrl = string.Empty;
+            var progressRing= new ProgressRing(){ IsEnabled=true,IsActive=true };
+            testButton.Click += async (a, b) =>
+            {
+                testButton.Content=progressRing;
+                testResultTextBlock.Text = "Testing...";
+                testButton.IsEnabled = false;
+                var foundUrl = await Logic.Version.FindProjectUrlFor(textBox.Text.Trim());
+                if (string.IsNullOrEmpty(foundUrl))
+                {
+                    testResultTextBlock.Text = "We didn't find any url";
+                    dialog.IsPrimaryButtonEnabled = false;
+                }
+                else
+                {
+                    testResultTextBlock.Text = foundUrl;
+                    successUrl = foundUrl;
+                    dialog.IsPrimaryButtonEnabled = true;
+                }
+                testButton.Content="Test";
+                testButton.IsEnabled = true;
+            };
+
+            var response = await dialog.ShowAsync();
+            if (response == ContentDialogResult.Primary)
+            {
+                if (!string.IsNullOrEmpty(successUrl))
+                {
+                    addon.ProjectUrl = successUrl;
+                }
+            }
+        }
+
 
 
 

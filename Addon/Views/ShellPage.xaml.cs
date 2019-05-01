@@ -22,7 +22,24 @@ namespace Addon.Views
             InitializeComponent();
             DataContext = ViewModel;
 
-
+            /*
+             *
+             *      Color fgColor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlPageTextBaseHighBrush"))->Color;
+            Color inactivefgColor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlForegroundChromeDisabledLowBrush"))->Color;
+            Color hoverbgColor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlBackgroundListLowBrush"))->Color;
+            Color hoverfgColor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlForegroundBaseHighBrush"))->Color;
+            Color pressedbgColor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlBackgroundListMediumBrush"))->Color;
+            Color pressedfgCoolor = safe_cast<SolidColorBrush^>(Application::Current->Resources->Lookup("SystemControlForegroundBaseHighBrush"))->Color;
+            applicationTitleBar->ButtonBackgroundColor = bgColor;
+            applicationTitleBar->ButtonForegroundColor = fgColor;
+            applicationTitleBar->ButtonInactiveBackgroundColor = bgColor;
+            applicationTitleBar->ButtonInactiveForegroundColor = inactivefgColor;
+            applicationTitleBar->ButtonHoverBackgroundColor = hoverbgColor;
+            applicationTitleBar->ButtonHoverForegroundColor = hoverfgColor;
+            applicationTitleBar->ButtonPressedBackgroundColor = pressedbgColor;
+            applicationTitleBar->ButtonPressedForegroundColor = pressedfgCoolor;
+             *
+             */
 
 
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
