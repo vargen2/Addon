@@ -2,7 +2,6 @@
 using Addon.Logic;
 using Addon.ViewModels;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
@@ -73,9 +72,22 @@ namespace Addon.Views
             {
                 return;
             }
+            var button = sender as Button;
+            button.IsEnabled = false;
+            var progressRing = (button.Content as StackPanel).Children.OfType<ProgressRing>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
+            var textBlock = (button.Content as StackPanel).Children.OfType<TextBlock>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
+            progressRing.IsActive = true;
+            textBlock.Visibility=Visibility.Collapsed;
+            progressRing.Visibility = Visibility.Visible;
+
             var addons = ViewModel.Session.SelectedGame.Addons;
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(addons);
-            Debug.WriteLine("Version downloaded for all addons");
+            progressRing.IsActive = false;
+            progressRing.Visibility = Visibility.Collapsed;
+            textBlock.Visibility=Visibility.Visible;
+            
+
+            button.IsEnabled = true;
         }
 
         //private async void RefreshTocFileForAllInSelectedGame(object sender, RoutedEventArgs e)
@@ -204,7 +216,7 @@ namespace Addon.Views
             row.Children.Add(testButton);
 
             StackPanel stackPanel = new StackPanel()
-            {  
+            {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch
             };
@@ -223,10 +235,10 @@ namespace Addon.Views
                 IsPrimaryButtonEnabled = false
             };
             string successUrl = string.Empty;
-            var progressRing= new ProgressRing(){ IsEnabled=true,IsActive=true };
+            var progressRing = new ProgressRing() { IsEnabled = true, IsActive = true };
             testButton.Click += async (a, b) =>
             {
-                testButton.Content=progressRing;
+                testButton.Content = progressRing;
                 testResultTextBlock.Text = "Testing...";
                 testButton.IsEnabled = false;
                 var foundUrl = await Logic.Version.FindProjectUrlFor(textBox.Text.Trim());
@@ -241,7 +253,7 @@ namespace Addon.Views
                     successUrl = foundUrl;
                     dialog.IsPrimaryButtonEnabled = true;
                 }
-                testButton.Content="Test";
+                testButton.Content = "Test";
                 testButton.IsEnabled = true;
             };
 

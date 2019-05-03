@@ -402,7 +402,7 @@
             </Setter>
         </Style>
 
-        
+
 
         <DataTemplate x:Key="ItemTemplate" x:DataType="data:Addon">
 
@@ -481,9 +481,10 @@
                                 <SymbolIcon Symbol="Accept" Visibility="{Binding IsRelease}" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
-                        <MenuFlyoutItem Tag="{x:Bind Mode=OneWay}" Click="MenuFlyoutItem_Click_Open_Edit_URL_DIALOG"  Text="Set URL...">
-                            
-                        </MenuFlyoutItem>
+                        <MenuFlyoutItem
+                            Click="MenuFlyoutItem_Click_Open_Edit_URL_DIALOG"
+                            Tag="{x:Bind Mode=OneWay}"
+                            Text="Set URL..." />
                         <MenuFlyoutSubItem Name="VersionsMenuFlyout" Text="Versions" />
                         <MenuFlyoutSubItem Text="Info">
                             <MenuFlyoutItem Style="{StaticResource mysyle2}" Text="{x:Bind InfoString, Mode=OneWay}" />
@@ -545,36 +546,44 @@
 
         <DataTemplate x:Key="MasterHeaderTemplate">
             <StackPanel Height="40" Orientation="Horizontal">
-                <Button Click="DownloadVersionsForAllAddonsInSelectedGame">Refresh</Button>
-                <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveSelectedGame">Remove Game...</Button>
+                <Button Width="130" Click="DownloadVersionsForAllAddonsInSelectedGame">
+                    <StackPanel Orientation="Horizontal">
+                        <ProgressRing x:Name="RefreshButtonProgressRing" Visibility="Collapsed" />
+                        <TextBlock Text="Refresh" />
+                    </StackPanel>
+                </Button>
+                <Button Width="130" Margin="{StaticResource SmallLeftMargin}" Click="RemoveSelectedGame">Remove Game...</Button>
             </StackPanel>
         </DataTemplate>
-        <DataTemplate x:Key="MinimalMasterHeaderTemplate">
+        <!--<DataTemplate x:Key="MinimalMasterHeaderTemplate">
             <StackPanel Height="40" Orientation="Horizontal">
-                <Button Click="DownloadVersionsForAllAddonsInSelectedGame">Refresh</Button>
+                <Button Click="DownloadVersionsForAllAddonsInSelectedGame">Refresh2</Button>
                 <Button Margin="{StaticResource SmallLeftMargin}" Click="RemoveSelectedGame">Remove Game...</Button>
             </StackPanel>
-        </DataTemplate>
+        </DataTemplate>-->
     </Page.Resources>
 
     <Grid x:Name="ContentArea">
         <controls:MasterDetailsView
             x:Name="MasterDetailsViewControl"
-            BackButtonBehavior="Manual"            
-            Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}" 
+            BackButtonBehavior="Manual"
+            Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}"
             BorderBrush="Transparent"
             CompactModeThresholdWidth="1"
             DetailsTemplate="{StaticResource DetailsTemplate}"
             ItemTemplate="{StaticResource ItemTemplate}"
             ItemsSource="{x:Bind ViewModel.Session.SelectedGame.Addons, Mode=OneWay}"
             MasterHeader="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath}"
-            MasterHeaderTemplate="{StaticResource MinimalMasterHeaderTemplate}"
+            MasterHeaderTemplate="{StaticResource MasterHeaderTemplate}"
             MasterPaneWidth="600"
             NoSelectionContentTemplate="{StaticResource NoSelectionContentTemplate}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=TwoWay}"
             Style="{StaticResource mymaster}" />
 
-        <TextBlock  Margin="12 40 0 0" Visibility="{x:Bind ViewModel.Session.IsNoGameSelected,Mode=OneWay}" Text="No Game Found"></TextBlock>
+        <TextBlock
+            Margin="12,40,0,0"
+            Text="No Game Found"
+            Visibility="{x:Bind ViewModel.Session.IsNoGameSelected, Mode=OneWay}" />
         <!--<controls:GridSplitter Grid.Column="1" Width="11" ResizeBehavior="CurrentAndNext"
             ResizeDirection="Columns" Background="Gray" Foreground="White" FontSize="13">
             <controls:GridSplitter.Element>
@@ -628,4 +637,4 @@
     MasterHeaderTemplate="{StaticResource MinimalMasterHeaderTemplate}"
 -->
 
-<!--Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"-->
+<!--  Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"  -->
