@@ -21,6 +21,10 @@ namespace Addon.Logic
             {
                 return FromWowaceToDownloads(page);
             }
+            else if (addon.ProjectUrl.Equals(Version.ELVUI))
+            {
+                return FromElvUiToDownloads(page);
+            }
             return new List<Download>();
         }
 
@@ -57,21 +61,6 @@ namespace Addon.Logic
 
         public static List<Download> FromWowCurseForgeToDownloads(string htmlPage)
         {
-            /*
-             
-
-            String subString = data.substring(matcher.start());
-            String temp = Util.parse(subString, "<td class=\"project-file-release-type\">", "</td>");
-            String release = Util.parse(temp, "title=\"", "\"></div>");
-            String title = Util.parse(subString, "data-name=\"", "\">");
-            String fileSize = Util.parse(subString, "<td class=\"project-file-size\">", "</td>").trim();
-            String a = Util.parse(subString, "data-epoch=\"", "\"");
-            LocalDateTime fileDateUploaded = LocalDateTime.ofEpochSecond(Integer.parseInt(a), 0, OffsetDateTime.now().getOffset());
-            String gameVersion = Util.parse(subString, "<span class=\"version-label\">", "</span>");
-            long dls = Long.valueOf(Util.parse(subString, "<td class=\"project-file-downloads\">", "</td>").replaceAll(",", "").trim());
-            String downloadLink = Util.parse(subString, " href=\"", "\"");
-                         */
-
             var downloads = new List<Download>();
             int index1 = htmlPage.IndexOf("<div class=\"listing-body\">");
             int index2 = htmlPage.IndexOf("</table>");
@@ -98,6 +87,24 @@ namespace Addon.Logic
 
                 downloads.Add(new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink));
             }
+            return downloads;
+        }
+
+        public static List<Download> FromElvUiToDownloads(string htmlPage)
+        {
+            var downloads = new List<Download>();
+
+            string downloadDiv = Util.Parse2(htmlPage, @"<div class=""tab-pane fade in active"" id=""download"">", "</div>");
+            string parsedDownloadLink = Util.Parse2(downloadDiv, @"<a href=""/", @""" ");
+            string downloadLink = "https://www.tukui.org/" + parsedDownloadLink;
+
+            string versionDiv = Util.Parse2(htmlPage, @"<div class=""tab-pane fade"" id=""version"">", "</div>");
+            string version = Util.Parse2(versionDiv, @"The current version of ElvUI is <b class=""Premium"">", @"</b>");
+            string dateString = Util.Parse2(versionDiv, @"and was updated on <b class=""Premium"">", @"</b>");
+            var date = DateTime.Parse(dateString);
+
+            downloads.Add(new Download("Release", version, "3.6 MB", date, "", 0, downloadLink));
+
             return downloads;
         }
 

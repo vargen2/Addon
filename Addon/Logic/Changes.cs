@@ -25,6 +25,11 @@ namespace Addon.Logic
                 return string.Empty;
             }
 
+            if(addon.ProjectUrl.Equals(Version.ELVUI))
+            {
+                return string.Empty;
+            }
+
             var changeUrl = addon.ProjectUrl.Substring(addon.ProjectUrl.IndexOf("projects/"));
             var aa = changeUrl.Replace("projects/", "https://www.curseforge.com/wow/addons/");
             var uri = new Uri(aa + "/changes");

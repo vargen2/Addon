@@ -12,6 +12,8 @@ namespace Addon.Logic
 {
     internal static class Version
     {
+        public const string ELVUI = "https://www.tukui.org/download.php?ui=elvui";
+
         public static Dictionary<string, List<string>> PROJECT_URLS = new Dictionary<string, List<string>>()
         {
             {"bigwigs", new List<string>{"big-wigs"}},
@@ -75,7 +77,43 @@ namespace Addon.Logic
                 return new List<Download>();
             }
 
+            if (addon.ProjectUrl.Equals(ELVUI))
+            {
+                return await FromElvUI(addon);
+            }
+
+            return await FromCurse(addon);
+        }
+
+        private static async Task<List<Download>> FromCurse(Core.Models.Addon addon)
+        {
             var uri = new Uri(addon.ProjectUrl + "/files");
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    var htmlPage = await httpClient.GetStringAsync(uri);
+                    return Parse.FromPageToDownloads(addon, htmlPage);
+                }
+                catch (Exception ex)
+                {
+                    var error = WebSocketError.GetStatus(ex.HResult);
+                    if (error == Windows.Web.WebErrorStatus.Unknown)
+                    {
+                        Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + ex.Message);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + error);
+                    }
+                }
+            }
+            return new List<Download>();
+        }
+
+        private static async Task<List<Download>> FromElvUI(Core.Models.Addon addon)
+        {
+            var uri = new Uri(addon.ProjectUrl);
             using (var httpClient = new HttpClient())
             {
                 try
@@ -110,6 +148,11 @@ namespace Addon.Logic
 
         private static async Task<string> GetUrl(string urlName)
         {
+            if (urlName.ToLower().Equals("elvui"))
+            {
+                return ELVUI;
+            }
+
             var uri = new Uri(@"https://www.curseforge.com/wow/addons/" + urlName);
             using (var httpClient = new HttpClient())
             {

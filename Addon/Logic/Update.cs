@@ -14,15 +14,26 @@ namespace Addon.Logic
 {
     internal static class Update
     {
+        private static string GetDownLoadLink(Core.Models.Addon addon, Download download)
+        {
+            if (addon.ProjectUrl.Equals(Version.ELVUI))
+            {
+                return download.DownloadLink;
+            }
+            else
+            {
+                return addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects")) + download.DownloadLink;
+            }
+        }
+
         internal static async Task<StorageFile> DLWithHttp(Core.Models.Addon addon, Download download)
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
             {
                 return null;
             }
-
-            var temp = addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects"));
-            var downloadLink = temp + download.DownloadLink;
+            string downloadLink = GetDownLoadLink(addon, download);
+            
             //Debug.WriteLine(downloadLink);
 
             Uri source = new Uri(downloadLink);
