@@ -87,7 +87,10 @@ namespace Addon.Services
 
            
             var settings = Singleton<SettingsViewModel>.Instance;
-            if (settings.IsAutoRefreshVersions ?? false)
+            await settings.EnsureInstanceInitializedAsync();
+            bool autoRefresh = settings.IsAutoRefreshVersions??false;
+            Debug.WriteLine("autorefresh: "+autoRefresh);
+            if (autoRefresh)
             {
                 await Tasks.FindProjectUrlAndDownLoadVersionsFor(Singleton<Session>.Instance.SelectedGame.Addons);
             }

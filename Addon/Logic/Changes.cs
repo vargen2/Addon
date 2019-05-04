@@ -30,10 +30,7 @@ namespace Addon.Logic
                 try
                 {
                     var htmlPage = await httpClient.GetStringAsync(uri);
-                    return (addon.ProjectUrl.Equals(Version.ELVUI)) ?
-                        Parse.FromElvUiPageToChanges(htmlPage) :
-                        Parse.FromPageToChanges(htmlPage);
-                    //return string.Join("\r\n",Parse.FromPageToChanges(htmlPage));
+                    return ParsedPage(addon, htmlPage);
                 }
                 catch (Exception ex)
                 {
@@ -42,6 +39,13 @@ namespace Addon.Logic
                     return string.Empty;
                 }
             }
+        }
+
+        private static string ParsedPage(Core.Models.Addon addon, string htmlPage)
+        {
+            return (addon.ProjectUrl.Equals(Version.ELVUI)) ?
+                                    Parse.FromElvUiPageToChanges(htmlPage) :
+                                    Parse.FromPageToChanges(htmlPage);
         }
 
         private static Uri GetChangeLogUri(Core.Models.Addon addon)
