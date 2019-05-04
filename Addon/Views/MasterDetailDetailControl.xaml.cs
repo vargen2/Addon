@@ -1,5 +1,8 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using System.Diagnostics;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 
 namespace Addon.Views
 {
@@ -34,6 +37,27 @@ namespace Addon.Views
                 webView.NavigateToString(head + styles + html);
 
             }
+        }
+    }
+
+    //
+    // Use this to prevent Hyperlinkbutton to crash on empty value
+    //
+    public class StringToUriConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            var uri = value as string;
+            if (string.IsNullOrEmpty(uri))
+            {
+                return new Uri("https://www.curseforge.com/wow/addons");
+            }
+            return new Uri(uri);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
         }
     }
 

@@ -7,6 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignWidth="600"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <local:StringToUriConverter x:Key="StringToUriConverter" />
+    </UserControl.Resources>
     <ScrollViewer
         Name="ForegroundElement"
         Padding="{StaticResource DetailPageMargin}"
@@ -23,7 +26,12 @@
                     Style="{ThemeResource TitleTextBlockStyle}"
                     Text="{x:Bind MasterMenuItem.FolderName, Mode=OneWay}" />
                 <TextBlock Text="{x:Bind MasterMenuItem.Title, Mode=OneWay}" />
-                <HyperlinkButton Content="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" NavigateUri="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" />
+
+                <HyperlinkButton
+                    Content="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}"
+                    NavigateUri="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay, Converter={StaticResource StringToUriConverter}}"
+                     />
+
                 <TextBlock Text="{x:Bind MasterMenuItem.AbsolutePath, Mode=OneWay}" />
                 <VariableSizedWrapGrid HorizontalAlignment="Stretch" Orientation="Horizontal">
                     <StackPanel Width="250" Height="60">

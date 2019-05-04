@@ -22,11 +22,8 @@ namespace Addon.Core.Models
         public Addon(Game game, string folderName, string absolutePath)
         {
             Game = game ?? throw new NullReferenceException();
-            ;
             FolderName = folderName ?? throw new NullReferenceException();
-            ;
             AbsolutePath = absolutePath ?? throw new NullReferenceException();
-            ;
             SetIgnored = new RelayCommand(() => IsIgnored = !IsIgnored);
             SetAlpha = new RelayCommand(() => PreferredReleaseType = "Alpha");
             SetBeta = new RelayCommand(() => PreferredReleaseType = "Beta");

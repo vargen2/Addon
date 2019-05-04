@@ -552,7 +552,12 @@
                         <TextBlock Text="Refresh" />
                     </StackPanel>
                 </Button>
-                <Button Width="130" Margin="{StaticResource SmallLeftMargin}" Click="RemoveSelectedGame">Remove Game...</Button>
+                <Button
+                    Width="130"
+                    Margin="{StaticResource SmallLeftMargin}"
+                    Click="RemoveSelectedGame">
+                    Remove Game...
+                </Button>
             </StackPanel>
         </DataTemplate>
         <!--<DataTemplate x:Key="MinimalMasterHeaderTemplate">
