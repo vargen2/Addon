@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
-using Windows.Web;
 using Windows.Web.Http;
 
 namespace Addon.Logic
@@ -17,28 +16,23 @@ namespace Addon.Logic
             {
                 Debug.WriteLine("No project url found");
                 return string.Empty;
-            
+
             }
-            if(!NetworkInterface.GetIsNetworkAvailable())
+            if (!NetworkInterface.GetIsNetworkAvailable())
             {
                 Debug.WriteLine("No Internet connection available");
                 return string.Empty;
             }
 
-            if(addon.ProjectUrl.Equals(Version.ELVUI))
-            {
-                return string.Empty;
-            }
-
-            var changeUrl = addon.ProjectUrl.Substring(addon.ProjectUrl.IndexOf("projects/"));
-            var aa = changeUrl.Replace("projects/", "https://www.curseforge.com/wow/addons/");
-            var uri = new Uri(aa + "/changes");
+            var uri = GetChangeLogUri(addon);
             using (var httpClient = new HttpClient())
             {
                 try
                 {
                     var htmlPage = await httpClient.GetStringAsync(uri);
-                    return Parse.FromPageToChanges(htmlPage);
+                    return (addon.ProjectUrl.Equals(Version.ELVUI)) ?
+                        Parse.FromElvUiPageToChanges(htmlPage) :
+                        Parse.FromPageToChanges(htmlPage);
                     //return string.Join("\r\n",Parse.FromPageToChanges(htmlPage));
                 }
                 catch (Exception ex)
@@ -49,5 +43,18 @@ namespace Addon.Logic
                 }
             }
         }
+
+        private static Uri GetChangeLogUri(Core.Models.Addon addon)
+        {
+            if (addon.ProjectUrl.Equals(Version.ELVUI))
+            {
+                return new Uri(addon.ProjectUrl);
+            }
+
+            var changeUrl = addon.ProjectUrl.Substring(addon.ProjectUrl.IndexOf("projects/"));
+            var temp = changeUrl.Replace("projects/", "https://www.curseforge.com/wow/addons/");
+            return new Uri(temp + "/changes");
+        }
+
     }
 }

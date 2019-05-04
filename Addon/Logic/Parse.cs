@@ -147,5 +147,18 @@ namespace Addon.Logic
                 return string.Empty;
             }
         }
+
+        public static string FromElvUiPageToChanges(string htmlPage)
+        {
+            try
+            {
+                return Util.Parse2(htmlPage, @"<div class=""tab-pane fade "" id=""changelog"">", "</div>");
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("[ERROR] FromElvUiPageToChanges, " + e.Message);
+                return string.Empty;
+            }
+        }
     }
 }
