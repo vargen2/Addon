@@ -90,9 +90,12 @@ namespace Addon.Logic
             var text = await FileIO.ReadTextAsync(sampleFile);
             // TODO fix time
             IList<CurseAddon> curseAddons = await Json.ToObjectAsync<List<CurseAddon>>(@text);
-            return curseAddons
+            var storeAddons= curseAddons
                 .Select(ca => new StoreAddon(ca.addonURL, ca.title, ca.description, ca.downloads, DateTime.Now, DateTime.Now))
                 .ToList();
+
+            storeAddons.Insert(0,new StoreAddon("elvui","ElvUI","A user interface designed around user-friendliness with extra features that are not included in the standard UI.",0,DateTime.Now, DateTime.Now));
+            return storeAddons;
         }
     }
 }
