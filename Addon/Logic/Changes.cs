@@ -25,11 +25,11 @@ namespace Addon.Logic
             }
 
             var uri = GetChangeLogUri(addon);
-            using (var httpClient = new HttpClient())
-            {
+            //using (var httpClient = new HttpClient())
+            //{
                 try
                 {
-                    var htmlPage = await httpClient.GetStringAsync(uri);
+                    var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
                     return ParsedPage(addon, htmlPage);
                 }
                 catch (Exception ex)
@@ -38,7 +38,7 @@ namespace Addon.Logic
                     Debug.WriteLine("[ERROR] DownloadChangesFor " + uri + " " + error);
                     return string.Empty;
                 }
-            }
+            //}
         }
 
         private static string ParsedPage(Core.Models.Addon addon, string htmlPage)

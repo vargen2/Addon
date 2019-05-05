@@ -16,9 +16,9 @@
         <StackPanel x:Name="ContentArea">
             <TextBlock x:Uid="Settings_Personalization" Style="{ThemeResource SubtitleTextBlockStyle}" />
             <CheckBox
-                    x:Uid="Settings_EnableAutoRefreshVersions"
-                    Margin="0,8,0,0"
-                    IsChecked="{x:Bind ViewModel.IsAutoRefreshVersions, Mode=TwoWay}" />
+                x:Uid="Settings_EnableAutoRefreshVersions"
+                Margin="0,8,0,0"
+                IsChecked="{x:Bind ViewModel.IsAutoRefreshVersions, Mode=TwoWay}" />
 
             <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
                 <TextBlock x:Uid="Settings_Theme" />
@@ -66,7 +66,7 @@
                     Margin="{StaticResource XSmallTopMargin}"
                     Style="{ThemeResource BodyTextBlockStyle}" />
 
-                
+
             </StackPanel>
         </StackPanel>
     </Grid>

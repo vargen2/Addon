@@ -127,6 +127,7 @@
     <Compile Include="Activation\ActivationHandler.cs" />
     <Compile Include="Helpers\FlyoutMenuExtension.cs" />
     <Compile Include="Logic\Changes.cs" />
+    <Compile Include="Logic\Http.cs" />
     <Compile Include="Logic\Install.cs" />
     <Compile Include="Logic\Sorter.cs" />
     <Compile Include="Logic\Storage.cs" />

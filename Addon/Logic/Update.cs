@@ -39,11 +39,11 @@ namespace Addon.Logic
             Uri source = new Uri(downloadLink);
             StorageFile destinationFile = await localFolder.CreateFileAsync(Util.RandomString(12) + ".zip", CreationCollisionOption.GenerateUniqueName);
 
-            using (var httpClient = new HttpClient())
-            {
+            //using (var httpClient = new HttpClient())
+            //{
                 try
                 {
-                    var htmlPage = await httpClient.GetByteArrayAsync(source);
+                    var htmlPage = await Http.NetHttpClient.GetByteArrayAsync(source);
                     await FileIO.WriteBytesAsync(destinationFile, htmlPage);
                     //Debug.WriteLine(htmlPage.Length);
                 }
@@ -51,7 +51,7 @@ namespace Addon.Logic
                 {
                     Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
                 }
-            }
+            //}
             return destinationFile;
         }
 

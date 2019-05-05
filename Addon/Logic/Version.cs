@@ -88,11 +88,11 @@ namespace Addon.Logic
         private static async Task<List<Download>> FromCurse(Core.Models.Addon addon)
         {
             var uri = new Uri(addon.ProjectUrl + "/files");
-            using (var httpClient = new HttpClient())
-            {
+            //using (var httpClient = new HttpClient())
+            //{
                 try
                 {
-                    var htmlPage = await httpClient.GetStringAsync(uri);
+                    var htmlPage = await Http.NetHttpClient.GetStringAsync(uri);
                     return Parse.FromPageToDownloads(addon, htmlPage);
                 }
                 catch (Exception ex)
@@ -107,18 +107,18 @@ namespace Addon.Logic
                         Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + error);
                     }
                 }
-            }
+            //}
             return new List<Download>();
         }
 
         private static async Task<List<Download>> FromElvUI(Core.Models.Addon addon)
         {
             var uri = new Uri(addon.ProjectUrl);
-            using (var httpClient = new HttpClient())
-            {
+            //using (var httpClient = new HttpClient())
+            //{
                 try
                 {
-                    var htmlPage = await httpClient.GetStringAsync(uri);
+                    var htmlPage = await Http.NetHttpClient.GetStringAsync(uri);
                     return Parse.FromPageToDownloads(addon, htmlPage);
                 }
                 catch (Exception ex)
@@ -133,7 +133,7 @@ namespace Addon.Logic
                         Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + error);
                     }
                 }
-            }
+            //}
             return new List<Download>();
         }
 
@@ -154,11 +154,11 @@ namespace Addon.Logic
             }
 
             var uri = new Uri(@"https://www.curseforge.com/wow/addons/" + urlName);
-            using (var httpClient = new HttpClient())
-            {
+            //using (var httpClient = new HttpClient())
+            //{
                 try
                 {
-                    var response = await httpClient.GetStringAsync(uri);
+                    var response = await Http.NetHttpClient.GetStringAsync(uri);
                     int index1 = response.IndexOf("<p class=\"infobox__cta\"");
                     int index2 = response.Substring(index1).IndexOf("</p>");
                     string data = response.Substring(index1, index2);
@@ -176,7 +176,7 @@ namespace Addon.Logic
                         Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + error);
                     }
                 }
-            }
+            //}
             return String.Empty;
         }
 
