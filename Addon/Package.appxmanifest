@@ -5,7 +5,7 @@
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:genTemplate="http://schemas.microsoft.com/appx/developer/windowsTemplateStudio"  
-    IgnorableNamespaces="uap mp genTemplate">
+      IgnorableNamespaces="uap mp genTemplate">
 
   <Identity
     Name="13993HjalmarArnell.AddonManager"
@@ -47,7 +47,7 @@
   </Applications>
 
   <Capabilities>
-    <Capability Name="internetClient" />    
+    <Capability Name="internetClient" />  
   </Capabilities>
 
   <genTemplate:Metadata>

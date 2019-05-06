@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Compression;
 using System.Linq;
-using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -33,7 +32,7 @@ namespace Addon.Logic
                 return null;
             }
             string downloadLink = GetDownLoadLink(addon, download);
-            
+
             //Debug.WriteLine(downloadLink);
 
             Uri source = new Uri(downloadLink);
@@ -41,16 +40,16 @@ namespace Addon.Logic
 
             //using (var httpClient = new HttpClient())
             //{
-                try
-                {
-                    var htmlPage = await Http.NetHttpClient.GetByteArrayAsync(source);
-                    await FileIO.WriteBytesAsync(destinationFile, htmlPage);
-                    //Debug.WriteLine(htmlPage.Length);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
-                }
+            try
+            {
+                var htmlPage = await Http.NetHttpClient.GetByteArrayAsync(source);
+                await FileIO.WriteBytesAsync(destinationFile, htmlPage);
+                //Debug.WriteLine(htmlPage.Length);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
+            }
             //}
             return destinationFile;
         }
@@ -136,11 +135,13 @@ namespace Addon.Logic
             var subFoldersToDelete = new List<string>();
             try
             {
+                Debug.WriteLine("Start: " + DateTime.Now.ToString("mm:ss"));
                 ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
+                Debug.WriteLine("extracted done: " + DateTime.Now.ToString("mm:ss"));
                 var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
                 var folders = await extractFolder.GetFoldersAsync();
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
-
+                Debug.WriteLine("getting folders done: " + DateTime.Now.ToString("mm:ss"));
                 foreach (var folder in folders)
                 {
                     try
@@ -153,14 +154,31 @@ namespace Addon.Logic
                         Debug.WriteLine("[ERROR] No folder found to delete. " + e.Message);
                     }
                 }
-                //await MoveContentFast(extractFolder, gameFolder);
 
+
+
+                Debug.WriteLine("Deleting old folders done: " + DateTime.Now.ToString("mm:ss"));
+                //await MoveContentFast(extractFolder, gameFolder);
+                ////////var aaa = extractFolder.CreateItemQueryWithOptions(new QueryOptions() { FolderDepth = FolderDepth.Deep });
+                ////////var itemsInFolder = await aaa.GetItemsAsync();
+                ////////foreach (IStorageItem item in itemsInFolder)
+                ////////{
+                ////////    if (item.IsOfType(StorageItemTypes.Folder))
+                ////////        Debug.WriteLine("Folder: " + item.Path);
+                ////////    else
+                ////////        Debug.WriteLine("File: " + item.Path);
+                ////////}
+                ///
+
+
+                //var copyFolderTasks = folders.Select(folder => CopyFolderAsync(folder, gameFolder));
+                //await Task.WhenAll(copyFolderTasks);
                 foreach (var folder in folders)
                 {
 
                     await CopyFolderAsync(folder, gameFolder);
                 }
-
+                Debug.WriteLine("copy done: " + DateTime.Now.ToString("mm:ss"));
                 var foldersAsList = new List<StorageFolder>(folders);
                 subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
                 //await AddSubFolders(addon, subFoldersToDelete);
@@ -173,19 +191,48 @@ namespace Addon.Logic
             return (file.Path, extractFolderPath, subFoldersToDelete);
         }
 
+        //internal static async Task DeleteFilesFrom(StorageFolder folder)
+        //{
+        //    var aaa = folder.CreateItemQueryWithOptions(new QueryOptions() { FolderDepth = FolderDepth.Deep });
+        //    var itemsInFolder = await aaa.GetItemsAsync();
 
-        internal static async Task CopyFolderAsync(StorageFolder source, StorageFolder destinationContainer, string desiredName = null)
+        //    var tasks = itemsInFolder.OfType<StorageFile>().Select(file => file.DeleteAsync(StorageDeleteOption.PermanentDelete).AsTask());
+
+        //    await Task.WhenAll(tasks);
+        //}
+
+        internal static async Task CopyFolderAsync(StorageFolder source, StorageFolder destinationContainer)
         {
             StorageFolder destinationFolder = null;
-            destinationFolder = await destinationContainer.CreateFolderAsync(desiredName ?? source.Name, CreationCollisionOption.ReplaceExisting);
+            destinationFolder = await destinationContainer.CreateFolderAsync(source.Name, CreationCollisionOption.ReplaceExisting);
+            var files = await source.GetFilesAsync();
+            //var fileTasks = files.Select(file => file.CopyAsync(destinationFolder).AsTask());
+            //await Task.WhenAll(fileTasks);
+            foreach (var file in files)
+            {
+                try
+                {
+                    await file.CopyAsync(destinationFolder);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("[ERROR] Copy file. " + e.Message);
+                }
 
-            foreach (var file in await source.GetFilesAsync())
-            {
-                await file.CopyAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting);
             }
-            foreach (var folder in await source.GetFoldersAsync())
+            var folders = await source.GetFoldersAsync();
+            //var folderTasks = folders.Select(folder => CopyFolderAsync(folder, destinationFolder));
+            //await Task.WhenAll(folderTasks);
+            foreach (var folder in folders)
             {
-                await CopyFolderAsync(folder, destinationFolder);
+                try
+                {
+                   await  CopyFolderAsync(folder, destinationFolder);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("[ERROR] Copy folder. " + e.Message);
+                }
             }
         }
 

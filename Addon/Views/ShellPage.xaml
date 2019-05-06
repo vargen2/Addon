@@ -13,10 +13,17 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <SolidColorBrush
+        <!--<SolidColorBrush
             x:Key="NavigationViewDefaultPaneBackground"
-            Opacity="0.0"
-            Color="black" />
+
+            Color="red" />-->
+        <!--<SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Blue"/>-->
+        <AcrylicBrush
+            x:Key="NavigationViewDefaultPaneBackground"
+            BackgroundSource="HostBackdrop"
+            FallbackColor="{ThemeResource SystemChromeMediumColor}"
+            TintColor="{ThemeResource SystemChromeLowColor}"
+            TintOpacity="0.7" />
     </Page.Resources>
     <i:Interaction.Behaviors>
         <ic:EventTriggerBehavior EventName="Loaded">
@@ -54,14 +61,13 @@
                 Text="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath, Mode=OneWay}" />
         </Grid>
 
-        
 
+        <!--  Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}"  -->
 
 
         <winui:NavigationView
             x:Name="navigationView"
             Grid.Row="1"
-            Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}"
             IsBackButtonVisible="Collapsed"
             IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
             IsPaneToggleButtonVisible="False"
