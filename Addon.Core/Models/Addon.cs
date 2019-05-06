@@ -196,6 +196,9 @@ namespace Addon.Core.Models
                 NotifyPropertyChanged("IsNotUpdateable");
                 NotifyPropertyChanged("IsProgressing");
                 NotifyPropertyChanged("InfoString");
+                NotifyPropertyChanged("ShowMessage");
+                NotifyPropertyChanged("ShowStatus");
+
             }
         }
 
@@ -263,8 +266,15 @@ namespace Addon.Core.Models
                     return;
                 message = value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("ShowMessage");
+                NotifyPropertyChanged("ShowStatus");
             }
         }
+
+        public bool ShowMessage => !string.IsNullOrEmpty(Message);
+        public bool ShowStatus => !status.Equals(UPDATEABLE) && string.IsNullOrEmpty(Message);
+
+
 
         private string changeLog;
 

@@ -449,11 +449,11 @@
                     <TextBlock
                         Height="20"
                         Text="{Binding Status}"
-                        Visibility="{Binding IsNotUpdateable}" />
+                        Visibility="{Binding ShowStatus}" />
                     <TextBlock
                         Height="20"
                         Text="{x:Bind Message, Mode=OneWay}"
-                        Visibility="{Binding IsNotUpdateable}" />
+                        Visibility="{Binding ShowMessage}" />
 
                 </StackPanel>
                 <FlyoutBase.AttachedFlyout>
