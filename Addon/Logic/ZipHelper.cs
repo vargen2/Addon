@@ -1,6 +1,5 @@
 ﻿using Addon.Helpers;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
@@ -10,6 +9,11 @@ using Windows.Storage.Streams;
 
 namespace Addon.Logic
 {
+
+
+    /// <summary> 
+    /// https://code.msdn.microsoft.com/How-to-and-extract-zip-242da300/sourcecode?fileId=167934&pathId=1626668963
+    /// </summary> 
     internal class ZipHelper : Observable
     {
         private float counter;
@@ -174,7 +178,7 @@ namespace Addon.Logic
                 }
                 Increment();
             }
-            
+
         }
 
         private void Increment()

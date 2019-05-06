@@ -67,36 +67,39 @@ namespace Addon.Logic
             }
             string downloadLink = GetDownLoadLink(addon, download);
 
-            //Debug.WriteLine(downloadLink);
+            // Debug.WriteLine(downloadLink);
 
             Uri source = new Uri(downloadLink);
+
             StorageFile destinationFile = await localFolder.CreateFileAsync(Util.RandomString(12) + ".zip", CreationCollisionOption.GenerateUniqueName);
 
-            //using (var httpClient = new HttpClient())
-            //{
+
             try
             {
-                var result = Http.WebHttpClient.GetAsync(source);
-                var downloadProgessHandler = new DownloadProgressHandler() { Addon = addon };
-                result.Progress = downloadProgessHandler.DownloadProgressCallback;
 
-                //var handler = new AsyncOperationProgressHandler(result, (a, b) =>
-                //{
-                //    Debug.WriteLine("hit");
-                //    return null;
-                //});
-
-
-                //not sure if this is correct and if it is, how to save this to a file
-                //var file = await ApplicationData.Current.LocalFolder.CreateFileAsync("filename.tmp", CreationCollisionOption.GenerateUniqueName);
-                using (var filestream = await destinationFile.OpenAsync(FileAccessMode.ReadWrite))
+                if (addon.ProjectUrl.Equals(Version.ELVUI))
                 {
-                    var res = await result;
-                    await res.Content.WriteToStreamAsync(filestream);
-                    await filestream.FlushAsync();
-
+                    var htmlPage = await Http.NetHttpClient.GetByteArrayAsync(source);
+                    await FileIO.WriteBytesAsync(destinationFile, htmlPage);
                 }
+                else
+                {
+                    var result = Http.WebHttpClient.GetAsync(source);
+                    var downloadProgessHandler = new DownloadProgressHandler() { Addon = addon };
+                    result.Progress = downloadProgessHandler.DownloadProgressCallback;
 
+
+
+
+                    //var file = await ApplicationData.Current.LocalFolder.CreateFileAsync("filename.tmp", CreationCollisionOption.GenerateUniqueName);
+                    using (var filestream = await destinationFile.OpenAsync(FileAccessMode.ReadWrite))
+                    {
+                        var res = await result;
+                        await res.Content.WriteToStreamAsync(filestream);
+                        await filestream.FlushAsync();
+
+                    }
+                }
                 // var htmlPage = await Http.NetHttpClient.GetByteArrayAsync(source);
                 // await FileIO.WriteBytesAsync(destinationFile, htmlPage);
                 //Debug.WriteLine(htmlPage.Length);
@@ -105,7 +108,7 @@ namespace Addon.Logic
             {
                 Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
             }
-            //}
+
             return destinationFile;
         }
 
@@ -282,6 +285,7 @@ namespace Addon.Logic
             {
                 Debug.WriteLine("Start: " + addon.FolderName + " " + DateTime.Now.ToString("mm:ss"));
                 int entries = 0;
+                var addonFoldersInGameToDelete = new HashSet<string>();
                 using (ZipArchive archive = ZipFile.OpenRead(file.Path))
                 {
                     foreach (ZipArchiveEntry entry in archive.Entries)
@@ -294,6 +298,11 @@ namespace Addon.Logic
                                 subFoldersToDelete.Add(folderName);
 
                             }
+                            if (folderName != null)
+                            {
+                                addonFoldersInGameToDelete.Add(folderName);
+
+                            }
                         }
 
                         entries++;
@@ -304,6 +313,24 @@ namespace Addon.Logic
                     }
                 }
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
+                if (addon.ProjectUrl.Equals(Version.ELVUI))
+                {
+
+                    foreach (var folder in addonFoldersInGameToDelete)
+                    {
+                        try
+                        {
+                            var delete = await gameFolder.GetFolderAsync(folder);
+                            await delete.DeleteAsync(StorageDeleteOption.PermanentDelete);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine("[ERROR] No folder found to delete. " + e.Message);
+                        }
+                    }
+                }
+
+                //var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
                 var zipHelper = new ZipHelper() { Addon = addon, Entries = Math.Max(entries, 1) };
                 zipHelper.PropertyChanged += UnzipProgress;
                 await zipHelper.UnZipFileAsync(file, gameFolder);
