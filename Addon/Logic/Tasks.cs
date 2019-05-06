@@ -86,13 +86,26 @@ namespace Addon.Logic
             addon.Message = "Extracting...";
             addon.Progress = 0;
 
-            var trash = await Task.Run(() => Update.UpdateAddon2(addon, download, file));
-            addon.CurrentDownload = download;
-            await Update.AddSubFolders(addon, trash.Item2);
+            if (addon.ProjectUrl.Equals(Version.ELVUI))
+            {
+                var trash = await Task.Run(() => Update.UpdateAddonOld(addon, download, file));
+                addon.CurrentDownload = download;
+                await Update.AddSubFolders(addon, trash.Item3);
 
-            addon.Message = "";
-            await Task.Run(() => Update.Cleanup2(trash.Item1));
+                addon.Message = "";
+                await Task.Run(() => Update.Cleanup(trash.Item1, trash.Item2));
+            }
+            else
+            {
 
+
+                var trash = await Task.Run(() => Update.UpdateAddon2(addon, download, file));
+                addon.CurrentDownload = download;
+                await Update.AddSubFolders(addon, trash.Item2);
+
+                addon.Message = "";
+                await Task.Run(() => Update.Cleanup2(trash.Item1));
+            }
         }
 
     }

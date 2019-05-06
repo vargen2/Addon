@@ -67,13 +67,15 @@ namespace Addon.Logic
             }
             string downloadLink = GetDownLoadLink(addon, download);
 
-            // Debug.WriteLine(downloadLink);
-
             Uri source = new Uri(downloadLink);
 
             StorageFile destinationFile = await localFolder.CreateFileAsync(Util.RandomString(12) + ".zip", CreationCollisionOption.GenerateUniqueName);
 
+            return await DownloadFile(destinationFile, source, addon);
+        }
 
+        private static async Task<StorageFile> DownloadFile(StorageFile destinationFile, Uri source, Core.Models.Addon addon)
+        {
             try
             {
 
@@ -91,7 +93,7 @@ namespace Addon.Logic
 
 
 
-                    //var file = await ApplicationData.Current.LocalFolder.CreateFileAsync("filename.tmp", CreationCollisionOption.GenerateUniqueName);
+
                     using (var filestream = await destinationFile.OpenAsync(FileAccessMode.ReadWrite))
                     {
                         var res = await result;
@@ -100,15 +102,11 @@ namespace Addon.Logic
 
                     }
                 }
-                // var htmlPage = await Http.NetHttpClient.GetByteArrayAsync(source);
-                // await FileIO.WriteBytesAsync(destinationFile, htmlPage);
-                //Debug.WriteLine(htmlPage.Length);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
             }
-
             return destinationFile;
         }
 
@@ -275,6 +273,30 @@ namespace Addon.Logic
         //    return (file.Path, extractFolderPath, subFoldersToDelete);
         //}
 
+        internal static async Task<(string, string, List<string>)> UpdateAddonOld(Core.Models.Addon addon, Download download, StorageFile file)
+        {
+            var extractFolderPath = localFolder.Path + @"\" + file.Name.Replace(".zip", "");
+            var subFoldersToDelete = new List<string>();
+            try
+            {
+                ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
+
+                var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
+                var folders = await extractFolder.GetFoldersAsync();
+                var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
+
+                var tasks = folders.SelectMany(folder => CopyFolderAsync2(folder, gameFolder));
+                await Task.WhenAll(tasks);
+                var foldersAsList = new List<StorageFolder>(folders);
+                subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("[ERROR] UpdateAddon. " + e.Message + ", " + e.StackTrace);
+            }
+            return (file.Path, extractFolderPath, subFoldersToDelete);
+        }
+
 
 
         internal static async Task<(string, List<string>)> UpdateAddon2(Core.Models.Addon addon, Download download, StorageFile file)
@@ -285,7 +307,7 @@ namespace Addon.Logic
             {
                 Debug.WriteLine("Start: " + addon.FolderName + " " + DateTime.Now.ToString("mm:ss"));
                 int entries = 0;
-                var addonFoldersInGameToDelete = new HashSet<string>();
+
                 using (ZipArchive archive = ZipFile.OpenRead(file.Path))
                 {
                     foreach (ZipArchiveEntry entry in archive.Entries)
@@ -298,39 +320,12 @@ namespace Addon.Logic
                                 subFoldersToDelete.Add(folderName);
 
                             }
-                            if (folderName != null)
-                            {
-                                addonFoldersInGameToDelete.Add(folderName);
-
-                            }
                         }
-
                         entries++;
-
-
-
-
                     }
                 }
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
-                if (addon.ProjectUrl.Equals(Version.ELVUI))
-                {
 
-                    foreach (var folder in addonFoldersInGameToDelete)
-                    {
-                        try
-                        {
-                            var delete = await gameFolder.GetFolderAsync(folder);
-                            await delete.DeleteAsync(StorageDeleteOption.PermanentDelete);
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.WriteLine("[ERROR] No folder found to delete. " + e.Message);
-                        }
-                    }
-                }
-
-                //var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
                 var zipHelper = new ZipHelper() { Addon = addon, Entries = Math.Max(entries, 1) };
                 zipHelper.PropertyChanged += UnzipProgress;
                 await zipHelper.UnZipFileAsync(file, gameFolder);
@@ -368,7 +363,7 @@ namespace Addon.Logic
 
         internal static async Task CopyFolderAsync(StorageFolder source, StorageFolder destinationContainer)
         {
-            Debug.WriteLine("Folder: " + source.Name);
+
             StorageFolder destinationFolder = null;
             destinationFolder = await destinationContainer.CreateFolderAsync(source.Name, CreationCollisionOption.OpenIfExists);
             var files = await source.GetFilesAsync();
