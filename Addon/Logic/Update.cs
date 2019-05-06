@@ -7,8 +7,10 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Storage;
 using Windows.UI.Core;
+using Windows.Web.Http;
 
 namespace Addon.Logic
 {
@@ -26,7 +28,38 @@ namespace Addon.Logic
             }
         }
 
-        internal static async Task<StorageFile> DLWithHttp(Core.Models.Addon addon, Download download)
+        //internal static async Task<StorageFile> DLWithHttp(Core.Models.Addon addon, Download download)
+        //{
+        //    if (!NetworkInterface.GetIsNetworkAvailable())
+        //    {
+        //        return null;
+        //    }
+        //    string downloadLink = GetDownLoadLink(addon, download);
+
+        //    //Debug.WriteLine(downloadLink);
+
+        //    Uri source = new Uri(downloadLink);
+        //    StorageFile destinationFile = await localFolder.CreateFileAsync(Util.RandomString(12) + ".zip", CreationCollisionOption.GenerateUniqueName);
+
+        //    //using (var httpClient = new HttpClient())
+        //    //{
+        //    try
+        //    {
+
+        //        var htmlPage = await Http.NetHttpClient.GetByteArrayAsync(source);
+        //        await FileIO.WriteBytesAsync(destinationFile, htmlPage);
+        //        //Debug.WriteLine(htmlPage.Length);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
+        //    }
+        //    //}
+        //    return destinationFile;
+        //}
+
+
+        internal static async Task<StorageFile> DLWithHttpProgress(Core.Models.Addon addon, Download download)
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
             {
@@ -43,8 +76,29 @@ namespace Addon.Logic
             //{
             try
             {
-                var htmlPage = await Http.NetHttpClient.GetByteArrayAsync(source);
-                await FileIO.WriteBytesAsync(destinationFile, htmlPage);
+                var result = Http.WebHttpClient.GetAsync(source);
+                var downloadProgessHandler = new DownloadProgressHandler() { Addon = addon };
+                result.Progress = downloadProgessHandler.DownloadProgressCallback;
+
+                //var handler = new AsyncOperationProgressHandler(result, (a, b) =>
+                //{
+                //    Debug.WriteLine("hit");
+                //    return null;
+                //});
+
+
+                //not sure if this is correct and if it is, how to save this to a file
+                //var file = await ApplicationData.Current.LocalFolder.CreateFileAsync("filename.tmp", CreationCollisionOption.GenerateUniqueName);
+                using (var filestream = await destinationFile.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    var res = await result;
+                    await res.Content.WriteToStreamAsync(filestream);
+                    await filestream.FlushAsync();
+
+                }
+
+                // var htmlPage = await Http.NetHttpClient.GetByteArrayAsync(source);
+                // await FileIO.WriteBytesAsync(destinationFile, htmlPage);
                 //Debug.WriteLine(htmlPage.Length);
             }
             catch (Exception ex)
@@ -226,7 +280,7 @@ namespace Addon.Logic
             var subFoldersToDelete = new HashSet<string>();
             try
             {
-                Debug.WriteLine("Start: " + addon.FolderName + " " +DateTime.Now.ToString("mm:ss"));
+                Debug.WriteLine("Start: " + addon.FolderName + " " + DateTime.Now.ToString("mm:ss"));
                 int entries = 0;
                 using (ZipArchive archive = ZipFile.OpenRead(file.Path))
                 {
@@ -262,15 +316,15 @@ namespace Addon.Logic
             return (file.Path, subFoldersToDelete.ToList());
         }
 
-        private static  void UnzipProgress(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private static void UnzipProgress(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             var zipHelper = sender as ZipHelper;
-             Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.
-                 RunAsync(CoreDispatcherPriority.Normal, () =>
-                 {
+            Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.
+                RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
 
-                     zipHelper.Addon.Progress = zipHelper.Progress;
-                 });
+                    zipHelper.Addon.Progress = zipHelper.Progress;
+                });
 
         }
 
@@ -610,7 +664,32 @@ namespace Addon.Logic
         //////    return await dataFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting).AsTask();
         //////}
 
+        private class DownloadProgressHandler
+        {
+            public Core.Models.Addon Addon { get; set; }
+
+            public void DownloadProgressCallback(IAsyncOperationWithProgress<HttpResponseMessage, HttpProgress> asyncInfo, HttpProgress progressInfo)
+            {
+                if (progressInfo.TotalBytesToReceive != null && progressInfo.TotalBytesToReceive > 0)
+                {
+                    var progress = (int)(((double)progressInfo.BytesReceived / (double)progressInfo.TotalBytesToReceive) * 100d);
+                    //Debug.WriteLine("received " + (int)progress);
+                    Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.
+                        RunAsync(CoreDispatcherPriority.Normal, () =>
+                        {
+                            Addon.Progress = progress;
+                        });
+                }
+
+
+            }
+        }
 
 
     }
+
+
+
+
+
 }

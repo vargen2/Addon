@@ -35,7 +35,7 @@ namespace Addon.Logic
             var tempAddon = new Core.Models.Addon(game, storeAddon.Url, game.AbsolutePath + @"\" + storeAddon.Url) { };
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(tempAddon);
             var download = tempAddon.SuggestedDownload;
-            var file = await Task.Run(() => Update.DLWithHttp(tempAddon, download));
+            var file = await Task.Run(() => Update.DLWithHttpProgress(tempAddon, download));
             var trash = await Task.Run(() => InstallAddon(tempAddon, file));
             tempAddon.Message = "";
             if (trash.Item3 == null)

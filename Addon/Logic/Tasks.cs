@@ -18,7 +18,7 @@ namespace Addon.Logic
             var storageFolderQueryResult = folder.CreateFolderQuery(CommonFolderQuery.DefaultQuery);
             var folders = await storageFolderQueryResult.GetFoldersAsync();
 
-            var tasks = await Task.WhenAll(folders.Select(Toc.FolderToTocFile).Where(task=> task!=null));
+            var tasks = await Task.WhenAll(folders.Select(Toc.FolderToTocFile).Where(task => task != null));
 
             tasks.Where(tf => tf != null && !tf.IsKnownSubFolder)
                 .Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
@@ -68,30 +68,31 @@ namespace Addon.Logic
 
         public static async Task UpdateAddon(Core.Models.Addon addon, Download download)
         {
-            
+
             addon.Message = "Downloading...";
             addon.Progress = 0;
             addon.Status = Core.Models.Addon.UPDATING;
-           
-            var file = await Task.Run(() => Update.DLWithHttp(addon, download));
+
+            var file = await Task.Run(() => Update.DLWithHttpProgress(addon, download));
 
             if (file == null)
             {
-                addon.Status= Core.Models.Addon.UNKNOWN;
-                addon.Message="";
+                addon.Status = Core.Models.Addon.UNKNOWN;
+                addon.Message = "";
+                addon.Progress = 0;
                 return;
             }
 
-            addon.Message = "Extract/Copy...";
+            addon.Message = "Extracting...";
             addon.Progress = 0;
-           
+
             var trash = await Task.Run(() => Update.UpdateAddon2(addon, download, file));
             addon.CurrentDownload = download;
             await Update.AddSubFolders(addon, trash.Item2);
-           
-            addon.Message = "";            
+
+            addon.Message = "";
             await Task.Run(() => Update.Cleanup2(trash.Item1));
-           
+
         }
 
     }
