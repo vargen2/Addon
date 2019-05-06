@@ -18,7 +18,7 @@ namespace Addon.Logic
         internal static async Task InstallAddon(StoreAddon storeAddon)
         {
             //TODO add functionality for storeaddon to progress
-            
+
             var game = Singleton<Session>.Instance.SelectedGame;
             if (game.AbsolutePath.Equals(Session.EMPTY_GAME))
             {
@@ -56,7 +56,7 @@ namespace Addon.Logic
             }
             catch (FileNotFoundException e)
             {
-                var newAddons = await Task.Run(()=>AnotherInstall(file,game));
+                var newAddons = await Task.Run(() => AnotherInstall(file, game));
                 foreach (var item in newAddons)
                 {
                     game.Addons.Add(item);
@@ -120,7 +120,7 @@ namespace Addon.Logic
             return (file.Path, extractFolderPath, subFoldersToDelete);
         }
 
-        private static async Task<List<Core.Models.Addon>> AnotherInstall(StorageFile file,Game game)
+        private static async Task<List<Core.Models.Addon>> AnotherInstall(StorageFile file, Game game)
         {
             var extractFolderPath = Update.localFolder.Path + @"\" + file.Name.Replace(".zip", "");
             var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);

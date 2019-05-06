@@ -3,11 +3,14 @@ using Addon.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace Addon.Logic
 {
@@ -129,66 +132,135 @@ namespace Addon.Logic
 
         //}
 
-        internal static async Task<(string, string, List<string>)> UpdateAddon(Core.Models.Addon addon, Download download, StorageFile file)
+        //internal static async Task<(string, string, List<string>)> UpdateAddon(Core.Models.Addon addon, Download download, StorageFile file)
+        //{
+        //    var extractFolderPath = localFolder.Path + @"\" + file.Name.Replace(".zip", "");
+        //    var subFoldersToDelete = new List<string>();
+        //    try
+        //    {
+        //        Debug.WriteLine("Start: " + DateTime.Now.ToString("mm:ss"));
+        //        ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
+
+        //        using (ZipArchive archive = ZipFile.OpenRead(file.Path))
+        //        {
+        //            foreach (ZipArchiveEntry entry in archive.Entries)
+        //            {
+        //                if (string.IsNullOrEmpty(entry.Name))
+        //                {
+        //                    Debug.WriteLine(entry.FullName);
+        //                }
+
+        //            }
+        //        }
+
+
+        //        Debug.WriteLine("extracted done: " + DateTime.Now.ToString("mm:ss"));
+        //        var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
+        //        var folders = await extractFolder.GetFoldersAsync();
+        //        var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
+        //        Debug.WriteLine("getting folders done: " + DateTime.Now.ToString("mm:ss"));
+        //        //foreach (var folder in folders)
+        //        //{
+        //        //    try
+        //        //    {
+        //        //        var delete = await gameFolder.GetFolderAsync(folder.Name);
+        //        //        await delete.DeleteAsync(StorageDeleteOption.PermanentDelete);
+        //        //    }
+        //        //    catch (Exception e)
+        //        //    {
+        //        //        Debug.WriteLine("[ERROR] No folder found to delete. " + e.Message);
+        //        //    }
+        //        //}
+
+
+
+        //        Debug.WriteLine("Deleting old folders done: " + DateTime.Now.ToString("mm:ss"));
+        //        //await MoveContentFast(extractFolder, gameFolder);
+        //        ////////var aaa = extractFolder.CreateItemQueryWithOptions(new QueryOptions() { FolderDepth = FolderDepth.Deep });
+        //        ////////var itemsInFolder = await aaa.GetItemsAsync();
+        //        ////////foreach (IStorageItem item in itemsInFolder)
+        //        ////////{
+        //        ////////    if (item.IsOfType(StorageItemTypes.Folder))
+        //        ////////        Debug.WriteLine("Folder: " + item.Path);
+        //        ////////    else
+        //        ////////        Debug.WriteLine("File: " + item.Path);
+        //        ////////}
+        //        ///
+
+        //        //var copyFolderTasks = folders.Select(folder => CopyFolderAsync(folder, gameFolder));
+        //        //await Task.WhenAll(copyFolderTasks);
+
+        //        //List<Task> tasks = new List<Task>();
+        //        //foreach (var folder in folders)
+        //        //{
+        //        //    tasks.AddRange(CopyFolderAsync2(folder, gameFolder));
+        //        //    //await CopyFolderAsync(folder, gameFolder);
+        //        //}
+        //        //var tasks=await Task.Run(()=>folders.SelectMany(folder => CopyFolderAsync2(folder, gameFolder)));
+
+
+        //        ////var tasks = folders.SelectMany(folder => CopyFolderAsync2(folder, gameFolder));
+        //        ////Debug.WriteLine("Generated tasks, " + tasks.Count() + " Count " + DateTime.Now.ToString("mm:ss"));
+        //        ////await Task.WhenAll(tasks);
+
+        //        //var copiedZip = await file.CopyAsync(gameFolder);
+        //        await UnZipFileAsync(file, gameFolder);
+
+
+        //        Debug.WriteLine("copy done: " + DateTime.Now.ToString("mm:ss"));
+        //        var foldersAsList = new List<StorageFolder>(folders);
+        //        subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
+        //        //await AddSubFolders(addon, subFoldersToDelete);
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine("[ERROR] UpdateAddon. " + e.Message + ", " + e.StackTrace);
+        //    }
+        //    return (file.Path, extractFolderPath, subFoldersToDelete);
+        //}
+
+
+
+        internal static async Task<(string, List<string>)> UpdateAddon2(Core.Models.Addon addon, Download download, StorageFile file)
         {
-            var extractFolderPath = localFolder.Path + @"\" + file.Name.Replace(".zip", "");
-            var subFoldersToDelete = new List<string>();
+
+            var subFoldersToDelete = new HashSet<string>();
             try
             {
                 Debug.WriteLine("Start: " + DateTime.Now.ToString("mm:ss"));
-                ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
-                Debug.WriteLine("extracted done: " + DateTime.Now.ToString("mm:ss"));
-                var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
-                var folders = await extractFolder.GetFoldersAsync();
+
+                using (ZipArchive archive = ZipFile.OpenRead(file.Path))
+                {
+                    foreach (ZipArchiveEntry entry in archive.Entries)
+                    {
+                        if (entry.FullName.Contains("/"))
+                        {
+                            var folderName = entry.FullName.Split("/").FirstOrDefault();
+                            if (folderName != null && !folderName.Equals(addon.FolderName))
+                            {
+                                subFoldersToDelete.Add(folderName);
+                                
+                            }
+                        }
+                    }
+                }
+
+                foreach (var item in subFoldersToDelete)
+                {
+                    Debug.WriteLine(item);
+                }
+
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
                 Debug.WriteLine("getting folders done: " + DateTime.Now.ToString("mm:ss"));
-                foreach (var folder in folders)
-                {
-                    try
-                    {
-                        var delete = await gameFolder.GetFolderAsync(folder.Name);
-                        await delete.DeleteAsync(StorageDeleteOption.PermanentDelete);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine("[ERROR] No folder found to delete. " + e.Message);
-                    }
-                }
-
-
-
-                Debug.WriteLine("Deleting old folders done: " + DateTime.Now.ToString("mm:ss"));
-                //await MoveContentFast(extractFolder, gameFolder);
-                ////////var aaa = extractFolder.CreateItemQueryWithOptions(new QueryOptions() { FolderDepth = FolderDepth.Deep });
-                ////////var itemsInFolder = await aaa.GetItemsAsync();
-                ////////foreach (IStorageItem item in itemsInFolder)
-                ////////{
-                ////////    if (item.IsOfType(StorageItemTypes.Folder))
-                ////////        Debug.WriteLine("Folder: " + item.Path);
-                ////////    else
-                ////////        Debug.WriteLine("File: " + item.Path);
-                ////////}
-                ///
-
-
-                //var copyFolderTasks = folders.Select(folder => CopyFolderAsync(folder, gameFolder));
-                //await Task.WhenAll(copyFolderTasks);
-                foreach (var folder in folders)
-                {
-
-                    await CopyFolderAsync(folder, gameFolder);
-                }
+                await UnZipFileAsync(file, gameFolder);
                 Debug.WriteLine("copy done: " + DateTime.Now.ToString("mm:ss"));
-                var foldersAsList = new List<StorageFolder>(folders);
-                subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
-                //await AddSubFolders(addon, subFoldersToDelete);
-
             }
             catch (Exception e)
             {
                 Debug.WriteLine("[ERROR] UpdateAddon. " + e.Message + ", " + e.StackTrace);
             }
-            return (file.Path, extractFolderPath, subFoldersToDelete);
+            return (file.Path, subFoldersToDelete.ToList());
         }
 
         //internal static async Task DeleteFilesFrom(StorageFolder folder)
@@ -200,19 +272,23 @@ namespace Addon.Logic
 
         //    await Task.WhenAll(tasks);
         //}
+        // private static Action<StorageFile, StorageFolder> FileMove =  (file, destination) => { file.MoveAsync(destination, file.Name, NameCollisionOption.ReplaceExisting).AsTask().RunSynchronously(); };
 
         internal static async Task CopyFolderAsync(StorageFolder source, StorageFolder destinationContainer)
         {
+            Debug.WriteLine("Folder: " + source.Name);
             StorageFolder destinationFolder = null;
-            destinationFolder = await destinationContainer.CreateFolderAsync(source.Name, CreationCollisionOption.ReplaceExisting);
+            destinationFolder = await destinationContainer.CreateFolderAsync(source.Name, CreationCollisionOption.OpenIfExists);
             var files = await source.GetFilesAsync();
             //var fileTasks = files.Select(file => file.CopyAsync(destinationFolder).AsTask());
             //await Task.WhenAll(fileTasks);
+
             foreach (var file in files)
             {
                 try
                 {
-                    await file.CopyAsync(destinationFolder);
+                    await file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting);
+
                 }
                 catch (Exception e)
                 {
@@ -223,29 +299,119 @@ namespace Addon.Logic
             var folders = await source.GetFoldersAsync();
             //var folderTasks = folders.Select(folder => CopyFolderAsync(folder, destinationFolder));
             //await Task.WhenAll(folderTasks);
+            // Parallel.ForEach(folders,folder=>FolderCopy(folder,destinationFolder));
             foreach (var folder in folders)
             {
                 try
                 {
-                   await  CopyFolderAsync(folder, destinationFolder);
+                    await CopyFolderAsync(folder, destinationFolder);
+
                 }
                 catch (Exception e)
                 {
                     Debug.WriteLine("[ERROR] Copy folder. " + e.Message);
                 }
             }
+            // Parallel.ForEach(files, file => FileMove(file, destinationFolder));
+        }
+
+
+        internal static List<Task> CopyFolderAsync2(StorageFolder source, StorageFolder destinationContainer)
+        {
+
+            var (destinationFolder, items) = Task.Run(async () =>
+             {
+                 StorageFolder destination = await destinationContainer.CreateFolderAsync(source.Name, CreationCollisionOption.OpenIfExists);
+                 var itemz = await source.GetItemsAsync();
+                 return (destination, itemz);
+             }).Result;
+            var tasks = items.OfType<StorageFile>().Select(file => file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting).AsTask()).ToList();
+
+            var folderTasks = items.OfType<StorageFolder>().SelectMany(folder => CopyFolderAsync2(folder, destinationFolder));
+            tasks.AddRange(folderTasks);
+
+            return tasks;
+
+            //var items = Task.Run(async () => await source.GetItemsAsync()).Result;
+            //            var files = Task.Run(async ()=> await source.GetFilesAsync()).Result;
+            //var fileTasks = files.Select(file => file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting).AsTask()).ToList();
+            //await Task.WhenAll(fileTasks);
+
+            //foreach (var file in files)
+            //{
+            //    try
+            //    {
+            //      await  file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting);
+
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Debug.WriteLine("[ERROR] Copy file. " + e.Message);
+            //    }
+
+            //}
+            //var folders = Task.Run(async () => await source.GetFoldersAsync()).Result;
+            //var folderTasks = folders.SelectMany(folder => CopyFolderAsync2(folder, destinationFolder));
+            //fileTasks.AddRange(folderTasks);
+            //return fileTasks;
+            //await Task.WhenAll(folderTasks);
+            // Parallel.ForEach(folders,folder=>FolderCopy(folder,destinationFolder));
+            //foreach (var folder in folders)
+            //{
+            //    try
+            //    {
+            //      await  CopyFolderAsync(folder, destinationFolder);
+
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Debug.WriteLine("[ERROR] Copy folder. " + e.Message);
+            //    }
+            //}
+            // Parallel.ForEach(files, file => FileMove(file, destinationFolder));
         }
 
         internal async static Task Cleanup(string filePath, string folderPath)
         {
-            var zipFile = await StorageFile.GetFileFromPathAsync(filePath);
-            await zipFile.DeleteAsync();
+            try
+            {
+                var zipFile = await StorageFile.GetFileFromPathAsync(filePath);
+                await zipFile.DeleteAsync();
 
-            var extractFolder = await StorageFolder.GetFolderFromPathAsync(folderPath);
-            await extractFolder.DeleteAsync();
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                var extractFolder = await StorageFolder.GetFolderFromPathAsync(folderPath);
+                await extractFolder.DeleteAsync();
+
+            }
+            catch (Exception)
+            {
+
+            }
 
 
 
+        }
+
+
+
+        internal async static Task Cleanup2(string filePath)
+        {
+            try
+            {
+                var zipFile = await StorageFile.GetFileFromPathAsync(filePath);
+                await zipFile.DeleteAsync();
+
+            }
+            catch (Exception)
+            {
+
+            }
         }
 
         internal async static Task AddSubFolders(Core.Models.Addon addon, List<string> subFoldersToDelete)
@@ -401,5 +567,175 @@ namespace Addon.Logic
         //}
 
 
+        //////private static async void extract(StorageFolder SF, string zipFileName)
+        //////{
+        //////    // StorageFolder SF = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("SampleBook");
+        //////    Stream stream = await SF.OpenStreamForReadAsync(zipFileName);
+
+        //////    using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
+        //////    {
+        //////        try
+        //////        {
+        //////            foreach (ZipArchiveEntry entry in archive.Entries)
+        //////            {
+        //////                StorageFile newFile = await CreateFile(SF, entry.FullName);
+        //////                Stream newFileStream = await newFile.OpenStreamForWriteAsync();
+        //////                Stream fileData = entry.Open();
+        //////                byte[] data = new byte[entry.Length];
+        //////                await fileData.ReadAsync(data, 0, data.Length);
+        //////                newFileStream.Write(data, 0, data.Length);
+        //////                await newFileStream.FlushAsync();
+        //////            }
+        //////        }
+        //////        catch (Exception)
+        //////        {
+        //////        }
+
+        //////    }
+        //////}
+
+        //////private static async Task<StorageFile> CreateFile(StorageFolder dataFolder, string fileName)
+        //////{
+        //////    return await dataFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting).AsTask();
+        //////}
+
+
+        /// <summary> 
+        /// https://code.msdn.microsoft.com/How-to-and-extract-zip-242da300/sourcecode?fileId=167934&pathId=1626668963
+        /// 
+        /// Unzips the specified zip file to the specified destination folder. 
+        /// </summary> 
+        /// <param name="zipFile">The zip file</param> 
+        /// <param name="destinationFolder">The destination folder</param> 
+        /// <returns></returns> 
+        public static IAsyncAction UnZipFileAsync(StorageFile zipFile, StorageFolder destinationFolder)
+        {
+            return UnZipFileHelper(zipFile, destinationFolder).AsAsyncAction();
+        }
+        #region private helper functions 
+        private static async Task UnZipFileHelper(StorageFile zipFile, StorageFolder destinationFolder)
+        {
+            if (zipFile == null || destinationFolder == null ||
+                !Path.GetExtension(zipFile.Name).Equals(".zip", StringComparison.OrdinalIgnoreCase)
+                )
+            {
+                throw new ArgumentException("Invalid argument...");
+            }
+
+            Stream zipMemoryStream = await zipFile.OpenStreamForReadAsync();
+
+            // Create zip archive to access compressed files in memory stream 
+            using (ZipArchive zipArchive = new ZipArchive(zipMemoryStream, ZipArchiveMode.Read))
+            {
+                // Unzip compressed file iteratively. 
+                foreach (ZipArchiveEntry entry in zipArchive.Entries)
+                {
+                    await UnzipZipArchiveEntryAsync(entry, entry.FullName, destinationFolder);
+                }
+            }
+        }
+
+        /// <summary> 
+        /// It checks if the specified path contains directory. 
+        /// </summary> 
+        /// <param name="entryPath">The specified path</param> 
+        /// <returns></returns> 
+        private static bool IfPathContainDirectory(string entryPath)
+        {
+            if (string.IsNullOrEmpty(entryPath))
+            {
+                return false;
+            }
+
+            return entryPath.Contains("/");
+        }
+
+        /// <summary> 
+        /// It checks if the specified folder exists. 
+        /// </summary> 
+        /// <param name="storageFolder">The container folder</param> 
+        /// <param name="subFolderName">The sub folder name</param> 
+        /// <returns></returns> 
+        private static async Task<bool> IfFolderExistsAsync(StorageFolder storageFolder, string subFolderName)
+        {
+            try
+            {
+                IStorageItem item = await storageFolder.GetItemAsync(subFolderName);
+                return (item != null);
+            }
+            catch
+            {
+                // Should never get here 
+                return false;
+            }
+        }
+
+        /// <summary> 
+        /// Unzips ZipArchiveEntry asynchronously. 
+        /// </summary> 
+        /// <param name="entry">The entry which needs to be unzipped</param> 
+        /// <param name="filePath">The entry's full name</param> 
+        /// <param name="unzipFolder">The unzip folder</param> 
+        /// <returns></returns> 
+        private static async Task UnzipZipArchiveEntryAsync(ZipArchiveEntry entry, string filePath, StorageFolder unzipFolder)
+        {
+            if (IfPathContainDirectory(filePath))
+            {
+                // Create sub folder 
+                string subFolderName = Path.GetDirectoryName(filePath);
+
+                bool isSubFolderExist = await IfFolderExistsAsync(unzipFolder, subFolderName);
+
+                StorageFolder subFolder;
+
+                if (!isSubFolderExist)
+                {
+                    // Create the sub folder. 
+                    subFolder =
+                        await unzipFolder.CreateFolderAsync(subFolderName, CreationCollisionOption.ReplaceExisting);
+                }
+                else
+                {
+                    // Just get the folder. 
+                    subFolder =
+                        await unzipFolder.GetFolderAsync(subFolderName);
+                }
+
+                // All sub folders have been created yet. Just pass the file name to the Unzip function. 
+                string newFilePath = Path.GetFileName(filePath);
+
+                if (!string.IsNullOrEmpty(newFilePath))
+                {
+                    // Unzip file iteratively. 
+                    await UnzipZipArchiveEntryAsync(entry, newFilePath, subFolder);
+                }
+            }
+            else
+            {
+
+                // Read uncompressed contents 
+                using (Stream entryStream = entry.Open())
+                {
+                    byte[] buffer = new byte[entry.Length];
+                    entryStream.Read(buffer, 0, buffer.Length);
+
+                    // Create a file to store the contents 
+                    StorageFile uncompressedFile = await unzipFolder.CreateFileAsync
+                    (entry.Name, CreationCollisionOption.ReplaceExisting);
+
+                    // Store the contents 
+                    using (IRandomAccessStream uncompressedFileStream =
+                    await uncompressedFile.OpenAsync(FileAccessMode.ReadWrite))
+                    {
+                        using (Stream outstream = uncompressedFileStream.AsStreamForWrite())
+                        {
+                            outstream.Write(buffer, 0, buffer.Length);
+                            outstream.Flush();
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
     }
 }

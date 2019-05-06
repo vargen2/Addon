@@ -85,12 +85,12 @@ namespace Addon.Logic
             addon.Message = "Extract/Copy...";
             addon.Progress = 0;
            
-            var trash = await Task.Run(() => Update.UpdateAddon(addon, download, file));
+            var trash = await Task.Run(() => Update.UpdateAddon2(addon, download, file));
             addon.CurrentDownload = download;
-            await Update.AddSubFolders(addon, trash.Item3);
+            await Update.AddSubFolders(addon, trash.Item2);
            
             addon.Message = "";            
-            await Task.Run(() => Update.Cleanup(trash.Item1,trash.Item2));
+            await Task.Run(() => Update.Cleanup2(trash.Item1));
            
         }
 
