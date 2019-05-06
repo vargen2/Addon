@@ -3,14 +3,12 @@ using Addon.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
-using Windows.Foundation;
 using Windows.Storage;
-using Windows.Storage.Streams;
+using Windows.UI.Core;
 
 namespace Addon.Logic
 {
@@ -228,8 +226,8 @@ namespace Addon.Logic
             var subFoldersToDelete = new HashSet<string>();
             try
             {
-                Debug.WriteLine("Start: " + DateTime.Now.ToString("mm:ss"));
-
+                Debug.WriteLine("Start: " + addon.FolderName + " " +DateTime.Now.ToString("mm:ss"));
+                int entries = 0;
                 using (ZipArchive archive = ZipFile.OpenRead(file.Path))
                 {
                     foreach (ZipArchiveEntry entry in archive.Entries)
@@ -240,27 +238,40 @@ namespace Addon.Logic
                             if (folderName != null && !folderName.Equals(addon.FolderName))
                             {
                                 subFoldersToDelete.Add(folderName);
-                                
+
                             }
                         }
+
+                        entries++;
+
+
+
+
                     }
                 }
-
-                foreach (var item in subFoldersToDelete)
-                {
-                    Debug.WriteLine(item);
-                }
-
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
-                Debug.WriteLine("getting folders done: " + DateTime.Now.ToString("mm:ss"));
-                await UnZipFileAsync(file, gameFolder);
-                Debug.WriteLine("copy done: " + DateTime.Now.ToString("mm:ss"));
+                var zipHelper = new ZipHelper() { Addon = addon, Entries = Math.Max(entries, 1) };
+                zipHelper.PropertyChanged += UnzipProgress;
+                await zipHelper.UnZipFileAsync(file, gameFolder);
+                Debug.WriteLine("Copy done: " + addon.FolderName + " " + DateTime.Now.ToString("mm:ss"));
             }
             catch (Exception e)
             {
                 Debug.WriteLine("[ERROR] UpdateAddon. " + e.Message + ", " + e.StackTrace);
             }
             return (file.Path, subFoldersToDelete.ToList());
+        }
+
+        private static  void UnzipProgress(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var zipHelper = sender as ZipHelper;
+             Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.
+                 RunAsync(CoreDispatcherPriority.Normal, () =>
+                 {
+
+                     zipHelper.Addon.Progress = zipHelper.Progress;
+                 });
+
         }
 
         //internal static async Task DeleteFilesFrom(StorageFolder folder)
@@ -600,142 +611,6 @@ namespace Addon.Logic
         //////}
 
 
-        /// <summary> 
-        /// https://code.msdn.microsoft.com/How-to-and-extract-zip-242da300/sourcecode?fileId=167934&pathId=1626668963
-        /// 
-        /// Unzips the specified zip file to the specified destination folder. 
-        /// </summary> 
-        /// <param name="zipFile">The zip file</param> 
-        /// <param name="destinationFolder">The destination folder</param> 
-        /// <returns></returns> 
-        public static IAsyncAction UnZipFileAsync(StorageFile zipFile, StorageFolder destinationFolder)
-        {
-            return UnZipFileHelper(zipFile, destinationFolder).AsAsyncAction();
-        }
-        #region private helper functions 
-        private static async Task UnZipFileHelper(StorageFile zipFile, StorageFolder destinationFolder)
-        {
-            if (zipFile == null || destinationFolder == null ||
-                !Path.GetExtension(zipFile.Name).Equals(".zip", StringComparison.OrdinalIgnoreCase)
-                )
-            {
-                throw new ArgumentException("Invalid argument...");
-            }
 
-            Stream zipMemoryStream = await zipFile.OpenStreamForReadAsync();
-
-            // Create zip archive to access compressed files in memory stream 
-            using (ZipArchive zipArchive = new ZipArchive(zipMemoryStream, ZipArchiveMode.Read))
-            {
-                // Unzip compressed file iteratively. 
-                foreach (ZipArchiveEntry entry in zipArchive.Entries)
-                {
-                    await UnzipZipArchiveEntryAsync(entry, entry.FullName, destinationFolder);
-                }
-            }
-        }
-
-        /// <summary> 
-        /// It checks if the specified path contains directory. 
-        /// </summary> 
-        /// <param name="entryPath">The specified path</param> 
-        /// <returns></returns> 
-        private static bool IfPathContainDirectory(string entryPath)
-        {
-            if (string.IsNullOrEmpty(entryPath))
-            {
-                return false;
-            }
-
-            return entryPath.Contains("/");
-        }
-
-        /// <summary> 
-        /// It checks if the specified folder exists. 
-        /// </summary> 
-        /// <param name="storageFolder">The container folder</param> 
-        /// <param name="subFolderName">The sub folder name</param> 
-        /// <returns></returns> 
-        private static async Task<bool> IfFolderExistsAsync(StorageFolder storageFolder, string subFolderName)
-        {
-            try
-            {
-                IStorageItem item = await storageFolder.GetItemAsync(subFolderName);
-                return (item != null);
-            }
-            catch
-            {
-                // Should never get here 
-                return false;
-            }
-        }
-
-        /// <summary> 
-        /// Unzips ZipArchiveEntry asynchronously. 
-        /// </summary> 
-        /// <param name="entry">The entry which needs to be unzipped</param> 
-        /// <param name="filePath">The entry's full name</param> 
-        /// <param name="unzipFolder">The unzip folder</param> 
-        /// <returns></returns> 
-        private static async Task UnzipZipArchiveEntryAsync(ZipArchiveEntry entry, string filePath, StorageFolder unzipFolder)
-        {
-            if (IfPathContainDirectory(filePath))
-            {
-                // Create sub folder 
-                string subFolderName = Path.GetDirectoryName(filePath);
-
-                bool isSubFolderExist = await IfFolderExistsAsync(unzipFolder, subFolderName);
-
-                StorageFolder subFolder;
-
-                if (!isSubFolderExist)
-                {
-                    // Create the sub folder. 
-                    subFolder =
-                        await unzipFolder.CreateFolderAsync(subFolderName, CreationCollisionOption.ReplaceExisting);
-                }
-                else
-                {
-                    // Just get the folder. 
-                    subFolder =
-                        await unzipFolder.GetFolderAsync(subFolderName);
-                }
-
-                // All sub folders have been created yet. Just pass the file name to the Unzip function. 
-                string newFilePath = Path.GetFileName(filePath);
-
-                if (!string.IsNullOrEmpty(newFilePath))
-                {
-                    // Unzip file iteratively. 
-                    await UnzipZipArchiveEntryAsync(entry, newFilePath, subFolder);
-                }
-            }
-            else
-            {
-
-                // Read uncompressed contents 
-                using (Stream entryStream = entry.Open())
-                {
-                    byte[] buffer = new byte[entry.Length];
-                    entryStream.Read(buffer, 0, buffer.Length);
-
-                    // Create a file to store the contents 
-                    StorageFile uncompressedFile = await unzipFolder.CreateFileAsync
-                    (entry.Name, CreationCollisionOption.ReplaceExisting);
-
-                    // Store the contents 
-                    using (IRandomAccessStream uncompressedFileStream =
-                    await uncompressedFile.OpenAsync(FileAccessMode.ReadWrite))
-                    {
-                        using (Stream outstream = uncompressedFileStream.AsStreamForWrite())
-                        {
-                            outstream.Write(buffer, 0, buffer.Length);
-                            outstream.Flush();
-                        }
-                    }
-                }
-            }
-        }
-        #endregion
     }
 }

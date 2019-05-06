@@ -142,6 +142,7 @@
     <Compile Include="Logic\Toc.cs" />
     <Compile Include="Logic\Update.cs" />
     <Compile Include="Logic\Version.cs" />
+    <Compile Include="Logic\ZipHelper.cs" />
     <Compile Include="Services\ActivationService.cs" />
     <Compile Include="Activation\DefaultLaunchActivationHandler.cs" />
     <Compile Include="Services\LiveTileService.cs" />
