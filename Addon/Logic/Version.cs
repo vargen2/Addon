@@ -91,7 +91,7 @@ namespace Addon.Logic
             //{
             try
             {
-                var htmlPage = await Http.NetHttpClient.GetStringAsync(uri);
+                var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
                 return Parse.FromPageToDownloads(addon, htmlPage);
             }
             catch (Exception ex)
@@ -117,7 +117,7 @@ namespace Addon.Logic
             //{
             try
             {
-                var htmlPage = await Http.NetHttpClient.GetStringAsync(uri);
+                var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
                 return Parse.FromPageToDownloads(addon, htmlPage);
             }
             catch (Exception ex)
@@ -157,7 +157,7 @@ namespace Addon.Logic
             //{
             try
             {
-                var response = await Http.NetHttpClient.GetStringAsync(uri);
+                var response = await Http.WebHttpClient.GetStringAsync(uri);
                 int index1 = response.IndexOf("<p class=\"infobox__cta\"");
                 int index2 = response.Substring(index1).IndexOf("</p>");
                 string data = response.Substring(index1, index2);

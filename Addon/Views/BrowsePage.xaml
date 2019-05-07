@@ -90,24 +90,33 @@
                                 Margin="0,15,0,15"
                                 Text="{x:Bind NrOfDownloads}" />
                         </StackPanel>
-                        <StackPanel Width="120">
+                        <StackPanel Width="120" Padding="0,15,0,15">
                             <ProgressBar
-                                Margin="0 8 0 0"
                                 Width="120"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
                                 IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
                                 Visibility="{x:Bind IsInstalling, Mode=OneWay}"
                                 Value="{x:Bind Progress, Mode=OneWay}" />
                             <Button
-                                Margin="0,14,0,14"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
                                 Click="Install_Button_Click"
                                 Content="Install"
                                 Tag="{x:Bind}"
                                 Visibility="{x:Bind IsNotInstalled, Mode=OneWay}" />
                             <TextBlock
                                 Height="30"
-                                Margin="0,15,0,15"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
                                 Text="{x:Bind Status, Mode=OneWay}"
-                                Visibility="{x:Bind IsShowTextBlock, Mode=OneWay}" />
+                                Visibility="{x:Bind ShowStatus, Mode=OneWay}" />
+                            <TextBlock
+                                Height="30"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{x:Bind Message, Mode=OneWay}"
+                                Visibility="{x:Bind ShowMessage, Mode=OneWay}" />
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock

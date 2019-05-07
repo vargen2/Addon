@@ -21,7 +21,7 @@ namespace Addon.Logic
         private int nextNotify = 0;
 
         public float Entries { get; set; }
-        public Core.Models.Addon Addon { get; set; }
+        public Core.Models.IProgressable Progressable { get; set; }
 
 
         private int progress = 0;

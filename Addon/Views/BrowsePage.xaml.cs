@@ -3,7 +3,6 @@ using Addon.Logic;
 using Addon.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -29,7 +28,7 @@ namespace Addon.Views
         }
 
         private async void Install_Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {           
+        {
             var button = sender as Button;
             var storeAddon = button.Tag as StoreAddon;
             await Install.InstallAddon(storeAddon);
@@ -38,16 +37,13 @@ namespace Addon.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
-           
-            ViewModel.Session.PropertyChanged+=Session_PropertyChanged;
-            
+            RefreshStoreAddonStatus();
+            ViewModel.Session.PropertyChanged += Session_PropertyChanged;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-            RefreshStoreAddonStatus();
             ViewModel.Session.PropertyChanged -= Session_PropertyChanged;
         }
 
@@ -55,7 +51,6 @@ namespace Addon.Views
         {
             var addons = new HashSet<string>(ViewModel.Session.SelectedGame.Addons.SelectMany(a =>
             {
-
                 var nameList = new List<string>() { a.FolderName.ToLower(), a.Title.ToLower() };
                 if (Logic.Version.PROJECT_URLS.TryGetValue(a.FolderName.ToLower(), out List<string> list))
                 {

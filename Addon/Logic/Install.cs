@@ -17,8 +17,6 @@ namespace Addon.Logic
     {
         internal static async Task InstallAddon(StoreAddon storeAddon)
         {
-            //TODO add functionality for storeaddon to progress
-
             var game = Singleton<Session>.Instance.SelectedGame;
             if (game.AbsolutePath.Equals(Session.EMPTY_GAME))
             {
@@ -35,95 +33,63 @@ namespace Addon.Logic
             var tempAddon = new Core.Models.Addon(game, storeAddon.Url, game.AbsolutePath + @"\" + storeAddon.Url) { };
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(tempAddon);
             var download = tempAddon.SuggestedDownload;
-            var file = await Task.Run(() => Update.DLWithHttpProgress(tempAddon, download,storeAddon));
-            storeAddon.Progress=0;
-            var trash = await Task.Run(() => InstallAddon(tempAddon, file));
-            tempAddon.Message = "";
-            if (trash.Item3 == null)
-            {
-                await Task.Run(() => Update.Cleanup(trash.Item1, trash.Item2));
-                storeAddon.Status = StoreAddon.INSTALLED;
-                return;
-            }
+            storeAddon.Message = "Downloading...";
+            var file = await Task.Run(() => Update.DLWithHttpProgress(tempAddon, download, storeAddon));
+            storeAddon.Progress = 0;
+            storeAddon.Message = "Extracting...";
 
-            tempAddon.CurrentDownload = download;
-            try
+            if (tempAddon.ProjectUrl.Equals(Version.ELVUI))
             {
+                var trash = await Task.Run(() => Update.UpdateAddonOld(tempAddon, download, file));
+                tempAddon.CurrentDownload = download;
                 await Tasks.RefreshTocFileFor(new List<Core.Models.Addon>() { tempAddon });
                 game.Addons.Add(tempAddon);
                 await Update.AddSubFolders(tempAddon, trash.Item3);
-                //await Tasks.Sort(game.Addons);
                 storeAddon.Status = StoreAddon.INSTALLED;
+                tempAddon.Message = string.Empty;
+                await Task.Run(() => Update.Cleanup(trash.Item1, trash.Item2));
             }
-            catch (FileNotFoundException e)
+            else
             {
-                var newAddons = await Task.Run(() => AnotherInstall(file, game));
-                foreach (var item in newAddons)
+
+                var trash = await Task.Run(() => Update.UpdateAddon2(tempAddon, file, storeAddon));
+                storeAddon.Progress = 0;
+                tempAddon.Message = string.Empty;
+                storeAddon.Message = "Configuring...";
+                tempAddon.CurrentDownload = download;
+            
+                try
                 {
-                    game.Addons.Add(item);
+                    await Tasks.RefreshTocFileFor(new List<Core.Models.Addon>() { tempAddon });
+                    game.Addons.Add(tempAddon);
+                    await Update.AddSubFolders(tempAddon, trash.Item2);
+
+                    storeAddon.Status = StoreAddon.INSTALLED;
+                    await Task.Run(() => Update.Cleanup2(trash.Item1));
                 }
-                var dlVersionTasks = newAddons.Select(Tasks.FindProjectUrlAndDownLoadVersionsFor).ToArray();
-                await Task.WhenAll(dlVersionTasks);
-                // await Tasks.Sort(game);
-                storeAddon.Status = StoreAddon.UNKNOWN;
-            }
-            await Task.Run(() => Update.Cleanup(trash.Item1, trash.Item2));
-        }
-
-
-
-        private static async Task<(string, string, List<string>)> InstallAddon(Core.Models.Addon addon, StorageFile file)
-        {
-            var subFoldersToDelete = new List<string>();
-            var extractFolderPath = Update.localFolder.Path + @"\" + file.Name.Replace(".zip", "");
-            try
-            {
-                ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
-                var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
-                var folders = await extractFolder.GetFoldersAsync();
-                var foldersHashSet = folders.Select(f => f.Name).ToHashSet();
-                if (addon.Game.Addons.Any(adn => foldersHashSet.Contains(adn.FolderName)))
+                catch (FileNotFoundException e)
                 {
-                    //abbort if allready installed
-                    return (file.Path, extractFolderPath, null);
-
-                }
-
-                var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
-                foreach (var folder in folders)
-                {
-                    try
+                    var newAddons = await Task.Run(() => AnotherInstall(file, game));
+                    foreach (var item in newAddons)
                     {
-                        var delete = await gameFolder.GetFolderAsync(folder.Name);
-                        await delete.DeleteAsync(StorageDeleteOption.PermanentDelete);
+                        game.Addons.Add(item);
                     }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine("[ERROR] No folder found to delete. " + e.Message);
-                    }
+                    var dlVersionTasks = newAddons.Select(Tasks.FindProjectUrlAndDownLoadVersionsFor).ToArray();
+                    await Task.WhenAll(dlVersionTasks);
 
+                    storeAddon.Status = StoreAddon.UNKNOWN;
                 }
-
-                foreach (var folder in folders)
-                {
-                    await Update.CopyFolderAsync(folder, gameFolder);
-                }
-                Debug.WriteLine("install copy ok");
-
-                var foldersAsList = new List<StorageFolder>(folders);
-                subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
-
             }
-            catch (Exception e)
-            {
-                Debug.WriteLine("[ERROR] InstallAddon. " + e.Message + ", " + e.StackTrace);
-            }
-            return (file.Path, extractFolderPath, subFoldersToDelete);
+            storeAddon.Message = string.Empty;
+
+
         }
 
         private static async Task<List<Core.Models.Addon>> AnotherInstall(StorageFile file, Game game)
         {
+
             var extractFolderPath = Update.localFolder.Path + @"\" + file.Name.Replace(".zip", "");
+            ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
             var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
             var extractFolders = await extractFolder.GetFoldersAsync();
 
@@ -137,7 +103,7 @@ namespace Addon.Logic
 
             foreach (var item in folders)
             {
-                Debug.WriteLine("AnotherInstall: "+item.Name + " " + item.Path);
+                Debug.WriteLine("AnotherInstall: " + item.Name + " " + item.Path);
             }
 
             var tasks = await Task.WhenAll(folders.Select(Toc.FolderToTocFile));
@@ -150,6 +116,7 @@ namespace Addon.Logic
                      Title = tf.Title
                  })
                  .ToList();
+            await Update.Cleanup(file.Path, extractFolderPath);
             return newAddons;
         }
     }

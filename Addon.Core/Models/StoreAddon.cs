@@ -44,7 +44,7 @@ namespace Addon.Core.Models
         public bool IsInstalling => status.Equals(INSTALLING);
         public bool IsNotInstalled => status.Equals(NOTINSTALLED);
         public bool IsUnknown => status.Equals(UNKNOWN);
-        public bool IsShowTextBlock => !status.Equals(NOTINSTALLED);
+        //public bool IsShowTextBlock => !status.Equals(NOTINSTALLED);
 
         private string status=NOTINSTALLED;
         public string Status
@@ -81,6 +81,27 @@ namespace Addon.Core.Models
         }
 
         public bool IsIndeterminate => progress == 0;
+
+        private string message = "";
+
+        public string Message
+        {
+            get => message;
+            set
+            {
+                if (value.Equals(message))
+                    return;
+                message = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged("ShowMessage");
+                NotifyPropertyChanged("ShowStatus");
+            }
+        }
+
+        public bool ShowMessage => !string.IsNullOrEmpty(Message);
+        public bool ShowStatus => !status.Equals(NOTINSTALLED) && string.IsNullOrEmpty(Message);
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

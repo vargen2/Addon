@@ -78,7 +78,7 @@ namespace Addon.Logic
             if (file == null)
             {
                 addon.Status = Core.Models.Addon.UNKNOWN;
-                addon.Message = "";
+                addon.Message = string.Empty;
                 addon.Progress = 0;
                 return;
             }
@@ -92,18 +92,18 @@ namespace Addon.Logic
                 addon.CurrentDownload = download;
                 await Update.AddSubFolders(addon, trash.Item3);
 
-                addon.Message = "";
+                addon.Message = string.Empty;
                 await Task.Run(() => Update.Cleanup(trash.Item1, trash.Item2));
             }
             else
             {
 
 
-                var trash = await Task.Run(() => Update.UpdateAddon2(addon, download, file));
+                var trash = await Task.Run(() => Update.UpdateAddon2(addon, file));
                 addon.CurrentDownload = download;
                 await Update.AddSubFolders(addon, trash.Item2);
 
-                addon.Message = "";
+                addon.Message = string.Empty;
                 await Task.Run(() => Update.Cleanup2(trash.Item1));
             }
         }

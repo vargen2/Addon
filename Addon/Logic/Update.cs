@@ -79,13 +79,13 @@ namespace Addon.Logic
             try
             {
 
-                if (addon.ProjectUrl.Equals(Version.ELVUI))
-                {
-                    var htmlPage = await Http.NetHttpClient.GetByteArrayAsync(source);
-                    await FileIO.WriteBytesAsync(destinationFile, htmlPage);
-                }
-                else
-                {
+                //if (addon.ProjectUrl.Equals(Version.ELVUI))
+                //{
+                //    var htmlPage = await Http.NetHttpClient.GetByteArrayAsync(source);
+                //    await FileIO.WriteBytesAsync(destinationFile, htmlPage);
+                //}
+                //else
+                //{
                     var result = Http.WebHttpClient.GetAsync(source);
                     var downloadProgessHandler = new DownloadProgressHandler() { Progressable = progressable != null ? progressable : addon };
                     result.Progress = downloadProgessHandler.DownloadProgressCallback;
@@ -101,11 +101,11 @@ namespace Addon.Logic
                         await filestream.FlushAsync();
 
                     }
-                }
+                //}
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message);
+                Debug.WriteLine("[ERROR] DownloadFile. " + ex.Message + " "+ex.StackTrace);
             }
             return destinationFile;
         }
@@ -285,8 +285,12 @@ namespace Addon.Logic
                 var folders = await extractFolder.GetFoldersAsync();
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
 
-                var tasks = folders.SelectMany(folder => CopyFolderAsync2(folder, gameFolder));
-                await Task.WhenAll(tasks);
+                foreach (var folder in folders)
+                {
+                    await CopyFolderAsync(folder,gameFolder);
+                }
+                //var tasks = folders.SelectMany(folder => CopyFolderAsync2(folder, gameFolder));
+                //await Task.WhenAll(tasks);
                 var foldersAsList = new List<StorageFolder>(folders);
                 subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
             }
@@ -299,7 +303,7 @@ namespace Addon.Logic
 
 
 
-        internal static async Task<(string, List<string>)> UpdateAddon2(Core.Models.Addon addon, Download download, StorageFile file)
+        internal static async Task<(string, List<string>)> UpdateAddon2(Core.Models.Addon addon, StorageFile file, IProgressable progressable = null)
         {
 
             var subFoldersToDelete = new HashSet<string>();
@@ -326,7 +330,7 @@ namespace Addon.Logic
                 }
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
 
-                var zipHelper = new ZipHelper() { Addon = addon, Entries = Math.Max(entries, 1) };
+                var zipHelper = new ZipHelper() { Progressable = progressable != null ? progressable : addon, Entries = Math.Max(entries, 1) };
                 zipHelper.PropertyChanged += UnzipProgress;
                 await zipHelper.UnZipFileAsync(file, gameFolder);
                 Debug.WriteLine("Copy done: " + addon.FolderName + " " + DateTime.Now.ToString("mm:ss"));
@@ -345,7 +349,7 @@ namespace Addon.Logic
                 RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
 
-                    zipHelper.Addon.Progress = zipHelper.Progress;
+                    zipHelper.Progressable.Progress = zipHelper.Progress;
                 });
 
         }
@@ -377,9 +381,9 @@ namespace Addon.Logic
                     await file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting);
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Debug.WriteLine("[ERROR] Copy file. " + e.Message);
+                   // Debug.WriteLine("[ERROR] Copy file. " + e.Message);
                 }
 
             }
@@ -394,69 +398,69 @@ namespace Addon.Logic
                     await CopyFolderAsync(folder, destinationFolder);
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Debug.WriteLine("[ERROR] Copy folder. " + e.Message);
+                    //Debug.WriteLine("[ERROR] Copy folder. " + e.Message);
                 }
             }
             // Parallel.ForEach(files, file => FileMove(file, destinationFolder));
         }
 
+        //Dont use, seems unstable. Getting stack owerflow
+        //////////////////internal static List<Task> CopyFolderAsync2(StorageFolder source, StorageFolder destinationContainer)
+        //////////////////{
 
-        internal static List<Task> CopyFolderAsync2(StorageFolder source, StorageFolder destinationContainer)
-        {
+        //////////////////    var (destinationFolder, items) = Task.Run(async () =>
+        //////////////////     {
+        //////////////////         StorageFolder destination = await destinationContainer.CreateFolderAsync(source.Name, CreationCollisionOption.OpenIfExists);
+        //////////////////         var itemz = await source.GetItemsAsync();
+        //////////////////         return (destination, itemz);
+        //////////////////     }).Result;
+        //////////////////    var tasks = items.OfType<StorageFile>().Select(file => file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting).AsTask()).ToList();
 
-            var (destinationFolder, items) = Task.Run(async () =>
-             {
-                 StorageFolder destination = await destinationContainer.CreateFolderAsync(source.Name, CreationCollisionOption.OpenIfExists);
-                 var itemz = await source.GetItemsAsync();
-                 return (destination, itemz);
-             }).Result;
-            var tasks = items.OfType<StorageFile>().Select(file => file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting).AsTask()).ToList();
+        //////////////////    var folderTasks = items.OfType<StorageFolder>().SelectMany(folder => CopyFolderAsync2(folder, destinationFolder));
+        //////////////////    tasks.AddRange(folderTasks);
 
-            var folderTasks = items.OfType<StorageFolder>().SelectMany(folder => CopyFolderAsync2(folder, destinationFolder));
-            tasks.AddRange(folderTasks);
+        //////////////////    return tasks;
 
-            return tasks;
+        //////////////////    //var items = Task.Run(async () => await source.GetItemsAsync()).Result;
+        //////////////////    //            var files = Task.Run(async ()=> await source.GetFilesAsync()).Result;
+        //////////////////    //var fileTasks = files.Select(file => file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting).AsTask()).ToList();
+        //////////////////    //await Task.WhenAll(fileTasks);
 
-            //var items = Task.Run(async () => await source.GetItemsAsync()).Result;
-            //            var files = Task.Run(async ()=> await source.GetFilesAsync()).Result;
-            //var fileTasks = files.Select(file => file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting).AsTask()).ToList();
-            //await Task.WhenAll(fileTasks);
+        //////////////////    //foreach (var file in files)
+        //////////////////    //{
+        //////////////////    //    try
+        //////////////////    //    {
+        //////////////////    //      await  file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting);
 
-            //foreach (var file in files)
-            //{
-            //    try
-            //    {
-            //      await  file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting);
+        //////////////////    //    }
+        //////////////////    //    catch (Exception e)
+        //////////////////    //    {
+        //////////////////    //        Debug.WriteLine("[ERROR] Copy file. " + e.Message);
+        //////////////////    //    }
 
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Debug.WriteLine("[ERROR] Copy file. " + e.Message);
-            //    }
+        //////////////////    //}
+        //////////////////    //var folders = Task.Run(async () => await source.GetFoldersAsync()).Result;
+        //////////////////    //var folderTasks = folders.SelectMany(folder => CopyFolderAsync2(folder, destinationFolder));
+        //////////////////    //fileTasks.AddRange(folderTasks);
+        //////////////////    //return fileTasks;
+        //////////////////    //await Task.WhenAll(folderTasks);
+        //////////////////    // Parallel.ForEach(folders,folder=>FolderCopy(folder,destinationFolder));
+        //////////////////    //foreach (var folder in folders)
+        //////////////////    //{
+        //////////////////    //    try
+        //////////////////    //    {
+        //////////////////    //      await  CopyFolderAsync(folder, destinationFolder);
 
-            //}
-            //var folders = Task.Run(async () => await source.GetFoldersAsync()).Result;
-            //var folderTasks = folders.SelectMany(folder => CopyFolderAsync2(folder, destinationFolder));
-            //fileTasks.AddRange(folderTasks);
-            //return fileTasks;
-            //await Task.WhenAll(folderTasks);
-            // Parallel.ForEach(folders,folder=>FolderCopy(folder,destinationFolder));
-            //foreach (var folder in folders)
-            //{
-            //    try
-            //    {
-            //      await  CopyFolderAsync(folder, destinationFolder);
-
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Debug.WriteLine("[ERROR] Copy folder. " + e.Message);
-            //    }
-            //}
-            // Parallel.ForEach(files, file => FileMove(file, destinationFolder));
-        }
+        //////////////////    //    }
+        //////////////////    //    catch (Exception e)
+        //////////////////    //    {
+        //////////////////    //        Debug.WriteLine("[ERROR] Copy folder. " + e.Message);
+        //////////////////    //    }
+        //////////////////    //}
+        //////////////////    // Parallel.ForEach(files, file => FileMove(file, destinationFolder));
+        //////////////////}
 
         internal async static Task Cleanup(string filePath, string folderPath)
         {
