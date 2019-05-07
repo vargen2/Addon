@@ -90,21 +90,21 @@ namespace Addon.Logic
             {
                 var trash = await Task.Run(() => Update.UpdateAddonOld(addon, download, file));
                 addon.CurrentDownload = download;
-                await Update.AddSubFolders(addon, trash.Item3);
+                await Update.AddSubFolders(addon, trash.Item2);
 
                 addon.Message = string.Empty;
-                await Task.Run(() => Update.Cleanup(trash.Item1, trash.Item2));
+                await Task.Run(() => Update.Cleanup(file.Name, trash.Item1));
             }
             else
             {
 
 
-                var trash = await Task.Run(() => Update.UpdateAddon2(addon, file));
+                var subFolders = await Task.Run(() => Update.UpdateAddon2(addon, file));
                 addon.CurrentDownload = download;
-                await Update.AddSubFolders(addon, trash.Item2);
+                await Update.AddSubFolders(addon, subFolders);
 
                 addon.Message = string.Empty;
-                await Task.Run(() => Update.Cleanup2(trash.Item1));
+                await Task.Run(() => Update.Cleanup2(file.Name));
             }
         }
 

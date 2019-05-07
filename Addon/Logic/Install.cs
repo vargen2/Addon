@@ -44,10 +44,10 @@ namespace Addon.Logic
                 tempAddon.CurrentDownload = download;
                 await Tasks.RefreshTocFileFor(new List<Core.Models.Addon>() { tempAddon });
                 game.Addons.Add(tempAddon);
-                await Update.AddSubFolders(tempAddon, trash.Item3);
+                await Update.AddSubFolders(tempAddon, trash.Item2);
                 storeAddon.Status = StoreAddon.INSTALLED;
                 tempAddon.Message = string.Empty;
-                await Task.Run(() => Update.Cleanup(trash.Item1, trash.Item2));
+                await Task.Run(() => Update.Cleanup(file.Name, trash.Item1));
             }
             else
             {
@@ -62,12 +62,12 @@ namespace Addon.Logic
                 {
                     await Tasks.RefreshTocFileFor(new List<Core.Models.Addon>() { tempAddon });
                     game.Addons.Add(tempAddon);
-                    await Update.AddSubFolders(tempAddon, trash.Item2);
+                    await Update.AddSubFolders(tempAddon, trash);
 
                     storeAddon.Status = StoreAddon.INSTALLED;
-                    await Task.Run(() => Update.Cleanup2(trash.Item1));
+                    await Task.Run(() => Update.Cleanup2(file.Name));
                 }
-                catch (FileNotFoundException e)
+                catch (FileNotFoundException)
                 {
                     var newAddons = await Task.Run(() => AnotherInstall(file, game));
                     foreach (var item in newAddons)
@@ -116,7 +116,7 @@ namespace Addon.Logic
                      Title = tf.Title
                  })
                  .ToList();
-            await Update.Cleanup(file.Path, extractFolderPath);
+            await Update.Cleanup(file.Name, extractFolderPath);
             return newAddons;
         }
     }
