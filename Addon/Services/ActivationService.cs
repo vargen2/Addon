@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -46,8 +45,7 @@ namespace Addon.Services
                 }
             }
 
-            var activationHandler = GetActivationHandlers()
-                                                .FirstOrDefault(h => h.CanHandle(activationArgs));
+            var activationHandler = GetActivationHandlers().FirstOrDefault(h => h.CanHandle(activationArgs));
 
             if (activationHandler != null)
             {
@@ -69,12 +67,12 @@ namespace Addon.Services
                 await StartupAsync();
             }
 
-            var storeAddons = await Task.Run(()=>Storage.LoadStoreAddons());
+            var storeAddons = await Task.Run(() => Storage.LoadStoreAddons());
             Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(storeAddons);
             Debug.WriteLine("Loaded StoreAddons " + Singleton<Session>.Instance.StoreAddons.Count);
 
-            var knownSubFolders = await Task.Run(()=>Storage.LoadKnownSubFolders());
-            var userKnownSubFolders = await Task.Run(()=>Storage.LoadKnownSubFoldersFromUser());
+            var knownSubFolders = await Task.Run(() => Storage.LoadKnownSubFolders());
+            var userKnownSubFolders = await Task.Run(() => Storage.LoadKnownSubFoldersFromUser());
             if (userKnownSubFolders != null)
             {
                 knownSubFolders.UnionWith(userKnownSubFolders);
@@ -85,11 +83,11 @@ namespace Addon.Services
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
 
 
-           
+
             var settings = Singleton<SettingsViewModel>.Instance;
             await settings.EnsureInstanceInitializedAsync();
-            bool autoRefresh = settings.IsAutoRefreshVersions??false;
-            Debug.WriteLine("autorefresh: "+autoRefresh);
+            bool autoRefresh = settings.IsAutoRefreshVersions ?? false;
+            Debug.WriteLine("autorefresh: " + autoRefresh);
             if (autoRefresh)
             {
                 await Tasks.FindProjectUrlAndDownLoadVersionsFor(Singleton<Session>.Instance.SelectedGame.Addons);
@@ -124,7 +122,6 @@ namespace Addon.Services
         async void App_Suspending(Object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            Debug.WriteLine("OnBackgroundActivated before save");
             await Storage.SaveSession();
             await Storage.SaveKnownSubFolders();
             Debug.WriteLine("OnBackgroundActivated after save");
@@ -132,6 +129,6 @@ namespace Addon.Services
         }
 
 
-        
+
     }
 }

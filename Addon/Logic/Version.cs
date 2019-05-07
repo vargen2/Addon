@@ -3,7 +3,6 @@ using Addon.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
@@ -90,23 +89,23 @@ namespace Addon.Logic
             var uri = new Uri(addon.ProjectUrl + "/files");
             //using (var httpClient = new HttpClient())
             //{
-                try
+            try
+            {
+                var htmlPage = await Http.NetHttpClient.GetStringAsync(uri);
+                return Parse.FromPageToDownloads(addon, htmlPage);
+            }
+            catch (Exception ex)
+            {
+                var error = WebSocketError.GetStatus(ex.HResult);
+                if (error == Windows.Web.WebErrorStatus.Unknown)
                 {
-                    var htmlPage = await Http.NetHttpClient.GetStringAsync(uri);
-                    return Parse.FromPageToDownloads(addon, htmlPage);
+                    Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + ex.Message);
                 }
-                catch (Exception ex)
+                else
                 {
-                    var error = WebSocketError.GetStatus(ex.HResult);
-                    if (error == Windows.Web.WebErrorStatus.Unknown)
-                    {
-                        Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + ex.Message);
-                    }
-                    else
-                    {
-                        Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + error);
-                    }
+                    Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + error);
                 }
+            }
             //}
             return new List<Download>();
         }
@@ -116,23 +115,23 @@ namespace Addon.Logic
             var uri = new Uri(addon.ProjectUrl);
             //using (var httpClient = new HttpClient())
             //{
-                try
+            try
+            {
+                var htmlPage = await Http.NetHttpClient.GetStringAsync(uri);
+                return Parse.FromPageToDownloads(addon, htmlPage);
+            }
+            catch (Exception ex)
+            {
+                var error = WebSocketError.GetStatus(ex.HResult);
+                if (error == Windows.Web.WebErrorStatus.Unknown)
                 {
-                    var htmlPage = await Http.NetHttpClient.GetStringAsync(uri);
-                    return Parse.FromPageToDownloads(addon, htmlPage);
+                    Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + ex.Message);
                 }
-                catch (Exception ex)
+                else
                 {
-                    var error = WebSocketError.GetStatus(ex.HResult);
-                    if (error == Windows.Web.WebErrorStatus.Unknown)
-                    {
-                        Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + ex.Message);
-                    }
-                    else
-                    {
-                        Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + error);
-                    }
+                    Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + error);
                 }
+            }
             //}
             return new List<Download>();
         }
@@ -156,26 +155,26 @@ namespace Addon.Logic
             var uri = new Uri(@"https://www.curseforge.com/wow/addons/" + urlName);
             //using (var httpClient = new HttpClient())
             //{
-                try
+            try
+            {
+                var response = await Http.NetHttpClient.GetStringAsync(uri);
+                int index1 = response.IndexOf("<p class=\"infobox__cta\"");
+                int index2 = response.Substring(index1).IndexOf("</p>");
+                string data = response.Substring(index1, index2);
+                return Util.Parse(data, "<a href=\"", "\">");
+            }
+            catch (Exception ex)
+            {
+                var error = WebSocketError.GetStatus(ex.HResult);
+                if (error == Windows.Web.WebErrorStatus.Unknown)
                 {
-                    var response = await Http.NetHttpClient.GetStringAsync(uri);
-                    int index1 = response.IndexOf("<p class=\"infobox__cta\"");
-                    int index2 = response.Substring(index1).IndexOf("</p>");
-                    string data = response.Substring(index1, index2);
-                    return Util.Parse(data, "<a href=\"", "\">");
+                    Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + ex.Message);
                 }
-                catch (Exception ex)
+                else
                 {
-                    var error = WebSocketError.GetStatus(ex.HResult);
-                    if (error == Windows.Web.WebErrorStatus.Unknown)
-                    {
-                        Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + ex.Message);
-                    }
-                    else
-                    {
-                        Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + error);
-                    }
+                    Debug.WriteLine("[ERROR] FindProjectUrlFor " + uri + " " + error);
                 }
+            }
             //}
             return String.Empty;
         }

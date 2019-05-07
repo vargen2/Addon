@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Addon.Views
 {
-    // TODO Acrylic
+    
     public sealed partial class ShellPage : Page
     {
         public ShellViewModel ViewModel { get; } = new ShellViewModel();
@@ -118,7 +118,6 @@ namespace Addon.Views
 
                 var game = new Game(folder.Path);
 
-                //   Debug.WriteLine("Picked folder: " + folder.Name);
                 await Task.Run(() => Tasks.RefreshGameFolder(game));
                 await Task.Run(() => Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons));
                 ViewModel.Session.Games.Add(game);

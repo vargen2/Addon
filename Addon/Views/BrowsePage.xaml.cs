@@ -3,6 +3,7 @@ using Addon.Logic;
 using Addon.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -28,25 +29,30 @@ namespace Addon.Views
         }
 
         private async void Install_Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            //if (ViewModel.Session.IsInstalling)
-            //{
-            //    return;
-            //}
+        {           
             var button = sender as Button;
             var storeAddon = button.Tag as StoreAddon;
-
-            //ViewModel.Session.IsInstalling = true;
-
             await Install.InstallAddon(storeAddon);
-
-            //ViewModel.Session.IsInstalling = false;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
+           
+            ViewModel.Session.PropertyChanged+=Session_PropertyChanged;
+            
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            RefreshStoreAddonStatus();
+            ViewModel.Session.PropertyChanged -= Session_PropertyChanged;
+        }
+
+        private void RefreshStoreAddonStatus()
+        {
             var addons = new HashSet<string>(ViewModel.Session.SelectedGame.Addons.SelectMany(a =>
             {
 
@@ -68,7 +74,19 @@ namespace Addon.Views
                 {
                     storeAddon.Status = StoreAddon.NOTINSTALLED;
                 }
-            }           
+            }
+        }
+
+        private void Session_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("SelectedGame"))
+            {
+                var game = ViewModel.Session.SelectedGame;
+                if (game != null)
+                {
+                    RefreshStoreAddonStatus();
+                }
+            }
         }
     }
 }
