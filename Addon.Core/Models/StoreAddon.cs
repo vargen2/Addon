@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Addon.Core.Models
 {
-    public class StoreAddon : INotifyPropertyChanged
+    public class StoreAddon : INotifyPropertyChanged, IProgressable
     {
 
         public string Url { get; }

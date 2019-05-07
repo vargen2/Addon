@@ -35,7 +35,8 @@ namespace Addon.Logic
             var tempAddon = new Core.Models.Addon(game, storeAddon.Url, game.AbsolutePath + @"\" + storeAddon.Url) { };
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(tempAddon);
             var download = tempAddon.SuggestedDownload;
-            var file = await Task.Run(() => Update.DLWithHttpProgress(tempAddon, download));
+            var file = await Task.Run(() => Update.DLWithHttpProgress(tempAddon, download,storeAddon));
+            storeAddon.Progress=0;
             var trash = await Task.Run(() => InstallAddon(tempAddon, file));
             tempAddon.Message = "";
             if (trash.Item3 == null)
@@ -136,7 +137,7 @@ namespace Addon.Logic
 
             foreach (var item in folders)
             {
-                Debug.WriteLine(item.Name + " " + item.Path);
+                Debug.WriteLine("AnotherInstall: "+item.Name + " " + item.Path);
             }
 
             var tasks = await Task.WhenAll(folders.Select(Toc.FolderToTocFile));

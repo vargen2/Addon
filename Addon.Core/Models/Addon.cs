@@ -11,7 +11,7 @@ using static System.String;
 
 namespace Addon.Core.Models
 {
-    public class Addon : INotifyPropertyChanged
+    public class Addon : INotifyPropertyChanged,IProgressable
 
     {
         public Game Game { get; }

@@ -59,7 +59,7 @@ namespace Addon.Logic
         //}
 
 
-        internal static async Task<StorageFile> DLWithHttpProgress(Core.Models.Addon addon, Download download)
+        internal static async Task<StorageFile> DLWithHttpProgress(Core.Models.Addon addon, Download download, IProgressable progressable = null)
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
             {
@@ -71,10 +71,10 @@ namespace Addon.Logic
 
             StorageFile destinationFile = await localFolder.CreateFileAsync(Util.RandomString(12) + ".zip", CreationCollisionOption.GenerateUniqueName);
 
-            return await DownloadFile(destinationFile, source, addon);
+            return await DownloadFile(destinationFile, source, addon, progressable);
         }
 
-        private static async Task<StorageFile> DownloadFile(StorageFile destinationFile, Uri source, Core.Models.Addon addon)
+        private static async Task<StorageFile> DownloadFile(StorageFile destinationFile, Uri source, Core.Models.Addon addon, IProgressable progressable)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Addon.Logic
                 else
                 {
                     var result = Http.WebHttpClient.GetAsync(source);
-                    var downloadProgessHandler = new DownloadProgressHandler() { Addon = addon };
+                    var downloadProgessHandler = new DownloadProgressHandler() { Progressable = progressable != null ? progressable : addon };
                     result.Progress = downloadProgessHandler.DownloadProgressCallback;
 
 
@@ -688,7 +688,7 @@ namespace Addon.Logic
 
         private class DownloadProgressHandler
         {
-            public Core.Models.Addon Addon { get; set; }
+            public Core.Models.IProgressable Progressable { get; set; }
 
             public void DownloadProgressCallback(IAsyncOperationWithProgress<HttpResponseMessage, HttpProgress> asyncInfo, HttpProgress progressInfo)
             {
@@ -699,7 +699,7 @@ namespace Addon.Logic
                     Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.
                         RunAsync(CoreDispatcherPriority.Normal, () =>
                         {
-                            Addon.Progress = progress;
+                            Progressable.Progress = progress;
                         });
                 }
 
