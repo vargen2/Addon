@@ -1,6 +1,9 @@
 ﻿using Addon.Services;
 using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.ExtendedExecution;
+using Windows.ApplicationModel.ExtendedExecution.Foreground;
 using Windows.UI.Xaml;
 
 namespace Addon
@@ -8,6 +11,7 @@ namespace Addon
     public sealed partial class App : Application
     {
         private Lazy<ActivationService> _activationService;
+        private ExtendedExecutionSession _session;
 
         private ActivationService ActivationService
         {
@@ -29,7 +33,9 @@ namespace Addon
             {
                 await ActivationService.ActivateAsync(args);
             }
-
+                                 
+            if (_session == null)
+                await PreventFromSuspending();
 
         }
 
@@ -48,6 +54,38 @@ namespace Addon
             return new Views.ShellPage();
         }
 
+        
 
+        //
+        // https://blogs.msdn.microsoft.com/mvpawardprogram/2018/01/30/non-suspending-uwp-desktop-apps/#comment-130715
+        //
+        private async Task PreventFromSuspending()
+        {
+            ExtendedExecutionSession newSession = new ExtendedExecutionSession();
+            newSession.Reason = ExtendedExecutionReason.Unspecified;
+            newSession.Revoked += SessionRevoked;
+
+            ExtendedExecutionResult result = await newSession.RequestExtensionAsync();
+            switch (result)
+            {
+                case ExtendedExecutionResult.Allowed:
+                    _session = newSession;
+                    break;
+                default:
+                case ExtendedExecutionResult.Denied:
+                    newSession.Dispose();
+                    break;
+            }
+            
+        }
+
+        private void SessionRevoked(object sender, ExtendedExecutionRevokedEventArgs args)
+        {
+            if (_session != null)
+            {
+                _session.Dispose();
+                _session = null;
+            }
+        }
     }
 }
