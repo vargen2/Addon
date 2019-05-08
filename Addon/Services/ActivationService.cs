@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -125,6 +126,7 @@ namespace Addon.Services
             await Storage.SaveSession();
             await Storage.SaveKnownSubFolders();
             Debug.WriteLine("OnBackgroundActivated after save");
+                       
             deferral.Complete();
         }
 

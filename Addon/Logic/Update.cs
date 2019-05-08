@@ -185,16 +185,18 @@ namespace Addon.Logic
             //var folderTasks = folders.Select(folder => CopyFolderAsync(folder, destinationFolder));
             //await Task.WhenAll(folderTasks);
             // Parallel.ForEach(folders,folder=>FolderCopy(folder,destinationFolder));
+         
             foreach (var folder in folders)
             {
                 try
                 {
+                   // System.IO.Directory.Move(folder.Path,destinationFolder.Path);
                     await CopyFolderAsync(folder, destinationFolder);
 
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    //Debug.WriteLine("[ERROR] Copy folder. " + e.Message);
+                    Debug.WriteLine("[ERROR] Copy folder. " + e.Message);
                 }
             }
             // Parallel.ForEach(files, file => FileMove(file, destinationFolder));
@@ -258,25 +260,25 @@ namespace Addon.Logic
 
         internal async static Task Cleanup(string fileName, string folderPath)
         {
-            //try
-            //{
-            //    var file = await localFolder.TryGetItemAsync(fileName);
-            //    await file?.DeleteAsync();
-            //}
-            //catch (Exception)
-            //{
-            //    Debug.WriteLine("[ERROR] Shouldn't reach here");
-            //}
-            //try
-            //{
-            //    var extractFolder = await StorageFolder.GetFolderFromPathAsync(folderPath);
-            //    await extractFolder.DeleteAsync();
+            try
+            {
+                var file = await localFolder.TryGetItemAsync(fileName);
+                await file?.DeleteAsync();
+            }
+            catch (Exception)
+            {
+                Debug.WriteLine("[ERROR] Shouldn't reach here");
+            }
+            try
+            {
+                var extractFolder = await StorageFolder.GetFolderFromPathAsync(folderPath);
+                await extractFolder.DeleteAsync();
 
-            //}
-            //catch (Exception)
-            //{
+            }
+            catch (Exception)
+            {
 
-            //}
+            }
 
 
 
@@ -286,15 +288,15 @@ namespace Addon.Logic
 
         internal async static Task Cleanup2(string fileName)
         {
-            //try
-            //{
-            //    var file = await localFolder.TryGetItemAsync(fileName);
-            //    await file?.DeleteAsync();
-            //}
-            //catch (Exception)
-            //{
-            //    Debug.WriteLine("[ERROR] Shouldn't reach here");
-            //}
+            try
+            {
+                var file = await localFolder.TryGetItemAsync(fileName);
+                await file?.DeleteAsync();
+            }
+            catch (Exception)
+            {
+                Debug.WriteLine("[ERROR] Shouldn't reach here");
+            }
         }
 
         internal async static Task AddSubFolders(Core.Models.Addon addon, List<string> subFoldersToDelete)
