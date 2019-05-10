@@ -2,15 +2,15 @@
 
 Addon Manager for Wow. Windows 10 UWP Application
 
-### Status
+### Installation
 
-Trying to upload to Microsoft Store
+https://www.microsoft.com/store/productId/9NXD1GMVB3ZH
 
 ### Known Issues
 
 - New addons are missing from browse/store page
 - Some Addons you have to set URL manually
-- Copy/move extracted files can be very slow
+- Copy/move extracted files is slow
 
 ### Screens
 
