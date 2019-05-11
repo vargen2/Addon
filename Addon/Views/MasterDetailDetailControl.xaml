@@ -69,9 +69,7 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 local:MyExtensions.HtmlString="{x:Bind MasterMenuItem.ChangeLog, Mode=OneWay}"
-                DefaultBackgroundColor="Transparent"
-                NavigationCompleted="WebView_NavigationCompleted"
-                ScrollViewer.VerticalScrollBarVisibility="Hidden" />
+                DefaultBackgroundColor="Transparent" />
             <!--</Grid>-->
 
         </Grid>
