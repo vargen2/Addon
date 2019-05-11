@@ -14,23 +14,28 @@
         Name="ForegroundElement"
         Padding="{StaticResource DetailPageMargin}"
         HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
         Background="{ThemeResource SystemChromeLowColor}"
-        VerticalScrollMode="Enabled">
-        <StackPanel HorizontalAlignment="Stretch">
+        HorizontalScrollBarVisibility="Disabled"
+        HorizontalScrollMode="Disabled"
+        VerticalScrollBarVisibility="Disabled"
+        VerticalScrollMode="Disabled">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
             <StackPanel
                 Name="block"
-                Padding="0,8,0,0"
+                Padding="0,0,0,0"
                 HorizontalAlignment="Stretch">
-                <TextBlock
-                    VerticalAlignment="Center"
-                    Style="{ThemeResource TitleTextBlockStyle}"
-                    Text="{x:Bind MasterMenuItem.FolderName, Mode=OneWay}" />
-                <TextBlock Text="{x:Bind MasterMenuItem.Title, Mode=OneWay}" />
-
-                <HyperlinkButton
-                    Content="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}"
-                    NavigateUri="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay, Converter={StaticResource StringToUriConverter}}"
-                     />
+                <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                    <TextBlock                        
+                        Style="{ThemeResource TitleTextBlockStyle}"
+                        Text="{x:Bind MasterMenuItem.FolderName, Mode=OneWay}" />
+                    <TextBlock Margin="16,0,0,0" VerticalAlignment="Center" Text="{x:Bind MasterMenuItem.Title, Mode=OneWay}" />
+                </StackPanel>
+                <HyperlinkButton Content="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" NavigateUri="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay, Converter={StaticResource StringToUriConverter}}" />
 
                 <TextBlock Text="{x:Bind MasterMenuItem.AbsolutePath, Mode=OneWay}" />
                 <VariableSizedWrapGrid HorizontalAlignment="Stretch" Orientation="Horizontal">
@@ -50,21 +55,26 @@
                     IsActive="True"
                     Visibility="{x:Bind MasterMenuItem.IsChangeLogEmpty, Mode=OneWay}" />-->
 
-                <Grid HorizontalAlignment="Stretch">
+                <!--<Grid HorizontalAlignment="Stretch"
+                      ScrollViewer.VerticalScrollMode="Disabled"
+                      ScrollViewer.IsScrollInertiaEnabled="False">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="9*" />
                         <ColumnDefinition Width="1*" />
-                    </Grid.ColumnDefinitions>
-
-                    <WebView
-                        Height="1000"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        local:MyExtensions.HtmlString="{x:Bind MasterMenuItem.ChangeLog, Mode=OneWay}"
-                        DefaultBackgroundColor="Transparent" />
-                </Grid>
+                    </Grid.ColumnDefinitions>-->
             </StackPanel>
-        </StackPanel>
+
+            <WebView
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                local:MyExtensions.HtmlString="{x:Bind MasterMenuItem.ChangeLog, Mode=OneWay}"
+                DefaultBackgroundColor="Transparent"
+                NavigationCompleted="WebView_NavigationCompleted"
+                ScrollViewer.VerticalScrollBarVisibility="Hidden" />
+            <!--</Grid>-->
+
+        </Grid>
     </ScrollViewer>
 </UserControl>
 <!--<FontIcon
@@ -72,3 +82,19 @@
                     VerticalAlignment="Center"
                     FontSize="48"
                     Glyph="&#xF000;" />-->
+
+
+<!--
+    ScrollViewer.IsVerticalScrollChainingEnabled="False"
+    ScrollViewer.IsDeferredScrollingEnabled="False"
+    ScrollViewer.IsScrollInertiaEnabled="False"
+-->
+<!--  ScrollViewer.VerticalScrollMode="Disabled"  -->
+
+
+
+<!--
+    IsHitTestVisible="False"
+    IsHoldingEnabled="False"
+    IsTapEnabled="False"
+-->

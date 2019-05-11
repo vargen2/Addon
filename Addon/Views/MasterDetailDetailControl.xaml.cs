@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -87,7 +86,40 @@ namespace Addon.Views
             control.ForegroundElement.ChangeView(0, 0, 1);
         }
 
+        private async void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            if (sender is WebView webView)
+            {
+               // await webView.InvokeScriptAsync("eval", new[] { DisableScrollingJs });
+                //var heightString = await webView.InvokeScriptAsync("eval", new[] { "document.body.scrollHeight.toString()" });
+                //int height;
+                //if (int.TryParse(heightString, out height))
+                //{
+                //    webView.Height = height+50;
+                //}
+               
+            }
+        }
 
+        string DisableScrollingJs = @"function RemoveScrolling()  
+                              {  
+                                  var styleElement = document.createElement('style');  
+                                  var styleText = 'body, html { overflow: hidden; }'  
+                                  var headElements = document.getElementsByTagName('head');  
+                                  styleElement.type = 'text/css';  
+                                  if (headElements.length == 1)  
+                                  {  
+                                      headElements[0].appendChild(styleElement);  
+                                  }  
+                                  else if (document.head)  
+                                  {  
+                                      document.head.appendChild(styleElement);  
+                                  }  
+                                  if (styleElement.styleSheet)  
+                                  {  
+                                      styleElement.styleSheet.cssText = styleText;  
+                                  }  
+                              }";
 
 
 
