@@ -332,15 +332,29 @@ namespace Addon.Logic
 
         internal static async Task RemoveFilesFor(Core.Models.Addon addon)
         {
-            var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
-            var addonFolder = await gameFolder.GetFolderAsync(addon.FolderName);
-            await addonFolder.DeleteAsync(StorageDeleteOption.PermanentDelete);
-            foreach (var folderName in addon.SubFolders)
+            var folders=new List<string>(addon.SubFolders);
+            folders.Add(addon.FolderName);
+            await RemoveFolders(addon.Game.AbsolutePath,folders);
+
+            //var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
+            //var addonFolder = await gameFolder.GetFolderAsync(addon.FolderName);
+            //await addonFolder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            //foreach (var folderName in addon.SubFolders)
+            //{
+            //    var folder = await gameFolder.GetFolderAsync(folderName);
+            //    await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            //}
+
+        }
+
+        internal static async Task RemoveFolders(string gameFolderPath, IEnumerable<string> folders)
+        {
+            var gameFolder = await StorageFolder.GetFolderFromPathAsync(gameFolderPath);
+            foreach (var folderName in folders)
             {
                 var folder = await gameFolder.GetFolderAsync(folderName);
                 await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
             }
-
         }
 
         //
