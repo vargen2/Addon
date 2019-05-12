@@ -110,9 +110,8 @@ namespace Addon.Logic
         }
 
         internal static async Task Remove(Core.Models.Addon addon)
-        {
-            var game = addon.Game;
-            game.Addons.Remove(addon);
+        {            
+            addon.Game.Addons.Remove(addon);
             await Task.Run(() => Update.RemoveFilesFor(addon));
             Debug.WriteLine("Remove done for "+addon.FolderName);
         }

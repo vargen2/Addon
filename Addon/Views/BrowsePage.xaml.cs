@@ -61,6 +61,11 @@ namespace Addon.Views
 
             foreach (var storeAddon in ViewModel.Session.StoreAddons)
             {
+                if(storeAddon.Status.Equals(StoreAddon.INSTALLING))
+                {
+                    continue;
+                }
+
                 if (addons.Contains(storeAddon.Url.ToLower()) || addons.Contains(storeAddon.Title.ToLower()))
                 {
                     storeAddon.Status = StoreAddon.INSTALLED;
