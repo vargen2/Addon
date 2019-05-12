@@ -482,6 +482,14 @@
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem
+                            Click="MenuFlyoutItem_Click_Remove_Addon"
+                            Tag="{x:Bind Mode=OneWay}"
+                            Text="Remove...">
+                            <MenuFlyoutItem.Icon>
+                                <SymbolIcon Symbol="Delete" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem
                             Click="MenuFlyoutItem_Click_Open_Edit_URL_DIALOG"
                             Tag="{x:Bind Mode=OneWay}"
                             Text="Set URL..." />

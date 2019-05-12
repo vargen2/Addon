@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -106,6 +107,14 @@ namespace Addon.Logic
                 addon.Message = string.Empty;
                 await Task.Run(() => Update.Cleanup2(file.Name));
             }
+        }
+
+        internal static async Task Remove(Core.Models.Addon addon)
+        {
+            var game = addon.Game;
+            game.Addons.Remove(addon);
+            await Task.Run(() => Update.RemoveFilesFor(addon));
+            Debug.WriteLine("Remove done for "+addon.FolderName);
         }
 
     }

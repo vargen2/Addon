@@ -86,7 +86,13 @@ namespace Addon.Logic
                 //var tasks = folders.SelectMany(folder => CopyFolderAsync2(folder, gameFolder));
                 //await Task.WhenAll(tasks);
                 var foldersAsList = new List<StorageFolder>(folders);
-                subFoldersToDelete = foldersAsList.Select(f => f.Name).Where(name => !name.Equals(addon.FolderName)).ToList();
+                subFoldersToDelete = foldersAsList.Select(f => f.Name)
+                    .Where(name => !name.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                foreach (var fName in subFoldersToDelete)
+                {
+                    Debug.WriteLine("UpdateAddonOld subfolder: " + fName);
+                }
             }
             catch (Exception e)
             {
@@ -113,8 +119,9 @@ namespace Addon.Logic
                         if (entry.FullName.Contains("/"))
                         {
                             var folderName = entry.FullName.Split("/").FirstOrDefault();
-                            if (folderName != null && !folderName.Equals(addon.FolderName))
+                            if (folderName != null && !folderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase))
                             {
+                               
                                 subFoldersToDelete.Add(folderName);
 
                             }
@@ -122,6 +129,11 @@ namespace Addon.Logic
                         entries++;
                     }
                 }
+                foreach (var fName in subFoldersToDelete)
+                {
+                    Debug.WriteLine("UpdateAddon2 subfolder: " + fName);
+                }
+
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
 
                 var zipHelper = new ZipHelper() { Progressable = progressable != null ? progressable : addon, Entries = Math.Max(entries, 1) };
@@ -185,12 +197,12 @@ namespace Addon.Logic
             //var folderTasks = folders.Select(folder => CopyFolderAsync(folder, destinationFolder));
             //await Task.WhenAll(folderTasks);
             // Parallel.ForEach(folders,folder=>FolderCopy(folder,destinationFolder));
-         
+
             foreach (var folder in folders)
             {
                 try
                 {
-                   // System.IO.Directory.Move(folder.Path,destinationFolder.Path);
+                    // System.IO.Directory.Move(folder.Path,destinationFolder.Path);
                     await CopyFolderAsync(folder, destinationFolder);
 
                 }
@@ -313,8 +325,22 @@ namespace Addon.Logic
             if (subFoldersToDelete.Count > 0)
             {
                 Singleton<Session>.Instance.KnownSubFolders.UnionWith(subFoldersToDelete);
+                addon.SubFolders.UnionWith(subFoldersToDelete);
             }
             await Task.CompletedTask;
+        }
+
+        internal static async Task RemoveFilesFor(Core.Models.Addon addon)
+        {
+            var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
+            var addonFolder = await gameFolder.GetFolderAsync(addon.FolderName);
+            await addonFolder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            foreach (var folderName in addon.SubFolders)
+            {
+                var folder = await gameFolder.GetFolderAsync(folderName);
+                await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+            }
+
         }
 
         //

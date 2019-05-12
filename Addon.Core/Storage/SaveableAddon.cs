@@ -1,8 +1,5 @@
 ﻿using Addon.Core.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
-using Addon = Addon.Core.Models.Addon;
 
 namespace Addon.Core.Storage
 {
@@ -19,18 +16,24 @@ namespace Addon.Core.Storage
         public bool IsIgnored { get; set; }
         public string GameVersion { get; set; }
         public string Status { get; set; }
+        public HashSet<string> SubFolders { get; set; }
 
 
         public override string ToString()
         {
-            return $"{nameof(FolderName)}: {FolderName}, {nameof(AbsolutePath)}: {AbsolutePath}, {nameof(Title)}: {Title}, {nameof(ProjectUrl)}: {ProjectUrl}, {nameof(Downloads)}: {Downloads}, {nameof(PreferredReleaseType)}: {PreferredReleaseType}, {nameof(Version)}: {Version}, {nameof(CurrentDownload)}: {CurrentDownload}, {nameof(IsIgnored)}: {IsIgnored}, {nameof(GameVersion)}: {GameVersion}, {nameof(Status)}: {Status}";
+            return $"{nameof(FolderName)}: {FolderName}, {nameof(AbsolutePath)}: {AbsolutePath}, " +
+                $"{nameof(Title)}: {Title}, {nameof(ProjectUrl)}: {ProjectUrl}, " +
+                $"{nameof(Downloads)}: {Downloads}, {nameof(PreferredReleaseType)}: {PreferredReleaseType}, " +
+                $"{nameof(Version)}: {Version}, {nameof(CurrentDownload)}: {CurrentDownload}, " +
+                $"{nameof(IsIgnored)}: {IsIgnored}, {nameof(GameVersion)}: {GameVersion}, " +
+                $"{nameof(Status)}: {Status}";
         }
 
-        public global::Addon.Core.Models.Addon AsAddon(Game game)
+        public Models.Addon AsAddon(Game game)
         {
-            return new global::Addon.Core.Models.Addon(game,this.FolderName,this.AbsolutePath)
+            return new Models.Addon(game, this.FolderName, this.AbsolutePath)
             {
-                Title=this.Title,
+                Title = this.Title,
                 ProjectUrl = this.ProjectUrl,
                 Downloads = this.Downloads,
                 PreferredReleaseType = this.PreferredReleaseType,
@@ -38,7 +41,8 @@ namespace Addon.Core.Storage
                 CurrentDownload = this.CurrentDownload,
                 IsIgnored = this.IsIgnored,
                 GameVersion = this.GameVersion,
-                Status = this.Status
+                Status = this.Status,
+                SubFolders = this.SubFolders ?? new HashSet<string>()
             };
         }
     }

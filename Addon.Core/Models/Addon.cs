@@ -11,13 +11,16 @@ using static System.String;
 
 namespace Addon.Core.Models
 {
-    public class Addon : INotifyPropertyChanged,IProgressable
+    public class Addon : INotifyPropertyChanged, IProgressable
 
     {
         public Game Game { get; }
         public string FolderName { get; }
         public string AbsolutePath { get; }
         public string Title { get; set; } = Empty;
+
+        public HashSet<string> SubFolders { get; set;} = new HashSet<string>();
+
 
         public Addon(Game game, string folderName, string absolutePath)
         {
@@ -307,7 +310,19 @@ namespace Addon.Core.Models
         }
 
 
-        public string InfoString => $"{nameof(Game)}: {Game},\r\n{nameof(FolderName)}: {FolderName},\r\n{nameof(AbsolutePath)}: {AbsolutePath},\r\n{nameof(Title)}: {Title},\r\n{nameof(ProjectUrl)}: {ProjectUrl},\r\n{nameof(PreferredReleaseType)}: {PreferredReleaseType},\r\n{nameof(Version)}: {Version},\r\n{nameof(CurrentReleaseTypeAndVersion)}: {CurrentReleaseTypeAndVersion},\r\n{nameof(IsIgnored)}: {IsIgnored},\r\n{nameof(GameVersion)}: {GameVersion},\r\n{nameof(Status)}: {Status},\r\n{nameof(CurrentDownload)}: {CurrentDownload},\r\n{nameof(SuggestedDownload)}: {SuggestedDownload}";
+        public string InfoString => $"{nameof(Game)}: {Game},\r\n{nameof(FolderName)}: {FolderName}," +
+            $"\r\n{nameof(AbsolutePath)}: {AbsolutePath},\r\n{nameof(Title)}: {Title}," +
+            $"\r\n{nameof(ProjectUrl)}: {ProjectUrl},\r\n{nameof(PreferredReleaseType)}: {PreferredReleaseType}," +
+            $"\r\n{nameof(Version)}: {Version},\r\n{nameof(CurrentReleaseTypeAndVersion)}: {CurrentReleaseTypeAndVersion}," +
+            $"\r\n{nameof(IsIgnored)}: {IsIgnored},\r\n{nameof(GameVersion)}: {GameVersion}," +
+            $"\r\n{nameof(Status)}: {Status},\r\n{nameof(CurrentDownload)}: {CurrentDownload}," +
+            $"\r\n{nameof(SuggestedDownload)}: {SuggestedDownload}," +
+            $"\r\n{nameof(SubFolders)}: {SubFolderContents()}";
+
+        private string SubFolderContents()        {
+            
+            return (SubFolders!=null) ?string.Join(", ",SubFolders):string.Empty;
+        }
 
         public SaveableAddon AsSaveableAddon()
         {
@@ -323,7 +338,8 @@ namespace Addon.Core.Models
                 PreferredReleaseType = this.PreferredReleaseType,
                 ProjectUrl = this.ProjectUrl,
                 Status = this.Status,
-                Version = this.Version
+                Version = this.Version,
+                SubFolders = this.SubFolders
             };
         }
 

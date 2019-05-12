@@ -77,15 +77,15 @@ namespace Addon.Views
             var progressRing = (button.Content as StackPanel).Children.OfType<ProgressRing>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
             var textBlock = (button.Content as StackPanel).Children.OfType<TextBlock>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
             progressRing.IsActive = true;
-            textBlock.Visibility=Visibility.Collapsed;
+            textBlock.Visibility = Visibility.Collapsed;
             progressRing.Visibility = Visibility.Visible;
 
             var addons = ViewModel.Session.SelectedGame.Addons;
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(addons);
             progressRing.IsActive = false;
             progressRing.Visibility = Visibility.Collapsed;
-            textBlock.Visibility=Visibility.Visible;
-            
+            textBlock.Visibility = Visibility.Visible;
+
 
             button.IsEnabled = true;
         }
@@ -267,40 +267,34 @@ namespace Addon.Views
             }
         }
 
+        private async void MenuFlyoutItem_Click_Remove_Addon(object sender, RoutedEventArgs e)
+        {
+            var menuItem = sender as MenuFlyoutItem;
+            Core.Models.Addon addon = menuItem.Tag as Core.Models.Addon;
+            var folderNames = addon.FolderName + "\r\n";
+            folderNames += string.Join("\r\n", addon.SubFolders);
+
+            ContentDialog dialog = new ContentDialog()
+            {
+                Title = "Remove " + addon.FolderName + "?",
+                Content = folderNames,
+                PrimaryButtonText = "Remove",
+                CloseButtonText = "Cancel"
+            };
+
+            var response = await dialog.ShowAsync();
+            if (response == ContentDialogResult.Primary)
+            {
+                await Tasks.Remove(addon);
+            }
+        }
 
 
 
 
 
-        //public void MyResize(double xDelta)
-        //{
-        //    //Debug.WriteLine(ContentArea.ActualWidth);
-        //    var elements = ContentArea.Children;
-        //    foreach (var item in elements)
-        //    {
-        //        var mast = item as MasterDetailsView;
-        //        mast.MasterPaneWidth = mast.MasterPaneWidth + xDelta;
-        //        //Debug.WriteLine(mast.ActualWidth + ", " + mast.MasterPaneWidth);
-        //        //Debug.WriteLine(mast.Parent.ToString());
-        //    }
-        //}
 
-        // private void ForegroundElement_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        //{
 
-        //    Debug.WriteLine("pressed");
-        //    //isPressed = true;
-        //    //xPrev = e.GetCurrentPoint(sender as UIElement).Position.X;
-        //    ////var grid = this.Parent as Grid;
-        //    //var gridParent = grid.Parent;
 
-        //    //Debug.WriteLine(gridParent.ToString());
-        //    //var elements = grid.Children;
-        //    //foreach (var item in elements)
-        //    //{
-        //    //    Debug.WriteLine(item.ToString());
-        //    //}
-
-        //}
     }
 }
