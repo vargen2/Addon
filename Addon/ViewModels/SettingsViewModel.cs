@@ -78,7 +78,7 @@ namespace Addon.ViewModels
 
         public bool? IsAutoRefreshVersions
         {
-            get => _isAutoRefreshVersions ?? true;
+            get => _isAutoRefreshVersions ?? false;
 
             set
             {
@@ -91,6 +91,23 @@ namespace Addon.ViewModels
             }
         }
 
+        private bool? _isDeleteOldFilesBeforeUpdate;
+
+        public bool? IsDeleteOldFilesBeforeUpdate
+        {
+            get => _isDeleteOldFilesBeforeUpdate ?? false;
+
+            set
+            {
+                if (value != _isDeleteOldFilesBeforeUpdate)
+                {
+                    Task.Run(async () => await Windows.Storage.ApplicationData.Current.LocalSettings.SaveAsync(nameof(IsDeleteOldFilesBeforeUpdate), value ?? false));
+                }
+
+                Set(ref _isDeleteOldFilesBeforeUpdate, value);
+            }
+        }
+
         private bool _hasInstanceBeenInitialized = false;
 
         public async Task EnsureInstanceInitializedAsync()
@@ -99,6 +116,7 @@ namespace Addon.ViewModels
             {
 
                 IsAutoRefreshVersions = await Windows.Storage.ApplicationData.Current.LocalSettings.ReadAsync<bool>(nameof(IsAutoRefreshVersions));
+                IsDeleteOldFilesBeforeUpdate = await Windows.Storage.ApplicationData.Current.LocalSettings.ReadAsync<bool>(nameof(IsDeleteOldFilesBeforeUpdate));
 
 
                 Initialize();

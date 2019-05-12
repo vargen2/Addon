@@ -19,6 +19,10 @@
                 x:Uid="Settings_EnableAutoRefreshVersions"
                 Margin="0,8,0,0"
                 IsChecked="{x:Bind ViewModel.IsAutoRefreshVersions, Mode=TwoWay}" />
+            <CheckBox
+                x:Uid="Settings_EnableDeleteOldFilesBeforeUpdate"
+                Margin="0,8,0,0"
+                IsChecked="{x:Bind ViewModel.IsDeleteOldFilesBeforeUpdate, Mode=TwoWay}" />
 
             <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
                 <TextBlock x:Uid="Settings_Theme" />

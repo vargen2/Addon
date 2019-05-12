@@ -129,7 +129,7 @@
     <value>Main</value>
     <comment>Navigation view item name for Main</comment>
   </data>
-   <data name="Shell_Master.Content" xml:space="preserve">
+  <data name="Shell_Master.Content" xml:space="preserve">
     <value>Your Addons</value>
     <comment>Navigation view item name for Master</comment>
   </data>
@@ -184,8 +184,11 @@
   <data name="ExceptionEnumToBooleanConverterParameterMustBeAnEnumName" xml:space="preserve">
     <value>parameter must be an Enum name!</value>
     <comment>Parameter must be an Enum name in enum to boolean converter</comment>
-  </data>  
+  </data>
   <data name="Settings_EnableAutoRefreshVersions.Content" xml:space="preserve">
     <value>Refresh versions on start up</value>
+  </data>
+  <data name="Settings_EnableDeleteOldFilesBeforeUpdate.Content" xml:space="preserve">
+    <value>Delete old files before updateing</value>
   </data>
 </root>

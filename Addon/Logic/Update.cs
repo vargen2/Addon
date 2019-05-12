@@ -1,5 +1,6 @@
 ﻿using Addon.Core.Helpers;
 using Addon.Core.Models;
+using Addon.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -79,19 +80,24 @@ namespace Addon.Logic
                 var folders = await extractFolder.GetFoldersAsync();
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
 
-                foreach (var folder in folders)
-                {
-                    await CopyFolderAsync(folder, gameFolder);
-                }
+
                 //var tasks = folders.SelectMany(folder => CopyFolderAsync2(folder, gameFolder));
                 //await Task.WhenAll(tasks);
                 var foldersAsList = new List<StorageFolder>(folders);
                 subFoldersToDelete = foldersAsList.Select(f => f.Name)
                     .Where(name => !name.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase))
                     .ToList();
-                foreach (var fName in subFoldersToDelete)
+                if (Singleton<SettingsViewModel>.Instance.IsDeleteOldFilesBeforeUpdate ?? false)
                 {
-                    Debug.WriteLine("UpdateAddonOld subfolder: " + fName);
+                    var subFolders = new List<string>(subFoldersToDelete);
+                    subFolders.Add(addon.FolderName);
+                    await RemoveFolders(addon.Game.AbsolutePath, subFolders);
+
+                }
+
+                foreach (var folder in folders)
+                {
+                    await CopyFolderAsync(folder, gameFolder);
                 }
             }
             catch (Exception e)
@@ -121,7 +127,7 @@ namespace Addon.Logic
                             var folderName = entry.FullName.Split("/").FirstOrDefault();
                             if (folderName != null && !folderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase))
                             {
-                               
+
                                 subFoldersToDelete.Add(folderName);
 
                             }
@@ -129,10 +135,14 @@ namespace Addon.Logic
                         entries++;
                     }
                 }
-                foreach (var fName in subFoldersToDelete)
+                if (Singleton<SettingsViewModel>.Instance.IsDeleteOldFilesBeforeUpdate ?? false)
                 {
-                    Debug.WriteLine("UpdateAddon2 subfolder: " + fName);
+                    var folders = new List<string>(subFoldersToDelete);
+                    folders.Add(addon.FolderName);
+                    await RemoveFolders(addon.Game.AbsolutePath, folders);
+
                 }
+
 
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
 
@@ -332,9 +342,9 @@ namespace Addon.Logic
 
         internal static async Task RemoveFilesFor(Core.Models.Addon addon)
         {
-            var folders=new List<string>(addon.SubFolders);
+            var folders = new List<string>(addon.SubFolders);
             folders.Add(addon.FolderName);
-            await RemoveFolders(addon.Game.AbsolutePath,folders);
+            await RemoveFolders(addon.Game.AbsolutePath, folders);
 
             //var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
             //var addonFolder = await gameFolder.GetFolderAsync(addon.FolderName);
