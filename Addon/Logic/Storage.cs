@@ -22,7 +22,20 @@ namespace Addon.Logic
             {
                 var instance = Singleton<Session>.Instance.AsSaveableSession();
                 await localFolder.SaveAsync("session", instance);
-            //    Debug.WriteLine("Saved Session to " + localFolder.Path);
+                var addonDataSet = new HashSet<AddonData>();
+                foreach (var game in instance.Games)
+                {
+                    var addonDataList = game.Addons
+                        .Where(saveableAddon =>
+                            !string.IsNullOrEmpty(saveableAddon.FolderName) &&
+                            !string.IsNullOrEmpty(saveableAddon.ProjectUrl))
+                        .Select(saveableAddon => saveableAddon.AsAddonData())
+                        .ToList();
+                    addonDataSet.UnionWith(addonDataList);
+                }
+                await localFolder.SaveAsync("addondata", addonDataSet);
+
+                //    Debug.WriteLine("Saved Session to " + localFolder.Path);
             }
             catch (Exception e)
             {
@@ -53,7 +66,7 @@ namespace Addon.Logic
 
 
 
-           // Debug.WriteLine("Loaded from " + localFolder.Path);
+            // Debug.WriteLine("Loaded from " + localFolder.Path);
         }
 
         public static async Task<HashSet<string>> LoadKnownSubFolders()
@@ -75,7 +88,7 @@ namespace Addon.Logic
             {
                 var instance = Singleton<Session>.Instance.KnownSubFolders;
                 await localFolder.SaveAsync("knownsubfolders", instance);
-               // Debug.WriteLine("Saved knownsubfolders");
+                // Debug.WriteLine("Saved knownsubfolders");
             }
             catch (Exception e)
             {
@@ -90,11 +103,11 @@ namespace Addon.Logic
             var text = await FileIO.ReadTextAsync(sampleFile);
             // TODO fix time
             IList<CurseAddon> curseAddons = await Json.ToObjectAsync<List<CurseAddon>>(@text);
-            var storeAddons= curseAddons
+            var storeAddons = curseAddons
                 .Select(ca => new StoreAddon(ca.addonURL, ca.title, ca.description, ca.downloads, DateTime.Now, DateTime.Now))
                 .ToList();
 
-            storeAddons.Insert(0,new StoreAddon("elvui","ElvUI","A user interface designed around user-friendliness with extra features that are not included in the standard UI.",0,DateTime.Now, DateTime.Now));
+            storeAddons.Insert(0, new StoreAddon("elvui", "ElvUI", "A user interface designed around user-friendliness with extra features that are not included in the standard UI.", 0, DateTime.Now, DateTime.Now));
             return storeAddons;
         }
     }

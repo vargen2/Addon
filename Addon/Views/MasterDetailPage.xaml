@@ -406,9 +406,9 @@
 
         <DataTemplate x:Key="ItemTemplate" x:DataType="data:Addon">
             <Grid
-                Opacity="{x:Bind NotIgnoredOpacity,Mode=OneWay}"
                 Height="50"
-                HorizontalAlignment="Stretch"                
+                HorizontalAlignment="Stretch"
+                Opacity="{x:Bind NotIgnoredOpacity, Mode=OneWay}"
                 RightTapped="UIElement_OnRightTapped">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="18*" />

@@ -45,5 +45,13 @@ namespace Addon.Core.Storage
                 SubFolders = this.SubFolders ?? new HashSet<string>()
             };
         }
+
+        public AddonData AsAddonData()
+        {
+            return new AddonData(this.FolderName,this.ProjectUrl)
+            {
+                SubFolders = this.SubFolders ?? new HashSet<string>()
+            };
+        }
     }
 }
