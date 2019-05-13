@@ -19,7 +19,7 @@ namespace Addon.Core.Models
         public string AbsolutePath { get; }
         public string Title { get; set; } = Empty;
 
-        public HashSet<string> SubFolders { get; set;} = new HashSet<string>();
+        public HashSet<string> SubFolders { get; set; } = new HashSet<string>();
 
 
         public Addon(Game game, string folderName, string absolutePath)
@@ -138,11 +138,13 @@ namespace Addon.Core.Models
                     return;
                 isIgnored = value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("NotIgnoredOpacity");
                 NotifyPropertyChanged("InfoString");
 
             }
         }
 
+        public double NotIgnoredOpacity => IsIgnored ? 0.3 : 1;
         public bool IsAlpha => PreferredReleaseType.ToLower().Equals("alpha");
         public bool IsBeta => PreferredReleaseType.ToLower().Equals("beta");
         public bool IsRelease => PreferredReleaseType.ToLower().Equals("release");
@@ -319,9 +321,10 @@ namespace Addon.Core.Models
             $"\r\n{nameof(SuggestedDownload)}: {SuggestedDownload}," +
             $"\r\n{nameof(SubFolders)}: {SubFolderContents()}";
 
-        private string SubFolderContents()        {
-            
-            return (SubFolders!=null) ?string.Join(", ",SubFolders):string.Empty;
+        private string SubFolderContents()
+        {
+
+            return (SubFolders != null) ? string.Join(", ", SubFolders) : string.Empty;
         }
 
         public SaveableAddon AsSaveableAddon()

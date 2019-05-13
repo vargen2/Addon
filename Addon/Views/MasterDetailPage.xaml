@@ -405,10 +405,10 @@
 
 
         <DataTemplate x:Key="ItemTemplate" x:DataType="data:Addon">
-
             <Grid
+                Opacity="{x:Bind NotIgnoredOpacity,Mode=OneWay}"
                 Height="50"
-                HorizontalAlignment="Stretch"
+                HorizontalAlignment="Stretch"                
                 RightTapped="UIElement_OnRightTapped">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="18*" />
@@ -420,8 +420,8 @@
                         Height="25"
                         FontSize="{StaticResource MediumFontSize}"
                         FontWeight="SemiBold"
-                        Text="{Binding FolderName}" />
-                    <TextBlock Height="25" Text="{Binding CurrentReleaseTypeAndVersion}" />
+                        Text="{x:Bind FolderName, Mode=OneWay}" />
+                    <TextBlock Height="25" Text="{x:Bind CurrentReleaseTypeAndVersion, Mode=OneWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Column="1"
@@ -445,15 +445,15 @@
                         Click="UpdateButtonClick"
                         Content="Update"
                         Tag="{x:Bind}"
-                        Visibility="{Binding IsUpdateable}" />
+                        Visibility="{x:Bind IsUpdateable, Mode=OneWay}" />
                     <TextBlock
                         Height="20"
-                        Text="{Binding Status}"
-                        Visibility="{Binding ShowStatus}" />
+                        Text="{x:Bind Status, Mode=OneWay}"
+                        Visibility="{x:Bind ShowStatus, Mode=OneWay}" />
                     <TextBlock
                         Height="20"
                         Text="{x:Bind Message, Mode=OneWay}"
-                        Visibility="{Binding ShowMessage}" />
+                        Visibility="{x:Bind ShowMessage, Mode=OneWay}" />
 
                 </StackPanel>
                 <FlyoutBase.AttachedFlyout>
@@ -463,22 +463,22 @@
                             Tag="{x:Bind Mode=OneWay}"
                             Text="Ignored">
                             <MenuFlyoutItem.Icon>
-                                <SymbolIcon Symbol="Accept" Visibility="{Binding IsIgnored}" />
+                                <SymbolIcon Symbol="Accept" Visibility="{x:Bind IsIgnored, Mode=OneWay}" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem Command="{Binding SetAlpha}" Text="Alpha">
                             <MenuFlyoutItem.Icon>
-                                <SymbolIcon Symbol="Accept" Visibility="{Binding IsAlpha}" />
+                                <SymbolIcon Symbol="Accept" Visibility="{x:Bind IsAlpha, Mode=OneWay}" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem Command="{Binding SetBeta}" Text="Beta">
                             <MenuFlyoutItem.Icon>
-                                <SymbolIcon Symbol="Accept" Visibility="{Binding IsBeta}" />
+                                <SymbolIcon Symbol="Accept" Visibility="{x:Bind IsBeta, Mode=OneWay}" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem Command="{Binding SetRelease}" Text="Release">
                             <MenuFlyoutItem.Icon>
-                                <SymbolIcon Symbol="Accept" Visibility="{Binding IsRelease}" />
+                                <SymbolIcon Symbol="Accept" Visibility="{x:Bind IsRelease, Mode=OneWay}" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem

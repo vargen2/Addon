@@ -13,52 +13,24 @@ namespace Addon.Views
 {
     public sealed partial class MasterDetailPage : Page
     {
-        // private Object oldSelected;
-
         public MasterDetailViewModel ViewModel { get; } = new MasterDetailViewModel();
 
         public MasterDetailPage()
         {
             InitializeComponent();
             Loaded += MasterDetailPage_Loaded;
-
         }
 
         private async void MasterDetailPage_Loaded(object sender, RoutedEventArgs e)
         {
-
             await ViewModel.LoadDataAsync(MasterDetailsViewControl.ViewState);
-            //MyMasterDetailPage = this;
-            //Window.Current.Content.PointerPressed +=ForegroundElement_PointerPressed;
-            //MasterDetailsViewControl.SelectionChanged += MasterDetailsViewControl_SelectionChanged;
         }
-
-        //private void MasterDetailsViewControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    Debug.WriteLine("SELECTION CHANGED "+e.ToString());
-        //    if (MasterDetailsViewControl.SelectedItem != null)
-        //    {
-        //        oldSelected = MasterDetailsViewControl.SelectedItem;
-        //    }
-        //    else if (MasterDetailsViewControl.SelectedItem == null)
-        //    {
-        //        Debug.WriteLine("NULL selected");
-        //        if (ViewModel.Session.SelectedGame != null && ViewModel.Session.SelectedGame.Addons.Count > 0 && oldSelected != null)
-        //        {
-        //            MasterDetailsViewControl.SelectedItem = oldSelected;
-
-        //        }
-        //    }
-        //}
 
         private async void UpdateButtonClick(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
             var addon = button.Tag as Core.Models.Addon;
-            //var nonUiAddon=ViewModel.Session.SelectedGame.Addons.First(adn=>adn.FolderName.Equals(addon.FolderName));
             await Tasks.UpdateAddon(addon);
-
-            // await Task.Run(() => Tasks.UpdateAddon(nonUiAddon));
         }
 
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -86,16 +58,8 @@ namespace Addon.Views
             progressRing.Visibility = Visibility.Collapsed;
             textBlock.Visibility = Visibility.Visible;
 
-
             button.IsEnabled = true;
         }
-
-        //private async void RefreshTocFileForAllInSelectedGame(object sender, RoutedEventArgs e)
-        //{
-        //    var addons = ViewModel.Session.SelectedGame.Addons.ToList();
-        //    await Tasks.RefreshTocFileFor(addons);
-        //    Debug.WriteLine("Refreshed toc files for all addons");
-        //}
 
         private void FlyoutBase_OnOpening(object sender, object e)
         {
@@ -116,19 +80,32 @@ namespace Addon.Views
                     var menuItem = new MenuFlyoutItem() { Text = download.ToString() };
                     menuItem.Click += async (a, b) =>
                     {
-                        ContentDialog updateAddonDialog = new ContentDialog()
+                        if (addon.IsIgnored)
                         {
-                            Title = "Update Addon?",
-                            Content = "Update to " + download.ReleaseType + " " + download.Version + "?",
-                            PrimaryButtonText = "Ok",
-                            CloseButtonText = "Cancel"
-                        };
-
-                        var response = await updateAddonDialog.ShowAsync();
-                        if (response == ContentDialogResult.Primary)
-                        {
-                            await Tasks.UpdateAddon(addon, download);
+                            ContentDialog updateAddonDialog = new ContentDialog()
+                            {
+                                Title = "Can't update ignored addon",
+                                PrimaryButtonText = "Ok"
+                            };
+                            var response = await updateAddonDialog.ShowAsync();
                         }
+                        else
+                        {
+                            ContentDialog updateAddonDialog = new ContentDialog()
+                            {
+                                Title = "Update Addon?",
+                                Content = "Update to " + download.ReleaseType + " " + download.Version + "?",
+                                PrimaryButtonText = "Ok",
+                                CloseButtonText = "Cancel"
+                            };
+
+                            var response = await updateAddonDialog.ShowAsync();
+                            if (response == ContentDialogResult.Primary)
+                            {
+                                await Tasks.UpdateAddon(addon, download);
+                            }
+                        }
+
                     };
                     submenu.Items.Add(menuItem);
                 }

@@ -185,10 +185,10 @@
     <value>parameter must be an Enum name!</value>
     <comment>Parameter must be an Enum name in enum to boolean converter</comment>
   </data>
-  <data name="Settings_EnableAutoRefreshVersions.Content" xml:space="preserve">
+  <data name="Settings_AutoRefreshVersions.Content" xml:space="preserve">
     <value>Refresh versions on start up</value>
   </data>
-  <data name="Settings_EnableDeleteOldFilesBeforeUpdate.Content" xml:space="preserve">
+  <data name="Settings_DeleteOldFilesBeforeUpdate.Content" xml:space="preserve">
     <value>Delete old files before updateing</value>
   </data>
 </root>

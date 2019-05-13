@@ -16,11 +16,11 @@
         <StackPanel x:Name="ContentArea">
             <TextBlock x:Uid="Settings_Personalization" Style="{ThemeResource SubtitleTextBlockStyle}" />
             <CheckBox
-                x:Uid="Settings_EnableAutoRefreshVersions"
+                x:Uid="Settings_AutoRefreshVersions"
                 Margin="0,8,0,0"
                 IsChecked="{x:Bind ViewModel.IsAutoRefreshVersions, Mode=TwoWay}" />
             <CheckBox
-                x:Uid="Settings_EnableDeleteOldFilesBeforeUpdate"
+                x:Uid="Settings_DeleteOldFilesBeforeUpdate"
                 Margin="0,8,0,0"
                 IsChecked="{x:Bind ViewModel.IsDeleteOldFilesBeforeUpdate, Mode=TwoWay}" />
 

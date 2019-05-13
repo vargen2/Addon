@@ -7,7 +7,6 @@ using Windows.UI.Xaml;
 
 namespace Addon.ViewModels
 {
-    // TODO WTS: Add other settings as necessary. For help see https://github.com/Microsoft/WindowsTemplateStudio/blob/master/docs/pages/settings.md
     public class SettingsViewModel : Observable
     {
         private ElementTheme _elementTheme = ThemeSelectorService.Theme;
@@ -29,8 +28,6 @@ namespace Addon.ViewModels
         }
 
         private ICommand _switchThemeCommand;
-
-
 
         public ICommand SwitchThemeCommand
         {
@@ -70,9 +67,6 @@ namespace Addon.ViewModels
 
             return $"{appName} - {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
         }
-
-
-
 
         private bool? _isAutoRefreshVersions;
 
@@ -114,13 +108,10 @@ namespace Addon.ViewModels
         {
             if (!_hasInstanceBeenInitialized)
             {
-
                 IsAutoRefreshVersions = await Windows.Storage.ApplicationData.Current.LocalSettings.ReadAsync<bool>(nameof(IsAutoRefreshVersions));
                 IsDeleteOldFilesBeforeUpdate = await Windows.Storage.ApplicationData.Current.LocalSettings.ReadAsync<bool>(nameof(IsDeleteOldFilesBeforeUpdate));
-
-
+               
                 Initialize();
-
                 _hasInstanceBeenInitialized = true;
             }
         }

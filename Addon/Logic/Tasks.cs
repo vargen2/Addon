@@ -53,6 +53,10 @@ namespace Addon.Logic
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(Core.Models.Addon addon)
         {
+            if (addon.IsIgnored)
+            {
+                return;
+            }
             addon.Progress = 0;
             addon.Status = Core.Models.Addon.DOWNLOADING_VERSIONS;
             if (String.IsNullOrEmpty(addon.ProjectUrl))
@@ -69,7 +73,10 @@ namespace Addon.Logic
 
         public static async Task UpdateAddon(Core.Models.Addon addon, Download download)
         {
-
+            if (addon.IsIgnored)
+            {
+                return;
+            }
             addon.Message = "Downloading...";
             addon.Progress = 0;
             addon.Status = Core.Models.Addon.UPDATING;
@@ -110,10 +117,10 @@ namespace Addon.Logic
         }
 
         internal static async Task Remove(Core.Models.Addon addon)
-        {            
+        {
             addon.Game.Addons.Remove(addon);
             await Task.Run(() => Update.RemoveFilesFor(addon));
-            Debug.WriteLine("Remove done for "+addon.FolderName);
+            Debug.WriteLine("Remove done for " + addon.FolderName);
         }
 
     }
