@@ -83,7 +83,11 @@ namespace Addon.Services
             Debug.WriteLine("Loaded knownsubfolders " + Singleton<Session>.Instance.KnownSubFolders.Count);
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
 
+            var addonData = await Task.Run(() => Storage.LoadAddonData());
 
+            Singleton<Session>.Instance.AddonData.AddRange(addonData);
+
+            Debug.WriteLine("addondata length: "+Singleton<Session>.Instance.AddonData.Count);
 
             var settings = Singleton<SettingsViewModel>.Instance;
             await settings.EnsureInstanceInitializedAsync();

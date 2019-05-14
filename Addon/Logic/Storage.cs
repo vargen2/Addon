@@ -110,5 +110,11 @@ namespace Addon.Logic
             storeAddons.Insert(0, new StoreAddon("elvui", "ElvUI", "A user interface designed around user-friendliness with extra features that are not included in the standard UI.", 0, DateTime.Now, DateTime.Now));
             return storeAddons;
         }
+
+        public static async Task<List<AddonData>> LoadAddonData()
+        {
+            var assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            return await assets.ReadAsync<List<AddonData>>("addondata");
+        }
     }
 }

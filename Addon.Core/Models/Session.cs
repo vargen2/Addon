@@ -49,6 +49,7 @@ namespace Addon.Core.Models
         public ObservableCollection<StoreAddon> StoreAddons { get; set; } = new ObservableCollection<StoreAddon>();
 
         public HashSet<string> KnownSubFolders { get; } = new HashSet<string>();
+        public List<AddonData> AddonData { get; } = new List<AddonData>();
 
         public SaveableSession AsSaveableSession()
         {

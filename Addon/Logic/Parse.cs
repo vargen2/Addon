@@ -115,7 +115,7 @@ namespace Addon.Logic
                 string section = Util.Parse2(htmlPage, "<section class=\"project-content", "</section>");
 
                 section = Regex.Replace(section, "href=\".*\"", "href=\"#\"");
-                
+
                 return section.Substring(section.IndexOf(">") + 1);
             }
             catch (Exception e)
@@ -136,6 +136,18 @@ namespace Addon.Logic
                 Debug.WriteLine("[ERROR] FromElvUiPageToChanges, " + e.Message);
                 return string.Empty;
             }
+        }
+
+        //
+        // Can return null
+        //
+        internal static string GetFromAddonDataFor(Core.Models.Addon addon)
+        {
+            return Singleton<Session>.Instance.AddonData
+               .Where(addonData => addonData.FolderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase))
+               .Where(addonData => addonData.ProjectUrl.Contains("projects/"))
+               .Select(addonData => addonData.ProjectUrl.Substring(addonData.ProjectUrl.IndexOf("projects/")+9))
+               .FirstOrDefault();
         }
     }
 }

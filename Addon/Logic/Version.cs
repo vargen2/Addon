@@ -3,6 +3,7 @@ using Addon.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
@@ -46,6 +47,14 @@ namespace Addon.Logic
             if (PROJECT_URLS.TryGetValue(addon.FolderName.ToLower(), out List<string> list))
             {
                 urlNames.InsertRange(0, list);
+            }
+
+            string urlFromAddonData = Parse.GetFromAddonDataFor(addon);
+           
+            if (!string.IsNullOrEmpty(urlFromAddonData))
+            {
+                //Debug.WriteLine("findproj urlfrom addondata  : "+urlFromAddonData);
+                urlNames.Insert(0, urlFromAddonData);
             }
 
             if (!NetworkInterface.GetIsNetworkAvailable())

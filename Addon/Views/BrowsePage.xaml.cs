@@ -3,6 +3,7 @@ using Addon.Logic;
 using Addon.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -56,18 +57,24 @@ namespace Addon.Views
                 {
                     nameList.InsertRange(0, list);
                 }
+                string urlFromAddonData = Parse.GetFromAddonDataFor(a);
+
+                if (!string.IsNullOrEmpty(urlFromAddonData))
+                {
+                    nameList.Insert(0, urlFromAddonData);
+                }
                 return nameList;
             }).ToList());
-
+           
             foreach (var storeAddon in ViewModel.Session.StoreAddons)
             {
-                if(storeAddon.Status.Equals(StoreAddon.INSTALLING))
+                if (storeAddon.Status.Equals(StoreAddon.INSTALLING))
                 {
                     continue;
                 }
 
                 if (addons.Contains(storeAddon.Url.ToLower()) || addons.Contains(storeAddon.Title.ToLower()))
-                {
+                {           
                     storeAddon.Status = StoreAddon.INSTALLED;
                 }
                 else
