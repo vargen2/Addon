@@ -28,5 +28,11 @@ Boilerplate was made with https://marketplace.visualstudio.com/items?itemName=WA
 
 ### ChangeLog
 
-1.0.13.0
+#### NEXT
+- Dont't download versions or update ignored addons
+- Setting to delete old files before update
+- Can remove addons
+- No more double scroll in detail page
+
+#### 1.0.13.0
 - Initial release
