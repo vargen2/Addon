@@ -108,28 +108,6 @@ namespace Addon.Logic
             return downloads;
         }
 
-        //public static List<string> FromPageToChanges(string htmlPage)
-        //{
-        //    try
-        //    {
-        //        string section = Util.Parse2(htmlPage, "<section class=\"project-content", "</section>");
-        //        section = section.Substring(section.IndexOf("<p>"));
-        //        return section.Split("<p>")
-        //            .Select(line => line
-        //            .Replace("</p>", "")
-        //            .Replace("<br>", "\r\n")
-        //            .Replace("&nbsp;", " ")
-        //            .Replace("&#x27;", "'")
-        //            .Replace("&quot;", "\"")
-        //            .Trim()).ToList();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.WriteLine("[ERROR] FromPageToChanges, " + e.Message);
-        //        return new List<string>();
-        //    }
-        //}
-
         public static string FromPageToChanges(string htmlPage)
         {
             try
@@ -137,8 +115,7 @@ namespace Addon.Logic
                 string section = Util.Parse2(htmlPage, "<section class=\"project-content", "</section>");
 
                 section = Regex.Replace(section, "href=\".*\"", "href=\"#\"");
-
-
+                
                 return section.Substring(section.IndexOf(">") + 1);
             }
             catch (Exception e)

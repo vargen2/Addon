@@ -161,7 +161,7 @@ namespace Addon.Logic
                 int index1 = response.IndexOf("<p class=\"infobox__cta\"");
                 int index2 = response.Substring(index1).IndexOf("</p>");
                 string data = response.Substring(index1, index2);
-                return Util.Parse(data, "<a href=\"", "\">");
+                return Util.Parse2(data, "<a href=\"", "\">");
             }
             catch (Exception ex)
             {

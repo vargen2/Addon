@@ -40,6 +40,7 @@ namespace Addon.Logic
 
             if (tempAddon.ProjectUrl.Equals(Version.ELVUI))
             {
+                // TODO move to method
                 var trash = await Task.Run(() => Update.UpdateAddonOld(tempAddon, download, file));
                 tempAddon.CurrentDownload = download;
                 await Tasks.RefreshTocFileFor(new List<Core.Models.Addon>() { tempAddon });
@@ -51,7 +52,7 @@ namespace Addon.Logic
             }
             else
             {
-
+                // TODO move to method
                 var trash = await Task.Run(() => Update.UpdateAddon2(tempAddon, file, storeAddon));
                 storeAddon.Progress = 0;
                 tempAddon.Message = string.Empty;

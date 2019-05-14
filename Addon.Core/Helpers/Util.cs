@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace Addon.Core.Helpers
 {
@@ -15,13 +13,6 @@ namespace Addon.Core.Helpers
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[Random.Next(s.Length)]).ToArray());
-        }
-
-        public static string Parse(string input, string start, string end)
-        {
-            int startI = input.IndexOf(start) + start.Length;
-            string mid = input.Substring(startI);
-            return mid.Substring(0, mid.IndexOf(end)).Trim();
         }
 
         public static string Parse2(string input, string start, string end)
