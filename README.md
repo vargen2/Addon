@@ -29,7 +29,7 @@ Boilerplate was made with https://marketplace.visualstudio.com/items?itemName=WA
 ### ChangeLog
 
 #### NEXT
-- Dont't download versions or update ignored addons
+- Don't download versions or update ignored addons
 - Setting to delete old files before update
 - Can remove addons
 - No more double scroll in detail page
