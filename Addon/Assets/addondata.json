@@ -1,0 +1,292 @@
+[
+  {
+    "FolderName": "DBM-Core",
+    "ProjectUrl": "https://wow.curseforge.com/projects/deadly-boss-mods",
+    "SubFolders": [
+      "DBM-Azeroth-BfA",
+      "DBM-Brawlers",
+      "DBM-CrucibleofStorms",
+      "DBM-DefaultSkin",
+      "DBM-DMF",
+      "DBM-EternalPalace",
+      "DBM-GUI",
+      "DBM-Party-BfA",
+      "DBM-StatusBarTimers",
+      "DBM-Uldir",
+      "DBM-WorldEvents",
+      "DBM-ZuldazarRaid"
+    ]
+  },
+  {
+    "FolderName": "elvui",
+    "ProjectUrl": "https://www.tukui.org/download.php?ui=elvui",
+    "SubFolders": ["ElvUI_Config"]
+  },
+  {
+    "FolderName": "AtlasLoot",
+    "ProjectUrl": "https://www.wowace.com/projects/atlasloot-enhanced",
+    "SubFolders": [
+      "AtlasLoot_BattleforAzeroth",
+      "AtlasLoot_BurningCrusade",
+      "AtlasLoot_Cataclysm",
+      "AtlasLoot_Classic",
+      "AtlasLoot_Collections",
+      "AtlasLoot_Crafting",
+      "AtlasLoot_Factions",
+      "AtlasLoot_Legion",
+      "AtlasLoot_MistsofPandaria",
+      "AtlasLoot_Options",
+      "AtlasLoot_PvP",
+      "AtlasLoot_WarlordsofDraenor",
+      "AtlasLoot_WorldEvents",
+      "AtlasLoot_WrathoftheLichKing"
+    ]
+  },
+  {
+    "FolderName": "Bagnon",
+    "ProjectUrl": "https://wow.curseforge.com/projects/bagnon",
+    "SubFolders": [
+      "Bagnon_Config",
+      "Bagnon_VoidStorage",
+      "Bagnon_GuildBank",
+      "BagBrother"
+    ]
+  },
+  {
+    "FolderName": "BigWigs",
+    "ProjectUrl": "https://wow.curseforge.com/projects/big-wigs",
+    "SubFolders": [
+      "BigWigs_Core",
+      "BigWigs_Options",
+      "BigWigs_Plugins",
+      "BigWigs_Azeroth",
+      "BigWigs_Uldir",
+      "BigWigs_BattleOfDazaralor",
+      "BigWigs_CrucibleOfStorms"
+    ]
+  },
+  {
+    "FolderName": "Details",
+    "ProjectUrl": "https://wow.curseforge.com/projects/details",
+    "SubFolders": [
+      "Details_3DModelsPaths",
+      "Details_DataStorage",
+      "Details_EncounterDetails",
+      "Details_RaidCheck",
+      "Details_Streamer",
+      "Details_TinyThreat",
+      "Details_Vanguard"
+    ]
+  },
+  {
+    "FolderName": "ElvUI",
+    "ProjectUrl": "https://www.tukui.org/download.php?ui=elvui",
+    "SubFolders": ["ElvUI_Config"]
+  },
+  {
+    "FolderName": "GTFO",
+    "ProjectUrl": "https://wow.curseforge.com/projects/gtfo",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "HealBot",
+    "ProjectUrl": "https://wow.curseforge.com/projects/heal-bot-continued",
+    "SubFolders": [
+      "HealBot_br",
+      "HealBot_cn",
+      "HealBot_de",
+      "HealBot_es",
+      "HealBot_fr",
+      "HealBot_gr",
+      "HealBot_hu",
+      "HealBot_it",
+      "HealBot_kr",
+      "HealBot_ru",
+      "HealBot_Tips",
+      "HealBot_tw"
+    ]
+  },
+  {
+    "FolderName": "NPCScan",
+    "ProjectUrl": "https://www.wowace.com/projects/npcscan",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "OmniCC",
+    "ProjectUrl": "https://wow.curseforge.com/projects/omni-cc",
+    "SubFolders": ["OmniCC_Config"]
+  },
+  {
+    "FolderName": "Pawn",
+    "ProjectUrl": "https://wow.curseforge.com/projects/pawn",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "RaiderIO",
+    "ProjectUrl": "https://wow.curseforge.com/projects/raiderio",
+    "SubFolders": [
+      "RaiderIO_DB_EU_A",
+      "RaiderIO_DB_EU_A_R",
+      "RaiderIO_DB_EU_H",
+      "RaiderIO_DB_EU_H_R",
+      "RaiderIO_DB_KR_A",
+      "RaiderIO_DB_KR_A_R",
+      "RaiderIO_DB_KR_H",
+      "RaiderIO_DB_KR_H_R",
+      "RaiderIO_DB_TW_A",
+      "RaiderIO_DB_TW_A_R",
+      "RaiderIO_DB_TW_H",
+      "RaiderIO_DB_TW_H_R",
+      "RaiderIO_DB_US_A",
+      "RaiderIO_DB_US_A_R",
+      "RaiderIO_DB_US_H",
+      "RaiderIO_DB_US_H_R"
+    ]
+  },
+  {
+    "FolderName": "Recount",
+    "ProjectUrl": "https://www.wowace.com/projects/recount",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "TradeSkillMaster",
+    "ProjectUrl": "https://wow.curseforge.com/projects/tradeskill-master",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "WeakAuras",
+    "ProjectUrl": "https://www.wowace.com/projects/weakauras-2",
+    "SubFolders": [
+      "WeakAurasOptions",
+      "WeakAurasModelPaths",
+      "WeakAurasTemplates"
+    ]
+  },
+  {
+    "FolderName": "WorldQuestTracker",
+    "ProjectUrl": "https://wow.curseforge.com/projects/world-quest-tracker",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "AngryKeystones",
+    "ProjectUrl": "https://www.wowace.com/projects/angry-keystones",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "handynotes",
+    "ProjectUrl": "https://www.wowace.com/projects/handynotes",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "AAP-Core",
+    "ProjectUrl": "https://wow.curseforge.com/projects/azeroth-auto-pilot",
+    "SubFolders": [
+      "AAP-BfA",
+      "AAP-Cata-MoP",
+      "AAP-Legion",
+      "AAP-TBC-WotLK",
+      "AAP-Vanilla",
+      "AAP-WoD",
+      "Azeroth Auto Pilot"
+    ]
+  },
+  {
+    "FolderName": "auctionator",
+    "ProjectUrl": "https://wow.curseforge.com/projects/auctionator",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "ExRT",
+    "ProjectUrl": "https://wow.curseforge.com/projects/exorsus-raid-tools",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "simulationcraft",
+    "ProjectUrl": "https://wow.curseforge.com/projects/simulationcraft",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "WorldQuestsList",
+    "ProjectUrl": "https://wow.curseforge.com/projects/world-quests-list",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "rclootcouncil",
+    "ProjectUrl": "https://wow.curseforge.com/projects/rclootcouncil",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "skada",
+    "ProjectUrl": "https://www.wowace.com/projects/skada",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "LittleWigs",
+    "ProjectUrl": "https://wow.curseforge.com/projects/little-wigs",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "Kui_Nameplates",
+    "ProjectUrl": "https://wow.curseforge.com/projects/kuinameplates",
+    "SubFolders": [
+      "Kui_Media",
+      "Kui_Nameplates_Core",
+      "Kui_Nameplates_Core_Config"
+    ]
+  },
+  {
+    "FolderName": "MethodDungeonTools",
+    "ProjectUrl": "https://wow.curseforge.com/projects/method-dungeon-tools",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "Titan",
+    "ProjectUrl": "https://wow.curseforge.com/projects/titan-panel",
+    "SubFolders": [
+      "TitanBag",
+      "TitanClock",
+      "TitanGold",
+      "TitanLocation",
+      "TitanLootType",
+      "TitanPerformance",
+      "TitanRepair",
+      "TitanVolume",
+      "TitanXP"
+    ]
+  },
+  {
+    "FolderName": "gathermate2",
+    "ProjectUrl": "https://www.wowace.com/projects/gathermate2",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "tellmewhen",
+    "ProjectUrl": "https://wow.curseforge.com/projects/tellmewhen",
+    "SubFolders": ["TellMeWhen_Options"]
+  },
+  {
+    "FolderName": "TidyPlates_ThreatPlates",
+    "ProjectUrl": "https://wow.curseforge.com/projects/tidy-plates-threat-plates",
+    "SubFolders": []
+  },
+  {
+    "FolderName": "Auc-Advanced",
+    "ProjectUrl": "https://wow.curseforge.com/projects/auctioneer",
+    "SubFolders": [
+      "Auc-Filter-Basic",
+      "Auc-ScanData",
+      "Auc-Stat-Histogram",
+      "Auc-Stat-iLevel",
+      "Auc-Stat-Purchased",
+      "Auc-Stat-Simple",
+      "Auc-Stat-StdDev",
+      "Auc-Util-FixAH",
+      "BeanCounter",
+      "Enchantrix",
+      "Informant",
+      "SlideBar",
+      "Stubby",
+      "!Swatter"
+    ]
+  }
+]
