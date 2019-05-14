@@ -46,8 +46,23 @@ namespace Addon.Logic
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(ObservableCollection<Core.Models.Addon> addons)
         {
-            var tasks = addons.Select(FindProjectUrlAndDownLoadVersionsFor).ToArray();
-            await Task.WhenAll(tasks);
+            int length = addons.Count;
+            int i = 0;
+            int chunkSize=10;
+            while (i < length)
+            {
+                try
+                {
+                    var tasks = addons.Skip(i).Take(chunkSize).Select(FindProjectUrlAndDownLoadVersionsFor);
+                    await Task.WhenAll(tasks);              
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("[Error] " + e.Message);
+                }
+                i+=chunkSize;
+            }
+            
             await Sorter.Sort(addons);
         }
 
