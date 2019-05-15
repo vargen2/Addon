@@ -57,7 +57,7 @@ namespace Addon.Logic
             await Task.WhenAll(tasks);
           
             
-            await Sorter.Sort(addons);
+            //await Sorter.Sort(addons);
         }
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(Core.Models.Addon addon)

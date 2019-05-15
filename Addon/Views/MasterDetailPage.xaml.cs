@@ -2,12 +2,14 @@
 using Addon.Logic;
 using Addon.ViewModels;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Navigation;
 
 namespace Addon.Views
 {
@@ -24,6 +26,18 @@ namespace Addon.Views
         private async void MasterDetailPage_Loaded(object sender, RoutedEventArgs e)
         {
             await ViewModel.LoadDataAsync(MasterDetailsViewControl.ViewState);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            ViewModel.Session.PropertyChanged += Session_PropertyChanged;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            ViewModel.Session.PropertyChanged -= Session_PropertyChanged;
         }
 
         private async void UpdateButtonClick(object sender, RoutedEventArgs e)
@@ -57,7 +71,7 @@ namespace Addon.Views
             progressRing.IsActive = false;
             progressRing.Visibility = Visibility.Collapsed;
             textBlock.Visibility = Visibility.Visible;
-
+            ViewModel.Addons.RefreshSorting();
             button.IsEnabled = true;
         }
 
@@ -267,7 +281,19 @@ namespace Addon.Views
         }
 
 
-
+        private void Session_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("SelectedGame"))
+            {
+                var game = ViewModel.Session.SelectedGame;
+                if (game != null)
+                {
+                   // Debug.WriteLine("Selected game triggered in MasterDetailPage");
+                    ViewModel.Addons.Source = ViewModel.Session.SelectedGame.Addons;
+                    ViewModel.Addons.Refresh();
+                }
+            }
+        }
 
 
 

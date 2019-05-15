@@ -585,7 +585,7 @@
             CompactModeThresholdWidth="1"
             DetailsTemplate="{StaticResource DetailsTemplate}"
             ItemTemplate="{StaticResource ItemTemplate}"
-            ItemsSource="{x:Bind ViewModel.Session.SelectedGame.Addons, Mode=OneWay}"
+            ItemsSource="{x:Bind ViewModel.Addons, Mode=OneWay}"
             MasterHeader="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath}"
             MasterHeaderTemplate="{StaticResource MasterHeaderTemplate}"
             MasterPaneWidth="600"
@@ -645,6 +645,9 @@
 
 
 <!--
+    ItemsSource="{x:Bind ViewModel.Addons, Mode=OneWay}"
+    ItemsSource="{x:Bind ViewModel.Session.SelectedGame.Addons, Mode=OneWay}"
+    ItemsSource="{x:Bind ViewModel.Session.SelectedGame.Addons, Mode=OneWay}"
     BorderBrush="Transparent"
     MasterHeader="MasterDetail"
     MasterHeaderTemplate="{StaticResource MinimalMasterHeaderTemplate}"

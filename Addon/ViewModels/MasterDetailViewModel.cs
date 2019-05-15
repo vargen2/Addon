@@ -2,7 +2,9 @@
 using Addon.Core.Models;
 using Addon.Helpers;
 using Addon.Logic;
+using Microsoft.Toolkit.Uwp.UI;
 using Microsoft.Toolkit.Uwp.UI.Controls;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,13 +12,15 @@ namespace Addon.ViewModels
 {
     public class MasterDetailViewModel : Observable
     {
-        private Addon.Core.Models.Addon oldSelected;
+        private Core.Models.Addon oldSelected;
 
         public Session Session { get; }
 
-        private Addon.Core.Models.Addon _selected;
+        public AdvancedCollectionView Addons { get; set; }
 
-        public Addon.Core.Models.Addon Selected
+        private Core.Models.Addon _selected;
+
+        public Core.Models.Addon Selected
         {
             get { return _selected; }
             set
@@ -24,15 +28,14 @@ namespace Addon.ViewModels
                 Set(ref _selected, value);
             }
         }
-
-        // public ObservableCollection<Addon.Core.Models.Addon> SampleItems { get; private set; } = new ObservableCollection<Addon.Core.Models.Addon>();
-
+        
         public MasterDetailViewModel()
         {
-
             Session = Singleton<Session>.Instance;
+            Addons = new AdvancedCollectionView(Session.SelectedGame.Addons);
+            Addons.SortDescriptions.Add(new SortDescription("Status", SortDirection.Descending, StringComparer.OrdinalIgnoreCase));
+            Addons.SortDescriptions.Add(new SortDescription("FolderName", SortDirection.Ascending, StringComparer.OrdinalIgnoreCase));
             PropertyChanged += MasterDetailViewModel_PropertyChanged;
-
         }
 
         private async void MasterDetailViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -67,25 +70,7 @@ namespace Addon.ViewModels
             {
                 Selected = Session.SelectedGame.Addons.First();
             }
+            await Task.CompletedTask;
         }
-
-
-
-        //public async Task LoadDataAsync(MasterDetailsViewState viewState)
-        //{
-        //    SampleItems.Clear();
-
-        //    var data = Singleton<Session>.Instance.SelectedGame.Addons;
-
-        //    foreach (var item in data)
-        //    {
-        //        SampleItems.Add(item);
-        //    }
-
-        //    if (viewState == MasterDetailsViewState.Both)
-        //    {
-        //        Selected = SampleItems.First();
-        //    }
-        //}
     }
 }

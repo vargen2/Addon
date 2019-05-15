@@ -1,10 +1,12 @@
 ﻿using Addon.Core.Models;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Addon.Logic
 {
+    [Obsolete("Not used anymore, since masterdetailpage uses AdvancedViewCollection")]
     internal static class Sorter
     {
 
