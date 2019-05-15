@@ -126,6 +126,18 @@ namespace Addon.Views
             Sort(new SortDescription("Status", ViewModel.StatusSortDirection));
         }
 
+        private void Updated_Header_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            ViewModel.UpdatedSortDirection = Opposite(ViewModel.UpdatedSortDirection);
+            Sort(new SortDescription("Updated", ViewModel.UpdatedSortDirection));
+        }
+
+        private void Created_Header_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {            
+            ViewModel.CreatedSortDirection = Opposite(ViewModel.CreatedSortDirection);
+            Sort(new SortDescription("Created", ViewModel.CreatedSortDirection));
+        }
+
         private static SortDirection Opposite(SortDirection sortDirection)
         {
             return sortDirection == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending;

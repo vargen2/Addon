@@ -12,6 +12,8 @@ namespace Addon.ViewModels
         public SortDirection TitleSortDirection { get; set; }
         public SortDirection DownloadSortDirection { get; set; }
         public SortDirection StatusSortDirection { get; set; }
+        public SortDirection UpdatedSortDirection { get; set; }
+        public SortDirection CreatedSortDirection { get; set; }
         
         public BrowseViewModel()
         {

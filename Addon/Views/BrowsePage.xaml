@@ -72,11 +72,15 @@
                             Width="90"
                             FontSize="{StaticResource MediumFontSize}"
                             Text="Updated"
+                            extensions:Mouse.Cursor="Hand"
+                            Tapped="Updated_Header_Tapped"
                             TextAlignment="Center" />
                         <TextBlock
                             Width="90"
                             FontSize="{StaticResource MediumFontSize}"
                             Text="Created"
+                            extensions:Mouse.Cursor="Hand"
+                            Tapped="Created_Header_Tapped"
                             TextAlignment="Center" />
                     </StackPanel>
                 </DataTemplate>
