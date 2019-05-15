@@ -14,14 +14,15 @@ namespace Addon.Logic
 {
     public static class Storage
     {
-        private static Windows.Storage.StorageFolder localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+        private static readonly StorageFolder LOCAL_FOLDER = ApplicationData.Current.LocalFolder;
+        private static readonly StorageFolder APP_INSTALLED_FOLDER = Package.Current.InstalledLocation;
 
         public static async Task SaveSession()
         {
             try
             {
                 var instance = Singleton<Session>.Instance.AsSaveableSession();
-                await localFolder.SaveAsync("session", instance);
+                await LOCAL_FOLDER.SaveAsync("session", instance);
                 var addonDataSet = new HashSet<AddonData>();
                 foreach (var game in instance.Games)
                 {
@@ -33,7 +34,7 @@ namespace Addon.Logic
                         .ToList();
                     addonDataSet.UnionWith(addonDataList);
                 }
-                await localFolder.SaveAsync("addondata", addonDataSet);
+                await LOCAL_FOLDER.SaveAsync("addondata", addonDataSet);
 
                 //    Debug.WriteLine("Saved Session to " + localFolder.Path);
             }
@@ -47,7 +48,7 @@ namespace Addon.Logic
         public static async Task LoadTask()
         {
             var session = Singleton<Session>.Instance;
-            var saveableSession = await localFolder.ReadAsync<SaveableSession>("session");
+            var saveableSession = await LOCAL_FOLDER.ReadAsync<SaveableSession>("session");
             if (saveableSession == null)
                 return;
 
@@ -71,14 +72,14 @@ namespace Addon.Logic
 
         public static async Task<HashSet<string>> LoadKnownSubFolders()
         {
-            var assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
             return await assets.ReadAsync<HashSet<string>>("knownsubfolders");
         }
 
 
         public static async Task<HashSet<string>> LoadKnownSubFoldersFromUser()
         {
-            var knownFolders = await localFolder.ReadAsync<HashSet<string>>("knownsubfolders");
+            var knownFolders = await LOCAL_FOLDER.ReadAsync<HashSet<string>>("knownsubfolders");
             return knownFolders;
         }
 
@@ -87,7 +88,7 @@ namespace Addon.Logic
             try
             {
                 var instance = Singleton<Session>.Instance.KnownSubFolders;
-                await localFolder.SaveAsync("knownsubfolders", instance);
+                await LOCAL_FOLDER.SaveAsync("knownsubfolders", instance);
                 // Debug.WriteLine("Saved knownsubfolders");
             }
             catch (Exception e)
@@ -98,14 +99,23 @@ namespace Addon.Logic
 
         public static async Task<IList<StoreAddon>> LoadStoreAddons()
         {
-            var packageFolder = Package.Current.InstalledLocation;
-            var sampleFile = await packageFolder.GetFileAsync(@"Assets\curseaddons.txt");
+            var sampleFile = await APP_INSTALLED_FOLDER.GetFileAsync(@"Assets\curseaddons.txt");
             var text = await FileIO.ReadTextAsync(sampleFile);
             // TODO fix time
-            IList<CurseAddon> curseAddons = await Json.ToObjectAsync<List<CurseAddon>>(@text);
+            var curseAddons = await Json.ToObjectAsync<List<CurseAddon>>(@text);
             var storeAddons = curseAddons
                 .Select(ca => new StoreAddon(ca.addonURL, ca.title, ca.description, ca.downloads, DateTime.Now, DateTime.Now))
                 .ToList();
+
+            storeAddons.Sort((x, y) =>
+            {
+                if (x == null || y == null)
+                {
+                    return 0;
+                }
+                // highest first
+                return y.NrOfDownloads.CompareTo(x.NrOfDownloads);
+            });
 
             storeAddons.Insert(0, new StoreAddon("elvui", "ElvUI", "A user interface designed around user-friendliness with extra features that are not included in the standard UI.", 0, DateTime.Now, DateTime.Now));
             return storeAddons;
@@ -113,7 +123,7 @@ namespace Addon.Logic
 
         public static async Task<List<AddonData>> LoadAddonData()
         {
-            var assets = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+            var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
             return await assets.ReadAsync<List<AddonData>>("addondata");
         }
     }

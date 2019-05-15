@@ -1,9 +1,9 @@
 ﻿using Addon.Core.Models;
 using Addon.Logic;
 using Addon.ViewModels;
+using Microsoft.Toolkit.Uwp.UI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -65,7 +65,7 @@ namespace Addon.Views
                 }
                 return nameList;
             }).ToList());
-           
+
             foreach (var storeAddon in ViewModel.Session.StoreAddons)
             {
                 if (storeAddon.Status.Equals(StoreAddon.INSTALLING))
@@ -74,7 +74,7 @@ namespace Addon.Views
                 }
 
                 if (addons.Contains(storeAddon.Url.ToLower()) || addons.Contains(storeAddon.Title.ToLower()))
-                {           
+                {
                     storeAddon.Status = StoreAddon.INSTALLED;
                 }
                 else
@@ -94,6 +94,29 @@ namespace Addon.Views
                     RefreshStoreAddonStatus();
                 }
             }
+        }
+
+        private void Sort(SortDescription sortDescription)
+        {
+            ViewModel.StoreAddons.SortDescriptions.Clear();
+            ViewModel.StoreAddons.SortDescriptions.Add(sortDescription);
+        }
+
+        private void Title_Header_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            ViewModel.TitleSortDirection = Opposite(ViewModel.TitleSortDirection);
+            Sort(new SortDescription("Title", ViewModel.TitleSortDirection));
+        }
+
+        private void Download_Header_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {            
+            ViewModel.DownloadSortDirection = Opposite(ViewModel.DownloadSortDirection);
+            Sort(new SortDescription("NrOfDownloads", ViewModel.DownloadSortDirection, StringComparer.OrdinalIgnoreCase));
+        }
+
+        private static SortDirection Opposite(SortDirection sortDirection)
+        {
+            return sortDirection == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending;
         }
     }
 }

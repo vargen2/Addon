@@ -70,7 +70,7 @@ namespace Addon.Services
 
             var storeAddons = await Task.Run(() => Storage.LoadStoreAddons());
             Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(storeAddons);
-            Debug.WriteLine("Loaded StoreAddons " + Singleton<Session>.Instance.StoreAddons.Count);
+            Debug.WriteLine("StoreAddons count: " + Singleton<Session>.Instance.StoreAddons.Count);
 
             var knownSubFolders = await Task.Run(() => Storage.LoadKnownSubFolders());
             var userKnownSubFolders = await Task.Run(() => Storage.LoadKnownSubFoldersFromUser());
@@ -80,19 +80,19 @@ namespace Addon.Services
             }
             Singleton<Session>.Instance.KnownSubFolders.UnionWith(knownSubFolders);
 
-            Debug.WriteLine("Loaded knownsubfolders " + Singleton<Session>.Instance.KnownSubFolders.Count);
+            Debug.WriteLine("Subfolders count: " + Singleton<Session>.Instance.KnownSubFolders.Count);
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
 
             var addonData = await Task.Run(() => Storage.LoadAddonData());
 
             Singleton<Session>.Instance.AddonData.AddRange(addonData);
 
-            Debug.WriteLine("addondata length: "+Singleton<Session>.Instance.AddonData.Count);
+            Debug.WriteLine("Addondata count: "+Singleton<Session>.Instance.AddonData.Count);
 
             var settings = Singleton<SettingsViewModel>.Instance;
             await settings.EnsureInstanceInitializedAsync();
             bool autoRefresh = settings.IsAutoRefreshVersions ?? false;
-            Debug.WriteLine("autorefresh: " + autoRefresh);
+            
             if (autoRefresh)
             {
                 await Tasks.FindProjectUrlAndDownLoadVersionsFor(Singleton<Session>.Instance.SelectedGame.Addons);

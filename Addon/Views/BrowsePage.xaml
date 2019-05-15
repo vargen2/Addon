@@ -2,11 +2,15 @@
     x:Class="Addon.Views.BrowsePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:Addon.Core.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
+    <Page.Resources>
+        <converters:StringFormatConverter x:Key="StringFormatConverter" />
+    </Page.Resources>
     <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftMargin}">
 
         <Grid.RowDefinitions>
@@ -28,7 +32,7 @@
             x:Name="ListView"
             Grid.Row="1"
             IsEnabled="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}"
-            ItemsSource="{x:Bind ViewModel.Session.StoreAddons, Mode=OneWay}"
+            ItemsSource="{x:Bind ViewModel.StoreAddons, Mode=OneWay}"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             SelectionMode="Single"
             Visibility="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}">
@@ -42,6 +46,7 @@
                         <TextBlock
                             Width="200"
                             FontSize="{StaticResource MediumFontSize}"
+                            Tapped="Title_Header_Tapped"
                             Text="Title" />
                         <TextBlock
                             Width="400"
@@ -50,11 +55,13 @@
                         <TextBlock
                             Width="120"
                             FontSize="{StaticResource MediumFontSize}"
+                            Tapped="Download_Header_Tapped"
                             Text="Downloads" />
                         <TextBlock
                             Width="120"
                             FontSize="{StaticResource MediumFontSize}"
-                            Text="Install" />
+                            Text="Install"
+                            TextAlignment="Center" />
                         <TextBlock
                             Width="120"
                             FontSize="{StaticResource MediumFontSize}"
@@ -88,7 +95,7 @@
                             <TextBlock
                                 Height="30"
                                 Margin="0,15,0,15"
-                                Text="{x:Bind NrOfDownloads}" />
+                                Text="{x:Bind NrOfDownloads, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0,0}'}" />
                         </StackPanel>
                         <StackPanel Width="120" Padding="0,15,0,15">
                             <ProgressBar

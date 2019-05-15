@@ -125,10 +125,6 @@
     <value>Addon Manager for Wow.</value>
     <comment>Application description</comment>
   </data>
-  <data name="Shell_Main.Content" xml:space="preserve">
-    <value>Main</value>
-    <comment>Navigation view item name for Main</comment>
-  </data>
   <data name="Shell_Master.Content" xml:space="preserve">
     <value>Your Addons</value>
     <comment>Navigation view item name for Master</comment>
