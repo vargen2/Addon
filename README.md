@@ -19,14 +19,16 @@ https://www.microsoft.com/store/productId/9NXD1GMVB3ZH
 ![Alt text](img/img1.png?raw=true "A user's addons in a game installation")
 ![Alt text](img/img2.png?raw=true "A user's addons in a game installation")
 
-### Info
+## Info
 
 Program I made mostly for fun and to use it myself. Somewhat a continuation
 of a similair program I made in Java ( https://github.com/vargen2/addonmanager ).
 
-Boilerplate was made with https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTemplateStudio
+Boilerplate was made with
 
-### ChangeLog
+https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTemplateStudio
+
+## ChangeLog
 
 ##### 1.0.14.0
 
