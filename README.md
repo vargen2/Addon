@@ -48,4 +48,4 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 ## Donations
 
-Paypal to hjaarn@hotmail.com
+Paypal paypal.me/hjalmar2
