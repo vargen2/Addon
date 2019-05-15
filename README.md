@@ -31,6 +31,12 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 ## ChangeLog
 
+##### Next
+
+- Can sort based on dates on browse page
+- Correct dates on browse page
+- Better sorting of addons on main page. Based on status and folder name.
+
 ##### 1.0.14.0 - 2019-05-15
 
 - Decode html chars in browse page
