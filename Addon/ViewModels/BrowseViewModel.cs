@@ -11,6 +11,7 @@ namespace Addon.ViewModels
         public AdvancedCollectionView StoreAddons { get;set; }
         public SortDirection TitleSortDirection { get; set; }
         public SortDirection DownloadSortDirection { get; set; }
+        public SortDirection StatusSortDirection { get; set; }
         
         public BrowseViewModel()
         {

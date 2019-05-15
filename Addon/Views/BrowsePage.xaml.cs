@@ -120,6 +120,12 @@ namespace Addon.Views
             Sort(new SortDescription("NrOfDownloads", ViewModel.DownloadSortDirection, StringComparer.OrdinalIgnoreCase));
         }
 
+        private void Status_Header_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            ViewModel.StatusSortDirection = Opposite(ViewModel.StatusSortDirection);
+            Sort(new SortDescription("Status", ViewModel.StatusSortDirection));
+        }
+
         private static SortDirection Opposite(SortDirection sortDirection)
         {
             return sortDirection == SortDirection.Ascending ? SortDirection.Descending : SortDirection.Ascending;

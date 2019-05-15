@@ -5,6 +5,7 @@
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:Addon.Core.Models"
+    xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
@@ -45,6 +46,7 @@
                         Orientation="Horizontal">
                         <TextBlock
                             Width="200"
+                            extensions:Mouse.Cursor="Hand"
                             FontSize="{StaticResource MediumFontSize}"
                             Tapped="Title_Header_Tapped"
                             Text="Title" />
@@ -54,12 +56,15 @@
                             Text="Description" />
                         <TextBlock
                             Width="120"
+                            extensions:Mouse.Cursor="Hand"
                             FontSize="{StaticResource MediumFontSize}"
                             Tapped="Download_Header_Tapped"
                             Text="Downloads" />
                         <TextBlock
                             Width="120"
+                            extensions:Mouse.Cursor="Hand"
                             FontSize="{StaticResource MediumFontSize}"
+                            Tapped="Status_Header_Tapped"
                             Text="Install"
                             TextAlignment="Center" />
                         <TextBlock
@@ -79,10 +84,11 @@
                     <StackPanel Height="60" Orientation="Horizontal">
                         <StackPanel Width="200">
                             <TextBlock
-                                Height="30"
-                                Margin="0,15,0,15"
+                                Height="60"
+                                Margin="0,0,0,0"
                                 FontSize="{StaticResource MediumFontSize}"
-                                Text="{x:Bind Title}" />
+                                Text="{x:Bind Title}"
+                                TextWrapping="Wrap"/>
                         </StackPanel>
                         <StackPanel Width="400">
                             <TextBlock
