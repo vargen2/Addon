@@ -23,9 +23,14 @@ namespace Addon.Views
         {
             if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
 
-            ListView.ItemsSource = ViewModel.Session.StoreAddons
-                .Where(storeAddon => storeAddon.Title.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase))
-                .ToList();
+            ViewModel.StoreAddons.Filter = obj =>
+            {
+                if (obj is StoreAddon storeAddon)
+                {
+                    return storeAddon.Title.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase);
+                }
+                return false;
+            };            
         }
 
         private async void Install_Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -109,7 +114,7 @@ namespace Addon.Views
         }
 
         private void Download_Header_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {            
+        {
             ViewModel.DownloadSortDirection = Opposite(ViewModel.DownloadSortDirection);
             Sort(new SortDescription("NrOfDownloads", ViewModel.DownloadSortDirection, StringComparer.OrdinalIgnoreCase));
         }
