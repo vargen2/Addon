@@ -49,8 +49,11 @@ namespace Addon.Views
 
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
+            e.Handled=true;
             FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
         }
+
+        
 
         private async void DownloadVersionsForAllAddonsInSelectedGame(object sender, RoutedEventArgs e)
         {
@@ -77,7 +80,7 @@ namespace Addon.Views
 
         private void FlyoutBase_OnOpening(object sender, object e)
         {
-            var menuflyuout = sender as MenuFlyout;
+            var menuflyuout = sender as MenuFlyout;            
             Core.Models.Addon addon = menuflyuout.Items.First().Tag as Core.Models.Addon;
             MenuFlyoutItemBase temp = menuflyuout.Items.FirstOrDefault(item => item.Name.Equals("VersionsMenuFlyout"));
 
@@ -295,9 +298,6 @@ namespace Addon.Views
             }
         }
 
-
-
-
-
+       
     }
 }

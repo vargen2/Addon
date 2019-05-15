@@ -8,7 +8,6 @@
     xmlns:data="using:Addon.Core.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:Addon.Views"
-    behaviors:NavigationViewHeaderBehavior.HeaderMode="Never"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
     <Page.Transitions>
@@ -408,6 +407,7 @@
             <Grid
                 Height="50"
                 HorizontalAlignment="Stretch"
+                IsRightTapEnabled="True"
                 Opacity="{x:Bind NotIgnoredOpacity, Mode=OneWay}"
                 RightTapped="UIElement_OnRightTapped">
                 <Grid.ColumnDefinitions>
