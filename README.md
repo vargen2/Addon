@@ -2,27 +2,28 @@
 
 Addon Manager for Wow. Windows 10 UWP Application
 
-### Installation
+## Installation
 
 Get it from Microsoft Store for free
 https://www.microsoft.com/store/productId/9NXD1GMVB3ZH
 
-### Known Issues
+## Known Issues
 
 - New addons are missing from browse/store page
 - Some Addons you have to set URL manually
 - Copy/move extracted files is slow
 
-### Screens
+## Screens
 
-![Alt text](img/img3.png?raw=true "A user's addons in a game installation")
-![Alt text](img/img1.png?raw=true "A user's addons in a game installation")
-![Alt text](img/img2.png?raw=true "A user's addons in a game installation")
+![Alt text](img/img3.png?raw=true "")
+![Alt text](img/img1.png?raw=true "Earlier version")
+![Alt text](img/img2.png?raw=true "Earlier version")
 
 ## Info
 
-Program I made mostly for fun and to use it myself. Somewhat a continuation
-of a similair program I made in Java ( https://github.com/vargen2/addonmanager ).
+Program I made mostly for fun and to use it myself. I have done a similar program earlier in Java.
+
+https://github.com/vargen2/addonmanager
 
 Boilerplate was made with
 
