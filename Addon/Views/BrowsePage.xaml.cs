@@ -86,7 +86,8 @@ namespace Addon.Views
                 {
                     storeAddon.Status = StoreAddon.NOTINSTALLED;
                 }
-            }
+            }           
+            ViewModel.StoreAddons.Refresh();
         }
 
         private void Session_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

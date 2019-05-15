@@ -8,14 +8,14 @@ namespace Addon.ViewModels
     public class BrowseViewModel : Observable
     {
         public Session Session { get; }
-        public AdvancedCollectionView StoreAddons { get; }
+        public AdvancedCollectionView StoreAddons { get;set; }
         public SortDirection TitleSortDirection { get; set; }
         public SortDirection DownloadSortDirection { get; set; }
         
         public BrowseViewModel()
         {
             Session = Singleton<Session>.Instance;
-            StoreAddons = new AdvancedCollectionView(Session.StoreAddons);
+            StoreAddons = new AdvancedCollectionView(Session.StoreAddons);            
         }
     }
 }
