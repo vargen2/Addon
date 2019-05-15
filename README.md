@@ -31,7 +31,7 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 ## ChangeLog
 
-##### 1.0.14.0
+##### 1.0.14.0 - 2019-05-15
 
 - Decode html chars in browse page
 - Small layout changes in browse page
@@ -42,7 +42,7 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 - Can remove addons
 - No more double scroll in detail page
 
-##### 1.0.13.0
+##### 1.0.13.0 - 2019-05-10
 
 - Initial release
 
