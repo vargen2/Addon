@@ -31,8 +31,9 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 ## ChangeLog
 
-##### Next
+##### 10.015.0 - In development
 
+- Bit snappier context menu on main page
 - Can sort based on dates on browse page
 - Correct dates on browse page
 - Better sorting of addons on main page. Based on status and folder name.
