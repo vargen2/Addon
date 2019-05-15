@@ -28,11 +28,17 @@ Boilerplate was made with https://marketplace.visualstudio.com/items?itemName=WA
 
 ### ChangeLog
 
-#### NEXT
+##### 1.0.14.0
+
+- Decode html chars in browse page
+- Small layout changes in browse page
+- Sorting in browse page for title, download and status
+- Better handling of refresh many addons
 - Don't download versions or update ignored addons
 - Setting to delete old files before update
 - Can remove addons
 - No more double scroll in detail page
 
-#### 1.0.13.0
+##### 1.0.13.0
+
 - Initial release
