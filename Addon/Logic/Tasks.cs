@@ -46,22 +46,16 @@ namespace Addon.Logic
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(ObservableCollection<Core.Models.Addon> addons)
         {
-            int length = addons.Count;
-            int i = 0;
-            int chunkSize=10;
-            while (i < length)
+            var addonList = new List<Core.Models.Addon>(addons);
+            var tasks = new List<Task>();
+            // Start tasks with a small delay to not get a UI spike
+            foreach (var addon in addonList)
             {
-                try
-                {
-                    var tasks = addons.Skip(i).Take(chunkSize).Select(FindProjectUrlAndDownLoadVersionsFor);
-                    await Task.WhenAll(tasks);              
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine("[Error] " + e.Message);
-                }
-                i+=chunkSize;
+                tasks.Add(FindProjectUrlAndDownLoadVersionsFor(addon));
+                await Task.Delay(25);
             }
+            await Task.WhenAll(tasks);
+          
             
             await Sorter.Sort(addons);
         }
