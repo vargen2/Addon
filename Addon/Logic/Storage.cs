@@ -99,13 +99,14 @@ namespace Addon.Logic
         }
 
         public static async Task<IList<StoreAddon>> LoadStoreAddons()
-        {
-            var sampleFile = await APP_INSTALLED_FOLDER.GetFileAsync(@"Assets\curseaddons.txt");
-            var text = await FileIO.ReadTextAsync(sampleFile);
-            // TODO fix time
-            var curseAddons = await Json.ToObjectAsync<List<CurseAddon>>(@text);
+        {            
+            var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
+            var curseAddons = await assets.ReadAsync<HashSet<CurseAddon>>("curseaddons");
             var storeAddons = curseAddons
-                .Select(ca => new StoreAddon(ca.addonURL, ca.title.DecodeHtml(), ca.description.DecodeHtml(), ca.downloads, DateTime.Now, DateTime.Now))
+                .Select(ca => new StoreAddon(ca.addonURL, ca.title.DecodeHtml(),
+                ca.description.DecodeHtml(), ca.downloads,
+                Parse.SafeParseFromEpochString(ca.updatedEpoch),
+                Parse.SafeParseFromEpochString(ca.createdEpoch)))
                 .ToList();
 
             storeAddons.Sort((x, y) =>
@@ -118,7 +119,7 @@ namespace Addon.Logic
                 return y.NrOfDownloads.CompareTo(x.NrOfDownloads);
             });
 
-            storeAddons.Insert(0, new StoreAddon("elvui", "ElvUI", "A user interface designed around user-friendliness with extra features that are not included in the standard UI.", 0, DateTime.Now, DateTime.Now));
+            storeAddons.Insert(0, new StoreAddon("elvui", "ElvUI", "A user interface designed around user-friendliness with extra features that are not included in the standard UI.", 100000000, DateTime.Now, DateTime.Now));
             return storeAddons;
         }
 

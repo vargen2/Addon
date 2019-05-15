@@ -149,5 +149,14 @@ namespace Addon.Logic
                .Select(addonData => addonData.ProjectUrl.Substring(addonData.ProjectUrl.IndexOf("projects/")+9))
                .FirstOrDefault();
         }
+
+        internal static DateTime SafeParseFromEpochString(string epoch)
+        {
+            if (long.TryParse(epoch,out long result))
+            {
+               return DateTimeOffset.FromUnixTimeSeconds(result).UtcDateTime;
+            }
+            return DateTime.UtcNow;
+        }
     }
 }

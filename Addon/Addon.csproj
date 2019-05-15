@@ -281,7 +281,7 @@
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="Addon_TemporaryKey.pfx" />
-    <Content Include="Assets\curseaddons.txt">
+    <Content Include="Assets\curseaddons.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\knownsubfolders.json">
