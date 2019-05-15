@@ -2,6 +2,7 @@
 using Addon.Core.Models;
 using Addon.Core.Storage;
 using Addon.Helpers;
+using Microsoft.Toolkit.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -104,7 +105,7 @@ namespace Addon.Logic
             // TODO fix time
             var curseAddons = await Json.ToObjectAsync<List<CurseAddon>>(@text);
             var storeAddons = curseAddons
-                .Select(ca => new StoreAddon(ca.addonURL, ca.title, ca.description, ca.downloads, DateTime.Now, DateTime.Now))
+                .Select(ca => new StoreAddon(ca.addonURL, ca.title.DecodeHtml(), ca.description.DecodeHtml(), ca.downloads, DateTime.Now, DateTime.Now))
                 .ToList();
 
             storeAddons.Sort((x, y) =>

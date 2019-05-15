@@ -10,9 +10,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
-using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Microsoft.Toolkit.Extensions;
 
 namespace Addon.Services
 {
@@ -72,6 +72,14 @@ namespace Addon.Services
             Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(storeAddons);
             Debug.WriteLine("StoreAddons count: " + Singleton<Session>.Instance.StoreAddons.Count);
 
+            //var dbms = Singleton<Session>.Instance.StoreAddons.Where(storeAddon => storeAddon.Title.Contains("- bc", StringComparison.OrdinalIgnoreCase)).ToList();
+            //foreach (var storeAddon in dbms)
+            //{
+            //    Debug.WriteLine("Normal: "+storeAddon.ToString()+"\r\n"+
+            //        "DecodeHtml: "+storeAddon.ToString().DecodeHtml() + "\r\n" +
+            //        "FixHtml: "+storeAddon.ToString().FixHtml());
+            //}
+
             var knownSubFolders = await Task.Run(() => Storage.LoadKnownSubFolders());
             var userKnownSubFolders = await Task.Run(() => Storage.LoadKnownSubFoldersFromUser());
             if (userKnownSubFolders != null)
@@ -87,12 +95,12 @@ namespace Addon.Services
 
             Singleton<Session>.Instance.AddonData.AddRange(addonData);
 
-            Debug.WriteLine("Addondata count: "+Singleton<Session>.Instance.AddonData.Count);
+            Debug.WriteLine("Addondata count: " + Singleton<Session>.Instance.AddonData.Count);
 
             var settings = Singleton<SettingsViewModel>.Instance;
             await settings.EnsureInstanceInitializedAsync();
             bool autoRefresh = settings.IsAutoRefreshVersions ?? false;
-            
+
             if (autoRefresh)
             {
                 await Tasks.FindProjectUrlAndDownLoadVersionsFor(Singleton<Session>.Instance.SelectedGame.Addons);
@@ -130,7 +138,7 @@ namespace Addon.Services
             await Storage.SaveSession();
             await Storage.SaveKnownSubFolders();
             Debug.WriteLine("OnBackgroundActivated after save");
-                       
+
             deferral.Complete();
         }
 

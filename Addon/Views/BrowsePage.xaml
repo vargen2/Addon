@@ -9,11 +9,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
+
     <Page.Resources>
         <converters:StringFormatConverter x:Key="StringFormatConverter" />
     </Page.Resources>
     <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftMargin}">
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -45,7 +45,7 @@
                         Padding="{StaticResource SmallLeftMargin}"
                         Orientation="Horizontal">
                         <TextBlock
-                            Width="200"
+                            Width="240"
                             extensions:Mouse.Cursor="Hand"
                             FontSize="{StaticResource MediumFontSize}"
                             Tapped="Title_Header_Tapped"
@@ -59,7 +59,8 @@
                             extensions:Mouse.Cursor="Hand"
                             FontSize="{StaticResource MediumFontSize}"
                             Tapped="Download_Header_Tapped"
-                            Text="Downloads" />
+                            Text="Downloads"
+                            TextAlignment="Right" />
                         <TextBlock
                             Width="120"
                             extensions:Mouse.Cursor="Hand"
@@ -68,13 +69,15 @@
                             Text="Install"
                             TextAlignment="Center" />
                         <TextBlock
-                            Width="120"
+                            Width="90"
                             FontSize="{StaticResource MediumFontSize}"
-                            Text="Updated" />
+                            Text="Updated"
+                            TextAlignment="Center" />
                         <TextBlock
-                            Width="120"
+                            Width="90"
                             FontSize="{StaticResource MediumFontSize}"
-                            Text="Created" />
+                            Text="Created"
+                            TextAlignment="Center" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.HeaderTemplate>
@@ -82,13 +85,13 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="data:StoreAddon">
                     <StackPanel Height="60" Orientation="Horizontal">
-                        <StackPanel Width="200">
+                        <StackPanel Width="240">
                             <TextBlock
                                 Height="60"
-                                Margin="0,0,0,0"
+                                Margin="0,0,8,0"
                                 FontSize="{StaticResource MediumFontSize}"
                                 Text="{x:Bind Title}"
-                                TextWrapping="Wrap"/>
+                                TextWrapping="Wrap" />
                         </StackPanel>
                         <StackPanel Width="400">
                             <TextBlock
@@ -101,7 +104,8 @@
                             <TextBlock
                                 Height="30"
                                 Margin="0,15,0,15"
-                                Text="{x:Bind NrOfDownloads, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0,0}'}" />
+                                Text="{x:Bind NrOfDownloads, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0,0}'}"
+                                TextAlignment="Right" />
                         </StackPanel>
                         <StackPanel Width="120" Padding="0,15,0,15">
                             <ProgressBar
@@ -131,17 +135,19 @@
                                 Text="{x:Bind Message, Mode=OneWay}"
                                 Visibility="{x:Bind ShowMessage, Mode=OneWay}" />
                         </StackPanel>
-                        <StackPanel Width="120">
+                        <StackPanel Width="90">
                             <TextBlock
                                 Height="30"
                                 Margin="0,15,0,15"
-                                Text="{x:Bind UpdatedFormated}" />
+                                Text="{x:Bind UpdatedFormated}"
+                                TextAlignment="Center" />
                         </StackPanel>
-                        <StackPanel Width="120">
+                        <StackPanel Width="90">
                             <TextBlock
                                 Height="30"
                                 Margin="0,15,0,15"
-                                Text="{x:Bind CreatedFormated}" />
+                                Text="{x:Bind CreatedFormated}"
+                                TextAlignment="Center" />
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>
