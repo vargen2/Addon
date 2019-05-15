@@ -45,3 +45,7 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 ##### 1.0.13.0
 
 - Initial release
+
+## Donations
+
+Paypal to hjaarn@hotmail.com
