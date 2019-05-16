@@ -466,6 +466,7 @@
                                 <SymbolIcon Symbol="Accept" Visibility="{x:Bind IsIgnored, Mode=OneWay}" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem Command="{Binding SetAlpha}" Text="Alpha">
                             <MenuFlyoutItem.Icon>
                                 <SymbolIcon Symbol="Accept" Visibility="{x:Bind IsAlpha, Mode=OneWay}" />
@@ -481,6 +482,15 @@
                                 <SymbolIcon Symbol="Accept" Visibility="{x:Bind IsRelease, Mode=OneWay}" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem
+                            Click="MenuFlyoutItem_Click_Refresh_Addon"
+                            Tag="{x:Bind Mode=OneWay}"
+                            Text="Refresh">
+                            <MenuFlyoutItem.Icon>
+                                <SymbolIcon Symbol="Refresh" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
                         <MenuFlyoutItem
                             Click="MenuFlyoutItem_Click_Remove_Addon"
                             Tag="{x:Bind Mode=OneWay}"
@@ -493,6 +503,7 @@
                             Click="MenuFlyoutItem_Click_Open_Edit_URL_DIALOG"
                             Tag="{x:Bind Mode=OneWay}"
                             Text="Set URL..." />
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutSubItem Name="VersionsMenuFlyout" Text="Versions" />
                         <MenuFlyoutSubItem Text="Info">
                             <MenuFlyoutItem Style="{StaticResource mysyle2}" Text="{x:Bind InfoString, Mode=OneWay}" />

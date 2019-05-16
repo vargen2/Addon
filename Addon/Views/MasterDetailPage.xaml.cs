@@ -2,7 +2,6 @@
 using Addon.Logic;
 using Addon.ViewModels;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
@@ -49,11 +48,11 @@ namespace Addon.Views
 
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            e.Handled=true;
+            e.Handled = true;
             FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
         }
 
-        
+
 
         private async void DownloadVersionsForAllAddonsInSelectedGame(object sender, RoutedEventArgs e)
         {
@@ -80,7 +79,7 @@ namespace Addon.Views
 
         private void FlyoutBase_OnOpening(object sender, object e)
         {
-            var menuflyuout = sender as MenuFlyout;            
+            var menuflyuout = sender as MenuFlyout;
             Core.Models.Addon addon = menuflyuout.Items.First().Tag as Core.Models.Addon;
             MenuFlyoutItemBase temp = menuflyuout.Items.FirstOrDefault(item => item.Name.Equals("VersionsMenuFlyout"));
 
@@ -283,7 +282,13 @@ namespace Addon.Views
             }
         }
 
-
+        private async void MenuFlyoutItem_Click_Refresh_Addon(object sender, RoutedEventArgs e)
+        {
+            var menuItem = sender as MenuFlyoutItem;
+            Core.Models.Addon addon = menuItem.Tag as Core.Models.Addon;
+            await Tasks.FindProjectUrlAndDownLoadVersionsFor(addon);
+        }
+                
         private void Session_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals("SelectedGame"))
@@ -291,13 +296,13 @@ namespace Addon.Views
                 var game = ViewModel.Session.SelectedGame;
                 if (game != null)
                 {
-                   // Debug.WriteLine("Selected game triggered in MasterDetailPage");
+                    // Debug.WriteLine("Selected game triggered in MasterDetailPage");
                     ViewModel.Addons.Source = ViewModel.Session.SelectedGame.Addons;
                     ViewModel.Addons.Refresh();
                 }
             }
         }
 
-       
+
     }
 }
