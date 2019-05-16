@@ -96,7 +96,7 @@ namespace Addon.Views
         }
 
         private void ListBox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
+        {            
             GameSelectorFlyout.Hide();
         }
 
@@ -140,6 +140,7 @@ namespace Addon.Views
 
         private void UpdateTitleBarLayout(CoreApplicationViewTitleBar coreTitleBar)
         {
+            //Debug.WriteLine(nameof(UpdateTitleBarLayout));
             // Get the size of the caption controls area and back button 
             // (returned in logical pixels), and move your content around as necessary.
             LeftPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayLeftInset);
@@ -152,6 +153,7 @@ namespace Addon.Views
 
         private void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args)
         {
+            //Debug.WriteLine(nameof(CoreTitleBar_IsVisibleChanged));
             if (sender.IsVisible)
             {
                 AppTitleBar.Visibility = Visibility.Visible;

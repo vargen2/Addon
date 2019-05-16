@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Extensions;
+using Microsoft.Toolkit.Uwp.UI.Controls;
+using System;
+using System.Threading.Tasks;
+using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -33,8 +38,30 @@ namespace Addon.Views
                     styles = "<style>html{font-family:'Segoe UI';  font-size:14px; color:#fff;}</style>";
                 }
 
-                webView.NavigateToString(head + styles + html);
 
+                webView.NavigateToString(head + styles + html);
+                //var decoded = html.DecodeHtml();
+                //Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.
+                //       RunAsync(CoreDispatcherPriority.Normal, async () =>
+                //       {
+                //           await Task.Delay(1000);
+                //           if (decoded != null)
+                //           {
+                //               MarkdownTextBlock mark=new MarkdownTextBlock() { Text=html};
+                //               var contentDialog = new ContentDialog()
+                //               {
+                //                   Content=mark,
+                //                   PrimaryButtonText="OK"
+                //               };
+                               
+                //              var res= await contentDialog.ShowAsync();
+                //               if (res == ContentDialogResult.Primary)
+                //               {
+
+                //               }
+                //           }
+                //       });
+                
             }
         }
     }
@@ -97,7 +124,7 @@ namespace Addon.Views
         //        //{
         //        //    webView.Height = height+50;
         //        //}
-               
+
         //    }
         //}
 

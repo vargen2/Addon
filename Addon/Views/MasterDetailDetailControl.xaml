@@ -30,10 +30,11 @@
                 Padding="0,0,0,0"
                 HorizontalAlignment="Stretch">
                 <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
-                    <TextBlock                        
-                        Style="{ThemeResource TitleTextBlockStyle}"
-                        Text="{x:Bind MasterMenuItem.FolderName, Mode=OneWay}" />
-                    <TextBlock Margin="16,0,0,0" VerticalAlignment="Center" Text="{x:Bind MasterMenuItem.Title, Mode=OneWay}" />
+                    <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Text="{x:Bind MasterMenuItem.FolderName, Mode=OneWay}" />
+                    <TextBlock
+                        Margin="16,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="{x:Bind MasterMenuItem.Title, Mode=OneWay}" />
                 </StackPanel>
                 <HyperlinkButton Content="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" NavigateUri="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay, Converter={StaticResource StringToUriConverter}}" />
 

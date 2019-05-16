@@ -80,6 +80,7 @@ namespace Addon.Views
         private void FlyoutBase_OnOpening(object sender, object e)
         {
             var menuflyuout = sender as MenuFlyout;
+            
             Core.Models.Addon addon = menuflyuout.Items.First().Tag as Core.Models.Addon;
             MenuFlyoutItemBase temp = menuflyuout.Items.FirstOrDefault(item => item.Name.Equals("VersionsMenuFlyout"));
 
