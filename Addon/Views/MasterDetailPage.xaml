@@ -599,7 +599,6 @@
             MasterHeader="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath}"
             MasterHeaderTemplate="{StaticResource MasterHeaderTemplate}"
             MasterPaneWidth="600"
-            
             NoSelectionContentTemplate="{StaticResource NoSelectionContentTemplate}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=TwoWay}"
             Style="{StaticResource mymaster}" />

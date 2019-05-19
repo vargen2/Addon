@@ -19,6 +19,7 @@ namespace Addon.Views
 
         public ShellPage()
         {
+            Debug.WriteLine("shellpage constructor start");
             InitializeComponent();
             DataContext = ViewModel;
 
@@ -79,7 +80,7 @@ namespace Addon.Views
             //ApplicationView.GetForCurrentView().Title = Singleton<Session>.Instance.SelectedGame.AbsolutePath;
             // Singleton<Session>.Instance.PropertyChanged += Session_PropertyChanged;
 
-
+            Debug.WriteLine("shellpage constructor end");
         }
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -120,13 +121,14 @@ namespace Addon.Views
                 game.IsLoading = true;
                 ViewModel.Session.Games.Add(game);
                 ViewModel.Session.SelectedGame = game;
-                var addons = await Task.Run(() => Tasks.RefreshGameFolder(game));
+                await Tasks.RefreshGameFolder2(game);
+                //var addons = await Task.Run(() => Tasks.RefreshGameFolder(game));
                 game.IsLoading = false;
 
-                addons.ForEach(game.Addons.Add);
+                //addons.ForEach(game.Addons.Add);
 
 
-                await Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons);
+                //await Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons);
 
 
 

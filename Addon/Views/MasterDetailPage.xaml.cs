@@ -2,6 +2,7 @@
 using Addon.Logic;
 using Addon.ViewModels;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
@@ -18,8 +19,10 @@ namespace Addon.Views
 
         public MasterDetailPage()
         {
+            Debug.WriteLine("MasterDetailPage constructor start");
             InitializeComponent();
             Loaded += MasterDetailPage_Loaded;
+            Debug.WriteLine("MasterDetailPage constructor end");
         }
 
         private async void MasterDetailPage_Loaded(object sender, RoutedEventArgs e)

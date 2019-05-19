@@ -1,5 +1,6 @@
 ﻿using Addon.Services;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.ExtendedExecution;
@@ -20,28 +21,36 @@ namespace Addon
 
         public App()
         {
+            Debug.WriteLine("App constructor start");
             InitializeComponent();
 
             // Deferred execution until used. Check https://msdn.microsoft.com/library/dd642331(v=vs.110).aspx for further info on Lazy<T> class.
             _activationService = new Lazy<ActivationService>(CreateActivationService);
+            Debug.WriteLine("App constructor end");
         }
 
         protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
+            Debug.WriteLine("App OnLaunched start");
             await Logic.Storage.LoadTask();
             if (!args.PrelaunchActivated)
             {
+                Debug.WriteLine("App await ActivationService.ActivateAsync(args); start");
                 await ActivationService.ActivateAsync(args);
+                Debug.WriteLine("App await ActivationService.ActivateAsync(args); end");
             }
                                  
             if (_session == null)
                 await PreventFromSuspending();
+            Debug.WriteLine("App OnLaunched end");
 
         }
 
         protected override async void OnActivated(IActivatedEventArgs args)
         {
+            Debug.WriteLine("App OnActivated start");
             await ActivationService.ActivateAsync(args);
+            Debug.WriteLine("App OnActivated end");
         }
 
         private ActivationService CreateActivationService()

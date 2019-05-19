@@ -32,11 +32,11 @@
     </i:Interaction.Behaviors>
     <Grid Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="32" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Grid x:Name="AppTitleBar" Background="Transparent">
+        <Grid x:Name="AppTitleBar" Background="Transparent" >
             <!--  Width of the padding columns is set in LayoutMetricsChanged handler.  -->
             <!--
                 Using padding columns instead of Margin ensures that the background

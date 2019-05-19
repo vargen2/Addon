@@ -67,41 +67,40 @@ namespace Addon.Services
                 await StartupAsync();
             }
 
-            Singleton<Session>.Instance.AddonData.AddRange(await Task.Run(() => Storage.LoadAddonData()));
-            Debug.WriteLine("AddonData count: " + Singleton<Session>.Instance.AddonData.Count);
 
-            Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(await Task.Run(() => Parse.LoadStoreAddons(Singleton<Session>.Instance.AddonData)));
-            Debug.WriteLine("StoreAddons count: " + Singleton<Session>.Instance.StoreAddons.Count);
+            var addonData=await Task.Run(() => Storage.LoadAddonData());
+            if (addonData!=null)
+            {
+                Singleton<Session>.Instance.AddonData.AddRange(addonData);
+                Debug.WriteLine("AddonData count: " + Singleton<Session>.Instance.AddonData.Count);
+
+                Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(await Task.Run(() => Parse.LoadStoreAddons(Singleton<Session>.Instance.AddonData)));
+                Debug.WriteLine("StoreAddons count: " + Singleton<Session>.Instance.StoreAddons.Count);
+
+            }
 
 
-            //var storeAddons = await Task.Run(() => Storage.LoadStoreAddons());
-            //Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(storeAddons);
-            //Debug.WriteLine("StoreAddons count: " + Singleton<Session>.Instance.StoreAddons.Count);
 
-            //var dbms = Singleton<Session>.Instance.StoreAddons.Where(storeAddon => storeAddon.Title.Contains("- bc", StringComparison.OrdinalIgnoreCase)).ToList();
-            //foreach (var storeAddon in dbms)
-            //{
-            //    Debug.WriteLine("Normal: "+storeAddon.ToString()+"\r\n"+
-            //        "DecodeHtml: "+storeAddon.ToString().DecodeHtml() + "\r\n" +
-            //        "FixHtml: "+storeAddon.ToString().FixHtml());
-            //}
 
-           // var knownSubFolders = await Task.Run(() => Storage.LoadKnownSubFolders());
+
+
             var userKnownSubFolders = await Task.Run(() => Storage.LoadKnownSubFoldersFromUser());
-            //if (userKnownSubFolders != null)
-            //{
-            //    knownSubFolders.UnionWith(userKnownSubFolders);
-            //}
-            Singleton<Session>.Instance.KnownSubFolders.UnionWith(userKnownSubFolders);
 
-            Debug.WriteLine("Subfolders count: " + Singleton<Session>.Instance.KnownSubFolders.Count);
+            if (userKnownSubFolders!=null)
+            {
+
+                Singleton<Session>.Instance.KnownSubFolders.UnionWith(userKnownSubFolders);
+                Debug.WriteLine("Subfolders count: " + Singleton<Session>.Instance.KnownSubFolders.Count);
+
+            }
+
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
 
             //var addonData = await Task.Run(() => Storage.LoadAddonData());
 
-           // Singleton<Session>.Instance.AddonData.AddRange(addonData);
+            // Singleton<Session>.Instance.AddonData.AddRange(addonData);
 
-           // Debug.WriteLine("Addondata count: " + Singleton<Session>.Instance.AddonData.Count);
+            // Debug.WriteLine("Addondata count: " + Singleton<Session>.Instance.AddonData.Count);
 
             var settings = Singleton<SettingsViewModel>.Instance;
             await settings.EnsureInstanceInitializedAsync();
