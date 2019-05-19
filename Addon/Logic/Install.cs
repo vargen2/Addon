@@ -30,7 +30,7 @@ namespace Addon.Logic
 
             storeAddon.Status = StoreAddon.INSTALLING;
 
-            var tempAddon = new Core.Models.Addon(game, storeAddon.Url, game.AbsolutePath + @"\" + storeAddon.Url) { };
+            var tempAddon = new Core.Models.Addon(game, storeAddon.AddonData.FolderName, game.AbsolutePath + @"\" + storeAddon.AddonData.FolderName) { };
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(tempAddon);
             var download = tempAddon.SuggestedDownload;
             storeAddon.Message = "Downloading...";

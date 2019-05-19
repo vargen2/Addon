@@ -27,7 +27,7 @@ namespace Addon.Views
             {
                 if (obj is StoreAddon storeAddon)
                 {
-                    return storeAddon.Title.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase);
+                    return storeAddon.AddonData.Title.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase);
                 }
                 return false;
             };            
@@ -55,22 +55,22 @@ namespace Addon.Views
 
         private void RefreshStoreAddonStatus()
         {
-            var addons = new HashSet<string>(ViewModel.Session.SelectedGame.Addons.SelectMany(a =>
-            {
-                var nameList = new List<string>() { a.FolderName.ToLower(), a.Title.ToLower() };
-                if (Logic.Version.PROJECT_URLS.TryGetValue(a.FolderName.ToLower(), out List<string> list))
-                {
-                    nameList.InsertRange(0, list);
-                }
-                string urlFromAddonData = Parse.GetFromAddonDataFor(a);
+            //var addons = new HashSet<string>(ViewModel.Session.SelectedGame.Addons.SelectMany(a =>
+            //{
+            //    var nameList = new List<string>() { a.FolderName.ToLower(), a.Title.ToLower() };
+            //    if (Logic.Version.PROJECT_URLS.TryGetValue(a.FolderName.ToLower(), out List<string> list))
+            //    {
+            //        nameList.InsertRange(0, list);
+            //    }
+            //    string urlFromAddonData = Parse.GetFromAddonDataFor(a);
 
-                if (!string.IsNullOrEmpty(urlFromAddonData))
-                {
-                    nameList.Insert(0, urlFromAddonData);
-                }
-                return nameList;
-            }).ToList());
-
+            //    if (!string.IsNullOrEmpty(urlFromAddonData))
+            //    {
+            //        nameList.Insert(0, urlFromAddonData);
+            //    }
+            //    return nameList;
+            //}).ToList());
+            var addons = new HashSet<string>(ViewModel.Session.SelectedGame.Addons.Select(a=>a.ProjectUrl)).ToHashSet();
             foreach (var storeAddon in ViewModel.Session.StoreAddons)
             {
                 if (storeAddon.Status.Equals(StoreAddon.INSTALLING))
@@ -78,7 +78,7 @@ namespace Addon.Views
                     continue;
                 }
 
-                if (addons.Contains(storeAddon.Url.ToLower()) || addons.Contains(storeAddon.Title.ToLower()))
+                if (addons.Contains(storeAddon.AddonData.ProjectUrl))
                 {
                     storeAddon.Status = StoreAddon.INSTALLED;
                 }

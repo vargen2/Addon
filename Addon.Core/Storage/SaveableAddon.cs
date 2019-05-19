@@ -46,12 +46,12 @@ namespace Addon.Core.Storage
             };
         }
 
-        public AddonData AsAddonData()
-        {
-            return new AddonData(this.FolderName,this.ProjectUrl)
-            {
-                SubFolders = this.SubFolders ?? new HashSet<string>()
-            };
-        }
+        //public AddonData AsAddonData()
+        //{
+        //    return new AddonData(this.FolderName,this.ProjectUrl)
+        //    {
+        //        SubFolders = this.SubFolders ?? new HashSet<string>()
+        //    };
+        //}
     }
 }

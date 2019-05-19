@@ -1,4 +1,5 @@
-﻿using Addon.Core.Models;
+﻿using Addon.Core.Helpers;
+using Addon.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,8 +19,13 @@ namespace Addon.Logic
             var folder = await StorageFolder.GetFolderFromPathAsync(game.AbsolutePath);
             var storageFolderQueryResult = folder.CreateFolderQuery(CommonFolderQuery.DefaultQuery);
             var folders = await storageFolderQueryResult.GetFoldersAsync();
-
-            var tasks = await Task.WhenAll(folders.Select(Toc.FolderToTocFile).Where(task => task != null));
+            var addonDatas = Singleton<Session>.Instance.LoadedAddonData;
+            var tasks = await Task.WhenAll(folders
+                .Where(f => addonDatas
+                .Any(ad => ad.FolderName
+                .Equals(f.Name, StringComparison.OrdinalIgnoreCase)))
+                .Select(Toc.FolderToTocFile)
+                .Where(task => task != null));
 
             tasks.Where(tf => tf != null && !tf.IsKnownSubFolder)
                 .Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
@@ -55,8 +61,8 @@ namespace Addon.Logic
                 await Task.Delay(25);
             }
             await Task.WhenAll(tasks);
-          
-            
+
+
             //await Sorter.Sort(addons);
         }
 
@@ -68,6 +74,9 @@ namespace Addon.Logic
             }
             addon.Progress = 0;
             addon.Status = Core.Models.Addon.DOWNLOADING_VERSIONS;
+
+
+
             if (String.IsNullOrEmpty(addon.ProjectUrl))
             {
                 addon.ProjectUrl = await Task.Run(() => Version.FindProjectUrlFor(addon));

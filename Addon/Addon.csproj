@@ -272,7 +272,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <None Include="Addon_StoreKey.pfx" />
-    <Content Include="Assets\addondata.json">
+    <Content Include="Assets\allvalidaddondata1-340.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Package.StoreAssociation.xml" />
@@ -281,12 +281,6 @@
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="Addon_TemporaryKey.pfx" />
-    <Content Include="Assets\curseaddons.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\knownsubfolders.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

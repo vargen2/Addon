@@ -1,5 +1,6 @@
 ﻿using Addon.Core.Helpers;
 using Addon.Core.Models;
+using Addon.Core.Storage;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -141,22 +142,45 @@ namespace Addon.Logic
         //
         // Can return null
         //
-        internal static string GetFromAddonDataFor(Core.Models.Addon addon)
-        {
-            return Singleton<Session>.Instance.AddonData
-               .Where(addonData => addonData.FolderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase))
-               .Where(addonData => addonData.ProjectUrl.Contains("projects/"))
-               .Select(addonData => addonData.ProjectUrl.Substring(addonData.ProjectUrl.IndexOf("projects/")+9))
-               .FirstOrDefault();
-        }
+        //internal static string GetFromAddonDataFor(Core.Models.Addon addon)
+        //{
+        //    return Singleton<Session>.Instance.AddonData
+        //       .Where(addonData => addonData.FolderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase))
+        //       .Where(addonData => addonData.ProjectUrl.Contains("projects/"))
+        //       .Select(addonData => addonData.ProjectUrl.Substring(addonData.ProjectUrl.IndexOf("projects/") + 9))
+        //       .FirstOrDefault();
+        //}
 
         internal static DateTime SafeParseFromEpochString(string epoch)
         {
-            if (long.TryParse(epoch,out long result))
+            if (long.TryParse(epoch, out long result))
             {
-               return DateTimeOffset.FromUnixTimeSeconds(result).UtcDateTime;
+                return DateTimeOffset.FromUnixTimeSeconds(result).UtcDateTime;
             }
             return DateTime.UtcNow;
+        }
+
+        public static List<StoreAddon> LoadStoreAddons(List<AddonData> addonDatas)
+        {
+            // var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
+            // var curseAddons = await assets.ReadAsync<HashSet<CurseAddon>>("curseaddons");
+
+            var storeAddons = addonDatas
+                .Select(ca => new StoreAddon(ca))
+                .ToList();
+
+            storeAddons.Sort((x, y) =>
+            {
+                if (x == null || y == null)
+                {
+                    return 0;
+                }
+                // highest first
+                return y.AddonData.NrOfDownloads.CompareTo(x.AddonData.NrOfDownloads);
+            });
+
+           // storeAddons.Insert(0, new StoreAddon("elvui", "ElvUI", "A user interface designed around user-friendliness with extra features that are not included in the standard UI.", 100000000, DateTime.Now, DateTime.Now));
+            return storeAddons;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Addon.Core.Storage;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -6,12 +7,7 @@ namespace Addon.Core.Models
 {
     public class StoreAddon : INotifyPropertyChanged, IProgressable
     {
-
-        public string Url { get; }
-        public string Title { get; }
-        public string Description { get; }
-        public long NrOfDownloads { get; }
-
+        public AddonData AddonData { get; }
         public DateTime Updated { get; }
         public DateTime Created { get; }
 
@@ -24,14 +20,12 @@ namespace Addon.Core.Models
             get { return Created.ToString("yyyy'-'MM'-'dd"); }
         }
 
-        public StoreAddon(string url, string title, string description, long nrOfDownloads, DateTime updated, DateTime created)
+        public StoreAddon(AddonData addonData)
         {
-            Url = url;
-            Title = title;
-            Description = description;
-            NrOfDownloads = nrOfDownloads;
-            Updated = updated;
-            Created = created;
+            AddonData = addonData;
+            Updated = DateTimeOffset.FromUnixTimeSeconds(addonData.UpdatedEpoch).UtcDateTime;
+            Created = DateTimeOffset.FromUnixTimeSeconds(addonData.CreatedEpoch).UtcDateTime;
+
         }
 
 
@@ -46,7 +40,7 @@ namespace Addon.Core.Models
         public bool IsUnknown => status.Equals(UNKNOWN);
         //public bool IsShowTextBlock => !status.Equals(NOTINSTALLED);
 
-        private string status=NOTINSTALLED;
+        private string status = NOTINSTALLED;
         public string Status
         {
             get => status;
@@ -112,7 +106,7 @@ namespace Addon.Core.Models
 
         public override string ToString()
         {
-            return $"{nameof(Title)}: {Title}, {nameof(Url)}: {Url}, {nameof(Description)}: {Description}, {nameof(NrOfDownloads)}: {NrOfDownloads}, {nameof(UpdatedFormated)}: {UpdatedFormated}, {nameof(CreatedFormated)}: {CreatedFormated}, {nameof(Status)}: {Status}";
+            return $"{nameof(AddonData.Title)}: {AddonData.Title}, {nameof(AddonData.ProjectName)}: {AddonData.ProjectName}";
         }
     }
 }

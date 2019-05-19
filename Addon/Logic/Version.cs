@@ -3,7 +3,6 @@ using Addon.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
@@ -41,6 +40,18 @@ namespace Addon.Logic
 
         internal static async Task<string> FindProjectUrlFor(Core.Models.Addon addon)
         {
+
+            var addonDatas = Singleton<Session>.Instance.LoadedAddonData.FindAll(ad => ad.FolderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase));
+
+            if (addonDatas.Count == 1)
+            {
+                return addonDatas[0].ProjectUrl;
+            }
+            else if (addonDatas.Count > 1)
+            {
+                Debug.WriteLine("Addondata.count=" + addonDatas.Count + " for " + addon.FolderName);
+            }
+
             List<String> urlNames = new List<string>() { addon.FolderName.Replace(" ", "-"),
                 addon.FolderName,addon.Title.Replace(" ","-"),addon.Title.Replace(" ",""),addon.Title };
 
@@ -49,13 +60,13 @@ namespace Addon.Logic
                 urlNames.InsertRange(0, list);
             }
 
-            string urlFromAddonData = Parse.GetFromAddonDataFor(addon);
-           
-            if (!string.IsNullOrEmpty(urlFromAddonData))
-            {
-                //Debug.WriteLine("findproj urlfrom addondata  : "+urlFromAddonData);
-                urlNames.Insert(0, urlFromAddonData);
-            }
+            //string urlFromAddonData = Parse.GetFromAddonDataFor(addon);
+
+            //if (!string.IsNullOrEmpty(urlFromAddonData))
+            //{
+            //    //Debug.WriteLine("findproj urlfrom addondata  : "+urlFromAddonData);
+            //    urlNames.Insert(0, urlFromAddonData);
+            //}
 
             if (!NetworkInterface.GetIsNetworkAvailable())
             {

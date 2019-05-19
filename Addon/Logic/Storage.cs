@@ -24,18 +24,18 @@ namespace Addon.Logic
             {
                 var instance = Singleton<Session>.Instance.AsSaveableSession();
                 await LOCAL_FOLDER.SaveAsync("session", instance);
-                var addonDataSet = new HashSet<AddonData>();
-                foreach (var game in instance.Games)
-                {
-                    var addonDataList = game.Addons
-                        .Where(saveableAddon =>
-                            !string.IsNullOrEmpty(saveableAddon.FolderName) &&
-                            !string.IsNullOrEmpty(saveableAddon.ProjectUrl))
-                        .Select(saveableAddon => saveableAddon.AsAddonData())
-                        .ToList();
-                    addonDataSet.UnionWith(addonDataList);
-                }
-                await LOCAL_FOLDER.SaveAsync("addondata", addonDataSet);
+                //var addonDataSet = new HashSet<AddonData>();
+                //foreach (var game in instance.Games)
+                //{
+                //    var addonDataList = game.Addons
+                //        .Where(saveableAddon =>
+                //            !string.IsNullOrEmpty(saveableAddon.FolderName) &&
+                //            !string.IsNullOrEmpty(saveableAddon.ProjectUrl))
+                //        .Select(saveableAddon => saveableAddon.AsAddonData())
+                //        .ToList();
+                //    addonDataSet.UnionWith(addonDataList);
+                //}
+             //   await LOCAL_FOLDER.SaveAsync("addondata", addonDataSet);
 
                 //    Debug.WriteLine("Saved Session to " + localFolder.Path);
             }
@@ -71,11 +71,11 @@ namespace Addon.Logic
             // Debug.WriteLine("Loaded from " + localFolder.Path);
         }
 
-        public static async Task<HashSet<string>> LoadKnownSubFolders()
-        {
-            var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
-            return await assets.ReadAsync<HashSet<string>>("knownsubfolders");
-        }
+        //public static async Task<HashSet<string>> LoadKnownSubFolders()
+        //{
+        //    var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
+        //    return await assets.ReadAsync<HashSet<string>>("knownsubfolders");
+        //}
 
 
         public static async Task<HashSet<string>> LoadKnownSubFoldersFromUser()
@@ -98,35 +98,12 @@ namespace Addon.Logic
             }
         }
 
-        public static async Task<IList<StoreAddon>> LoadStoreAddons()
-        {            
-            var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
-            var curseAddons = await assets.ReadAsync<HashSet<CurseAddon>>("curseaddons");
-            var storeAddons = curseAddons
-                .Select(ca => new StoreAddon(ca.addonURL, ca.title.DecodeHtml(),
-                ca.description.DecodeHtml(), ca.downloads,
-                Parse.SafeParseFromEpochString(ca.updatedEpoch),
-                Parse.SafeParseFromEpochString(ca.createdEpoch)))
-                .ToList();
-
-            storeAddons.Sort((x, y) =>
-            {
-                if (x == null || y == null)
-                {
-                    return 0;
-                }
-                // highest first
-                return y.NrOfDownloads.CompareTo(x.NrOfDownloads);
-            });
-
-            storeAddons.Insert(0, new StoreAddon("elvui", "ElvUI", "A user interface designed around user-friendliness with extra features that are not included in the standard UI.", 100000000, DateTime.Now, DateTime.Now));
-            return storeAddons;
-        }
+        
 
         public static async Task<List<AddonData>> LoadAddonData()
         {
             var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
-            return await assets.ReadAsync<List<AddonData>>("addondata");
+            return await assets.ReadAsync<List<AddonData>>("allvalidaddondata1-340");
         }
     }
 }
