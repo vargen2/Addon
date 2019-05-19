@@ -13,29 +13,57 @@ namespace Addon.Logic
 {
     public static class Tasks
     {
-        public static async Task RefreshGameFolder(Game game)
+        public static async Task<List<Core.Models.Addon>> RefreshGameFolder(Game game)
         {
-            game.IsLoading = true;
-            var folder = await StorageFolder.GetFolderFromPathAsync(game.AbsolutePath);
-            var storageFolderQueryResult = folder.CreateFolderQuery(CommonFolderQuery.DefaultQuery);
+            
+            var addonDatas = Singleton<Session>.Instance.AddonData.Select(ad=>ad.FolderName).ToHashSet();
+            var gameFolder = await StorageFolder.GetFolderFromPathAsync(game.AbsolutePath);
+            var storageFolderQueryResult = gameFolder.CreateFolderQuery(CommonFolderQuery.DefaultQuery);
             var folders = await storageFolderQueryResult.GetFoldersAsync();
-            var addonDatas = Singleton<Session>.Instance.LoadedAddonData;
-            var tasks = await Task.WhenAll(folders
-                .Where(f => addonDatas
-                .Any(ad => ad.FolderName
-                .Equals(f.Name, StringComparison.OrdinalIgnoreCase)))
-                .Select(Toc.FolderToTocFile)
-                .Where(task => task != null));
+            var filteredFolders = new List<StorageFolder>();
+            foreach (var folder in folders)
+            {
 
-            tasks.Where(tf => tf != null && !tf.IsKnownSubFolder)
+                if (addonDatas.Contains(folder.Name))
+                {
+                    filteredFolders.Add(folder);
+                }
+
+                //var allMatchingFolders = addonDatas
+                //    .Where(ad => ad.FolderName.Equals(folder.Name, StringComparison.OrdinalIgnoreCase))
+                //    .ToList();
+                //if (allMatchingFolders.Count == 1)
+                //{
+                //    filteredFolders.Add(folder);
+                //}
+                //else if (allMatchingFolders.Count > 1)
+                //{
+                //    filteredFolders.Add(folder);
+                //    Debug.WriteLine("RefreshGameFoder: Found " + allMatchingFolders.Count + " matches for " + folder.Name);
+                //}
+
+
+            }
+
+
+            var tasks = filteredFolders
+                .Select(Toc.FolderToTocFile)
+                .Where(task => task != null);
+
+            var proccessed = await Task.WhenAll(tasks);
+
+            var addons = proccessed.Where(tf => tf != null && !tf.IsKnownSubFolder)
                 .Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
                 {
                     Version = tf.Version,
                     GameVersion = tf.GameVersion,
                     Title = tf.Title
-                })
-                .ToList().ForEach(game.Addons.Add);
-            game.IsLoading = false;
+                }).ToList();
+
+           
+
+           
+            return addons;
         }
 
         public static async Task RefreshTocFileFor(IList<Core.Models.Addon> addons)

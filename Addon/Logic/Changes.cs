@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
-using Windows.Web.Http;
 
 namespace Addon.Logic
 {
@@ -25,20 +24,19 @@ namespace Addon.Logic
             }
 
             var uri = GetChangeLogUri(addon);
-            //using (var httpClient = new HttpClient())
-            //{
-                try
-                {
-                    var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
-                    return ParsedPage(addon, htmlPage);
-                }
-                catch (Exception ex)
-                {
-                    var error = WebSocketError.GetStatus(ex.HResult);
-                    Debug.WriteLine("[ERROR] DownloadChangesFor " + uri + " " + error);
-                    return string.Empty;
-                }
-            //}
+
+            try
+            {
+                var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
+                return ParsedPage(addon, htmlPage);
+            }
+            catch (Exception ex)
+            {
+                var error = WebSocketError.GetStatus(ex.HResult);
+                Debug.WriteLine("[ERROR] DownloadChangesFor " + uri + " " + error);
+                return string.Empty;
+            }
+
         }
 
         private static string ParsedPage(Core.Models.Addon addon, string htmlPage)

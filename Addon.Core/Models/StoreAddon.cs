@@ -10,21 +10,16 @@ namespace Addon.Core.Models
         public AddonData AddonData { get; }
         public DateTime Updated { get; }
         public DateTime Created { get; }
-
-        public string UpdatedFormated
-        {
-            get { return Updated.ToString("yyyy'-'MM'-'dd"); }
-        }
-        public string CreatedFormated
-        {
-            get { return Created.ToString("yyyy'-'MM'-'dd"); }
-        }
+        public string UpdatedFormated { get; }
+        public string CreatedFormated { get; }
 
         public StoreAddon(AddonData addonData)
         {
             AddonData = addonData;
             Updated = DateTimeOffset.FromUnixTimeSeconds(addonData.UpdatedEpoch).UtcDateTime;
             Created = DateTimeOffset.FromUnixTimeSeconds(addonData.CreatedEpoch).UtcDateTime;
+            UpdatedFormated = Updated.ToString("yyyy'-'MM'-'dd");
+            CreatedFormated = Created.ToString("yyyy'-'MM'-'dd");
 
         }
 
@@ -38,7 +33,6 @@ namespace Addon.Core.Models
         public bool IsInstalling => status.Equals(INSTALLING);
         public bool IsNotInstalled => status.Equals(NOTINSTALLED);
         public bool IsUnknown => status.Equals(UNKNOWN);
-        //public bool IsShowTextBlock => !status.Equals(NOTINSTALLED);
 
         private string status = NOTINSTALLED;
         public string Status
@@ -54,7 +48,7 @@ namespace Addon.Core.Models
                 NotifyPropertyChanged("IsInstalling");
                 NotifyPropertyChanged("IsNotInstalled");
                 NotifyPropertyChanged("IsUnknown");
-                NotifyPropertyChanged("IsShowTextBlock");
+
 
             }
         }
@@ -94,8 +88,6 @@ namespace Addon.Core.Models
 
         public bool ShowMessage => !string.IsNullOrEmpty(Message);
         public bool ShowStatus => !status.Equals(NOTINSTALLED) && string.IsNullOrEmpty(Message);
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

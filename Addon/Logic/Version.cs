@@ -41,7 +41,7 @@ namespace Addon.Logic
         internal static async Task<string> FindProjectUrlFor(Core.Models.Addon addon)
         {
 
-            var addonDatas = Singleton<Session>.Instance.LoadedAddonData.FindAll(ad => ad.FolderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase));
+            var addonDatas = Singleton<Session>.Instance.AddonData.FindAll(ad => ad.FolderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase));
 
             if (addonDatas.Count == 1)
             {

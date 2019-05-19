@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Addon.Views
 {
-    
+
     public sealed partial class ShellPage : Page
     {
         public ShellViewModel ViewModel { get; } = new ShellViewModel();
@@ -96,7 +96,7 @@ namespace Addon.Views
         }
 
         private void ListBox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {            
+        {
             GameSelectorFlyout.Hide();
         }
 
@@ -117,12 +117,19 @@ namespace Addon.Views
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(folder);
 
                 var game = new Game(folder.Path);
-
-                await Task.Run(() => Tasks.RefreshGameFolder(game));
-                await Task.Run(() => Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons));
+                game.IsLoading = true;
                 ViewModel.Session.Games.Add(game);
-
                 ViewModel.Session.SelectedGame = game;
+                var addons = await Task.Run(() => Tasks.RefreshGameFolder(game));
+                game.IsLoading = false;
+
+                addons.ForEach(game.Addons.Add);
+
+
+                await Tasks.FindProjectUrlAndDownLoadVersionsFor(game.Addons);
+
+
+
             }
             else
             {

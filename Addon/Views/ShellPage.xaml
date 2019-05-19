@@ -217,6 +217,13 @@
             </Grid>
 
         </winui:NavigationView>
+        <ProgressRing
+            Grid.Row="1"
+            Width="100"
+            Height="100"
+            Margin="12,40,0,0"
+            IsActive="{x:Bind ViewModel.Session.SelectedGame.IsLoading, Mode=OneWay}"
+            Visibility="{x:Bind ViewModel.Session.SelectedGame.IsLoading, Mode=OneWay}" />
     </Grid>
 
 </Page>

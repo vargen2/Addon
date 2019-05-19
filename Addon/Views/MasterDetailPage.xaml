@@ -31,7 +31,7 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                             <Grid x:Name="RootPanel">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition x:Name="MasterColumn" Width="Auto" />
+                                    <ColumnDefinition x:Name="MasterColumn" Width="505" />
                                     <ColumnDefinition x:Name="SplitterColumn" Width="3" />
                                     <ColumnDefinition x:Name="DetailsColumn" Width="*" />
                                 </Grid.ColumnDefinitions>
@@ -599,6 +599,7 @@
             MasterHeader="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath}"
             MasterHeaderTemplate="{StaticResource MasterHeaderTemplate}"
             MasterPaneWidth="600"
+            
             NoSelectionContentTemplate="{StaticResource NoSelectionContentTemplate}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=TwoWay}"
             Style="{StaticResource mymaster}" />
@@ -607,6 +608,7 @@
             Margin="12,40,0,0"
             Text="No Game Found"
             Visibility="{x:Bind ViewModel.Session.IsNoGameSelected, Mode=OneWay}" />
+
         <!--<controls:GridSplitter Grid.Column="1" Width="11" ResizeBehavior="CurrentAndNext"
             ResizeDirection="Columns" Background="Gray" Foreground="White" FontSize="13">
             <controls:GridSplitter.Element>

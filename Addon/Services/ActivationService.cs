@@ -67,10 +67,10 @@ namespace Addon.Services
                 await StartupAsync();
             }
 
-            Singleton<Session>.Instance.LoadedAddonData.AddRange(await Task.Run(() => Storage.LoadAddonData()));
-            Debug.WriteLine("AddonData count: " + Singleton<Session>.Instance.LoadedAddonData.Count);
+            Singleton<Session>.Instance.AddonData.AddRange(await Task.Run(() => Storage.LoadAddonData()));
+            Debug.WriteLine("AddonData count: " + Singleton<Session>.Instance.AddonData.Count);
 
-            Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(await Task.Run(() => Parse.LoadStoreAddons(Singleton<Session>.Instance.LoadedAddonData)));
+            Singleton<Session>.Instance.StoreAddons = new ObservableCollection<StoreAddon>(await Task.Run(() => Parse.LoadStoreAddons(Singleton<Session>.Instance.AddonData)));
             Debug.WriteLine("StoreAddons count: " + Singleton<Session>.Instance.StoreAddons.Count);
 
 
