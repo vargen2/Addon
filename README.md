@@ -9,8 +9,6 @@ https://www.microsoft.com/store/productId/9NXD1GMVB3ZH
 
 ## Known Issues
 
-- New addons are missing from browse/store page
-- Some Addons you have to set URL manually
 - Copy/move extracted files is slow
 
 ## Screens
@@ -35,7 +33,7 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 - Added AddonData for almost all addons
 - Bit snappier context menu on main page
-- Can sort based on dates on browse page
+- Can sort on browse page
 - Correct dates on browse page
 - Better sorting of addons on main page. Based on status and folder name.
 
