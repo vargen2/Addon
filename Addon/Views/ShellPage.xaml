@@ -36,7 +36,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Grid x:Name="AppTitleBar" Background="Transparent" >
+        <Grid x:Name="AppTitleBar" Background="Transparent">
             <!--  Width of the padding columns is set in LayoutMetricsChanged handler.  -->
             <!--
                 Using padding columns instead of Margin ensures that the background
@@ -217,13 +217,22 @@
             </Grid>
 
         </winui:NavigationView>
-        <ProgressRing
+        <StackPanel
             Grid.Row="1"
-            Width="100"
-            Height="100"
-            Margin="12,40,0,0"
-            IsActive="{x:Bind ViewModel.Session.SelectedGame.IsLoading, Mode=OneWay}"
-            Visibility="{x:Bind ViewModel.Session.SelectedGame.IsLoading, Mode=OneWay}" />
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="{x:Bind ViewModel.Session.SelectedGame.IsLoading, Mode=OneWay}">
+            <ProgressRing
+                Width="150"
+                Height="150"
+                IsActive="{x:Bind ViewModel.Session.SelectedGame.IsLoading, Mode=OneWay}"
+                IsHitTestVisible="False" />
+            <TextBlock
+                FontSize="36"
+                IsHitTestVisible="False"
+                Text="Loading folder..." />
+        </StackPanel>
+
     </Grid>
 
 </Page>

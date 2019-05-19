@@ -94,21 +94,21 @@
                                 Height="60"
                                 Margin="0,0,8,0"
                                 FontSize="{StaticResource MediumFontSize}"
-                                Text="{x:Bind AddonData.Title}"
+                                Text="{x:Bind Title}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
                         <StackPanel Width="400">
                             <TextBlock
                                 Height="60"
                                 Margin="{StaticResource SmallRightMargin}"
-                                Text="{x:Bind AddonData.Description}"
+                                Text="{x:Bind Description}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock
                                 Height="30"
                                 Margin="0,15,0,15"
-                                Text="{x:Bind AddonData.NrOfDownloads, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0,0}'}"
+                                Text="{x:Bind NrOfDownloads, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0,0}'}"
                                 TextAlignment="Right" />
                         </StackPanel>
                         <StackPanel Width="120" Padding="0,15,0,15">

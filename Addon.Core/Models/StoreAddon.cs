@@ -8,6 +8,9 @@ namespace Addon.Core.Models
     public class StoreAddon : INotifyPropertyChanged, IProgressable
     {
         public AddonData AddonData { get; }
+        public string Title { get => AddonData.Title; }
+        public string Description { get => AddonData.Description; }
+        public long NrOfDownloads { get => AddonData.NrOfDownloads; }
         public DateTime Updated { get; }
         public DateTime Created { get; }
         public string UpdatedFormated { get; }

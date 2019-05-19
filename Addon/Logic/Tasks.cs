@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Search;
-using Windows.UI.Core;
 
 namespace Addon.Logic
 {
@@ -17,33 +16,30 @@ namespace Addon.Logic
         public static async Task FolderToGame(Game game, StorageFolder folder)
         {
             var tocFile = await Task.Run(() => Toc.FolderToTocFile(folder));
-            if (tocFile != null && !tocFile.IsKnownSubFolder)
+            if (tocFile == null || tocFile.IsKnownSubFolder)
             {
-                var a = new Core.Models.Addon(game, tocFile.StorageFolder.Name, tocFile.StorageFolder.Path)
-                {
-                    Version = tocFile.Version,
-                    GameVersion = tocFile.GameVersion,
-                    Title = tocFile.Title
-                };
-                game.Addons.Add(a);
-                await Task.Delay(100);
-                await Tasks.FindProjectUrlAndDownLoadVersionsFor(a);
+                return;
             }
-            await Task.CompletedTask;
-
+            var a = new Core.Models.Addon(game, tocFile.StorageFolder.Name, tocFile.StorageFolder.Path)
+            {
+                Version = tocFile.Version,
+                GameVersion = tocFile.GameVersion,
+                Title = tocFile.Title
+            };
+            game.Addons.Add(a);
+            await Task.Delay(500);
+            await Tasks.FindProjectUrlAndDownLoadVersionsFor(a);
         }
 
-        public static async Task RefreshGameFolder2(Game game)
+        public static async Task RefreshGameFolder(Game game)
         {
-            Debug.WriteLine("install game start");
-            //var addonDatas = Singleton<Session>.Instance.AddonData.Select(ad=>ad.FolderName).ToHashSet();
             var addonDatas = Singleton<Session>.Instance.AddonData;
             var gameFolder = await StorageFolder.GetFolderFromPathAsync(game.AbsolutePath);
             var storageFolderQueryResult = gameFolder.CreateFolderQuery(CommonFolderQuery.DefaultQuery);
             var folders = await storageFolderQueryResult.GetFoldersAsync();
             var filteredFolders = new List<StorageFolder>();
             var SubFoldersToBeRemoved = new HashSet<string>();
-            Debug.WriteLine("install game  all folders.count=" + folders.Count);
+
             foreach (var folder in folders)
             {
                 var allMatchingFolders = addonDatas
@@ -61,122 +57,113 @@ namespace Addon.Logic
                     SubFoldersToBeRemoved.UnionWith(allMatchingFolders[0].SubFolders);
                     Debug.WriteLine("RefreshGameFoder: Found " + allMatchingFolders.Count + " matches for " + folder.Name);
                 }
-
-
             }
-            Debug.WriteLine("install game  filtered.count=" + filteredFolders.Count);
 
             var filteredAndPurgedFolders = filteredFolders.Where(f => !SubFoldersToBeRemoved.Contains(f.Name)).ToList();
 
-
             var tasks = filteredAndPurgedFolders.Select(f => FolderToGame(game, f));
-
-            Debug.WriteLine("install game  created toc tasks.count=" + filteredAndPurgedFolders.Count);
             await Task.WhenAll(tasks);
-            Debug.WriteLine("install game  toc tasks done");
-
-            await Task.CompletedTask;
         }
 
-        public static async Task<List<Core.Models.Addon>> RefreshGameFolder(Game game)
-        {
-            Debug.WriteLine("install game start");
-            //var addonDatas = Singleton<Session>.Instance.AddonData.Select(ad=>ad.FolderName).ToHashSet();
-            var addonDatas = Singleton<Session>.Instance.AddonData;
-            var gameFolder = await StorageFolder.GetFolderFromPathAsync(game.AbsolutePath);
-            var storageFolderQueryResult = gameFolder.CreateFolderQuery(CommonFolderQuery.DefaultQuery);
-            var folders = await storageFolderQueryResult.GetFoldersAsync();
-            var filteredFolders = new List<StorageFolder>();
-            Debug.WriteLine("install game  all folders");
-            foreach (var folder in folders)
-            {
+        //public static async Task<List<Core.Models.Addon>> RefreshGameFolder(Game game)
+        //{
+        //    Debug.WriteLine("install game start");
+        //    //var addonDatas = Singleton<Session>.Instance.AddonData.Select(ad=>ad.FolderName).ToHashSet();
+        //    var addonDatas = Singleton<Session>.Instance.AddonData;
+        //    var gameFolder = await StorageFolder.GetFolderFromPathAsync(game.AbsolutePath);
+        //    var storageFolderQueryResult = gameFolder.CreateFolderQuery(CommonFolderQuery.DefaultQuery);
+        //    var folders = await storageFolderQueryResult.GetFoldersAsync();
+        //    var filteredFolders = new List<StorageFolder>();
+        //    Debug.WriteLine("install game  all folders");
+        //    foreach (var folder in folders)
+        //    {
 
-                //if (addonDatas.Contains(folder.Name))
-                //{
-                //    filteredFolders.Add(folder);
-                //}
+        //        //if (addonDatas.Contains(folder.Name))
+        //        //{
+        //        //    filteredFolders.Add(folder);
+        //        //}
 
-                var allMatchingFolders = addonDatas
-                    .Where(ad => ad.FolderName.Equals(folder.Name, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-                if (allMatchingFolders.Count == 1)
-                {
-                    filteredFolders.Add(folder);
-                }
-                else if (allMatchingFolders.Count > 1)
-                {
-                    filteredFolders.Add(folder);
-                    Debug.WriteLine("RefreshGameFoder: Found " + allMatchingFolders.Count + " matches for " + folder.Name);
-                }
-
-
-            }
-            Debug.WriteLine("install game  all filtered");
-
-            //var tasks = filteredFolders
-            //    .Select(Toc.FolderToTocFile);
-            //    //.Where(task => task != null).ToList();
-            //Debug.WriteLine("install game  created toc tasks");
-            //var proccessed = await Task.WhenAll(tasks);
-            //Debug.WriteLine("install game  toc tasks done");
-            //var addons = proccessed.Where(tf => tf != null && !tf.IsKnownSubFolder)
-            //    .Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
-            //    {
-            //        Version = tf.Version,
-            //        GameVersion = tf.GameVersion,
-            //        Title = tf.Title
-            //    }).ToList();
-
-            //Debug.WriteLine("install game  done");
+        //        var allMatchingFolders = addonDatas
+        //            .Where(ad => ad.FolderName.Equals(folder.Name, StringComparison.OrdinalIgnoreCase))
+        //            .ToList();
+        //        if (allMatchingFolders.Count == 1)
+        //        {
+        //            filteredFolders.Add(folder);
+        //        }
+        //        else if (allMatchingFolders.Count > 1)
+        //        {
+        //            filteredFolders.Add(folder);
+        //            Debug.WriteLine("RefreshGameFoder: Found " + allMatchingFolders.Count + " matches for " + folder.Name);
+        //        }
 
 
-            var tasks = filteredFolders.Select(folder => Toc.FolderToTocFile(folder)
-             .ContinueWith(pTask =>
-                         {
-                             if (pTask.IsCompleted)
-                             {
-                                 var tocFile = pTask.Result;
-                                 if (tocFile != null && !tocFile.IsKnownSubFolder)
-                                 {
-                                     var a = new Core.Models.Addon(game, tocFile.StorageFolder.Name, tocFile.StorageFolder.Path)
-                                     {
-                                         Version = tocFile.Version,
-                                         GameVersion = tocFile.GameVersion,
-                                         Title = tocFile.Title
-                                     };
-                                     Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher
-                              .RunAsync(CoreDispatcherPriority.Normal, () =>
-                              {
-                                  game.Addons.Add(a);
-                              });
+        //    }
+        //    Debug.WriteLine("install game  all filtered");
 
-                                 }
-                             }
+        //    //var tasks = filteredFolders
+        //    //    .Select(Toc.FolderToTocFile);
+        //    //    //.Where(task => task != null).ToList();
+        //    //Debug.WriteLine("install game  created toc tasks");
+        //    //var proccessed = await Task.WhenAll(tasks);
+        //    //Debug.WriteLine("install game  toc tasks done");
+        //    //var addons = proccessed.Where(tf => tf != null && !tf.IsKnownSubFolder)
+        //    //    .Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
+        //    //    {
+        //    //        Version = tf.Version,
+        //    //        GameVersion = tf.GameVersion,
+        //    //        Title = tf.Title
+        //    //    }).ToList();
 
-                         }));
-            Debug.WriteLine("install game  created toc tasks");
-            await Task.WhenAll(tasks);
-            Debug.WriteLine("install game  toc tasks done");
-            //).Where(a => a != null).Select(at=>at.Result).ToList().ForEach(a =>
-            //{
-            //    Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher
-            //    .RunAsync(CoreDispatcherPriority.Normal, () =>
-            //     {
-            //         game.Addons.Add(a);
-            //     });
-            //});
-
-            //.Where(tf => tf != null && !tf.IsKnownSubFolder)
-            //.Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
-            //{
-            //    Version = tf.Version,
-            //    GameVersion = tf.GameVersion,
-            //    Title = tf.Title
-            //});
+        //    //Debug.WriteLine("install game  done");
 
 
-            return null;
-        }
+        //    var tasks = filteredFolders.Select(folder => Toc.FolderToTocFile(folder)
+        //     .ContinueWith(pTask =>
+        //                 {
+        //                     if (pTask.IsCompleted)
+        //                     {
+        //                         var tocFile = pTask.Result;
+        //                         if (tocFile != null && !tocFile.IsKnownSubFolder)
+        //                         {
+        //                             var a = new Core.Models.Addon(game, tocFile.StorageFolder.Name, tocFile.StorageFolder.Path)
+        //                             {
+        //                                 Version = tocFile.Version,
+        //                                 GameVersion = tocFile.GameVersion,
+        //                                 Title = tocFile.Title
+        //                             };
+        //                             Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher
+        //                      .RunAsync(CoreDispatcherPriority.Normal, () =>
+        //                      {
+        //                          game.Addons.Add(a);
+        //                      });
+
+        //                         }
+        //                     }
+
+        //                 }));
+        //    Debug.WriteLine("install game  created toc tasks");
+        //    await Task.WhenAll(tasks);
+        //    Debug.WriteLine("install game  toc tasks done");
+        //    //).Where(a => a != null).Select(at=>at.Result).ToList().ForEach(a =>
+        //    //{
+        //    //    Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher
+        //    //    .RunAsync(CoreDispatcherPriority.Normal, () =>
+        //    //     {
+        //    //         game.Addons.Add(a);
+        //    //     });
+        //    //});
+
+        //    //.Where(tf => tf != null && !tf.IsKnownSubFolder)
+        //    //.Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
+        //    //{
+        //    //    Version = tf.Version,
+        //    //    GameVersion = tf.GameVersion,
+        //    //    Title = tf.Title
+        //    //});
+
+
+        //    return null;
+        //}
 
         public static async Task RefreshTocFileFor(IList<Core.Models.Addon> addons)
         {
