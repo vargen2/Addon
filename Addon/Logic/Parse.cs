@@ -178,8 +178,18 @@ namespace Addon.Logic
                 // highest first
                 return y.AddonData.NrOfDownloads.CompareTo(x.AddonData.NrOfDownloads);
             });
-
-           // storeAddons.Insert(0, new StoreAddon("elvui", "ElvUI", "A user interface designed around user-friendliness with extra features that are not included in the standard UI.", 100000000, DateTime.Now, DateTime.Now));
+            //var elvuiAddonData= new AddonData() { FolderName= "ElvUI",Title="ElvUI",
+            //    Description= "A user interface designed around user-friendliness with extra features that are not included in the standard UI.",
+            //    NrOfDownloads= 100000000,
+            //    UpdatedEpoch= 1557784800,
+            //    CreatedEpoch=0,
+            //    ProjectName="elvui",
+            //    ProjectUrl= Version.ELVUI,
+            //    SubFolders=new HashSet<string>(){"ElvUI_Config" },
+            //    Files=100,
+            //    Size=100
+            //};
+            //storeAddons.Insert(0, new StoreAddon(elvuiAddonData));
             return storeAddons;
         }
     }

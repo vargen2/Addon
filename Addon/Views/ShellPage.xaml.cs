@@ -122,7 +122,14 @@ namespace Addon.Views
                 ViewModel.Session.SelectedGame = game;
                 await Tasks.RefreshGameFolder(game);
 
+                if (shellFrame.Content is BrowsePage browsePage)
+                {
+                    browsePage.RefreshStoreAddonStatus();
+                }
                 game.IsLoading = false;
+
+
+
 
             }
             else

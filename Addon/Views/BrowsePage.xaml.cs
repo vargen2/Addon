@@ -53,7 +53,7 @@ namespace Addon.Views
             ViewModel.Session.PropertyChanged -= Session_PropertyChanged;
         }
 
-        private void RefreshStoreAddonStatus()
+        public void RefreshStoreAddonStatus()
         {
             //var addons = new HashSet<string>(ViewModel.Session.SelectedGame.Addons.SelectMany(a =>
             //{

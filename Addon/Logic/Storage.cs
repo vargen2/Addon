@@ -2,11 +2,9 @@
 using Addon.Core.Models;
 using Addon.Core.Storage;
 using Addon.Helpers;
-using Microsoft.Toolkit.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Storage;
@@ -35,7 +33,7 @@ namespace Addon.Logic
                 //        .ToList();
                 //    addonDataSet.UnionWith(addonDataList);
                 //}
-             //   await LOCAL_FOLDER.SaveAsync("addondata", addonDataSet);
+                //   await LOCAL_FOLDER.SaveAsync("addondata", addonDataSet);
 
                 //    Debug.WriteLine("Saved Session to " + localFolder.Path);
             }
@@ -98,12 +96,27 @@ namespace Addon.Logic
             }
         }
 
-        
+
 
         public static async Task<List<AddonData>> LoadAddonData()
         {
             var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
-            return await assets.ReadAsync<List<AddonData>>("allvalidaddondata1-340");
+            var addonDatas = await assets.ReadAsync<List<AddonData>>("allvalidaddondata1-340");
+            addonDatas.Add(new AddonData()
+            {
+                FolderName = "ElvUI",
+                Title = "ElvUI",
+                Description = "A user interface designed around user-friendliness with extra features that are not included in the standard UI.",
+                NrOfDownloads = 100000000,
+                UpdatedEpoch = 1557784800,
+                CreatedEpoch = 0,
+                ProjectName = "elvui",
+                ProjectUrl = Version.ELVUI,
+                SubFolders = new HashSet<string>() { "ElvUI_Config" },
+                Files = 100,
+                Size = 100
+            });
+            return addonDatas;
         }
     }
 }
