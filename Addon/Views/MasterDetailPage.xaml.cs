@@ -78,7 +78,11 @@ namespace Addon.Views
             progressRing.IsActive = false;
             progressRing.Visibility = Visibility.Collapsed;
             textBlock.Visibility = Visibility.Visible;
-            ViewModel.Addons.RefreshSorting();
+            if (!addons.Any(a=>a.Status.Equals(Core.Models.Addon.UPDATING)))
+            {
+                ViewModel.Addons.RefreshSorting();
+            }
+            
             button.IsEnabled = true;
         }
 
