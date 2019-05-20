@@ -109,6 +109,7 @@ namespace Addon.Services
             if (autoRefresh)
             {
                 await Tasks.FindProjectUrlAndDownLoadVersionsFor(Singleton<Session>.Instance.SelectedGame.Addons);
+                await Tasks.AutoUpdate(Singleton<Session>.Instance.SelectedGame.Addons);
             }
 
 

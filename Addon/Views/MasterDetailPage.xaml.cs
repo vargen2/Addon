@@ -73,6 +73,8 @@ namespace Addon.Views
 
             var addons = ViewModel.Session.SelectedGame.Addons;
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(addons);
+
+            await Tasks.AutoUpdate(addons);
             progressRing.IsActive = false;
             progressRing.Visibility = Visibility.Collapsed;
             textBlock.Visibility = Visibility.Visible;

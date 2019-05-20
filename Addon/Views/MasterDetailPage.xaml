@@ -466,6 +466,15 @@
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
                         <MenuFlyoutSeparator />
+                        <MenuFlyoutItem
+                            Command="{Binding SetAutoUpdate}"
+                            Tag="{x:Bind Mode=OneWay}"
+                            Text="Auto Update">
+                            <MenuFlyoutItem.Icon>
+                                <SymbolIcon Symbol="Accept" Visibility="{x:Bind IsAutoUpdate, Mode=OneWay}" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem Command="{Binding SetAlpha}" Text="Alpha">
                             <MenuFlyoutItem.Icon>
                                 <SymbolIcon Symbol="Accept" Visibility="{x:Bind IsAlpha, Mode=OneWay}" />

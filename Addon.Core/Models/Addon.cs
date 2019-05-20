@@ -28,6 +28,7 @@ namespace Addon.Core.Models
             FolderName = folderName ?? throw new NullReferenceException();
             AbsolutePath = absolutePath ?? throw new NullReferenceException();
             SetIgnored = new RelayCommand(() => IsIgnored = !IsIgnored);
+            SetAutoUpdate = new RelayCommand(() => IsAutoUpdate = !IsAutoUpdate);
             SetAlpha = new RelayCommand(() => PreferredReleaseType = "Alpha");
             SetBeta = new RelayCommand(() => PreferredReleaseType = "Beta");
             SetRelease = new RelayCommand(() => PreferredReleaseType = "Release");
@@ -123,6 +124,7 @@ namespace Addon.Core.Models
 
 
         public ICommand SetIgnored { get; set; }
+        public ICommand SetAutoUpdate { get; set; }
         public ICommand SetAlpha { get; set; }
         public ICommand SetBeta { get; set; }
         public ICommand SetRelease { get; set; }
@@ -139,6 +141,22 @@ namespace Addon.Core.Models
                 isIgnored = value;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("NotIgnoredOpacity");
+                NotifyPropertyChanged("InfoString");
+
+            }
+        }
+
+        private bool isAutoUpdate;
+
+        public bool IsAutoUpdate
+        {
+            get => isAutoUpdate;
+            set
+            {
+                if (value == isAutoUpdate)
+                    return;
+                isAutoUpdate = value;
+                NotifyPropertyChanged();
                 NotifyPropertyChanged("InfoString");
 
             }
@@ -220,7 +238,7 @@ namespace Addon.Core.Models
                     return null;
                 }
 
-                return downloads.FirstOrDefault(dl => dl.ReleaseType.ToLower().Equals(this.preferredReleaseType.ToLower()));
+                return downloads.FirstOrDefault(dl => dl.ReleaseType.ToLower().Equals(preferredReleaseType.ToLower()));
             }
         }
 
@@ -247,7 +265,7 @@ namespace Addon.Core.Models
                 return;
             }
 
-            if (suggestedDownload.DateUploaded > this.currentDownload.DateUploaded)
+            if (suggestedDownload.DateUploaded > currentDownload.DateUploaded)
             {
                 Status = UPDATEABLE;
             }
@@ -318,7 +336,7 @@ namespace Addon.Core.Models
             $"\r\n{nameof(Version)}: {Version},\r\n{nameof(CurrentReleaseTypeAndVersion)}: {CurrentReleaseTypeAndVersion}," +
             $"\r\n{nameof(IsIgnored)}: {IsIgnored},\r\n{nameof(GameVersion)}: {GameVersion}," +
             $"\r\n{nameof(Status)}: {Status},\r\n{nameof(CurrentDownload)}: {CurrentDownload}," +
-            $"\r\n{nameof(SuggestedDownload)}: {SuggestedDownload}," +
+            $"\r\n{nameof(SuggestedDownload)}: {SuggestedDownload},\r\n{ nameof(IsAutoUpdate)}: { IsAutoUpdate}" +
             $"\r\n{nameof(SubFolders)}: {SubFolderContents()}";
 
         private string SubFolderContents()
@@ -331,18 +349,19 @@ namespace Addon.Core.Models
         {
             return new SaveableAddon()
             {
-                AbsolutePath = this.AbsolutePath,
-                Title = this.Title,
-                CurrentDownload = this.CurrentDownload,
-                Downloads = this.Downloads,
-                FolderName = this.FolderName,
-                GameVersion = this.GameVersion,
-                IsIgnored = this.IsIgnored,
-                PreferredReleaseType = this.PreferredReleaseType,
-                ProjectUrl = this.ProjectUrl,
-                Status = this.Status,
-                Version = this.Version,
-                SubFolders = this.SubFolders
+                AbsolutePath = AbsolutePath,
+                Title = Title,
+                CurrentDownload = CurrentDownload,
+                Downloads = Downloads,
+                FolderName = FolderName,
+                GameVersion = GameVersion,
+                IsIgnored = IsIgnored,
+                IsAutoUpdate = IsAutoUpdate,
+                PreferredReleaseType = PreferredReleaseType,
+                ProjectUrl = ProjectUrl,
+                Status = Status,
+                Version = Version,
+                SubFolders = SubFolders
             };
         }
 
