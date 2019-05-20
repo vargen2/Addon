@@ -444,7 +444,12 @@
                         Click="UpdateButtonClick"
                         Content="Update"
                         Tag="{x:Bind}"
-                        Visibility="{x:Bind IsUpdateable, Mode=OneWay}" />
+                        Visibility="{x:Bind IsUpdateable, Mode=OneWay}">
+                        <!--<StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Download" />
+                            <TextBlock Text="Update" />
+                        </StackPanel>-->
+                    </Button>
                     <TextBlock
                         Height="20"
                         Text="{x:Bind Status, Mode=OneWay}"
@@ -576,6 +581,7 @@
                 <Button Width="130" Click="DownloadVersionsForAllAddonsInSelectedGame">
                     <StackPanel Orientation="Horizontal">
                         <ProgressRing x:Name="RefreshButtonProgressRing" Visibility="Collapsed" />
+                        <!--<SymbolIcon Symbol="Sync" />-->
                         <TextBlock Text="Refresh" />
                     </StackPanel>
                 </Button>
