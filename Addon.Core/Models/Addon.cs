@@ -65,7 +65,7 @@ namespace Addon.Core.Models
 
         public void InsertNewDownloads(List<Download> newDownloads)
         {
-            downloads.InsertRange(0,newDownloads);
+            downloads.InsertRange(0, newDownloads);
             updateStatus();
             NotifyPropertyChanged("Downloads");
             NotifyPropertyChanged("InfoString");
@@ -368,7 +368,8 @@ namespace Addon.Core.Models
                 IsAutoUpdate = IsAutoUpdate,
                 PreferredReleaseType = PreferredReleaseType,
                 ProjectUrl = ProjectUrl,
-                Status = Status,
+
+                Status = (this.Status.Equals(DOWNLOADING_VERSIONS) || this.Status.Equals(UPDATING)) ? UNKNOWN : this.Status,
                 Version = Version,
                 SubFolders = SubFolders
             };
