@@ -63,12 +63,13 @@ namespace AddonManager.Views
             {
                 return;
             }
-            var button = sender as Button;
+            var button = sender as AppBarButton;
             button.IsEnabled = false;
             var progressRing = (button.Content as StackPanel).Children.OfType<ProgressRing>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
-            var textBlock = (button.Content as StackPanel).Children.OfType<TextBlock>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
+                                                                                                               // var textBlock = (button.Content as StackPanel).Children.OfType<TextBlock>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
+            var refreshButtonIcon = (button.Content as StackPanel).Children.OfType<SymbolIcon>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
             progressRing.IsActive = true;
-            textBlock.Visibility = Visibility.Collapsed;
+            refreshButtonIcon.Visibility = Visibility.Collapsed;
             progressRing.Visibility = Visibility.Visible;
 
             var addons = ViewModel.Session.SelectedGame.Addons;
@@ -77,19 +78,19 @@ namespace AddonManager.Views
             await Tasks.AutoUpdate(addons);
             progressRing.IsActive = false;
             progressRing.Visibility = Visibility.Collapsed;
-            textBlock.Visibility = Visibility.Visible;
-            if (!addons.Any(a=>a.Status.Equals(Core.Models.Addon.UPDATING)))
+            refreshButtonIcon.Visibility = Visibility.Visible;
+            if (!addons.Any(a => a.Status.Equals(Addon.UPDATING)))
             {
                 ViewModel.Addons.RefreshSorting();
             }
-            
+
             button.IsEnabled = true;
         }
 
         private void FlyoutBase_OnOpening(object sender, object e)
         {
             var menuflyuout = sender as MenuFlyout;
-            
+
             Core.Models.Addon addon = menuflyuout.Items.First().Tag as Core.Models.Addon;
             MenuFlyoutItemBase temp = menuflyuout.Items.FirstOrDefault(item => item.Name.Equals("VersionsMenuFlyout"));
 
@@ -298,7 +299,7 @@ namespace AddonManager.Views
             Core.Models.Addon addon = menuItem.Tag as Core.Models.Addon;
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(addon);
         }
-                
+
         private void Session_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals("SelectedGame"))

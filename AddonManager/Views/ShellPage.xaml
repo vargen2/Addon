@@ -163,12 +163,26 @@
 
                                     <Button
                                         Height="40"
+
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Left"
                                         Background="Transparent"
                                         BorderThickness="0"
                                         Click="OpenFolder_OnClick"
                                         Content="Open Folder..." />
+
+                                    <!--<AppBarButton
+                                        FontSize="18"
+                                        Width="300"
+                                        Height="40"
+                                        HorizontalAlignment="Stretch"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Click="OpenFolder_OnClick">
+                                        <TextBlock LineHeight="40" Width="300" Height="40" FontSize="18" Text="Open Folder..." />
+                                            
+                                        
+                                    </AppBarButton>-->
                                     <!--<Button
                                     Height="40"
                                     HorizontalAlignment="Stretch"

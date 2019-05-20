@@ -609,19 +609,34 @@
 
         <DataTemplate x:Key="MasterHeaderTemplate">
             <StackPanel Height="40" Orientation="Horizontal">
-                <Button Width="130" Click="DownloadVersionsForAllAddonsInSelectedGame">
+                <AppBarButton Click="DownloadVersionsForAllAddonsInSelectedGame" ToolTipService.ToolTip="Get new version from net">
                     <StackPanel Orientation="Horizontal">
                         <ProgressRing x:Name="RefreshButtonProgressRing" Visibility="Collapsed" />
-                        <!--<SymbolIcon Symbol="Sync" />-->
-                        <TextBlock Text="Refresh" />
+                        <SymbolIcon
+                            x:Name="RefreshButtonIcon"
+                            Symbol="Sync"
+                            Visibility="Visible" />
                     </StackPanel>
-                </Button>
-                <Button
+                </AppBarButton>
+                <AppBarButton
+                    Click="RemoveSelectedGame"
+                    Icon="Delete"
+                    ToolTipService.ToolTip="Remove Game" />
+                <!--<Button Width="130" Click="DownloadVersionsForAllAddonsInSelectedGame">
+                    <StackPanel Orientation="Horizontal">
+                        <ProgressRing x:Name="RefreshButtonProgressRing" Visibility="Collapsed" />
+                -->
+                <!--<SymbolIcon Symbol="Sync" />-->
+                <!--
+                        <TextBlock Text="Refresh" />
+                    </StackPanel>-->
+                <!--</Button>-->
+                <!--<Button
                     Width="130"
                     Margin="{StaticResource SmallLeftMargin}"
                     Click="RemoveSelectedGame">
                     Remove Game...
-                </Button>
+                </Button>-->
             </StackPanel>
         </DataTemplate>
         <!--<DataTemplate x:Key="MinimalMasterHeaderTemplate">
