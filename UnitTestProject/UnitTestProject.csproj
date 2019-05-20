@@ -159,13 +159,13 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Addon.Core\Addon.Core.csproj">
+    <ProjectReference Include="..\AddonManager.Core\AddonManager.Core.csproj">
       <Project>{e6760120-c01e-44ca-9028-ec9f0d7abdda}</Project>
-      <Name>Addon.Core</Name>
+      <Name>AddonManager.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Addon\Addon.csproj">
+    <ProjectReference Include="..\AddonManager\AddonManager.csproj">
       <Project>{25f7fb92-65b2-4838-a4c1-20e530a9cf3b}</Project>
-      <Name>Addon</Name>
+      <Name>AddonManager</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
