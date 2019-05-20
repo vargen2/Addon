@@ -101,9 +101,7 @@ namespace Addon.Logic
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(Core.Models.Addon addon)
         {
-            if (addon.IsIgnored
-                || addon.Status.Equals(Core.Models.Addon.UPDATING)
-                || addon.Status.Equals(Core.Models.Addon.DOWNLOADING_VERSIONS))
+            if (addon.IsIgnored)
             {
                 return;
             }
@@ -116,7 +114,8 @@ namespace Addon.Logic
             {
                 addon.ProjectUrl = await Task.Run(() => Version.FindProjectUrlFor(addon));
             }
-            addon.Downloads = await Task.Run(() => Version.DownloadVersionsFor(addon));
+            var downloadsToBeAdded = await Task.Run(() => Version.DownloadVersionsFor(addon));
+            addon.InsertNewDownloads(downloadsToBeAdded);
         }
 
         public static async Task UpdateAddon(Core.Models.Addon addon)

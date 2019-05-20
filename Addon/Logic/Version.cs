@@ -3,6 +3,7 @@ using Addon.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
@@ -52,7 +53,7 @@ namespace Addon.Logic
                 Debug.WriteLine("Addondata.count=" + addonDatas.Count + " for " + addon.FolderName);
             }
 
-            List<String> urlNames = new List<string>() { addon.FolderName.Replace(" ", "-"),
+            List<string> urlNames = new List<string>() { addon.FolderName.Replace(" ", "-"),
                 addon.FolderName,addon.Title.Replace(" ","-"),addon.Title.Replace(" ",""),addon.Title };
 
             if (PROJECT_URLS.TryGetValue(addon.FolderName.ToLower(), out List<string> list))
@@ -81,7 +82,7 @@ namespace Addon.Logic
                     return url;
                 }
             }
-            return String.Empty;
+            return string.Empty;
         }
 
         internal static async Task<List<Download>> DownloadVersionsFor(Core.Models.Addon addon)
@@ -106,35 +107,62 @@ namespace Addon.Logic
 
         private static async Task<List<Download>> FromCurse(Core.Models.Addon addon)
         {
-            var uri = new Uri(addon.ProjectUrl + "/files");
-            //using (var httpClient = new HttpClient())
-            //{
+            var downloads = new List<Download>();
+
             try
             {
-                var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
-                return Parse.FromPageToDownloads(addon, htmlPage);
+                for (int i = 1; i < 5; i++)
+                {
+
+                    var uri = new Uri(addon.ProjectUrl + "/files?page=" + i);
+                    var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
+                    var fresh = Parse.FromPageToDownloads(addon, htmlPage);
+
+                    var dontExistAllready = fresh.Except(addon.Downloads).ToList();
+                    if (dontExistAllready.Count == 0)
+                    {
+                        //  Debug.WriteLine("Should be in addon allready " + addon.FolderName);
+                        return downloads;
+                    }
+
+                    var newPage = dontExistAllready.Except(downloads).ToList();
+                    if (newPage.Count == 0)
+                    {
+                        //  Debug.WriteLine("Should be same page return " + addon.FolderName);
+                        return downloads;
+                    }
+
+                    downloads.AddRange(newPage);
+                    if (downloads.Any(d => d.ReleaseType.Equals("release", StringComparison.OrdinalIgnoreCase))
+                        && downloads.Any(d => d.ReleaseType.Equals("beta", StringComparison.OrdinalIgnoreCase))
+                        && downloads.Any(d => d.ReleaseType.Equals("aplha", StringComparison.OrdinalIgnoreCase))
+                        )
+                    {
+                        return downloads;
+                    }
+                }
+                return downloads;
             }
             catch (Exception ex)
             {
                 var error = WebSocketError.GetStatus(ex.HResult);
                 if (error == Windows.Web.WebErrorStatus.Unknown)
                 {
-                    Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + ex.Message);
+                    Debug.WriteLine("[ERROR] DownloadVersionsFor " + addon.ProjectUrl + " " + error + " " + ex.Message);
                 }
                 else
                 {
-                    Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + error);
+                    Debug.WriteLine("[ERROR] DownloadVersionsFor " + addon.ProjectUrl + " " + ex.Message);
                 }
             }
-            //}
+
             return new List<Download>();
         }
 
         private static async Task<List<Download>> FromElvUI(Core.Models.Addon addon)
         {
             var uri = new Uri(addon.ProjectUrl);
-            //using (var httpClient = new HttpClient())
-            //{
+
             try
             {
                 var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
@@ -152,7 +180,7 @@ namespace Addon.Logic
                     Debug.WriteLine("[ERROR] DownloadVersionsFor " + uri + " " + error);
                 }
             }
-            //}
+
             return new List<Download>();
         }
 
@@ -196,7 +224,7 @@ namespace Addon.Logic
                 }
             }
             //}
-            return String.Empty;
+            return string.Empty;
         }
 
     }

@@ -412,6 +412,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="18*" />
                     <ColumnDefinition Width="15*" />
+                    <!--<ColumnDefinition Width="20" />-->
                     <ColumnDefinition Width="15*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Width="180">
@@ -429,6 +430,36 @@
                     <TextBlock Height="25" Text="{x:Bind SuggestedDownload.ReleaseType, Mode=OneWay}" />
                     <TextBlock Height="25" Text="{x:Bind SuggestedDownload.Version, Mode=OneWay}" />
                 </StackPanel>
+                <!--<StackPanel Grid.Column="2">
+                    <TextBlock
+                        Width="15"
+                        Height="15"
+                        Margin="0,8,0,2"
+                        HorizontalTextAlignment="Center"
+                        Opacity="0.7"
+                        Text="R" />
+                    <Grid
+                        Width="15"
+                        Height="19"
+                        Margin="0,2,0,4">
+                        <TextBlock
+                            Width="15"
+                            Height="15"
+                           Margin="0 0 0 4"
+                            HorizontalTextAlignment="Center"
+                            Opacity="0.7"
+                            Text="A" />
+                        <Viewbox
+
+                            MaxHeight="15" MaxWidth="15">
+                            <SymbolIcon
+                            Opacity="0.7"
+                            Symbol="Refresh" />
+                        </Viewbox>
+
+                    </Grid>
+
+                </StackPanel>-->
                 <StackPanel
                     Grid.Column="2"
                     Width="150"

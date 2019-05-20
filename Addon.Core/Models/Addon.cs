@@ -63,6 +63,15 @@ namespace Addon.Core.Models
             }
         }
 
+        public void InsertNewDownloads(List<Download> newDownloads)
+        {
+            downloads.InsertRange(0,newDownloads);
+            updateStatus();
+            NotifyPropertyChanged("Downloads");
+            NotifyPropertyChanged("InfoString");
+            NotifyPropertyChanged("SuggestedDownload");
+        }
+
         private string preferredReleaseType = "Release";
 
         public string PreferredReleaseType
