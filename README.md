@@ -29,7 +29,12 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 ## ChangeLog
 
-##### 10.016.0 - In development
+##### 10.017.0 - In development
+
+- Will try to get versions for all release types
+- Per addon setting for auto update
+
+##### 10.016.0 - In deploment
 
 - Added AddonData for almost all addons
 - Bit snappier context menu on main page
