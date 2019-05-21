@@ -9,6 +9,8 @@ namespace AddonManager.Core.Models
 {
     public class Game : INotifyPropertyChanged
     {
+        public string DisplayName { get; set; } = "R";
+
         private bool isLoading = false;
         public bool IsLoading
         {

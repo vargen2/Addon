@@ -92,20 +92,22 @@ namespace AddonManager.Views
             ViewModel.Session.SelectedGame = listBox.SelectedValue as Game;
             // NavigationService.ForceNavigateMainPage();
 
-            GameSelectorFlyout.Hide();
+            //GameSelectorFlyout.Hide();
         }
 
-        private void ListBox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            GameSelectorFlyout.Hide();
-        }
+        //private void ListBox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        //{
+        //    GameSelectorFlyout.Hide();
+        //}
 
 
         private async void OpenFolder_OnClick(object sender, RoutedEventArgs e)
         {
 
-            var folderPicker = new Windows.Storage.Pickers.FolderPicker();
-            folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
+            var folderPicker = new Windows.Storage.Pickers.FolderPicker
+            {
+                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop
+            };
             folderPicker.FileTypeFilter.Add("*");
 
             Windows.Storage.StorageFolder folder = await folderPicker.PickSingleFolderAsync();
@@ -115,9 +117,10 @@ namespace AddonManager.Views
 
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(folder);
 
-                var game = new Game(folder.Path);
-
-                game.IsLoading = true;
+                var game = new Game(folder.Path)
+                {
+                    IsLoading = true
+                };
                 ViewModel.Session.Games.Add(game);
                 ViewModel.Session.SelectedGame = game;
                 await Tasks.RefreshGameFolder(game);
@@ -172,16 +175,27 @@ namespace AddonManager.Views
             }
         }
 
-        //private void Session_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        //private async void StackPanel_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
         //{
-        //    if (e.PropertyName.Equals("SelectedGame"))
+        //    var game = (sender as StackPanel).Tag as Game;
+        //    Debug.WriteLine("hit "+game.AbsolutePath);
+
+        //    var contentDialog = new ContentDialog()
         //    {
-        //        var game = Singleton<Session>.Instance.SelectedGame;
-        //        if (game != null)
-        //        {
-        //            ApplicationView.GetForCurrentView().Title = Singleton<Session>.Instance.SelectedGame.AbsolutePath;
-        //        }
-        //    }
-        //}
+        //        Title="Set display symbol",
+        //        Content="For example\r\n" +
+        //        "R=Retail\r\n" +
+        //        "B=Beta\r\n" +
+        //        "A=Alpha\r\n" +
+        //        "P=Ptr\r\n" +
+        //        "C=Classic",
+        //        IsPrimaryButtonEnabled=true,
+        //        IsSecondaryButtonEnabled=true,
+        //        PrimaryButtonText="Save",
+        //        SecondaryButtonText="Cancel"
+        //    };
+
+        //    var result=await contentDialog.ShowAsync();
+        //}       
     }
 }

@@ -619,6 +619,7 @@
                     </StackPanel>
                 </AppBarButton>
                 <AppBarButton
+                    
                     Click="RemoveSelectedGame"
                     Icon="Delete"
                     ToolTipService.ToolTip="Remove Game" />

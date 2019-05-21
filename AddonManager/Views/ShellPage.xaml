@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="using:AddonManager.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="using:AddonManager.Core.Models"
     xmlns:helpers="using:AddonManager.Helpers"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
@@ -13,11 +14,6 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <!--<SolidColorBrush
-            x:Key="NavigationViewDefaultPaneBackground"
-
-            Color="red" />-->
-        <!--<SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Blue"/>-->
         <AcrylicBrush
             x:Key="NavigationViewDefaultPaneBackground"
             BackgroundSource="HostBackdrop"
@@ -37,23 +33,11 @@
         </Grid.RowDefinitions>
 
         <Grid x:Name="AppTitleBar" Background="Transparent">
-            <!--  Width of the padding columns is set in LayoutMetricsChanged handler.  -->
-            <!--
-                Using padding columns instead of Margin ensures that the background
-                paints the area under the caption control buttons (for transparent buttons).
-            -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="LeftPaddingColumn" Width="0" />
                 <ColumnDefinition />
                 <ColumnDefinition x:Name="RightPaddingColumn" Width="0" />
             </Grid.ColumnDefinitions>
-            <!--<Image
-                Grid.Column="1"
-                Width="20"
-                Height="20"
-                Margin="12,0"
-                HorizontalAlignment="Left"
-                Source="Assets/Square44x44Logo.targetsize-16.png" />-->
             <TextBlock
                 Grid.Column="1"
                 Margin="8,8,0,0"
@@ -61,8 +45,6 @@
                 Text="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath, Mode=OneWay}" />
         </Grid>
 
-
-        <!--  Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}"  -->
 
 
         <winui:NavigationView
@@ -74,14 +56,7 @@
             IsSettingsVisible="True"
             PaneDisplayMode="LeftCompact"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}">
-
             <winui:NavigationView.MenuItems>
-
-                <!--<winui:NavigationViewItem
-                Name="navitem1"
-                x:Uid="Shell_Main"
-                helpers:NavHelper.NavigateTo="views:MainPage"
-                Icon="Home" />-->
                 <winui:NavigationViewItem
                     Name="navitem1"
                     x:Uid="Shell_Master"
@@ -97,12 +72,7 @@
                     <!--  DefaultHeader="{x:Bind ViewModel.Selected.Content, Mode=OneWay}"  -->
                     <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <TextBlock
-                                    Margin="{StaticResource SmallLeftRightMargin}"
-                                    Style="{ThemeResource TitleTextBlockStyle}"
-                                    Text="{Binding}" />
-                            </Grid>
+                            <Grid />
                         </DataTemplate>
                     </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
                 </behaviors:NavigationViewHeaderBehavior>
@@ -113,123 +83,45 @@
 
             <winui:NavigationView.PaneCustomContent>
                 <StackPanel>
-                    <!--<Button
-                    Height="40"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Left"
-                    Background="Transparent"
-                    BorderThickness="0">
-                    <Button.Flyout>
-                        <MenuFlyout Placement="Right">
-                            <MenuFlyout.MenuFlyoutPresenterStyle>
-                                <Style TargetType="MenuFlyoutPresenter">
-                                    <Setter Property="MinHeight" Value="80" />
-                                    <Setter Property="MinWidth" Value="200" />
-                                </Style>
-                            </MenuFlyout.MenuFlyoutPresenterStyle>
-                            <MenuFlyoutItem
-                                Icon="OpenFile"
-                                Tag="rating"
-                                Text="Open Folder..." />
-
-
-                            <MenuFlyoutItem
-                                Icon="Find"
-                                Tag="distance"
-                                Text="Automatic Search..." />
-
-                        </MenuFlyout>
-                    </Button.Flyout>
-                    <StackPanel Orientation="Horizontal">
-                        <SymbolIcon Symbol="Add" />
-                        <TextBlock Margin="20,0">Add Game</TextBlock>
-                    </StackPanel>
-                </Button>-->
-                    <Button
-                        Height="40"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Left"
+                    <winui:NavigationViewItem
+                        Icon="Add"
+                        Tapped="OpenFolder_OnClick"
+                        ToolTipService.ToolTip="Add new game folder" />
+                    <ListBox
                         Background="Transparent"
-                        BorderThickness="0">
-                        <Button.Flyout>
-
-                            <Flyout x:Name="GameSelectorFlyout" Placement="Right">
-
+                        ItemsSource="{x:Bind ViewModel.Session.Games, Mode=OneWay}"
+                        SelectedItem="{x:Bind ViewModel.Session.SelectedGame, Mode=OneWay}"
+                        SelectionChanged="ListBox_SelectionChanged"
+                        SelectionMode="Single">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="data:Game">
                                 <StackPanel
-                                    Width="300"
-                                    VerticalAlignment="Stretch"
-                                    Background="{ThemeResource AppBarBackgroundThemeBrush}">
-                                    <!--  Background="{ThemeResource SystemControlChromeHighAcrylicWindowMediumBrush}">  -->
-
-                                    <Button
-                                        Height="40"
-
-                                        HorizontalAlignment="Stretch"
-                                        HorizontalContentAlignment="Left"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Click="OpenFolder_OnClick"
-                                        Content="Open Folder..." />
-
-                                    <!--<AppBarButton
-                                        FontSize="18"
-                                        Width="300"
-                                        Height="40"
-                                        HorizontalAlignment="Stretch"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Click="OpenFolder_OnClick">
-                                        <TextBlock LineHeight="40" Width="300" Height="40" FontSize="18" Text="Open Folder..." />
-                                            
-                                        
-                                    </AppBarButton>-->
-                                    <!--<Button
+                                    Width="40"
                                     Height="40"
-                                    HorizontalAlignment="Stretch"
-                                    HorizontalContentAlignment="Left"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Content="Scan for Games" />-->
-                                    <NavigationViewItemSeparator />
-                                    <ListBox
-                                        DisplayMemberPath="AbsolutePath"
-                                        ItemsSource="{x:Bind ViewModel.Session.Games, Mode=OneWay}"
-                                        SelectedItem="{x:Bind ViewModel.Session.SelectedGame, Mode=OneWay}"
-                                        SelectionChanged="ListBox_SelectionChanged"
-                                        SelectionMode="Single"
-                                        Tapped="ListBox_Tapped" />
-
-
-
+                                    
+                                    Tag="{x:Bind Mode=OneTime}"
+                                    ToolTipService.ToolTip="{x:Bind AbsolutePath, Mode=OneTime}">
+                                    <TextBlock
+                                        Width="40"
+                                        Height="36"
+                                        Margin="0,4,0,0"
+                                        FontSize="20"
+                                        Text="{x:Bind DisplayName, Mode=OneWay}"
+                                        TextAlignment="Center" />
                                 </StackPanel>
-
-                                <Flyout.FlyoutPresenterStyle>
-                                    <Style TargetType="FlyoutPresenter">
-                                        <Setter Property="Background" Value="Transparent" />
-                                        <Setter Property="BorderThickness" Value="0" />
-                                        <Setter Property="MaxHeight" Value="NaN" />
-                                        <Setter Property="Height" Value="2000" />
-                                        <Setter Property="MinHeight" Value="2000" />
-                                        <Setter Property="Padding" Value="0,0,0,0" />
-                                        <Setter Property="Margin" Value="-4,0,0,0" />
-                                    </Style>
-                                </Flyout.FlyoutPresenterStyle>
-                            </Flyout>
-                        </Button.Flyout>
-                        <SymbolIcon Symbol="More" />
-                        <ToolTipService.ToolTip>
-                            <ToolTip Content="Select Game" />
-                        </ToolTipService.ToolTip>
-                    </Button>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="0,0,0,0" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
                 </StackPanel>
-
             </winui:NavigationView.PaneCustomContent>
-
-
             <Grid>
                 <Frame x:Name="shellFrame" />
             </Grid>
-
         </winui:NavigationView>
         <StackPanel
             Grid.Row="1"
@@ -250,6 +142,3 @@
     </Grid>
 
 </Page>
-
-
-<!--  Background="{ThemeResource SystemControlBackgroundAltHighBrush}"  -->
