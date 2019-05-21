@@ -64,7 +64,8 @@ namespace AddonManager.Views
                 return;
             }
             var button = sender as AppBarButton;
-            button.IsEnabled = false;
+            //button.IsEnabled = false;
+            ViewModel.Session.Refreshing=true;
             var progressRing = (button.Content as StackPanel).Children.OfType<ProgressRing>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
                                                                                                                // var textBlock = (button.Content as StackPanel).Children.OfType<TextBlock>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
             var refreshButtonIcon = (button.Content as StackPanel).Children.OfType<SymbolIcon>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
@@ -84,7 +85,8 @@ namespace AddonManager.Views
                 ViewModel.Addons.RefreshSorting();
             }
 
-            button.IsEnabled = true;
+            //button.IsEnabled = true;
+            ViewModel.Session.Refreshing=false;
         }
 
         private void FlyoutBase_OnOpening(object sender, object e)

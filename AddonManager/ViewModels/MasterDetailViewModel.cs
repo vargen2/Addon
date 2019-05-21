@@ -1,6 +1,5 @@
 ﻿using AddonManager.Core.Helpers;
 using AddonManager.Core.Models;
-using AddonManager.Helpers;
 using AddonManager.Logic;
 using Microsoft.Toolkit.Uwp.UI;
 using Microsoft.Toolkit.Uwp.UI.Controls;
@@ -12,23 +11,25 @@ namespace AddonManager.ViewModels
 {
     public class MasterDetailViewModel : Observable
     {
-        private Core.Models.Addon oldSelected;
+        private Addon oldSelected;
 
         public Session Session { get; }
 
         public AdvancedCollectionView Addons { get; set; }
 
-        private Core.Models.Addon _selected;
+        private Addon _selected;
 
-        public Core.Models.Addon Selected
+        public Addon Selected
         {
-            get { return _selected; }
-            set
-            {
-                Set(ref _selected, value);
-            }
+            get => _selected;
+            set => Set(ref _selected, value);
         }
+
         
+
+
+        
+
         public MasterDetailViewModel()
         {
             Session = Singleton<Session>.Instance;

@@ -98,7 +98,6 @@
                                 <StackPanel
                                     Width="40"
                                     Height="40"
-                                    
                                     Tag="{x:Bind Mode=OneTime}"
                                     ToolTipService.ToolTip="{x:Bind AbsolutePath, Mode=OneTime}">
                                     <TextBlock

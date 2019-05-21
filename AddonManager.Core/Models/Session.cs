@@ -1,8 +1,8 @@
-﻿using AddonManager.Core.Storage;
+﻿using AddonManager.Core.Helpers;
+using AddonManager.Core.Storage;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using AddonManager.Core.Helpers;
 
 namespace AddonManager.Core.Models
 {
@@ -19,11 +19,26 @@ namespace AddonManager.Core.Models
                 Set(ref _selectedGame, value);
                 OnPropertyChanged("IsNoGameSelected");
                 OnPropertyChanged("IsGameSelected");
+                OnPropertyChanged("IsRefreshButtonEnabled");
+            }
+        }
+
+        private bool _refreshing;
+
+        public bool Refreshing
+        {
+            get => _refreshing;
+            set
+            {
+                Set(ref _refreshing, value);
+                OnPropertyChanged("IsRefreshButtonEnabled");
             }
         }
 
         public bool IsNoGameSelected => SelectedGame == null ? true : SelectedGame.AbsolutePath.Equals(EMPTY_GAME);
         public bool IsGameSelected => SelectedGame == null ? false : !SelectedGame.AbsolutePath.Equals(EMPTY_GAME);
+
+        public bool IsRefreshButtonEnabled => IsGameSelected && !Refreshing;
 
         //private bool isInstalling = false;
         //public bool IsInstalling
@@ -48,7 +63,7 @@ namespace AddonManager.Core.Models
         public ObservableCollection<StoreAddon> StoreAddons { get; set; } = new ObservableCollection<StoreAddon>();
 
         public HashSet<string> KnownSubFolders { get; } = new HashSet<string>();
-       
+
         public List<AddonData> AddonData { get; } = new List<AddonData>();
 
         public SaveableSession AsSaveableSession()

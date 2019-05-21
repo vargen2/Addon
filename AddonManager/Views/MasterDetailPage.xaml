@@ -607,9 +607,9 @@
             </Grid>
         </DataTemplate>
 
-        <DataTemplate x:Key="MasterHeaderTemplate">
+        <DataTemplate x:Key="MasterHeaderTemplate" x:DataType="data:Session">
             <StackPanel Height="40" Orientation="Horizontal">
-                <AppBarButton Click="DownloadVersionsForAllAddonsInSelectedGame" ToolTipService.ToolTip="Get new version from net">
+                <AppBarButton IsEnabled="{x:Bind IsRefreshButtonEnabled,Mode=OneWay}" Click="DownloadVersionsForAllAddonsInSelectedGame" ToolTipService.ToolTip="Get new version from net">
                     <StackPanel Orientation="Horizontal">
                         <ProgressRing x:Name="RefreshButtonProgressRing" Visibility="Collapsed" />
                         <SymbolIcon
@@ -619,7 +619,7 @@
                     </StackPanel>
                 </AppBarButton>
                 <AppBarButton
-                    
+                    IsEnabled="{x:Bind IsGameSelected,Mode=OneWay}"
                     Click="RemoveSelectedGame"
                     Icon="Delete"
                     ToolTipService.ToolTip="Remove Game" />
@@ -658,7 +658,7 @@
             DetailsTemplate="{StaticResource DetailsTemplate}"
             ItemTemplate="{StaticResource ItemTemplate}"
             ItemsSource="{x:Bind ViewModel.Addons, Mode=OneWay}"
-            MasterHeader="{x:Bind ViewModel.Session.SelectedGame.AbsolutePath}"
+            MasterHeader="{x:Bind ViewModel.Session}"
             MasterHeaderTemplate="{StaticResource MasterHeaderTemplate}"
             MasterPaneWidth="600"
             NoSelectionContentTemplate="{StaticResource NoSelectionContentTemplate}"
