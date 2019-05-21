@@ -13,9 +13,10 @@ https://www.microsoft.com/store/productId/9NXD1GMVB3ZH
 
 ## Screens
 
+![Alt text](img/img5.png?raw=true "")
+![Alt text](img/img4.png?raw=true "")
+![Alt text](img/img6.png?raw=true "")
 ![Alt text](img/img3.png?raw=true "")
-![Alt text](img/img1.png?raw=true "Earlier version")
-![Alt text](img/img2.png?raw=true "Earlier version")
 
 ## Info
 
