@@ -666,8 +666,9 @@
             Style="{StaticResource mymaster}" />
 
         <TextBlock
-            Margin="12,40,0,0"
+            Margin="24,40,0,0"
             Text="No Game Found"
+            Style="{StaticResource DetailBodyBaseMediumStyle}"
             Visibility="{x:Bind ViewModel.Session.IsNoGameSelected, Mode=OneWay}" />
 
         <!--<controls:GridSplitter Grid.Column="1" Width="11" ResizeBehavior="CurrentAndNext"

@@ -135,6 +135,7 @@
             <TextBlock
                 FontSize="36"
                 IsHitTestVisible="False"
+                Style="{StaticResource PageTitleStyle}"
                 Text="Loading folder..." />
         </StackPanel>
 
