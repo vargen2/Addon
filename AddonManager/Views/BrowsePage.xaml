@@ -13,152 +13,156 @@
     <Page.Resources>
         <converters:StringFormatConverter x:Key="StringFormatConverter" />
     </Page.Resources>
-    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftMargin}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <Grid
+        x:Name="ContentArea"
+        Margin="0,0,0,0"
+        Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}">
+        <Grid Margin="12,12,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        <AutoSuggestBox
-            Margin="0,12,12,12"
-            HorizontalAlignment="Stretch"
-            IsEnabled="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}"
-            PlaceholderText="Search"
-            TextChanged="AutoSuggestBox_OnTextChanged" />
-        <TextBlock
-            Grid.Row="1"
-            Text="No Game Found"
-            Visibility="{x:Bind ViewModel.Session.IsNoGameSelected, Mode=OneWay}" />
-        <ListView
-            x:Name="ListView"
-            Grid.Row="1"
-            IsEnabled="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}"
-            ItemsSource="{x:Bind ViewModel.StoreAddons, Mode=OneWay}"
-            ScrollViewer.VerticalScrollBarVisibility="Auto"
-            SelectionMode="Single"
-            Visibility="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}">
-            <ListView.HeaderTemplate>
-                <DataTemplate>
-                    <StackPanel
-                        Height="25"
-                        Margin="{StaticResource SmallBottomMargin}"
-                        Padding="{StaticResource SmallLeftMargin}"
-                        Orientation="Horizontal">
-                        <TextBlock
-                            Width="240"
-                            extensions:Mouse.Cursor="Hand"
-                            FontSize="{StaticResource MediumFontSize}"
-                            Tapped="Title_Header_Tapped"
-                            Text="Title" />
-                        <TextBlock
-                            Width="400"
-                            FontSize="{StaticResource MediumFontSize}"
-                            Text="Description" />
-                        <TextBlock
-                            Width="120"
-                            extensions:Mouse.Cursor="Hand"
-                            FontSize="{StaticResource MediumFontSize}"
-                            Tapped="Download_Header_Tapped"
-                            Text="Downloads"
-                            TextAlignment="Right" />
-                        <TextBlock
-                            Width="120"
-                            extensions:Mouse.Cursor="Hand"
-                            FontSize="{StaticResource MediumFontSize}"
-                            Tapped="Status_Header_Tapped"
-                            Text="Install"
-                            TextAlignment="Center" />
-                        <TextBlock
-                            Width="90"
-                            FontSize="{StaticResource MediumFontSize}"
-                            Text="Updated"
-                            extensions:Mouse.Cursor="Hand"
-                            Tapped="Updated_Header_Tapped"
-                            TextAlignment="Center" />
-                        <TextBlock
-                            Width="90"
-                            FontSize="{StaticResource MediumFontSize}"
-                            Text="Created"
-                            extensions:Mouse.Cursor="Hand"
-                            Tapped="Created_Header_Tapped"
-                            TextAlignment="Center" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.HeaderTemplate>
-
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="data:StoreAddon">
-                    <StackPanel Height="60" Orientation="Horizontal">
-                        <StackPanel Width="240">
+            <AutoSuggestBox
+                Margin="12,0,12,12"
+                HorizontalAlignment="Stretch"
+                IsEnabled="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}"
+                PlaceholderText="Search"
+                TextChanged="AutoSuggestBox_OnTextChanged" />
+            <TextBlock
+                Grid.Row="1"
+                Text="No Game Found"
+                Visibility="{x:Bind ViewModel.Session.IsNoGameSelected, Mode=OneWay}" />
+            <ListView
+                x:Name="ListView"
+                Grid.Row="1"
+                IsEnabled="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}"
+                ItemsSource="{x:Bind ViewModel.StoreAddons, Mode=OneWay}"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                SelectionMode="Single"
+                Visibility="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}">
+                <ListView.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                            Height="25"
+                            Margin="{StaticResource SmallBottomMargin}"
+                            Padding="{StaticResource SmallLeftMargin}"
+                            Orientation="Horizontal">
                             <TextBlock
-                                Height="60"
-                                Margin="0,0,8,0"
+                                Width="240"
+                                extensions:Mouse.Cursor="Hand"
                                 FontSize="{StaticResource MediumFontSize}"
-                                Text="{x:Bind Title}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                        <StackPanel Width="400">
+                                Tapped="Title_Header_Tapped"
+                                Text="Title" />
                             <TextBlock
-                                Height="60"
-                                Margin="{StaticResource SmallRightMargin}"
-                                Text="{x:Bind Description}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                        <StackPanel Width="120">
+                                Width="400"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Text="Description" />
                             <TextBlock
-                                Height="30"
-                                Margin="0,15,0,15"
-                                Text="{x:Bind NrOfDownloads, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0,0}'}"
-                                TextAlignment="Right" />
-                        </StackPanel>
-                        <StackPanel Width="120" Padding="0,15,0,15">
-                            <ProgressBar
                                 Width="120"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
-                                Visibility="{x:Bind IsInstalling, Mode=OneWay}"
-                                Value="{x:Bind Progress, Mode=OneWay}" />
-                            <Button
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Click="Install_Button_Click"
-                                Content="Install"
-                                Tag="{x:Bind}"
-                                Visibility="{x:Bind IsNotInstalled, Mode=OneWay}" />
+                                extensions:Mouse.Cursor="Hand"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Tapped="Download_Header_Tapped"
+                                Text="Downloads"
+                                TextAlignment="Right" />
                             <TextBlock
-                                Height="30"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Text="{x:Bind Status, Mode=OneWay}"
-                                Visibility="{x:Bind ShowStatus, Mode=OneWay}" />
+                                Width="120"
+                                extensions:Mouse.Cursor="Hand"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Tapped="Status_Header_Tapped"
+                                Text="Install"
+                                TextAlignment="Center" />
                             <TextBlock
-                                Height="30"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Text="{x:Bind Message, Mode=OneWay}"
-                                Visibility="{x:Bind ShowMessage, Mode=OneWay}" />
-                        </StackPanel>
-                        <StackPanel Width="90">
+                                Width="90"
+                                extensions:Mouse.Cursor="Hand"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Tapped="Updated_Header_Tapped"
+                                Text="Updated"
+                                TextAlignment="Center" />
                             <TextBlock
-                                Height="30"
-                                Margin="0,15,0,15"
-                                Text="{x:Bind UpdatedFormated}"
+                                Width="90"
+                                extensions:Mouse.Cursor="Hand"
+                                FontSize="{StaticResource MediumFontSize}"
+                                Tapped="Created_Header_Tapped"
+                                Text="Created"
                                 TextAlignment="Center" />
                         </StackPanel>
-                        <StackPanel Width="90">
-                            <TextBlock
-                                Height="30"
-                                Margin="0,15,0,15"
-                                Text="{x:Bind CreatedFormated}"
-                                TextAlignment="Center" />
-                        </StackPanel>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                    </DataTemplate>
+                </ListView.HeaderTemplate>
 
-        <!--<controls:Loading
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="data:StoreAddon">
+                        <StackPanel Height="60" Orientation="Horizontal">
+                            <StackPanel Width="240">
+                                <TextBlock
+                                    Height="60"
+                                    Margin="0,0,8,0"
+                                    FontSize="{StaticResource MediumFontSize}"
+                                    Text="{x:Bind Title}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                            <StackPanel Width="400">
+                                <TextBlock
+                                    Height="60"
+                                    Margin="{StaticResource SmallRightMargin}"
+                                    Text="{x:Bind Description}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock
+                                    Height="30"
+                                    Margin="0,15,0,15"
+                                    Text="{x:Bind NrOfDownloads, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0,0}'}"
+                                    TextAlignment="Right" />
+                            </StackPanel>
+                            <StackPanel Width="120" Padding="0,15,0,15">
+                                <ProgressBar
+                                    Width="120"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
+                                    Visibility="{x:Bind IsInstalling, Mode=OneWay}"
+                                    Value="{x:Bind Progress, Mode=OneWay}" />
+                                <Button
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Click="Install_Button_Click"
+                                    Content="Install"
+                                    Tag="{x:Bind}"
+                                    Visibility="{x:Bind IsNotInstalled, Mode=OneWay}" />
+                                <TextBlock
+                                    Height="30"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{x:Bind Status, Mode=OneWay}"
+                                    Visibility="{x:Bind ShowStatus, Mode=OneWay}" />
+                                <TextBlock
+                                    Height="30"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{x:Bind Message, Mode=OneWay}"
+                                    Visibility="{x:Bind ShowMessage, Mode=OneWay}" />
+                            </StackPanel>
+                            <StackPanel Width="90">
+                                <TextBlock
+                                    Height="30"
+                                    Margin="0,15,0,15"
+                                    Text="{x:Bind UpdatedFormated}"
+                                    TextAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Width="90">
+                                <TextBlock
+                                    Height="30"
+                                    Margin="0,15,0,15"
+                                    Text="{x:Bind CreatedFormated}"
+                                    TextAlignment="Center" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <!--<controls:Loading
             x:Name="LoadingControl"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -178,6 +182,7 @@
                     Text="Installing..." />
             </StackPanel>
         </controls:Loading>-->
+        </Grid>
     </Grid>
 
 </Page>

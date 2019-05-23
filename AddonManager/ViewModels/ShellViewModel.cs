@@ -12,7 +12,7 @@ using AddonManager.Core.Models;
 using AddonManager.Helpers;
 using AddonManager.Services;
 using AddonManager.Views;
-
+using Windows.UI.Xaml.Media.Animation;
 
 namespace AddonManager.ViewModels
 {
@@ -77,7 +77,7 @@ namespace AddonManager.ViewModels
         {
             if (args.IsSettingsInvoked)
             {
-                NavigationService.Navigate(typeof(SettingsPage));
+                NavigationService.Navigate(typeof(SettingsPage),null, new SuppressNavigationTransitionInfo());
                 return;
             }
 
@@ -85,7 +85,7 @@ namespace AddonManager.ViewModels
                             .OfType<WinUI.NavigationViewItem>()
                             .First(menuItem => (string)menuItem.Content == (string)args.InvokedItem);
             var pageType = item.GetValue(NavHelper.NavigateToProperty) as Type;
-            NavigationService.Navigate(pageType);
+            NavigationService.Navigate(pageType,null, new SuppressNavigationTransitionInfo());
         }
 
         private void OnBackRequested(WinUI.NavigationView sender, WinUI.NavigationViewBackRequestedEventArgs args)

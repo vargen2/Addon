@@ -61,6 +61,11 @@ namespace AddonManager.Services
             // Don't open the same page multiple times
             if (Frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParamUsed)))
             {
+                if (infoOverride!=null)
+                {
+                    Debug.WriteLine(infoOverride.ToString());
+                }
+                
                 var navigationResult = Frame.Navigate(pageType, parameter, infoOverride); //new SuppressNavigationTransitionInfo()
                 if (navigationResult)
                 {

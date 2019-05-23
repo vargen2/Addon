@@ -29,7 +29,7 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                            <Grid x:Name="RootPanel">
+                            <Grid x:Name="RootPanel" Margin="12,0,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition x:Name="MasterColumn" Width="505" />
                                     <ColumnDefinition x:Name="SplitterColumn" Width="3" />
@@ -119,9 +119,10 @@
                                 <VisualStateGroup x:Name="SelectionStates">
                                     <VisualStateGroup.Transitions>
                                         <VisualTransition From="NoSelectionWide" To="HasSelection">
-                                            <Storyboard>
-                                                <DrillInThemeAnimation EntranceTargetName="SelectionDetailsPanel" ExitTargetName="NoSelectionPresenter" />
-                                            </Storyboard>
+                                            <!--<Storyboard>
+                                                
+                                                <DrillInThemeAnimation EntranceTargetName="SelectionDetailsPanel" ExitTargetName="NoSelectionPresenter" />-->
+                                            <!--</Storyboard>-->
                                         </VisualTransition>
                                         <VisualTransition From="NoSelectionNarrow" To="HasSelection">
                                             <Storyboard>
@@ -150,9 +151,9 @@
                                             </Storyboard>
                                         </VisualTransition>
                                         <VisualTransition From="HasSelection" To="NoSelectionWide">
-                                            <Storyboard>
+                                            <!--<Storyboard>
                                                 <DrillOutThemeAnimation EntranceTargetName="NoSelectionPresenter" ExitTargetName="SelectionDetailsPanel" />
-                                            </Storyboard>
+                                            </Storyboard>-->
                                         </VisualTransition>
                                         <VisualTransition From="HasSelection" To="NoSelectionNarrow">
                                             <Storyboard>

@@ -12,8 +12,8 @@
         <helper:EnumToBooleanConverter x:Key="EnumToBooleanConverter" EnumType="ElementTheme" />
     </Page.Resources>
 
-    <Grid Margin="{StaticResource MediumLeftRightMargin}">
-        <StackPanel x:Name="ContentArea">
+    <Grid  Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}">
+        <StackPanel Margin="{StaticResource MediumLeftMargin}" x:Name="ContentArea">
             <TextBlock x:Uid="Settings_Personalization" Style="{ThemeResource SubtitleTextBlockStyle}" />
             <CheckBox
                 x:Uid="Settings_AutoRefreshVersions"

@@ -4,6 +4,7 @@ using AddonManager.Logic;
 using Microsoft.Toolkit.Uwp.UI;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -58,6 +59,7 @@ namespace AddonManager.ViewModels
                 {
                     if (oldSelected.Game == Session.SelectedGame)
                     {
+                        Debug.WriteLine("NULL selected sätter ny seelected");
                         Selected = oldSelected;
                     }
 
@@ -69,7 +71,7 @@ namespace AddonManager.ViewModels
         {
             if (viewState == MasterDetailsViewState.Both && Session.SelectedGame != null && Session.SelectedGame.Addons.Count > 0)
             {
-                Selected = Session.SelectedGame.Addons.First();
+                //Selected = Session.SelectedGame.Addons.First();
             }
             await Task.CompletedTask;
         }
