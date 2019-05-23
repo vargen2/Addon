@@ -30,7 +30,7 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 ## ChangeLog
 
-##### 10.017.0 - In development
+##### 10.017.0 - 2019-05-24
 
 - Layout changes
 - Will try to get versions for all release types
