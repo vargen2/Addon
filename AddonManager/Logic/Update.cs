@@ -109,7 +109,7 @@ namespace AddonManager.Logic
 
 
 
-        internal static async Task<List<string>> UpdateAddon2(Core.Models.Addon addon, StorageFile file, IProgressable progressable = null)
+        internal static async Task<List<string>> UpdateAddon2(Addon addon, StorageFile file, IProgressable progressable = null)
         {
 
             var subFoldersToDelete = new HashSet<string>();

@@ -9,7 +9,8 @@ namespace AddonManager.Core.Models
 {
     public class Game : INotifyPropertyChanged
     {
-        public string DisplayName { get; set; } = "R";
+
+        public string DisplayName { get; set; } = "W";
 
         private bool isLoading = false;
         public bool IsLoading
@@ -51,6 +52,7 @@ namespace AddonManager.Core.Models
             return new SaveableGame()
             {
                 AbsolutePath = this.AbsolutePath,
+                DisplayName=this.DisplayName,
                 Addons = this.Addons.Select(a => a.AsSaveableAddon()).ToList()
             };
         }

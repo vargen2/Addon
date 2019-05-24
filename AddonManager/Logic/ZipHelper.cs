@@ -1,8 +1,9 @@
 ﻿using AddonManager.Core.Helpers;
-using AddonManager.Helpers;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
@@ -29,12 +30,8 @@ namespace AddonManager.Logic
 
         public int Progress
         {
-            get { return progress; }
-            set
-            {
-                Set(ref progress, value);
-
-            }
+            get => progress;
+            set => Set(ref progress, value);
 
         }
 
@@ -69,9 +66,27 @@ namespace AddonManager.Logic
             // Create zip archive to access compressed files in memory stream 
             using (ZipArchive zipArchive = new ZipArchive(zipMemoryStream, ZipArchiveMode.Read))
             {
-                // Unzip compressed file iteratively. 
+
+                //foreach (ZipArchiveEntry entry in zipArchive.Entries)
+                //{
+                //    if (entry.FullName.EndsWith("/"))
+                //    {
+                //        Debug.WriteLine("Folder: "+entry.FullName);
+                //        await UnzipZipArchiveEntryAsync(entry, entry.FullName, destinationFolder);
+                //    }
+
+                //}
+
+                //var zipFileTasks=zipArchive.Entries
+                //    .Where(entry=>!entry.FullName.EndsWith("/"))
+                //    .Select(entry=>UnzipZipArchiveEntryAsync(entry,entry.FullName,destinationFolder));
+
+                //await Task.WhenAll(zipFileTasks);
+
+                //Unzip compressed file iteratively. 
                 foreach (ZipArchiveEntry entry in zipArchive.Entries)
                 {
+                    //Debug.WriteLine("File: " + entry.FullName);
                     await UnzipZipArchiveEntryAsync(entry, entry.FullName, destinationFolder);
                 }
             }
