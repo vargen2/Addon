@@ -104,7 +104,7 @@
                                         Width="40"
                                         Height="36"
                                         Margin="0,4,0,0"
-                                        FontSize="20"
+                                        FontSize="18"
                                         Text="{x:Bind DisplayName, Mode=OneWay}"
                                         TextAlignment="Center" />
                                 </StackPanel>

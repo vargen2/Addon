@@ -115,35 +115,12 @@ namespace AddonManager.Views
             {
                 if (ViewModel.Session.Games.Any(g => g.AbsolutePath.Equals(folder.Path))) return;
 
-                var gameDisplayName = "W";
-                if (folder.Path.Contains("_retail_", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameDisplayName = "R";
-                }
-                else if (folder.Path.Contains("_ptr_", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameDisplayName = "P";
-                }
-                else if (folder.Path.Contains("_beta_", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameDisplayName = "B";
-                }
-                else if (folder.Path.Contains("_alpha_", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameDisplayName = "A";
-                }
-                else if (folder.Path.Contains("_classic_", StringComparison.OrdinalIgnoreCase))
-                {
-                    gameDisplayName = "C";
-                }
-
-
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(folder);
 
                 var game = new Game(folder.Path)
                 {
                     IsLoading = true,
-                    DisplayName= gameDisplayName
+                    DisplayName = Parse.CreateGameDisplayName(folder.Path)
                 };
                 ViewModel.Session.Games.Add(game);
                 ViewModel.Session.SelectedGame = game;

@@ -192,5 +192,49 @@ namespace AddonManager.Logic
             //storeAddons.Insert(0, new StoreAddon(elvuiAddonData));
             return storeAddons;
         }
+
+        internal static string CreateGameDisplayName(string fullPath)
+        {
+            var path = fullPath.ToLower();
+
+
+            if (path.Contains("_classic_beta_"))
+            {
+                return "CB";
+            }
+            else if (path.Contains("_classic_ptr_"))
+            {
+                return "Cptr";
+            }
+            else if (path.Contains("_classic_alpha_"))
+            {
+                return "CA";
+            }
+            else if (path.Contains("_classic_retail_"))
+            {
+                return "C";
+            }
+            else if (path.Contains("_classic_"))
+            {
+                return "C";
+            }
+            else if (path.Contains("_retail_"))
+            {
+                return "R";
+            }
+            else if (path.Contains("_ptr_"))
+            {
+                return "PTR";
+            }
+            else if (path.Contains("_beta_"))
+            {
+                return "B";
+            }
+            else if (path.Contains("_alpha_"))
+            {
+                return "A";
+            }
+            return "W";
+        }
     }
 }
