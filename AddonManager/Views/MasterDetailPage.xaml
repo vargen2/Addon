@@ -57,7 +57,7 @@
                                         x:Name="MasterList"
                                         Grid.Row="1"
                                         IsTabStop="False"
-                                        ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                                        ItemContainerStyle="{StaticResource ListViewItemExpanded}"
                                         ItemContainerStyleSelector="{TemplateBinding ItemContainerStyleSelector}"
                                         ItemTemplate="{TemplateBinding ItemTemplate}"
                                         ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
@@ -120,7 +120,7 @@
                                     <VisualStateGroup.Transitions>
                                         <VisualTransition From="NoSelectionWide" To="HasSelection">
                                             <!--<Storyboard>
-                                                
+
                                                 <DrillInThemeAnimation EntranceTargetName="SelectionDetailsPanel" ExitTargetName="NoSelectionPresenter" />-->
                                             <!--</Storyboard>-->
                                         </VisualTransition>
@@ -610,7 +610,10 @@
 
         <DataTemplate x:Key="MasterHeaderTemplate" x:DataType="data:Session">
             <StackPanel Height="40" Orientation="Horizontal">
-                <AppBarButton IsEnabled="{x:Bind IsRefreshButtonEnabled,Mode=OneWay}" Click="DownloadVersionsForAllAddonsInSelectedGame" ToolTipService.ToolTip="Get new version from net">
+                <AppBarButton
+                    Click="DownloadVersionsForAllAddonsInSelectedGame"
+                    IsEnabled="{x:Bind IsRefreshButtonEnabled, Mode=OneWay}"
+                    ToolTipService.ToolTip="Get new version from net">
                     <StackPanel Orientation="Horizontal">
                         <ProgressRing x:Name="RefreshButtonProgressRing" Visibility="Collapsed" />
                         <SymbolIcon
@@ -620,9 +623,9 @@
                     </StackPanel>
                 </AppBarButton>
                 <AppBarButton
-                    IsEnabled="{x:Bind IsGameSelected,Mode=OneWay}"
                     Click="RemoveSelectedGame"
                     Icon="Delete"
+                    IsEnabled="{x:Bind IsGameSelected, Mode=OneWay}"
                     ToolTipService.ToolTip="Remove Game" />
                 <!--<Button Width="130" Click="DownloadVersionsForAllAddonsInSelectedGame">
                     <StackPanel Orientation="Horizontal">
@@ -668,8 +671,8 @@
 
         <TextBlock
             Margin="24,40,0,0"
-            Text="No Game Found"
             Style="{StaticResource DetailBodyBaseMediumStyle}"
+            Text="No Game Found"
             Visibility="{x:Bind ViewModel.Session.IsNoGameSelected, Mode=OneWay}" />
 
         <!--<controls:GridSplitter Grid.Column="1" Width="11" ResizeBehavior="CurrentAndNext"
@@ -729,3 +732,24 @@
 -->
 
 <!--  Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"  -->
+
+<!--
+
+
+
+ <ListView
+                                        x:Name="MasterList"
+                                        Grid.Row="1"
+                                        IsTabStop="False"
+                                        ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                                        ItemContainerStyleSelector="{TemplateBinding ItemContainerStyleSelector}"
+                                        ItemTemplate="{TemplateBinding ItemTemplate}"
+                                        ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                        ItemsSource="{TemplateBinding ItemsSource}"
+                                        SelectedItem="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+
+
+
+
+
+-->
