@@ -18,7 +18,7 @@
         x:Name="ContentArea"
         Margin="0,0,0,0"
         Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}">
-        <Grid Margin="12,12,0,0">
+        <Grid Margin="12,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />

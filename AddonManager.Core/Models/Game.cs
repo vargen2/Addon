@@ -1,16 +1,27 @@
-﻿using System;
+﻿using AddonManager.Core.Storage;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using AddonManager.Core.Storage;
 
 namespace AddonManager.Core.Models
 {
     public class Game : INotifyPropertyChanged
     {
+        private string displayName = "W";
+        public string DisplayName
+        {
+            get => displayName;
+            set
+            {
 
-        public string DisplayName { get; set; } = "W";
+                displayName = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
 
         private bool isLoading = false;
         public bool IsLoading
@@ -52,7 +63,7 @@ namespace AddonManager.Core.Models
             return new SaveableGame()
             {
                 AbsolutePath = this.AbsolutePath,
-                DisplayName=this.DisplayName,
+                DisplayName = this.DisplayName,
                 Addons = this.Addons.Select(a => a.AsSaveableAddon()).ToList()
             };
         }

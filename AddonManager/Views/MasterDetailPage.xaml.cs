@@ -65,7 +65,7 @@ namespace AddonManager.Views
             }
             var button = sender as AppBarButton;
             //button.IsEnabled = false;
-            ViewModel.Session.Refreshing=true;
+            ViewModel.Session.Refreshing = true;
             var progressRing = (button.Content as StackPanel).Children.OfType<ProgressRing>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
                                                                                                                // var textBlock = (button.Content as StackPanel).Children.OfType<TextBlock>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
             var refreshButtonIcon = (button.Content as StackPanel).Children.OfType<SymbolIcon>().FirstOrDefault();//.FindName("RefreshButtonProgressRing") as ProgressRing;
@@ -86,7 +86,7 @@ namespace AddonManager.Views
             }
 
             //button.IsEnabled = true;
-            ViewModel.Session.Refreshing=false;
+            ViewModel.Session.Refreshing = false;
         }
 
         private void FlyoutBase_OnOpening(object sender, object e)
@@ -316,6 +316,40 @@ namespace AddonManager.Views
             }
         }
 
+        private async void EditNameofSelectedGame(object sender, RoutedEventArgs e)
+        {
+            var game = ViewModel.Session.SelectedGame;
+
+            if (game.AbsolutePath.Equals(Session.EMPTY_GAME))
+            {
+                return;
+            }
+
+            var textBlock = new TextBlock() { Text = game.AbsolutePath };
+            var textBox = new TextBox() { PlaceholderText = game.DisplayName };
+
+            
+
+            var panel=new StackPanel(){ };
+            panel.Children.Add(textBlock);
+            panel.Children.Add(textBox);
+
+            var contentDialog = new ContentDialog()
+            {
+                Title = "Edit sidebar display name",
+                Content = panel,
+                IsPrimaryButtonEnabled = true,
+                IsSecondaryButtonEnabled = true,
+                PrimaryButtonText = "Save",
+                SecondaryButtonText = "Cancel"
+            };
+
+            var result = await contentDialog.ShowAsync();
+            if (result==ContentDialogResult.Primary)
+            {
+                game.DisplayName=textBox.Text;
+            }
+        }
 
     }
 }

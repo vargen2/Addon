@@ -623,6 +623,11 @@
                     </StackPanel>
                 </AppBarButton>
                 <AppBarButton
+                    Click="EditNameofSelectedGame"
+                    Icon="Edit"
+                    IsEnabled="{x:Bind IsGameSelected, Mode=OneWay}"
+                    ToolTipService.ToolTip="Edit Name" />
+                <AppBarButton
                     Click="RemoveSelectedGame"
                     Icon="Delete"
                     IsEnabled="{x:Bind IsGameSelected, Mode=OneWay}"
