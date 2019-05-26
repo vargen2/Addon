@@ -2,14 +2,12 @@
 using AddonManager.Logic;
 using AddonManager.ViewModels;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Navigation;
 
 namespace AddonManager.Views
 {
@@ -19,11 +17,9 @@ namespace AddonManager.Views
 
         public MasterDetailPage()
         {
-            Debug.WriteLine("MasterDetailPage constructor start");
             InitializeComponent();
             Loaded += MasterDetailPage_Loaded;
             ViewModel.Session.PropertyChanged += Session_PropertyChanged;
-            Debug.WriteLine("MasterDetailPage constructor end");
         }
 
         private async void MasterDetailPage_Loaded(object sender, RoutedEventArgs e)
@@ -53,10 +49,12 @@ namespace AddonManager.Views
         private void UIElement_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             e.Handled = true;
-            FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
+            if (sender is FrameworkElement frameworkElement)
+            {
+                FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(frameworkElement);
+                flyoutBase.ShowAt(frameworkElement, new FlyoutShowOptions() { Position = e.GetPosition(frameworkElement) });
+            }
         }
-
-
 
         private async void DownloadVersionsForAllAddonsInSelectedGame(object sender, RoutedEventArgs e)
         {
@@ -329,9 +327,9 @@ namespace AddonManager.Views
             var textBlock = new TextBlock() { Text = game.AbsolutePath };
             var textBox = new TextBox() { PlaceholderText = game.DisplayName };
 
-            
 
-            var panel=new StackPanel(){ };
+
+            var panel = new StackPanel() { };
             panel.Children.Add(textBlock);
             panel.Children.Add(textBox);
 
@@ -346,11 +344,10 @@ namespace AddonManager.Views
             };
 
             var result = await contentDialog.ShowAsync();
-            if (result==ContentDialogResult.Primary)
+            if (result == ContentDialogResult.Primary)
             {
-                game.DisplayName=textBox.Text;
+                game.DisplayName = textBox.Text;
             }
         }
-
     }
 }

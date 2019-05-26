@@ -2,20 +2,25 @@
     x:Class="AddonManager.Views.MasterDetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Windows10version1809="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 7)"
+    xmlns:Windows10version1903="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 8)"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="using:AddonManager.Core.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:AddonManager.Views"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
+    NavigationCacheMode="Required"
     Style="{StaticResource PageStyle}"
-    mc:Ignorable="d"
-    NavigationCacheMode="Required">
+    mc:Ignorable="d">
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition />
         </TransitionCollection>
     </Page.Transitions>
     <Page.Resources>
+
+
 
 
         <Style x:Key="mymaster" TargetType="controls:MasterDetailsView">
@@ -64,6 +69,7 @@
                                         ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                         ItemsSource="{TemplateBinding ItemsSource}"
                                         SelectedItem="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
+
                                     <Grid x:Name="MasterCommandBarPanel" Grid.Row="2" />
                                 </Grid>
                                 <Grid x:Name="DetailsPanel" Grid.Column="2">
@@ -406,31 +412,49 @@
 
         <DataTemplate x:Key="ItemTemplate" x:DataType="data:Addon">
             <Grid
+                x:Name="AddonGrid"
                 Height="50"
                 HorizontalAlignment="Stretch"
+                Background="Transparent"
+                IsHitTestVisible="True"
                 IsRightTapEnabled="True"
                 Opacity="{x:Bind NotIgnoredOpacity, Mode=OneWay}"
                 RightTapped="UIElement_OnRightTapped">
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="18*" />
                     <ColumnDefinition Width="15*" />
                     <!--<ColumnDefinition Width="20" />-->
                     <ColumnDefinition Width="15*" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Width="180">
+                <StackPanel
+                    Grid.Column="0"
+                    Width="180"
+                    IsHitTestVisible="False">
                     <TextBlock
                         Height="25"
                         FontSize="{StaticResource MediumFontSize}"
                         FontWeight="SemiBold"
+                        IsHitTestVisible="False"
                         Text="{x:Bind FolderName, Mode=OneWay}" />
-                    <TextBlock Height="25" Text="{x:Bind CurrentReleaseTypeAndVersion, Mode=OneWay}" />
+                    <TextBlock
+                        Height="25"
+                        IsHitTestVisible="False"
+                        Text="{x:Bind CurrentReleaseTypeAndVersion, Mode=OneWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Column="1"
                     Width="150"
-                    Padding="{StaticResource XXSmallLeftMargin}">
-                    <TextBlock Height="25" Text="{x:Bind SuggestedDownload.ReleaseType, Mode=OneWay}" />
-                    <TextBlock Height="25" Text="{x:Bind SuggestedDownload.Version, Mode=OneWay}" />
+                    Padding="{StaticResource XXSmallLeftMargin}"
+                    IsHitTestVisible="False">
+                    <TextBlock
+                        Height="25"
+                        IsHitTestVisible="False"
+                        Text="{x:Bind SuggestedDownload.ReleaseType, Mode=OneWay}" />
+                    <TextBlock
+                        Height="25"
+                        IsHitTestVisible="False"
+                        Text="{x:Bind SuggestedDownload.Version, Mode=OneWay}" />
                 </StackPanel>
                 <!--<StackPanel Grid.Column="2">
                     <TextBlock
@@ -465,10 +489,12 @@
                 <StackPanel
                     Grid.Column="2"
                     Width="150"
-                    Padding="{StaticResource XXSmallLeftMargin}">
+                    Padding="{StaticResource XXSmallLeftMargin}"
+                    IsHitTestVisible="True">
                     <ProgressBar
                         Width="145"
                         Margin="{StaticResource XXSmallTopMargin}"
+                        IsHitTestVisible="False"
                         IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
                         Visibility="{x:Bind IsProgressing, Mode=OneWay}"
                         Value="{x:Bind Progress, Mode=OneWay}" />
@@ -476,6 +502,7 @@
                         Margin="0,9,0,9"
                         Click="UpdateButtonClick"
                         Content="Update"
+                        IsHitTestVisible="True"
                         Tag="{x:Bind}"
                         Visibility="{x:Bind IsUpdateable, Mode=OneWay}">
                         <!--<StackPanel Orientation="Horizontal">
@@ -485,16 +512,21 @@
                     </Button>
                     <TextBlock
                         Height="20"
+                        IsHitTestVisible="False"
                         Text="{x:Bind Status, Mode=OneWay}"
                         Visibility="{x:Bind ShowStatus, Mode=OneWay}" />
                     <TextBlock
                         Height="20"
+                        IsHitTestVisible="False"
                         Text="{x:Bind Message, Mode=OneWay}"
                         Visibility="{x:Bind ShowMessage, Mode=OneWay}" />
 
                 </StackPanel>
                 <FlyoutBase.AttachedFlyout>
-                    <MenuFlyout Opening="FlyoutBase_OnOpening">
+                    <MenuFlyout
+                        Windows10version1809:ShowMode="Transient"
+                        Windows10version1903:ShouldConstrainToRootBounds="True"
+                        Opening="FlyoutBase_OnOpening">
                         <MenuFlyoutItem
                             Command="{Binding SetIgnored}"
                             Tag="{x:Bind Mode=OneWay}"
@@ -513,7 +545,7 @@
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
                         <MenuFlyoutSeparator />
-                        <MenuFlyoutItem Command="{Binding SetAlpha}" Text="Alpha">
+                        <!-- <MenuFlyoutItem Command="{Binding SetAlpha}" Text="Alpha">
                             <MenuFlyoutItem.Icon>
                                 <SymbolIcon Symbol="Accept" Visibility="{x:Bind IsAlpha, Mode=OneWay}" />
                             </MenuFlyoutItem.Icon>
@@ -527,7 +559,24 @@
                             <MenuFlyoutItem.Icon>
                                 <SymbolIcon Symbol="Accept" Visibility="{x:Bind IsRelease, Mode=OneWay}" />
                             </MenuFlyoutItem.Icon>
-                        </MenuFlyoutItem>
+                        </MenuFlyoutItem>-->
+                        <MenuFlyoutSubItem Text="{x:Bind PreferredReleaseType, Mode=OneWay}">
+                            <winui:RadioMenuFlyoutItem
+                                Command="{Binding SetAlpha}"
+                                GroupName="ReleaseType"
+                                IsChecked="{x:Bind IsAlpha, Mode=OneWay}"
+                                Text="Alpha" />
+                            <winui:RadioMenuFlyoutItem
+                                Command="{Binding SetBeta}"
+                                GroupName="ReleaseType"
+                                IsChecked="{x:Bind IsBeta, Mode=OneWay}"
+                                Text="Beta" />
+                            <winui:RadioMenuFlyoutItem
+                                Command="{Binding SetRelease}"
+                                GroupName="ReleaseType"
+                                IsChecked="{x:Bind IsRelease, Mode=OneWay}"
+                                Text="Release" />
+                        </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem
                             Click="MenuFlyoutItem_Click_Refresh_Addon"
@@ -752,10 +801,4 @@
                                         ItemTemplate="{TemplateBinding ItemTemplate}"
                                         ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                         ItemsSource="{TemplateBinding ItemsSource}"
-                                        SelectedItem="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
-
-
-
-
-
--->
+                                        SelectedItem="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />-->
