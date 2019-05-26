@@ -67,7 +67,7 @@ namespace AddonManager.Services
                 {
                     _lastParamUsed = parameter;
                 }
-                Debug.WriteLine("Backstack: " + Frame.BackStack.Count+" cachesize: "+Frame.CacheSize+" backstackdepth: "+Frame.BackStackDepth+" cachemode: "+Frame.CacheMode);
+               // Debug.WriteLine("Backstack: " + Frame.BackStack.Count+" cachesize: "+Frame.CacheSize+" backstackdepth: "+Frame.BackStackDepth+" cachemode: "+Frame.CacheMode);
                 //Frame.BackStack.Clear();
                 return navigationResult;
             }
