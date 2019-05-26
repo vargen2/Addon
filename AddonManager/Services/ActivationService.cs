@@ -67,7 +67,8 @@ namespace AddonManager.Services
                 await StartupAsync();
             }
 
-
+           // var stopWatch= new Stopwatch();
+           // stopWatch.Start();
             var addonData=await Task.Run(() => Storage.LoadAddonData());
             if (addonData!=null)
             {
@@ -78,7 +79,8 @@ namespace AddonManager.Services
                 Debug.WriteLine("StoreAddons count: " + Singleton<Session>.Instance.StoreAddons.Count);
 
             }
-
+           // stopWatch.Stop();
+           // Debug.WriteLine("Time: "+stopWatch.ElapsedMilliseconds);
 
 
 

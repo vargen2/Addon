@@ -2,6 +2,7 @@
 using AddonManager.Core.Models;
 using AddonManager.Core.Storage;
 using AddonManager.Helpers;
+using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -100,23 +101,44 @@ namespace AddonManager.Logic
 
         public static async Task<List<AddonData>> LoadAddonData()
         {
-            var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
-            var addonDatas = await assets.ReadAsync<List<AddonData>>("allvalidaddondata1-340");
-            addonDatas.Add(new AddonData()
+
+            using (var stream = await StreamHelper.GetPackagedFileStreamAsync("Assets/allvalidaddondata1-340.json"))
             {
-                FolderName = "ElvUI",
-                Title = "ElvUI",
-                Description = "A user interface designed around user-friendliness with extra features that are not included in the standard UI.",
-                NrOfDownloads = 100000000,
-                UpdatedEpoch = 1557784800,
-                CreatedEpoch = 0,
-                ProjectName = "elvui",
-                ProjectUrl = Version.ELVUI,
-                SubFolders = new HashSet<string>() { "ElvUI_Config" },
-                Files = 100,
-                Size = 100
-            });
-            return addonDatas;
+                var fileContent = await stream.ReadTextAsync();
+                var addonDatas = await Json.ToObjectAsync<List<AddonData>>(fileContent);
+                addonDatas.Add(new AddonData()
+                {
+                    FolderName = "ElvUI",
+                    Title = "ElvUI",
+                    Description = "A user interface designed around user-friendliness with extra features that are not included in the standard UI.",
+                    NrOfDownloads = 100000000,
+                    UpdatedEpoch = 1557784800,
+                    CreatedEpoch = 0,
+                    ProjectName = "elvui",
+                    ProjectUrl = Version.ELVUI,
+                    SubFolders = new HashSet<string>() { "ElvUI_Config" },
+                    Files = 100,
+                    Size = 100
+                });
+                return addonDatas;
+            }
+            //var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
+            //var addonDatas = await assets.ReadAsync<List<AddonData>>("allvalidaddondata1-340");
+            //addonDatas.Add(new AddonData()
+            //{
+            //    FolderName = "ElvUI",
+            //    Title = "ElvUI",
+            //    Description = "A user interface designed around user-friendliness with extra features that are not included in the standard UI.",
+            //    NrOfDownloads = 100000000,
+            //    UpdatedEpoch = 1557784800,
+            //    CreatedEpoch = 0,
+            //    ProjectName = "elvui",
+            //    ProjectUrl = Version.ELVUI,
+            //    SubFolders = new HashSet<string>() { "ElvUI_Config" },
+            //    Files = 100,
+            //    Size = 100
+            //});
+            //return addonDatas;
         }
     }
 }
