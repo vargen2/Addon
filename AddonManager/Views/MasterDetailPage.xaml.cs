@@ -22,6 +22,7 @@ namespace AddonManager.Views
             Debug.WriteLine("MasterDetailPage constructor start");
             InitializeComponent();
             Loaded += MasterDetailPage_Loaded;
+            ViewModel.Session.PropertyChanged += Session_PropertyChanged;
             Debug.WriteLine("MasterDetailPage constructor end");
         }
 
@@ -30,17 +31,17 @@ namespace AddonManager.Views
             await ViewModel.LoadDataAsync(MasterDetailsViewControl.ViewState);
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            ViewModel.Session.PropertyChanged += Session_PropertyChanged;
-        }
+        //protected override void OnNavigatedTo(NavigationEventArgs e)
+        //{
+        //    base.OnNavigatedTo(e);
+        //    ViewModel.Session.PropertyChanged += Session_PropertyChanged;
+        //}
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            base.OnNavigatedFrom(e);
-            ViewModel.Session.PropertyChanged -= Session_PropertyChanged;
-        }
+        //protected override void OnNavigatedFrom(NavigationEventArgs e)
+        //{
+        //    base.OnNavigatedFrom(e);
+        //    ViewModel.Session.PropertyChanged -= Session_PropertyChanged;
+        //}
 
         private async void UpdateButtonClick(object sender, RoutedEventArgs e)
         {

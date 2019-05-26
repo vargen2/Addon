@@ -34,7 +34,7 @@ namespace AddonManager.Services
             {
                 UnregisterFrameEvents();
                 _frame = value;
-                RegisterFrameEvents();
+                RegisterFrameEvents();               
             }
         }
 
@@ -57,21 +57,18 @@ namespace AddonManager.Services
 
         public static bool Navigate(Type pageType, object parameter = null, NavigationTransitionInfo infoOverride = null)
         {
-            //Debug.WriteLine("pagetype: " + pageType.ToString());
+            
             // Don't open the same page multiple times
             if (Frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParamUsed)))
             {
-                if (infoOverride!=null)
-                {
-                    Debug.WriteLine(infoOverride.ToString());
-                }
                 
-                var navigationResult = Frame.Navigate(pageType, parameter, infoOverride); //new SuppressNavigationTransitionInfo()
+                var navigationResult = Frame.Navigate(pageType, parameter, infoOverride); 
                 if (navigationResult)
                 {
                     _lastParamUsed = parameter;
                 }
-
+                Debug.WriteLine("Backstack: " + Frame.BackStack.Count+" cachesize: "+Frame.CacheSize+" backstackdepth: "+Frame.BackStackDepth+" cachemode: "+Frame.CacheMode);
+                //Frame.BackStack.Clear();
                 return navigationResult;
             }
             else

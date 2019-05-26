@@ -73,6 +73,7 @@ namespace AddonManager.Views
             // For example, when the title bar is invoked in full screen mode.
             coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
 
+           
 
             ViewModel.Initialize(shellFrame, navigationView, KeyboardAccelerators);
 

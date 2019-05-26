@@ -8,11 +8,12 @@
     xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Style="{StaticResource PageStyle}"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    NavigationCacheMode="Required">
 
     <Page.Resources>
         <converters:StringFormatConverter x:Key="StringFormatConverter" />
-        
+
     </Page.Resources>
     <Grid
         x:Name="ContentArea"
@@ -35,10 +36,10 @@
                 Text="No Game Found"
                 Visibility="{x:Bind ViewModel.Session.IsNoGameSelected, Mode=OneWay}" />
             <ListView
-                ItemContainerStyle="{StaticResource ListViewItemExpanded}"
                 x:Name="ListView"
                 Grid.Row="1"
                 IsEnabled="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}"
+                ItemContainerStyle="{StaticResource ListViewItemExpanded}"
                 ItemsSource="{x:Bind ViewModel.StoreAddons, Mode=OneWay}"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 SelectionMode="Single"
@@ -96,10 +97,10 @@
 
                     <DataTemplate x:DataType="data:StoreAddon">
 
-                      
 
 
-                        
+
+
                         <StackPanel Height="60" Orientation="Horizontal">
                             <StackPanel Width="240">
                                 <TextBlock

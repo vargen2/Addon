@@ -17,6 +17,8 @@ namespace AddonManager.Views
         public BrowsePage()
         {
             InitializeComponent();
+            ViewModel.Session.PropertyChanged += Session_PropertyChanged;
+            RefreshStoreAddonStatus();
         }
 
         private void AutoSuggestBox_OnTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
@@ -40,18 +42,18 @@ namespace AddonManager.Views
             await Install.InstallAddon(storeAddon);
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            RefreshStoreAddonStatus();
-            ViewModel.Session.PropertyChanged += Session_PropertyChanged;
-        }
+        //protected override void OnNavigatedTo(NavigationEventArgs e)
+        //{
+        //    base.OnNavigatedTo(e);
+        //    RefreshStoreAddonStatus();
+        //    ViewModel.Session.PropertyChanged += Session_PropertyChanged;
+        //}
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            base.OnNavigatedFrom(e);
-            ViewModel.Session.PropertyChanged -= Session_PropertyChanged;
-        }
+        //protected override void OnNavigatedFrom(NavigationEventArgs e)
+        //{
+        //    base.OnNavigatedFrom(e);
+        //    ViewModel.Session.PropertyChanged -= Session_PropertyChanged;
+        //}
 
         public void RefreshStoreAddonStatus()
         {

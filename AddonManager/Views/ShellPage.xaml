@@ -51,7 +51,7 @@
             x:Name="navigationView"
             Grid.Row="1"
             IsBackButtonVisible="Collapsed"
-            IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
+            IsBackEnabled="False"
             IsPaneToggleButtonVisible="False"
             IsSettingsVisible="True"
             PaneDisplayMode="LeftCompact"
@@ -119,7 +119,7 @@
                 </StackPanel>
             </winui:NavigationView.PaneCustomContent>
             <Grid>
-                <Frame x:Name="shellFrame" />
+                <Frame x:Name="shellFrame" CacheSize="3" />
             </Grid>
         </winui:NavigationView>
         <StackPanel

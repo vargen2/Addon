@@ -95,7 +95,8 @@ namespace AddonManager.ViewModels
 
         private void Frame_Navigated(object sender, NavigationEventArgs e)
         {
-            IsBackEnabled = NavigationService.CanGoBack;
+            //IsBackEnabled = NavigationService.CanGoBack;
+            IsBackEnabled = false;
             if (e.SourcePageType == typeof(SettingsPage))
             {
                 Selected = _navigationView.SettingsItem as WinUI.NavigationViewItem;
