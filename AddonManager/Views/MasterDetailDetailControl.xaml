@@ -15,90 +15,63 @@
         Name="ForegroundElement"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
-        Background="{ThemeResource SystemChromeLowColor}"
+        Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}"
         HorizontalScrollBarVisibility="Disabled"
         HorizontalScrollMode="Disabled"
         VerticalScrollBarVisibility="Disabled"
         VerticalScrollMode="Disabled">
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid
+            Margin="{StaticResource DetailPageMargin}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <StackPanel Margin="{StaticResource DetailPageMargin}" Orientation="Horizontal" MaxHeight="40">
-                <AppBarToggleButton MaxWidth="40">
-                    <TextBlock Text="Ignore" />
-                </AppBarToggleButton>
-                <AppBarSeparator />
-                <AppBarToggleButton MaxWidth="40">
-                    <TextBlock Text="Auto" />
-                </AppBarToggleButton>
-                <AppBarSeparator />
-                <AppBarToggleButton MaxWidth="40">
-                    <TextBlock Text="Alpha" />
-                </AppBarToggleButton>
-                <AppBarToggleButton MaxWidth="40">
-                    <TextBlock Text="Beta" />
-                </AppBarToggleButton>
-                <AppBarToggleButton MaxWidth="40">
-                    <TextBlock Text="Release" />
-                </AppBarToggleButton>
-                <AppBarSeparator />
-                <AppBarButton Icon="Refresh" MaxWidth="40"/>
-                <AppBarButton Icon="Delete" MaxWidth="40"/>
-                <AppBarButton Icon="Edit" MaxWidth="40"/>
-                <AppBarSeparator />
-                <AppBarButton MinWidth="80">
-                    <TextBlock Text="Versions"></TextBlock>
-                    <AppBarButton.Flyout>
-                        <Flyout Placement="Bottom">
-                            <ListBox Background="Transparent">
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                                <ListBoxItem Content="Bbbbb" />
-                            </ListBox>
-                        </Flyout>
-                    </AppBarButton.Flyout>
-                </AppBarButton>
-            </StackPanel>
             <StackPanel
                 Name="block"
-                Grid.Row="1"
-                Margin="{StaticResource DetailPageMargin}"
                 Padding="0,0,0,0"
                 HorizontalAlignment="Stretch">
-
-
-                <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
                     <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Text="{x:Bind MasterMenuItem.FolderName, Mode=OneWay}" />
                     <TextBlock
+                        Grid.Column="1"
                         Margin="16,0,0,0"
                         VerticalAlignment="Center"
                         Text="{x:Bind MasterMenuItem.Title, Mode=OneWay}" />
-                </StackPanel>
+                    <StackPanel
+                        Grid.Column="2"
+                        MaxHeight="40"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <ToggleButton
+                            Background="Transparent"
+                            Content="Ignored"
+                            IsChecked="{x:Bind MasterMenuItem.IsIgnored, Mode=TwoWay}" />
+                        <ToggleButton
+                            Background="Transparent"
+                            Content="Auto Update"
+                            IsChecked="{x:Bind MasterMenuItem.IsAutoUpdate, Mode=TwoWay}" />
+                        <Windows10version1809:DropDownButton
+                            MinWidth="90"
+                            Background="Transparent"
+                            Content="{x:Bind MasterMenuItem.PreferredReleaseType, Mode=OneWay}">
+                            <DropDownButton.Flyout>
+                                <MenuFlyout Placement="Bottom">
+                                    <MenuFlyoutItem Command="{x:Bind MasterMenuItem.SetAlpha, Mode=OneWay}" Text="Alpha" />
+                                    <MenuFlyoutItem Command="{x:Bind MasterMenuItem.SetBeta, Mode=OneWay}" Text="Beta" />
+                                    <MenuFlyoutItem Command="{x:Bind MasterMenuItem.SetRelease, Mode=OneWay}" Text="Release" />
+                                </MenuFlyout>
+                            </DropDownButton.Flyout>
+                        </Windows10version1809:DropDownButton>
+                    </StackPanel>
+                </Grid>
                 <HyperlinkButton Content="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay}" NavigateUri="{x:Bind MasterMenuItem.ProjectUrl, Mode=OneWay, Converter={StaticResource StringToUriConverter}}" />
-
-                <TextBlock Text="{x:Bind MasterMenuItem.AbsolutePath, Mode=OneWay}" />
                 <VariableSizedWrapGrid HorizontalAlignment="Stretch" Orientation="Horizontal">
                     <StackPanel Width="250" Height="60">
                         <TextBlock Text="Current Version" />
@@ -109,52 +82,13 @@
                         <TextBlock Height="40" Text="{x:Bind MasterMenuItem.SuggestedDownload, Mode=OneWay}" />
                     </StackPanel>
                 </VariableSizedWrapGrid>
-                <!--<ProgressRing
-                    Width="100"
-                    Height="100"
-                    HorizontalAlignment="Left"
-                    IsActive="True"
-                    Visibility="{x:Bind MasterMenuItem.IsChangeLogEmpty, Mode=OneWay}" />-->
-
-                <!--<Grid HorizontalAlignment="Stretch"
-                      ScrollViewer.VerticalScrollMode="Disabled"
-                      ScrollViewer.IsScrollInertiaEnabled="False">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="9*" />
-                        <ColumnDefinition Width="1*" />
-                    </Grid.ColumnDefinitions>-->
             </StackPanel>
-
             <WebView
-                Grid.Row="2"
-                Margin="{StaticResource DetailPageMargin}"
+                Grid.Row="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 local:MyExtensions.HtmlString="{x:Bind MasterMenuItem.ChangeLog, Mode=OneWay}"
                 DefaultBackgroundColor="Transparent" />
-            <!--</Grid>-->
-
         </Grid>
     </ScrollViewer>
 </UserControl>
-<!--<FontIcon
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="48"
-                    Glyph="&#xF000;" />-->
-
-
-<!--
-    ScrollViewer.IsVerticalScrollChainingEnabled="False"
-    ScrollViewer.IsDeferredScrollingEnabled="False"
-    ScrollViewer.IsScrollInertiaEnabled="False"
--->
-<!--  ScrollViewer.VerticalScrollMode="Disabled"  -->
-
-
-
-<!--
-    IsHitTestVisible="False"
-    IsHoldingEnabled="False"
-    IsTapEnabled="False"
--->

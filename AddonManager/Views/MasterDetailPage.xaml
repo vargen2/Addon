@@ -583,7 +583,7 @@
                             Tag="{x:Bind Mode=OneWay}"
                             Text="Refresh">
                             <MenuFlyoutItem.Icon>
-                                <SymbolIcon Symbol="Refresh" />
+                                <SymbolIcon Symbol="Sync" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem
@@ -648,7 +648,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="NoSelectionContentTemplate">
-            <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <Grid Background="{StaticResource AppChromeAcrylicHostBackdropMediumLowBrush}">
                 <TextBlock
                     x:Uid="MasterDetail_NoSelection"
                     HorizontalAlignment="Center"
@@ -789,7 +789,7 @@
 <!--  Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"  -->
 
 <!--
-
+Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
 
 
  <ListView
