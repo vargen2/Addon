@@ -45,12 +45,12 @@ namespace AddonManager.Services
                 }
             }
 
-            var activationHandler = GetActivationHandlers().FirstOrDefault(h => h.CanHandle(activationArgs));
+            //var activationHandler = GetActivationHandlers().FirstOrDefault(h => h.CanHandle(activationArgs));
 
-            if (activationHandler != null)
-            {
-                await activationHandler.HandleAsync(activationArgs);
-            }
+            //if (activationHandler != null)
+            //{
+            //    await activationHandler.HandleAsync(activationArgs);
+            //}
 
             if (IsInteractive(activationArgs))
             {
@@ -119,21 +119,21 @@ namespace AddonManager.Services
 
         private async Task InitializeAsync()
         {
-            await Singleton<LiveTileService>.Instance.EnableQueueAsync();
+           // await Singleton<LiveTileService>.Instance.EnableQueueAsync();
             await ThemeSelectorService.InitializeAsync();
         }
 
         private async Task StartupAsync()
         {
             await ThemeSelectorService.SetRequestedThemeAsync();
-            Singleton<LiveTileService>.Instance.SampleUpdate();
+          //  Singleton<LiveTileService>.Instance.SampleUpdate();
             await Task.CompletedTask;
         }
 
-        private IEnumerable<ActivationHandler> GetActivationHandlers()
-        {
-            yield return Singleton<LiveTileService>.Instance;
-        }
+        //private IEnumerable<ActivationHandler> GetActivationHandlers()
+        //{
+        //    yield return Singleton<LiveTileService>.Instance;
+        //}
 
         private bool IsInteractive(object args)
         {
