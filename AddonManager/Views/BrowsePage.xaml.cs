@@ -42,12 +42,12 @@ namespace AddonManager.Views
             await Install.InstallAddon(storeAddon);
         }
 
-        //protected override void OnNavigatedTo(NavigationEventArgs e)
-        //{
-        //    base.OnNavigatedTo(e);
-        //    RefreshStoreAddonStatus();
-        //    ViewModel.Session.PropertyChanged += Session_PropertyChanged;
-        //}
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            RefreshStoreAddonStatus();
+         //   ViewModel.Session.PropertyChanged += Session_PropertyChanged;
+        }
 
         //protected override void OnNavigatedFrom(NavigationEventArgs e)
         //{

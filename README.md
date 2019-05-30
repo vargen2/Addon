@@ -30,13 +30,22 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 ## ChangeLog
 
-##### 10.017.0 - 2019-05-24
+##### 1.0.18.0 - publishing
+
+- Live tiles disabled
+- Controls on detail page
+- Context menu placed at cursor and hitbox fix
+- Save and edit display name for game
+- misc layout changes
+- cache and reuse nav pages
+
+##### 1.0.17.0 - 2019-05-24
 
 - Layout changes
 - Will try to get versions for all release types
 - Per addon setting for auto update
 
-##### 10.016.0 - 2019-05-20
+##### 1.0.16.0 - 2019-05-20
 
 - Added AddonData for almost all addons
 - Bit snappier context menu on main page
