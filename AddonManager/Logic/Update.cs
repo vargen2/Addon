@@ -335,7 +335,8 @@ namespace AddonManager.Logic
             if (subFoldersToDelete.Count > 0)
             {
                 Singleton<Session>.Instance.KnownSubFolders.UnionWith(subFoldersToDelete);
-                addon.SubFolders.UnionWith(subFoldersToDelete);
+                addon.AddSubFolders(subFoldersToDelete);
+                
             }
             await Task.CompletedTask;
         }

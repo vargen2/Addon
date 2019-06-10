@@ -21,6 +21,11 @@ namespace AddonManager.Core.Models
 
         public HashSet<string> SubFolders { get; set; } = new HashSet<string>();
 
+        public void AddSubFolders(List<string> subFolders)
+        {
+            SubFolders.UnionWith(subFolders);
+            NotifyPropertyChanged("InfoString");
+        }
 
         public Addon(Game game, string folderName, string absolutePath)
         {
