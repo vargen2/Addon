@@ -116,7 +116,7 @@ namespace AddonManager.Logic
                     CreatedEpoch = 0,
                     ProjectName = "elvui",
                     ProjectUrl = Version.ELVUI,
-                    SubFolders = new HashSet<string>() { "ElvUI_Config" },
+                    SubFolders = new HashSet<string>() { "ElvUI_Config", "ElvUI_OptionsUI" },
                     Files = 100,
                     Size = 100
                 });
