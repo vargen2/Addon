@@ -4,6 +4,7 @@ using AddonManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -31,7 +32,7 @@ namespace AddonManager.Logic
             }
         }
 
-        internal static async Task<StorageFile> DLWithHttpProgress(Core.Models.Addon addon, Download download, IProgressable progressable = null)
+        internal static async Task<StorageFile> DLWithHttpProgress(Addon addon, Download download, IProgressable progressable = null)
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
             {
@@ -39,7 +40,7 @@ namespace AddonManager.Logic
             }
             string downloadLink = GetDownLoadLink(addon, download);
 
-            Uri source = new Uri(downloadLink);
+            var source = new Uri(downloadLink);
 
             StorageFile destinationFile = await localFolder.CreateFileAsync(Util.RandomString(12) + ".zip", CreationCollisionOption.GenerateUniqueName);
 
@@ -68,18 +69,19 @@ namespace AddonManager.Logic
             return destinationFile;
         }
 
-        internal static async Task<(string, List<string>)> UpdateAddonOld(Core.Models.Addon addon, Download download, StorageFile file)
+        internal static async Task<(string, List<string>)> UpdateAddonOld(Core.Models.Addon addon, Download download, StorageFile file, IProgressable progressable = null)
         {
             var extractFolderPath = localFolder.Path + @"\" + file.Name.Replace(".zip", "");
             var subFoldersToDelete = new List<string>();
             try
             {
                 ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
+                // int directoryCount = Directory.GetDirectories(extractFolderPath, "*", SearchOption.AllDirectories).Length;
+                float fileCount = Directory.GetFiles(extractFolderPath, "*", SearchOption.AllDirectories).Length;
 
                 var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);
                 var folders = await extractFolder.GetFoldersAsync();
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
-
 
                 //var tasks = folders.SelectMany(folder => CopyFolderAsync2(folder, gameFolder));
                 //await Task.WhenAll(tasks);
@@ -89,15 +91,17 @@ namespace AddonManager.Logic
                     .ToList();
                 if (Singleton<SettingsViewModel>.Instance.IsDeleteOldFilesBeforeUpdate ?? false)
                 {
-                    var subFolders = new List<string>(subFoldersToDelete);
-                    subFolders.Add(addon.FolderName);
+                    var subFolders = new List<string>(subFoldersToDelete)
+                    {
+                        addon.FolderName
+                    };
                     await RemoveFolders(addon.Game.AbsolutePath, subFolders);
-
                 }
 
+                var counter = new Counter(progressable != null ? progressable : addon, Math.Max(fileCount, 1));
                 foreach (var folder in folders)
                 {
-                    await CopyFolderAsync(folder, gameFolder);
+                    await CopyFolderAsync(folder, gameFolder, counter);
                 }
             }
             catch (Exception e)
@@ -107,11 +111,8 @@ namespace AddonManager.Logic
             return (extractFolderPath, subFoldersToDelete);
         }
 
-
-
         internal static async Task<List<string>> UpdateAddon2(Addon addon, StorageFile file, IProgressable progressable = null)
         {
-
             var subFoldersToDelete = new HashSet<string>();
             try
             {
@@ -127,9 +128,7 @@ namespace AddonManager.Logic
                             var folderName = entry.FullName.Split("/").FirstOrDefault();
                             if (folderName != null && !folderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase))
                             {
-
                                 subFoldersToDelete.Add(folderName);
-
                             }
                         }
                         entries++;
@@ -137,12 +136,12 @@ namespace AddonManager.Logic
                 }
                 if (Singleton<SettingsViewModel>.Instance.IsDeleteOldFilesBeforeUpdate ?? false)
                 {
-                    var folders = new List<string>(subFoldersToDelete);
-                    folders.Add(addon.FolderName);
+                    var folders = new List<string>(subFoldersToDelete)
+                    {
+                        addon.FolderName
+                    };
                     await RemoveFolders(addon.Game.AbsolutePath, folders);
-
                 }
-
 
                 var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
 
@@ -164,10 +163,8 @@ namespace AddonManager.Logic
             Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.
                 RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-
                     zipHelper.Progressable.Progress = zipHelper.Progress;
                 });
-
         }
 
         //internal static async Task DeleteFilesFrom(StorageFolder folder)
@@ -181,28 +178,34 @@ namespace AddonManager.Logic
         //}
         // private static Action<StorageFile, StorageFolder> FileMove =  (file, destination) => { file.MoveAsync(destination, file.Name, NameCollisionOption.ReplaceExisting).AsTask().RunSynchronously(); };
 
-        internal static async Task CopyFolderAsync(StorageFolder source, StorageFolder destinationContainer)
+        //
+        //bool filesAreEqual = new FileInfo(path1).Length == new FileInfo(path2).Length &&
+        //File.ReadAllBytes(path1).SequenceEqual(File.ReadAllBytes(path2));
+        //
+        internal static async Task CopyFolderAsync(StorageFolder source, StorageFolder destinationContainer, Counter counter)
         {
-
             StorageFolder destinationFolder = null;
             destinationFolder = await destinationContainer.CreateFolderAsync(source.Name, CreationCollisionOption.OpenIfExists);
             var files = await source.GetFilesAsync();
             //var fileTasks = files.Select(file => file.CopyAsync(destinationFolder).AsTask());
             //await Task.WhenAll(fileTasks);
+            var moveTasks = files.Select(file => file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting).AsTask());
+            await Task.WhenAll(moveTasks);
+            //foreach (var file in files)
+            //{
+            //    try
+            //    {
+            //        await file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting);
+            //    }
+            //    catch (Exception)
+            //    {
+            //        // Debug.WriteLine("[ERROR] Copy file. " + e.Message);
+            //    }
+            //}
+            counter.Current += files.Count;
+            await counter.Dispatch();
+            // Debug.WriteLine($"Files: {current}/{fileCount}, progress={progressable.Progress}");
 
-            foreach (var file in files)
-            {
-                try
-                {
-                    await file.MoveAsync(destinationFolder, file.Name, NameCollisionOption.ReplaceExisting);
-
-                }
-                catch (Exception)
-                {
-                    // Debug.WriteLine("[ERROR] Copy file. " + e.Message);
-                }
-
-            }
             var folders = await source.GetFoldersAsync();
             //var folderTasks = folders.Select(folder => CopyFolderAsync(folder, destinationFolder));
             //await Task.WhenAll(folderTasks);
@@ -213,8 +216,7 @@ namespace AddonManager.Logic
                 try
                 {
                     // System.IO.Directory.Move(folder.Path,destinationFolder.Path);
-                    await CopyFolderAsync(folder, destinationFolder);
-
+                    await CopyFolderAsync(folder, destinationFolder, counter);
                 }
                 catch (Exception e)
                 {
@@ -227,7 +229,6 @@ namespace AddonManager.Logic
         //Dont use, seems unstable. Getting stack owerflow
         //////////////////internal static List<Task> CopyFolderAsync2(StorageFolder source, StorageFolder destinationContainer)
         //////////////////{
-
         //////////////////    var (destinationFolder, items) = Task.Run(async () =>
         //////////////////     {
         //////////////////         StorageFolder destination = await destinationContainer.CreateFolderAsync(source.Name, CreationCollisionOption.OpenIfExists);
@@ -280,7 +281,7 @@ namespace AddonManager.Logic
         //////////////////    // Parallel.ForEach(files, file => FileMove(file, destinationFolder));
         //////////////////}
 
-        internal async static Task Cleanup(string fileName, string folderPath)
+        internal static async Task Cleanup(string fileName, string folderPath)
         {
             try
             {
@@ -295,20 +296,13 @@ namespace AddonManager.Logic
             {
                 var extractFolder = await StorageFolder.GetFolderFromPathAsync(folderPath);
                 await extractFolder.DeleteAsync();
-
             }
             catch (Exception)
             {
-
             }
-
-
-
         }
 
-
-
-        internal async static Task Cleanup2(string fileName)
+        internal static async Task Cleanup2(string fileName)
         {
             try
             {
@@ -321,7 +315,7 @@ namespace AddonManager.Logic
             }
         }
 
-        internal async static Task AddSubFolders(Core.Models.Addon addon, List<string> subFoldersToDelete)
+        internal static async Task AddSubFolders(Core.Models.Addon addon, List<string> subFoldersToDelete)
         {
             var addons = addon.Game.Addons;
             foreach (var name in subFoldersToDelete)
@@ -336,15 +330,16 @@ namespace AddonManager.Logic
             {
                 Singleton<Session>.Instance.KnownSubFolders.UnionWith(subFoldersToDelete);
                 addon.AddSubFolders(subFoldersToDelete);
-                
             }
             await Task.CompletedTask;
         }
 
         internal static async Task RemoveFilesFor(Core.Models.Addon addon)
         {
-            var folders = new List<string>(addon.SubFolders);
-            folders.Add(addon.FolderName);
+            var folders = new List<string>(addon.SubFolders)
+            {
+                addon.FolderName
+            };
             await RemoveFolders(addon.Game.AbsolutePath, folders);
 
             //var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
@@ -355,7 +350,6 @@ namespace AddonManager.Logic
             //    var folder = await gameFolder.GetFolderAsync(folderName);
             //    await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
             //}
-
         }
 
         internal static async Task RemoveFolders(string gameFolderPath, IEnumerable<string> folders)
@@ -369,8 +363,8 @@ namespace AddonManager.Logic
         }
 
         //
-        // https://stackoverflow.com/questions/54942686/fastest-way-to-move-folder-to-another-place-in-uwp 
-        // 
+        // https://stackoverflow.com/questions/54942686/fastest-way-to-move-folder-to-another-place-in-uwp
+        //
         //static async Task MoveContentFast(IStorageFolder source, IStorageFolder destination)
         //{
         //    await Task.Run(() =>
@@ -502,7 +496,6 @@ namespace AddonManager.Logic
         //    WRITE_THROUGH = 0x80000000
         //}
 
-
         //////private static async void extract(StorageFolder SF, string zipFileName)
         //////{
         //////    // StorageFolder SF = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("SampleBook");
@@ -543,7 +536,7 @@ namespace AddonManager.Logic
             {
                 if (progressInfo.TotalBytesToReceive != null && progressInfo.TotalBytesToReceive > 0)
                 {
-                    var progress = (int)(((double)progressInfo.BytesReceived / (double)progressInfo.TotalBytesToReceive) * 100d);
+                    var progress = (int)((progressInfo.BytesReceived / (double)progressInfo.TotalBytesToReceive) * 100d);
                     //Debug.WriteLine("received " + (int)progress);
                     Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.
                         RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -551,17 +544,30 @@ namespace AddonManager.Logic
                             Progressable.Progress = progress;
                         });
                 }
-               
-
-
             }
         }
 
+        internal class Counter
+        {
+            private readonly IProgressable progressable;
+            public float Current { get; set; } = 0;
+            private readonly float max;
 
+            public Counter(IProgressable progressable, float max)
+            {
+                this.progressable = progressable ?? throw new ArgumentNullException(nameof(progressable));
+                this.max = max;
+            }
+
+            public async Task Dispatch()
+            {
+                var dispatcher = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher;
+
+                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    progressable.Progress = (int)(Current / max * 100f);
+                });
+            }
+        }
     }
-
-
-
-
-
 }

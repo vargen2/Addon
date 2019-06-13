@@ -47,7 +47,6 @@ namespace AddonManager.Logic
                     .ToList();
                 if (allMatchingFolders.Count == 1)
                 {
-
                     filteredFolders.Add(folder);
                     SubFoldersToBeRemoved.UnionWith(allMatchingFolders[0].SubFolders);
                 }
@@ -95,22 +94,19 @@ namespace AddonManager.Logic
             }
             await Task.WhenAll(tasks);
 
-
             //await Sorter.Sort(addons);
         }
 
         public static async Task FindProjectUrlAndDownLoadVersionsFor(Core.Models.Addon addon)
         {
             if (addon.IsIgnored
-                ||addon.Status.Equals(Core.Models.Addon.DOWNLOADING_VERSIONS)
+                || addon.Status.Equals(Core.Models.Addon.DOWNLOADING_VERSIONS)
                 || addon.Status.Equals(Core.Models.Addon.UPDATING))
             {
                 return;
             }
             addon.Progress = 0;
             addon.Status = Core.Models.Addon.DOWNLOADING_VERSIONS;
-
-
 
             if (string.IsNullOrEmpty(addon.ProjectUrl))
             {
@@ -159,8 +155,6 @@ namespace AddonManager.Logic
             }
             else
             {
-
-
                 var subFolders = await Task.Run(() => Update.UpdateAddon2(addon, file));
                 addon.CurrentDownload = download;
                 await Update.AddSubFolders(addon, subFolders);
@@ -176,6 +170,5 @@ namespace AddonManager.Logic
             await Task.Run(() => Update.RemoveFilesFor(addon));
             Debug.WriteLine("Remove done for " + addon.FolderName);
         }
-
     }
 }

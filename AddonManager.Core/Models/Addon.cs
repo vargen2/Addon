@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using static System.String;
 
-
 namespace AddonManager.Core.Models
 {
     public class Addon : INotifyPropertyChanged, IProgressable
@@ -94,7 +93,6 @@ namespace AddonManager.Core.Models
                 NotifyPropertyChanged("IsRelease");
                 NotifyPropertyChanged("InfoString");
                 NotifyPropertyChanged("SuggestedDownload");
-
             }
         }
 
@@ -125,8 +123,8 @@ namespace AddonManager.Core.Models
             get => currentDownload;
             set
             {
-                if (currentDownload != null && value == currentDownload)
-                    return;
+                //if (currentDownload != null && value == currentDownload)
+                //    return;
                 currentDownload = value;
                 updateStatus();
                 NotifyPropertyChanged();
@@ -135,7 +133,6 @@ namespace AddonManager.Core.Models
                 NotifyPropertyChanged("SuggestedDownload");
             }
         }
-
 
         public ICommand SetIgnored { get; set; }
         public ICommand SetAutoUpdate { get; set; }
@@ -156,7 +153,6 @@ namespace AddonManager.Core.Models
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("NotIgnoredOpacity");
                 NotifyPropertyChanged("InfoString");
-
             }
         }
 
@@ -172,7 +168,6 @@ namespace AddonManager.Core.Models
                 isAutoUpdate = value;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged("InfoString");
-
             }
         }
 
@@ -180,9 +175,6 @@ namespace AddonManager.Core.Models
         public bool IsAlpha => PreferredReleaseType.ToLower().Equals("alpha");
         public bool IsBeta => PreferredReleaseType.ToLower().Equals("beta");
         public bool IsRelease => PreferredReleaseType.ToLower().Equals("release");
-
-
-
 
         private int progress;
 
@@ -201,7 +193,6 @@ namespace AddonManager.Core.Models
 
         public bool IsIndeterminate => progress == 0;
 
-
         public string GameVersion { get; set; } = Empty;
 
         public const string INITIALIZED = "Initialized";
@@ -210,8 +201,6 @@ namespace AddonManager.Core.Models
         public const string UPDATING = "Updating";
         public const string UP_TO_DATE = "Up to date";
         public const string UNKNOWN = "Unknown";
-
-
 
         public bool IsUpdateable => status.Equals(UPDATEABLE);
         public bool IsNotUpdateable => !status.Equals(UPDATEABLE);
@@ -235,13 +224,8 @@ namespace AddonManager.Core.Models
                 NotifyPropertyChanged("InfoString");
                 NotifyPropertyChanged("ShowMessage");
                 NotifyPropertyChanged("ShowStatus");
-
             }
         }
-
-
-
-
 
         public Download SuggestedDownload
         {
@@ -255,7 +239,6 @@ namespace AddonManager.Core.Models
                 return downloads.FirstOrDefault(dl => dl.ReleaseType.ToLower().Equals(preferredReleaseType.ToLower()));
             }
         }
-
 
         private void updateStatus()
         {
@@ -287,10 +270,7 @@ namespace AddonManager.Core.Models
             {
                 Status = UP_TO_DATE;
             }
-
-
         }
-
 
         private string message = "";
 
@@ -311,8 +291,6 @@ namespace AddonManager.Core.Models
         public bool ShowMessage => !string.IsNullOrEmpty(Message);
         public bool ShowStatus => !status.Equals(UPDATEABLE) && string.IsNullOrEmpty(Message);
 
-
-
         private string changeLog;
 
         public string ChangeLog
@@ -328,8 +306,6 @@ namespace AddonManager.Core.Models
 
         public bool IsChangeLogEmpty => string.IsNullOrEmpty(ChangeLog);
 
-
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -337,12 +313,10 @@ namespace AddonManager.Core.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-
         public override string ToString()
         {
             return $"{nameof(FolderName)}: {FolderName}, {nameof(AbsolutePath)}: {AbsolutePath}, {nameof(PreferredReleaseType)}: {PreferredReleaseType}, {nameof(CurrentReleaseTypeAndVersion)}: {CurrentReleaseTypeAndVersion}, {nameof(IsIgnored)}: {IsIgnored}, {nameof(Status)}: {Status}, {nameof(GameVersion)}: {GameVersion}";
         }
-
 
         public string InfoString => $"{nameof(Game)}: {Game},\r\n{nameof(FolderName)}: {FolderName}," +
             $"\r\n{nameof(AbsolutePath)}: {AbsolutePath},\r\n{nameof(Title)}: {Title}," +
@@ -355,7 +329,6 @@ namespace AddonManager.Core.Models
 
         private string SubFolderContents()
         {
-
             return (SubFolders != null) ? string.Join(", ", SubFolders) : string.Empty;
         }
 
@@ -379,6 +352,5 @@ namespace AddonManager.Core.Models
                 SubFolders = SubFolders
             };
         }
-
     }
 }

@@ -1,9 +1,7 @@
 ﻿using AddonManager.Core.Helpers;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
@@ -11,11 +9,9 @@ using Windows.Storage.Streams;
 
 namespace AddonManager.Logic
 {
-
-
-    /// <summary> 
+    /// <summary>
     /// https://code.msdn.microsoft.com/How-to-and-extract-zip-242da300/sourcecode?fileId=167934&pathId=1626668963
-    /// </summary> 
+    /// </summary>
     internal class ZipHelper : Observable
     {
         private float counter;
@@ -25,32 +21,26 @@ namespace AddonManager.Logic
         public float Entries { get; set; }
         public Core.Models.IProgressable Progressable { get; set; }
 
-
         private int progress = 0;
 
         public int Progress
         {
             get => progress;
             set => Set(ref progress, value);
-
         }
 
-
-
-        /// <summary> 
+        /// <summary>
         /// https://code.msdn.microsoft.com/How-to-and-extract-zip-242da300/sourcecode?fileId=167934&pathId=1626668963
-        /// 
-        /// Unzips the specified zip file to the specified destination folder. 
-        /// </summary> 
-        /// <param name="zipFile">The zip file</param> 
-        /// <param name="destinationFolder">The destination folder</param> 
-        /// <returns></returns> 
+        ///
+        /// Unzips the specified zip file to the specified destination folder.
+        /// </summary>
+        /// <param name="zipFile">The zip file</param>
+        /// <param name="destinationFolder">The destination folder</param>
+        /// <returns></returns>
         public IAsyncAction UnZipFileAsync(StorageFile zipFile, StorageFolder destinationFolder)
         {
             return UnZipFileHelper(zipFile, destinationFolder).AsAsyncAction();
         }
-
-
 
         private async Task UnZipFileHelper(StorageFile zipFile, StorageFolder destinationFolder)
         {
@@ -63,10 +53,9 @@ namespace AddonManager.Logic
 
             Stream zipMemoryStream = await zipFile.OpenStreamForReadAsync();
 
-            // Create zip archive to access compressed files in memory stream 
+            // Create zip archive to access compressed files in memory stream
             using (ZipArchive zipArchive = new ZipArchive(zipMemoryStream, ZipArchiveMode.Read))
             {
-
                 //foreach (ZipArchiveEntry entry in zipArchive.Entries)
                 //{
                 //    if (entry.FullName.EndsWith("/"))
@@ -83,7 +72,7 @@ namespace AddonManager.Logic
 
                 //await Task.WhenAll(zipFileTasks);
 
-                //Unzip compressed file iteratively. 
+                //Unzip compressed file iteratively.
                 foreach (ZipArchiveEntry entry in zipArchive.Entries)
                 {
                     //Debug.WriteLine("File: " + entry.FullName);
@@ -92,11 +81,11 @@ namespace AddonManager.Logic
             }
         }
 
-        /// <summary> 
-        /// It checks if the specified path contains directory. 
-        /// </summary> 
-        /// <param name="entryPath">The specified path</param> 
-        /// <returns></returns> 
+        /// <summary>
+        /// It checks if the specified path contains directory.
+        /// </summary>
+        /// <param name="entryPath">The specified path</param>
+        /// <returns></returns>
         private static bool IfPathContainDirectory(string entryPath)
         {
             if (string.IsNullOrEmpty(entryPath))
@@ -107,12 +96,12 @@ namespace AddonManager.Logic
             return entryPath.Contains("/");
         }
 
-        /// <summary> 
-        /// It checks if the specified folder exists. 
-        /// </summary> 
-        /// <param name="storageFolder">The container folder</param> 
-        /// <param name="subFolderName">The sub folder name</param> 
-        /// <returns></returns> 
+        /// <summary>
+        /// It checks if the specified folder exists.
+        /// </summary>
+        /// <param name="storageFolder">The container folder</param>
+        /// <param name="subFolderName">The sub folder name</param>
+        /// <returns></returns>
         private static async Task<bool> IfFolderExistsAsync(StorageFolder storageFolder, string subFolderName)
         {
             try
@@ -122,23 +111,23 @@ namespace AddonManager.Logic
             }
             catch
             {
-                // Should never get here 
+                // Should never get here
                 return false;
             }
         }
 
-        /// <summary> 
-        /// Unzips ZipArchiveEntry asynchronously. 
-        /// </summary> 
-        /// <param name="entry">The entry which needs to be unzipped</param> 
-        /// <param name="filePath">The entry's full name</param> 
-        /// <param name="unzipFolder">The unzip folder</param> 
-        /// <returns></returns> 
+        /// <summary>
+        /// Unzips ZipArchiveEntry asynchronously.
+        /// </summary>
+        /// <param name="entry">The entry which needs to be unzipped</param>
+        /// <param name="filePath">The entry's full name</param>
+        /// <param name="unzipFolder">The unzip folder</param>
+        /// <returns></returns>
         private async Task UnzipZipArchiveEntryAsync(ZipArchiveEntry entry, string filePath, StorageFolder unzipFolder)
         {
             if (IfPathContainDirectory(filePath))
             {
-                // Create sub folder 
+                // Create sub folder
                 string subFolderName = Path.GetDirectoryName(filePath);
 
                 bool isSubFolderExist = await IfFolderExistsAsync(unzipFolder, subFolderName);
@@ -147,40 +136,39 @@ namespace AddonManager.Logic
 
                 if (!isSubFolderExist)
                 {
-                    // Create the sub folder. 
+                    // Create the sub folder.
                     subFolder =
                         await unzipFolder.CreateFolderAsync(subFolderName, CreationCollisionOption.ReplaceExisting);
                 }
                 else
                 {
-                    // Just get the folder. 
+                    // Just get the folder.
                     subFolder =
                         await unzipFolder.GetFolderAsync(subFolderName);
                 }
 
-                // All sub folders have been created yet. Just pass the file name to the Unzip function. 
+                // All sub folders have been created yet. Just pass the file name to the Unzip function.
                 string newFilePath = Path.GetFileName(filePath);
 
                 if (!string.IsNullOrEmpty(newFilePath))
                 {
-                    // Unzip file iteratively. 
+                    // Unzip file iteratively.
                     await UnzipZipArchiveEntryAsync(entry, newFilePath, subFolder);
                 }
             }
             else
             {
-
-                // Read uncompressed contents 
+                // Read uncompressed contents
                 using (Stream entryStream = entry.Open())
                 {
                     byte[] buffer = new byte[entry.Length];
                     entryStream.Read(buffer, 0, buffer.Length);
 
-                    // Create a file to store the contents 
+                    // Create a file to store the contents
                     StorageFile uncompressedFile = await unzipFolder.CreateFileAsync
                     (entry.Name, CreationCollisionOption.ReplaceExisting);
 
-                    // Store the contents 
+                    // Store the contents
                     using (IRandomAccessStream uncompressedFileStream =
                     await uncompressedFile.OpenAsync(FileAccessMode.ReadWrite))
                     {
@@ -190,24 +178,21 @@ namespace AddonManager.Logic
                             outstream.Flush();
                         }
                     }
-
                 }
                 Increment();
             }
-
         }
 
         private void Increment()
         {
             counter++;
-            var newProggress = (int)((counter / Entries) * 100f);
-            //Debug.WriteLine("counter/entries " + counter + " / " + Entries + " ........newprog " + newProggress);
+            int newProggress = (int)(counter / Entries * 100f);
+
             if (newProggress > nextNotify)
             {
                 Progress = newProggress;
-                nextNotify = nextNotify + 5;
+                nextNotify += 5;
             }
         }
-
     }
 }

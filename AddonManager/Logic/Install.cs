@@ -41,7 +41,7 @@ namespace AddonManager.Logic
             if (tempAddon.ProjectUrl.Equals(Version.ELVUI))
             {
                 // TODO move to method
-                var trash = await Task.Run(() => Update.UpdateAddonOld(tempAddon, download, file));
+                var trash = await Task.Run(() => Update.UpdateAddonOld(tempAddon, download, file, storeAddon));
                 tempAddon.CurrentDownload = download;
                 await Tasks.RefreshTocFileFor(new List<Core.Models.Addon>() { tempAddon });
                 game.Addons.Add(tempAddon);
@@ -58,7 +58,7 @@ namespace AddonManager.Logic
                 tempAddon.Message = string.Empty;
                 storeAddon.Message = "Configuring...";
                 tempAddon.CurrentDownload = download;
-            
+
                 try
                 {
                     await Tasks.RefreshTocFileFor(new List<Core.Models.Addon>() { tempAddon });
@@ -82,13 +82,10 @@ namespace AddonManager.Logic
                 }
             }
             storeAddon.Message = string.Empty;
-
-
         }
 
         private static async Task<List<Core.Models.Addon>> AnotherInstall(StorageFile file, Game game)
         {
-
             var extractFolderPath = Update.localFolder.Path + @"\" + file.Name.Replace(".zip", "");
             ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
             var extractFolder = await StorageFolder.GetFolderFromPathAsync(extractFolderPath);

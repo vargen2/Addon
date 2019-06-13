@@ -1,7 +1,4 @@
-﻿
-using System;
-using Addon.Core.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTestProject
 {

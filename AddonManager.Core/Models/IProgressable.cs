@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AddonManager.Core.Models
+﻿namespace AddonManager.Core.Models
 {
     public interface IProgressable
     {
-        int Progress{get;set; }
-        string Message {get;set; }
-        bool ShowMessage {get; }
+        int Progress { get; set; }
+        string Message { get; set; }
+        bool ShowMessage { get; }
     }
 }
