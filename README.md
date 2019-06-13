@@ -30,7 +30,13 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 ## ChangeLog
 
-##### 1.0.18.0 - publishing
+##### 1.0.19.0 - development
+
+- progress bar when using old update (elvui)
+- add ElvUI_OptionsUI to elvui subfolders
+- adding subfolder now updates infomessage
+
+##### 1.0.18.0 - 2019-05.30
 
 - Live tiles disabled
 - Controls on detail page
