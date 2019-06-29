@@ -7,7 +7,6 @@ namespace AddonScraper.FileIO
 {
     internal static class Storage
     {
-
         internal static void SaveToFile(List<CurseAddon> addons, int from, int to)
         {
             using (StreamWriter file = File.CreateText(@".\out\curseaddons" + from + "-" + to + ".json"))
@@ -15,7 +14,6 @@ namespace AddonScraper.FileIO
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, addons);
             }
-
         }
 
         internal static void SaveToFile(List<AddonData> addonData, string fileTag, Formatting formatting, int from, int to)
@@ -28,11 +26,14 @@ namespace AddonScraper.FileIO
                 };
                 serializer.Serialize(file, addonData);
             }
-
         }
 
         internal static List<AddonData> LoadAddonData()
         {
+            if (!Directory.Exists(@".\Data"))
+            {
+                return new List<AddonData>();
+            }
             var files = Directory.GetFiles(@".\Data");
             var addons = new List<AddonData>();
 
@@ -46,9 +47,6 @@ namespace AddonScraper.FileIO
                 }
             }
             return addons;
-
         }
-
-
     }
 }

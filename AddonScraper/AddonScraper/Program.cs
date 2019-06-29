@@ -1,9 +1,11 @@
 ﻿using AddonScraper.FileIO;
 using AddonToolkit.Model;
 using AddonToolkit.Parse;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NLog;
 using NLog.Config;
+using NLog.Extensions.Logging;
 using NLog.Targets;
 using System;
 using System.Collections.Concurrent;
@@ -17,7 +19,9 @@ namespace AddonScraper
 {
     public class Program
     {
-        private static readonly Logger logger = LogManager.GetLogger("AddonScraper");
+        //private static readonly NLog.ILogger logger = LogManager.GetLogger("AddonScraper");
+        private static Microsoft.Extensions.Logging.ILogger logger;// = LogManager.GetLogger("AddonScraper");
+
         public static readonly Dictionary<string, string> PROJECT_URLS = new Dictionary<string, string>()
         {
             {"bigwigs", "big-wigs"},
@@ -126,8 +130,6 @@ namespace AddonScraper
             {"dbcs_data_0000","dbcs_data"},
             {"mysellall","mysellall"},
             {"xpmultibar","xp-multibar"},
-
-
         };
 
         public static HashSet<string> IgnoredProjectNames = new HashSet<string>()
@@ -159,15 +161,13 @@ namespace AddonScraper
             "inobaigold",
             "rhoninmute",
             "oom",
-
         };
+
         public static async Task Main(string[] args)
         {
-
             Directory.CreateDirectory(@".\temp");
             Directory.CreateDirectory(@".\log");
             Directory.CreateDirectory(@".\out");
-
 
             LoggingConfiguration config = new LoggingConfiguration();
             ColoredConsoleTarget consoleTarget = new ColoredConsoleTarget("target1")
@@ -178,7 +178,6 @@ namespace AddonScraper
             string date = DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
             FileTarget fileTarget = new FileTarget("target2")
             {
-
                 FileName = "${basedir}/log/log_" + date + ".txt",
                 Layout = "${longdate} ${level} ${message}  ${exception}"
             };
@@ -187,11 +186,17 @@ namespace AddonScraper
             config.AddRuleForAllLevels(consoleTarget); // all to console
             LogManager.Configuration = config;
             //logger = LogManager.GetLogger("AddonScraper");
-            logger.Info("Start");
+
+            var loggerFactory = new LoggerFactory();
+            loggerFactory.AddProvider(new NLogLoggerProvider()); //TODO: use a nlog provider for Microsoft.Extenstions.Logger, and add the provider here.
+
+            logger = loggerFactory.CreateLogger("aaaa");
+            logger.LogInformation("Start");
 
             List<AddonData> loadedData = Storage.LoadAddonData();
-            logger.Info("Loaded " + loadedData.Count);
+            logger.LogInformation("Loaded " + loadedData.Count);
 
+            //log2.LogInformation("LOG2 start");
             //HashSet<string> query = loadedData.GroupBy(x => x.FolderName)
             //                        .Where(g => g.Count() > 1)
             //                        .Select(g => g.Key)
@@ -204,23 +209,20 @@ namespace AddonScraper
             //await Task.Delay(20000);
             using (HttpClient httpClient = new HttpClient())
             {
-                int start = 1;
-                int tries = 5;
-                int files = 68;
-                int span = 5;
-
                 //int start = 1;
                 //int tries = 5;
-                //int files = 40;
-                //int span = 2;
+                //int files = 68;
+                //int span = 5;
 
-
+                int start = 1;
+                int tries = 5;
+                int files = 1;
+                int span = 1;
 
                 List<Task> tasks = new List<Task>();
                 List<CurseAddon> allCurse = new List<CurseAddon>();
                 List<AddonData> allValid = new List<AddonData>();
                 List<AddonData> allFailed = new List<AddonData>();
-
 
                 for (int i = 0; i < files; i++)
                 {
@@ -237,7 +239,6 @@ namespace AddonScraper
                     Storage.SaveToFile(failed, "failed", Formatting.Indented, from, to);
                     allValid.AddRange(valid);
                     allFailed.AddRange(failed);
-
                 }
 
                 int end = start + (files * span) - 1;
@@ -245,7 +246,6 @@ namespace AddonScraper
                 Storage.SaveToFile(allCurse, start, end);
                 Storage.SaveToFile(allValid, "allvalid", Formatting.None, start, end);
                 Storage.SaveToFile(allFailed, "allfailed", Formatting.Indented, start, end);
-
 
                 HashSet<string> query = allValid.GroupBy(x => x.FolderName)
                                     .Where(g => g.Count() > 1)
@@ -256,9 +256,7 @@ namespace AddonScraper
                 Storage.SaveToFile(allDuplicates, "duplicates", Formatting.Indented, start, end);
             }
 
-
-
-            logger.Info("End");
+            logger.LogInformation("End");
         }
 
         public static async Task<(List<AddonData>, List<AddonData>)> FullProccess(HttpClient httpClient, List<CurseAddon> addons, int tries, List<AddonData> loadedData)
@@ -266,10 +264,8 @@ namespace AddonScraper
             ConcurrentBag<AddonData> validAddonData = new ConcurrentBag<AddonData>();
             ConcurrentBag<AddonData> NonValidAddonData = new ConcurrentBag<AddonData>();
 
-
             List<Task<AddonData>> addonDataTasks = addons.Select(curseAddon => FromCurseToAddonData(httpClient, curseAddon, tries, loadedData)).ToList();
             AddonData[] addonDatas = await Task.WhenAll(addonDataTasks);
-
 
             List<Task> proccessTasks = addonDatas.Select(ad => ProccessAddonData(httpClient, ad).ContinueWith((t) =>
             {
@@ -278,17 +274,16 @@ namespace AddonScraper
                 if (result)
                 {
                     validAddonData.Add(addonData);
-                    logger.Info("Match found for: " + addonData.ProjectName + " = " + addonData.FolderName);
+                    logger.LogInformation("Match found for: " + addonData.ProjectName + " = " + addonData.FolderName);
                 }
                 else
                 {
                     NonValidAddonData.Add(addonData);
-                    logger.Warn("No Match found for: " + addonData.ProjectName + " = " + addonData.FolderName);
+                    logger.LogInformation("No Match found for: " + addonData.ProjectName + " = " + addonData.FolderName);
                 }
                 addonData.Downloads = new List<Download>();
             })).ToList();
             await Task.WhenAll(proccessTasks);
-
 
             return (validAddonData.ToList(), NonValidAddonData.ToList());
         }
@@ -308,15 +303,13 @@ namespace AddonScraper
             }
             catch (Exception e)
             {
-                logger.Error(e, "Something went wrong in " + nameof(ProccessAddonData) + " for " + addonData.ProjectName);
+                logger.LogError(e, "Something went wrong in " + nameof(ProccessAddonData) + " for " + addonData.ProjectName);
                 return (found, addonData);
             }
 
-
             if (string.IsNullOrEmpty(zipFile) || !File.Exists(zipFile))
             {
-
-                logger.Error("No zipFile found for " + addonData.ProjectName);
+                logger.LogError("No zipFile found for " + addonData.ProjectName);
                 return (found, addonData);
             }
 
@@ -359,15 +352,12 @@ namespace AddonScraper
                     addonData.ProjectName.Replace("-", "_")};
                         foreach (string folder in folders)
                         {
-
                             string lowered = folder.ToLower();
-
 
                             HashSet<string> folderNames = new HashSet<string>() {
                     lowered,
                     lowered.Replace(" ", "-"),
                     lowered.Replace("_", "-")};
-
 
                             if (folderNames.Contains(addonData.ProjectName))
                             {
@@ -376,9 +366,6 @@ namespace AddonScraper
 
                                 break;
                             }
-
-
-
 
                             if (urlNames.Contains(lowered))
                             {
@@ -403,10 +390,9 @@ namespace AddonScraper
             }
             catch (Exception e)
             {
-                logger.Error(e, "Someting went wrong for " + addonData.ProjectName);
+                logger.LogError(e, "Someting went wrong for " + addonData.ProjectName);
                 return (found, addonData);
             }
-
         }
 
         private static async Task<AddonData> FromCurseToAddonData(HttpClient httpClient, CurseAddon curseAddon, int tries, List<AddonData> loadedData)
@@ -441,13 +427,10 @@ namespace AddonScraper
             }
             if (foundDataList.Count > 1)
             {
-                logger.Info("foundDataList.Count=" + foundDataList.Count + " for " + curseAddon.AddonURL);
+                logger.LogInformation("foundDataList.Count=" + foundDataList.Count + " for " + curseAddon.AddonURL);
             }
 
-
             AddonData addonData = curseAddon.toAddonData();
-
-
 
             for (int i = 0; i < tries; i++)
             {
@@ -458,19 +441,16 @@ namespace AddonScraper
                     {
                         break;
                     }
-
                 }
                 catch (Exception e)
                 {
-
-                    logger.Error(e, nameof(FromCurseToAddonData) + " try: " + i + "/" + tries);
+                    logger.LogError(e, nameof(FromCurseToAddonData) + " try: " + i + "/" + tries);
                 }
             }
             for (int i = 0; i < tries; i++)
             {
                 try
                 {
-
                     addonData.Downloads = await Pure.Version.DownloadVersionsFor(httpClient, addonData.ProjectUrl);
                     if (addonData.Downloads.Count > 1)
                     {
@@ -479,20 +459,15 @@ namespace AddonScraper
                 }
                 catch (Exception e)
                 {
-
-                    logger.Error(e, nameof(FromCurseToAddonData) + " try: " + i + "/" + tries);
+                    logger.LogError(e, nameof(FromCurseToAddonData) + " try: " + i + "/" + tries);
                 }
             }
 
             return addonData;
         }
 
-
-
-
         public static async Task<List<CurseAddon>> Scrape(HttpClient httpClient, int tries, int from, int to)
         {
-
             List<CurseAddon> addons = new List<CurseAddon>();
             for (int i = from; i <= to; i++)
             {
@@ -500,13 +475,13 @@ namespace AddonScraper
                 string page = await DownloadPage(httpClient, tries, i);
                 if (string.IsNullOrEmpty(page))
                 {
-                    logger.Warn("MISSED page: " + i);
+                    logger.LogWarning("MISSED page: " + i);
                 }
                 else
                 {
-                    List<CurseAddon> addonsFromPage = HtmlParser.FromCursePageToCurseAddons(page);
+                    List<CurseAddon> addonsFromPage = HtmlParser.FromCursePageToCurseAddons(page, logger);
                     addons.AddRange(addonsFromPage);
-                    logger.Info("Page: " + i + ", Added: " + addonsFromPage.Count);
+                    logger.LogInformation("Page: " + i + ", Added: " + addonsFromPage.Count);
                 }
             }
 
@@ -515,7 +490,6 @@ namespace AddonScraper
 
         public static async Task<string> DownloadPage(HttpClient httpClient, int tries, int page)
         {
-
             for (int i = 0; i < tries; i++)
             {
                 try
@@ -529,14 +503,10 @@ namespace AddonScraper
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e, nameof(DownloadPage) + ", try: " + i);
+                    logger.LogError(e, nameof(DownloadPage) + ", try: " + i);
                 }
             }
             return string.Empty;
         }
-
-
     }
 }
-
-

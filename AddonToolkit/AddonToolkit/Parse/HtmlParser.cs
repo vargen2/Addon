@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using static AddonToolkit.Model.Enums;
+using Microsoft.Extensions.Logging;
 
 namespace AddonToolkit.Parse
 {
     public static class HtmlParser
     {
-
         public static List<Download> FromPageToDownloads(PROJECT_SITE projectSite, string page)
         {
             if (string.IsNullOrEmpty(page))
@@ -142,32 +142,30 @@ namespace AddonToolkit.Parse
             }
         }
 
-        public static List<CurseAddon> FromCursePageToCurseAddons(string page)
+        public static List<CurseAddon> FromCursePageToCurseAddons(string page, ILogger log = null)
         {
             var addons = new List<CurseAddon>();
-            List<string> strings = new List<string>();
+            var strings = new List<string>();
             try
             {
-                var data = Parser.Parse(page, "<section class=\"project-list\">", "</section>");
-                strings = Regex.Split(data, "<li class=\"project-list-item\">").Skip(1).ToList();
-
+                log?.LogInformation("page.Length, {page.Length}!", page.Length);
+                strings = Regex.Split(page, "<div class=\"project-listing-row").Skip(1).ToList();
+                log?.LogInformation("strings.count {strings.Count}", strings.Count);
             }
             catch (Exception e)
             {
-                Debug.WriteLine("ParsePage. Message: "+e.Message);
+                log?.LogError(e, nameof(FromCursePageToCurseAddons));
                 return addons;
             }
             foreach (var s in strings)
             {
                 try
                 {
-
-
                     var url = Parser.Parse(s, "<a href=\"/wow/addons/", "\">").Trim();
                     var titleHtml = Parser.Parse(s, "<h2 class=\"list-item__title strong mg-b-05\">", "</h2>").Trim();
-                    var title=System.Net.WebUtility.HtmlDecode(titleHtml);
+                    var title = System.Net.WebUtility.HtmlDecode(titleHtml);
                     var descriptionHtml = Parser.Parse(s, "<p title=\"", "\">").Trim();
-                    var description=System.Net.WebUtility.HtmlDecode(descriptionHtml);
+                    var description = System.Net.WebUtility.HtmlDecode(descriptionHtml);
 
                     var downloadsString = Parser.Parse(s, "<span class=\"has--icon count--download\">", "</span>").Replace(",", "").Trim();
                     long downloads = long.Parse(downloadsString);
@@ -180,7 +178,6 @@ namespace AddonToolkit.Parse
                     var createdEpochString = Parser.Parse(createdString, "data-epoch=\"", "\">");
                     var created = long.Parse(createdEpochString);
 
-
                     addons.Add(new CurseAddon()
                     {
                         AddonURL = url,
@@ -191,14 +188,12 @@ namespace AddonToolkit.Parse
                         CreatedEpoch = created
                     });
                 }
-
                 catch (Exception e)
                 {
-                    Debug.WriteLine("ParsePage. Message: "+e.Message);
+                    log?.LogError(e, nameof(FromCursePageToCurseAddons));
                 }
             }
             return addons;
         }
-
     }
 }
