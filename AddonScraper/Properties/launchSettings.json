@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AddonScraper": {
+      "commandName": "Project",
+      "commandLineArgs": "1 1"
+    }
+  }
+}

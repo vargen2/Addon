@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using NLog;
 using NLog.Config;
 using NLog.Extensions.Logging;
-using NLog.Fluent;
 using NLog.Targets;
 using System;
 using System.Collections.Concurrent;
@@ -166,20 +165,26 @@ namespace AddonScraper
 
         public static async Task Main(string[] args)
         {
-            Directory.CreateDirectory(@".\temp");
-            Directory.CreateDirectory(@".\log");
-            Directory.CreateDirectory(@".\out");
+            int startPage = int.Parse(args[0]);
+            int endPage = int.Parse(args[1]);
 
+            Directory.CreateDirectory(@".\temp");
+            var outDir = Directory.CreateDirectory(@".\out");
+
+            List<AddonData> loadedData = Storage.LoadAddonData();
+
+            string date = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss");
+            var directory = outDir.CreateSubdirectory(date);
             LoggingConfiguration config = new LoggingConfiguration();
             ColoredConsoleTarget consoleTarget = new ColoredConsoleTarget("target1")
             {
                 Layout = @"${date:format=HH\:mm\:ss} ${level} ${message} ${exception}"
             };
             config.AddTarget(consoleTarget);
-            string date = DateTime.Now.ToString("yyyy-MM-dd_HH-mm");
+
             FileTarget fileTarget = new FileTarget("target2")
             {
-                FileName = "${basedir}/log/log_" + date + ".txt",
+                FileName = directory.FullName + "/log.txt",
                 Layout = "${longdate} ${level} ${message}  ${exception}"
             };
             config.AddTarget(fileTarget);
@@ -191,12 +196,9 @@ namespace AddonScraper
             var loggerFactory = new LoggerFactory();
             loggerFactory.AddProvider(new NLogLoggerProvider()); //TODO: use a nlog provider for Microsoft.Extenstions.Logger, and add the provider here.
 
-            logger = loggerFactory.CreateLogger("aaaa");
+            logger = loggerFactory.CreateLogger("AddonScraper");
             logger.LogInformation("Start");
-
-            List<AddonData> loadedData = Storage.LoadAddonData();
             logger.LogInformation("Loaded " + loadedData.Count);
-
             //log2.LogInformation("LOG2 start");
             //HashSet<string> query = loadedData.GroupBy(x => x.FolderName)
             //                        .Where(g => g.Count() > 1)
@@ -215,9 +217,9 @@ namespace AddonScraper
                 //int files = 68;
                 //int span = 5;
 
-                int start = 1;
+                int start = startPage;
                 int tries = 5;
-                int files = 1;
+                int files = endPage - startPage + 1;
                 int span = 1;
 
                 List<Task> tasks = new List<Task>();
@@ -232,21 +234,21 @@ namespace AddonScraper
 
                     List<CurseAddon> scrapedAddons = await Scrape(httpClient, tries, from, to);
                     List<CurseAddon> addons = scrapedAddons.Where(curseAddon => !IgnoredProjectNames.Contains(curseAddon.AddonURL)).ToList();
-                    Storage.SaveToFile(addons, from, to);
+                    Storage.SaveToFile(directory, addons, from, to);
                     allCurse.AddRange(addons);
 
                     (List<AddonData> valid, List<AddonData> failed) = await FullProccess(httpClient, addons, tries, loadedData);
-                    Storage.SaveToFile(valid, "valid", Formatting.None, from, to);
-                    Storage.SaveToFile(failed, "failed", Formatting.Indented, from, to);
+                    Storage.SaveToFile(directory, valid, "valid", Formatting.None, from, to);
+                    Storage.SaveToFile(directory, failed, "failed", Formatting.Indented, from, to);
                     allValid.AddRange(valid);
                     allFailed.AddRange(failed);
                 }
 
                 int end = start + (files * span) - 1;
 
-                Storage.SaveToFile(allCurse, start, end);
-                Storage.SaveToFile(allValid, "allvalid", Formatting.None, start, end);
-                Storage.SaveToFile(allFailed, "allfailed", Formatting.Indented, start, end);
+                Storage.SaveToFile(directory, allCurse, start, end);
+                Storage.SaveToFile(directory, allValid, "allvalid", Formatting.None, start, end);
+                Storage.SaveToFile(directory, allFailed, "allfailed", Formatting.Indented, start, end);
 
                 HashSet<string> query = allValid.GroupBy(x => x.FolderName)
                                     .Where(g => g.Count() > 1)
@@ -254,7 +256,7 @@ namespace AddonScraper
                                     .ToHashSet();
                 List<AddonData> allDuplicates = allValid.Where(ad => query.Contains(ad.FolderName)).ToList();
                 allDuplicates.Sort((x, y) => x.FolderName.CompareTo(y.FolderName));
-                Storage.SaveToFile(allDuplicates, "duplicates", Formatting.Indented, start, end);
+                Storage.SaveToFile(directory, allDuplicates, "duplicates", Formatting.Indented, start, end);
             }
 
             logger.LogInformation("End");
@@ -432,21 +434,6 @@ namespace AddonScraper
 
             AddonData addonData = curseAddon.toAddonData();
 
-            //for (int i = 0; i < tries; i++)
-            //{
-            //    try
-            //    {
-            //        addonData.ProjectUrl = await Pure.Version.FindProjectUrlFor(httpClient, addonData.ProjectName);
-            //        if (!string.IsNullOrEmpty(addonData.ProjectUrl))
-            //        {
-            //            break;
-            //        }
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        logger.LogError(e, nameof(FromCurseToAddonData) + " try: " + i + "/" + tries);
-            //    }
-            //}
             for (int i = 0; i < tries; i++)
             {
                 try
