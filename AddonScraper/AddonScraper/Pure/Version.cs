@@ -11,7 +11,7 @@ namespace AddonScraper.Pure
 {
     public static class Version
     {
-        private static readonly Logger logger = LogManager.GetLogger("AddonScraper");       
+        private static readonly Logger logger = LogManager.GetLogger("AddonScraper");
 
         public static async Task<string> FindProjectUrlFor(HttpClient httpClient, string projectName)
         {
@@ -22,32 +22,26 @@ namespace AddonScraper.Pure
             return await GetUrl(httpClient, projectName);
         }
 
-        public static async Task<List<Download>> DownloadVersionsFor(HttpClient httpClient, string projectUrl)
+        public static async Task<List<Download>> DownloadVersionsFor(HttpClient httpClient, string projectName)
         {
-            if (string.IsNullOrEmpty(projectUrl))
-            {
-                return new List<Download>();
-            }
-
-            return await FromCurse(httpClient, projectUrl);
+            return await FromCurse(httpClient, projectName);
         }
 
-        private static async Task<List<Download>> FromCurse(HttpClient httpClient, string projectUrl)
+        private static async Task<List<Download>> FromCurse(HttpClient httpClient, string projectName)
         {
-            var uri = new Uri(projectUrl + "/files");
+            var uri = new Uri(Consts.CURSE_FORGE_WOW_ADDONS + projectName + "/files");
 
-            try
-            {
-                var htmlPage = await httpClient.GetStringAsync(uri);
-                var projectSite = Parser.FromProjectUrlToEnum(projectUrl);
-                return HtmlParser.FromPageToDownloads(projectSite, htmlPage);
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, nameof(FromCurse)+ " for "+projectUrl);
-            }
+            //try
+            //{
+            var htmlPage = await httpClient.GetStringAsync(uri);
+            return HtmlParser.FromPageToDownloads(Enums.PROJECT_SITE.CURSEFORGE, htmlPage);
+            //}
+            //catch (Exception ex)
+            //{
+            //    logger.Error(ex, nameof(FromCurse) + " for " + projectName);
+            //}
 
-            return new List<Download>();
+            // return new List<Download>();
         }
 
         //private static async Task<List<Download>> FromElvUI(Core.Models.Addon addon)
@@ -76,8 +70,6 @@ namespace AddonScraper.Pure
         //    return new List<Download>();
         //}
 
-       
-
         private static async Task<string> GetUrl(HttpClient httpClient, string projectName)
         {
             if (projectName.ToLower().Equals("elvui"))
@@ -86,7 +78,7 @@ namespace AddonScraper.Pure
             }
 
             var uri = new Uri(@"https://www.curseforge.com/wow/addons/" + projectName);
-           
+
             try
             {
                 var response = await httpClient.GetStringAsync(uri);
@@ -97,11 +89,10 @@ namespace AddonScraper.Pure
             }
             catch (Exception ex)
             {
-               logger.Error(ex,nameof(GetUrl)+" for "+projectName);
+                logger.Error(ex, nameof(GetUrl) + " for " + projectName);
             }
-            
+
             return String.Empty;
         }
-
     }
 }

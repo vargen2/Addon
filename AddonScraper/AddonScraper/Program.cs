@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using NLog;
 using NLog.Config;
 using NLog.Extensions.Logging;
+using NLog.Fluent;
 using NLog.Targets;
 using System;
 using System.Collections.Concurrent;
@@ -299,7 +300,7 @@ namespace AddonScraper
             string zipFile = string.Empty;
             try
             {
-                zipFile = await Update.DLWithHttpProgress(httpClient, addonData.ProjectUrl, addonData.Downloads[0]);
+                zipFile = await Update.DLWithHttpProgress(httpClient, addonData.Downloads[0]);
             }
             catch (Exception e)
             {
@@ -417,7 +418,6 @@ namespace AddonScraper
                     FolderName = foundData.FolderName,
                     NrOfDownloads = foundData.NrOfDownloads,
                     ProjectName = foundData.ProjectName,
-                    ProjectUrl = foundData.ProjectUrl,
                     Size = foundData.Size,
                     SubFolders = foundData.SubFolders,
                     UpdatedEpoch = foundData.UpdatedEpoch
@@ -432,26 +432,26 @@ namespace AddonScraper
 
             AddonData addonData = curseAddon.toAddonData();
 
+            //for (int i = 0; i < tries; i++)
+            //{
+            //    try
+            //    {
+            //        addonData.ProjectUrl = await Pure.Version.FindProjectUrlFor(httpClient, addonData.ProjectName);
+            //        if (!string.IsNullOrEmpty(addonData.ProjectUrl))
+            //        {
+            //            break;
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        logger.LogError(e, nameof(FromCurseToAddonData) + " try: " + i + "/" + tries);
+            //    }
+            //}
             for (int i = 0; i < tries; i++)
             {
                 try
                 {
-                    addonData.ProjectUrl = await Pure.Version.FindProjectUrlFor(httpClient, addonData.ProjectName);
-                    if (!string.IsNullOrEmpty(addonData.ProjectUrl))
-                    {
-                        break;
-                    }
-                }
-                catch (Exception e)
-                {
-                    logger.LogError(e, nameof(FromCurseToAddonData) + " try: " + i + "/" + tries);
-                }
-            }
-            for (int i = 0; i < tries; i++)
-            {
-                try
-                {
-                    addonData.Downloads = await Pure.Version.DownloadVersionsFor(httpClient, addonData.ProjectUrl);
+                    addonData.Downloads = await Pure.Version.DownloadVersionsFor(httpClient, addonData.ProjectName);
                     if (addonData.Downloads.Count > 1)
                     {
                         return addonData;
@@ -479,9 +479,16 @@ namespace AddonScraper
                 }
                 else
                 {
-                    List<CurseAddon> addonsFromPage = HtmlParser.FromCursePageToCurseAddons(page, logger);
-                    addons.AddRange(addonsFromPage);
-                    logger.LogInformation("Page: " + i + ", Added: " + addonsFromPage.Count);
+                    try
+                    {
+                        List<CurseAddon> addonsFromPage = HtmlParser.FromCursePageToCurseAddons(page);
+                        addons.AddRange(addonsFromPage);
+                        logger.LogInformation("Page: " + i + ", Added: " + addonsFromPage.Count);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.LogError(e, nameof(Program.Scrape));
+                    }
                 }
             }
 

@@ -82,42 +82,42 @@ namespace AddonScraperTests
             }
         }
 
-        [TestMethod]
-        public async Task TestDownloadFile()
-        {
-            using (HttpClient httpClient = new HttpClient())
-            {
-                var addonData = new AddonData() { ProjectName = "weakauras-2" };
-                addonData.ProjectUrl = "https://www.wowace.com/projects/weakauras-2";
-                var downloads = await AddonScraper.Pure.Version.DownloadVersionsFor(httpClient, addonData.ProjectUrl);
-                addonData.Downloads = downloads;
-                Assert.IsNotNull(downloads);
-                Assert.AreEqual(25, downloads.Count);
-                Assert.IsTrue(downloads[0].DownloadLink.Contains("/projects/weakauras-2/files/"), "Fail: " + downloads[0].DownloadLink);
+        //[TestMethod]
+        //public async Task TestDownloadFile()
+        //{
+        //    using (HttpClient httpClient = new HttpClient())
+        //    {
+        //        var addonData = new AddonData() { ProjectName = "weakauras-2" };
+        //        addonData.ProjectUrl = "https://www.wowace.com/projects/weakauras-2";
+        //        var downloads = await AddonScraper.Pure.Version.DownloadVersionsFor(httpClient, addonData.ProjectUrl);
+        //        addonData.Downloads = downloads;
+        //        Assert.IsNotNull(downloads);
+        //        Assert.AreEqual(25, downloads.Count);
+        //        Assert.IsTrue(downloads[0].DownloadLink.Contains("/projects/weakauras-2/files/"), "Fail: " + downloads[0].DownloadLink);
 
-                var zipFile = await AddonScraper.Update.DLWithHttpProgress(httpClient, "https://www.wowace.com/projects/weakauras-2", downloads[0]);
-                Assert.IsTrue(File.Exists(zipFile));
+        //        var zipFile = await AddonScraper.Update.DLWithHttpProgress(httpClient, "https://www.wowace.com/projects/weakauras-2", downloads[0]);
+        //        Assert.IsTrue(File.Exists(zipFile));
 
-                //  var folders =  AddonScraper.Update.UpdateAddon2(addonData, zipFile);
-            }
-        }
+        //        //  var folders =  AddonScraper.Update.UpdateAddon2(addonData, zipFile);
+        //    }
+        //}
 
-        [TestMethod]
-        public async Task TestProcess()
-        {
-            using (HttpClient httpClient = new HttpClient())
-            {
-                var addonData = new AddonData() { ProjectName = "weakauras-2" };
-                addonData.ProjectUrl = "https://www.wowace.com/projects/weakauras-2";
-                var downloads = await AddonScraper.Pure.Version.DownloadVersionsFor(httpClient, addonData.ProjectUrl);
-                addonData.Downloads = downloads;
-                Assert.IsNotNull(downloads);
-                Assert.AreEqual(25, downloads.Count);
-                Assert.IsTrue(downloads[0].DownloadLink.Contains("/projects/weakauras-2/files/"), "Fail: " + downloads[0].DownloadLink);
+        //[TestMethod]
+        //public async Task TestProcess()
+        //{
+        //    using (HttpClient httpClient = new HttpClient())
+        //    {
+        //        var addonData = new AddonData() { ProjectName = "weakauras-2" };
+        //        addonData.ProjectUrl = "https://www.wowace.com/projects/weakauras-2";
+        //        var downloads = await AddonScraper.Pure.Version.DownloadVersionsFor(httpClient, addonData.ProjectUrl);
+        //        addonData.Downloads = downloads;
+        //        Assert.IsNotNull(downloads);
+        //        Assert.AreEqual(25, downloads.Count);
+        //        Assert.IsTrue(downloads[0].DownloadLink.Contains("/projects/weakauras-2/files/"), "Fail: " + downloads[0].DownloadLink);
 
-                var result = await Program.ProccessAddonData(httpClient, addonData);
-                Assert.IsTrue(result.Item1);
-            }
-        }
+        //        var result = await Program.ProccessAddonData(httpClient, addonData);
+        //        Assert.IsTrue(result.Item1);
+        //    }
+        //}
     }
 }

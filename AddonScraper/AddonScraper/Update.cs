@@ -3,7 +3,6 @@ using AddonToolkit.Model;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -16,7 +15,6 @@ namespace AddonScraper
     public static class Update
     {
         private static readonly Logger logger = LogManager.GetLogger("AddonScraper");
-        
 
         private static string GetDownLoadLink(string projectUrl, Download download)
         {
@@ -30,15 +28,14 @@ namespace AddonScraper
             }
         }
 
-        public static async Task<string> DLWithHttpProgress(HttpClient httpClient, string projectUrl, Download download)
+        public static async Task<string> DLWithHttpProgress(HttpClient httpClient, Download download)
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
             {
                 return null;
             }
-            string downloadLink = GetDownLoadLink(projectUrl, download);
 
-           // Uri source = new Uri(downloadLink);
+            string downloadLink = "https://www.curseforge.com" + download.DownloadLink + "/file";
 
             using (var fileStream = File.Create(@".\temp\" + Util.RandomString(12) + ".zip"))
             {
@@ -51,12 +48,10 @@ namespace AddonScraper
                 }
                 catch (Exception e)
                 {
-                    logger.Error(e,"Something went wrong in "+ nameof(DLWithHttpProgress)+" for "+projectUrl);
+                    logger.Error(e, "Something went wrong in " + nameof(DLWithHttpProgress) + " for " + downloadLink);
                     return string.Empty;
                 }
-               
             }
-
         }
 
         //private static async Task<File> DownloadFile(FileStream destinationFile, Uri source)
@@ -93,7 +88,6 @@ namespace AddonScraper
         //        var folders = await extractFolder.GetFoldersAsync();
         //        var gameFolder = await StorageFolder.GetFolderFromPathAsync(addon.Game.AbsolutePath);
 
-
         //        //var tasks = folders.SelectMany(folder => CopyFolderAsync2(folder, gameFolder));
         //        //await Task.WhenAll(tasks);
         //        var foldersAsList = new List<StorageFolder>(folders);
@@ -120,17 +114,13 @@ namespace AddonScraper
         //    return (extractFolderPath, subFoldersToDelete);
         //}
 
-
-
-        public static (int,List<string>) UpdateAddon2(string filePath)
+        public static (int, List<string>) UpdateAddon2(string filePath)
         {
-
             var subFoldersToDelete = new HashSet<string>();
             int entries = 0;
             try
             {
                 //logger.Info("Extract: " + addon.ProjectName);
-                
 
                 using (ZipArchive archive = ZipFile.OpenRead(filePath))
                 {
@@ -141,24 +131,20 @@ namespace AddonScraper
                             var folderName = entry.FullName.Split("/").FirstOrDefault();
                             if (folderName != null)// && !folderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase))
                             {
-
                                 subFoldersToDelete.Add(folderName);
-
                             }
                         }
                         entries++;
                     }
                 }
 
-                ZipFile.ExtractToDirectory(filePath, @".\temp\"+ Path.GetFileNameWithoutExtension(filePath));
-
-                
+                ZipFile.ExtractToDirectory(filePath, @".\temp\" + Path.GetFileNameWithoutExtension(filePath));
             }
             catch (Exception e)
             {
-                logger.Error(e," UpdateAddon. ");
+                logger.Error(e, nameof(Update.UpdateAddon2));
             }
-            return (entries,subFoldersToDelete.ToList());
+            return (entries, subFoldersToDelete.ToList());
         }
 
         //private static void UnzipProgress(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -167,7 +153,6 @@ namespace AddonScraper
         //    Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.
         //        RunAsync(CoreDispatcherPriority.Normal, () =>
         //        {
-
         //            zipHelper.Progressable.Progress = zipHelper.Progress;
         //        });
 
@@ -186,7 +171,6 @@ namespace AddonScraper
 
         //internal static async Task CopyFolderAsync(StorageFolder source, StorageFolder destinationContainer)
         //{
-
         //    StorageFolder destinationFolder = null;
         //    destinationFolder = await destinationContainer.CreateFolderAsync(source.Name, CreationCollisionOption.OpenIfExists);
         //    var files = await source.GetFilesAsync();
@@ -230,7 +214,6 @@ namespace AddonScraper
         ////Dont use, seems unstable. Getting stack owerflow
         ////////////////////internal static List<Task> CopyFolderAsync2(StorageFolder source, StorageFolder destinationContainer)
         ////////////////////{
-
         ////////////////////    var (destinationFolder, items) = Task.Run(async () =>
         ////////////////////     {
         ////////////////////         StorageFolder destination = await destinationContainer.CreateFolderAsync(source.Name, CreationCollisionOption.OpenIfExists);
@@ -302,14 +285,9 @@ namespace AddonScraper
         //    }
         //    catch (Exception)
         //    {
-
         //    }
 
-
-
         //}
-
-
 
         //internal async static Task Cleanup2(string fileName)
         //{
@@ -371,8 +349,8 @@ namespace AddonScraper
         //}
 
         ////
-        //// https://stackoverflow.com/questions/54942686/fastest-way-to-move-folder-to-another-place-in-uwp 
-        //// 
+        //// https://stackoverflow.com/questions/54942686/fastest-way-to-move-folder-to-another-place-in-uwp
+        ////
         ////static async Task MoveContentFast(IStorageFolder source, IStorageFolder destination)
         ////{
         ////    await Task.Run(() =>
@@ -504,7 +482,6 @@ namespace AddonScraper
         ////    WRITE_THROUGH = 0x80000000
         ////}
 
-
         ////////private static async void extract(StorageFolder SF, string zipFileName)
         ////////{
         ////////    // StorageFolder SF = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync("SampleBook");
@@ -553,7 +530,6 @@ namespace AddonScraper
         //                    Progressable.Progress = progress;
         //                });
         //        }
-
 
         //    }
         //}

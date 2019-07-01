@@ -10,14 +10,12 @@ namespace AddonToolkit.Model
         public int Files { get; set; }
 
         public string ProjectName { get; set; }
-        public string ProjectUrl { get; set; }
+
         public string Title { get; set; }
         public string Description { get; set; }
         public long NrOfDownloads { get; set; }
         public long UpdatedEpoch { get; set; }
         public long CreatedEpoch { get; set; }
-
-
 
         public List<Download> Downloads { get; set; }
     }

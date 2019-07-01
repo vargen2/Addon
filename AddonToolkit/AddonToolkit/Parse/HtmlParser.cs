@@ -1,11 +1,11 @@
-﻿using AddonToolkit.Model;
+﻿using AddonToolkit.AddonToolkit.Parse;
+using AddonToolkit.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Diagnostics;
 using static AddonToolkit.Model.Enums;
-using Microsoft.Extensions.Logging;
 
 namespace AddonToolkit.Parse
 {
@@ -20,11 +20,8 @@ namespace AddonToolkit.Parse
 
             switch (projectSite)
             {
-                case PROJECT_SITE.WOWACE:
-                    return FromWowaceToDownloads(page);
-
                 case PROJECT_SITE.CURSEFORGE:
-                    return FromWowCurseForgeToDownloads(page);
+                    return HtmlAgilityParser.FromCurseForgeToDownloads(page);
 
                 case PROJECT_SITE.ELVUI:
                     return FromElvUiToDownloads(page);
@@ -32,67 +29,45 @@ namespace AddonToolkit.Parse
             throw new ArgumentException("Invalid enum", nameof(projectSite));
         }
 
-        public static List<Download> FromWowaceToDownloads(string htmlPage)
-        {
-            var downloads = new List<Download>();
-            int index1 = htmlPage.IndexOf("<div class=\"listing-body\">");
-            int index2 = htmlPage.IndexOf("</table>");
-            string data = htmlPage.Substring(index1, index2 - index1);
-            var strings = Regex.Split(data, "<tr class=\"project-file-list-item\">").Skip(1).ToList();
+        //    public static List<Download> FromCurseForgeToDownloads(string htmlPage)
+        //    {
+        //        var downloads = new List<Download>();
 
-            foreach (var s in strings)
-            {
-                string temp = Parser.Parse(s, "<td class=\"project-file-release-type\">", "</td>");
-                string release = Parser.Parse(temp, "title=\"", "\"></div>");
+        //        var strings = Regex.Split(htmlPage, @"<div class=""w-5 h-5 bg-green-500 flex items-center justify-center text-white mx-auto rounded-sm"">").Skip(1).ToList();
 
-                string title = Parser.Parse(s, "data-name=\"", "\">");
-                string fileSize = Parser.Parse(s, "<td class=\"project-file-size\">", "</td>").Trim();
+        //        foreach (var s in strings)
+        //        {
+        //            // Console.WriteLine(s.Substring(0, 49));
+        //            string release = Parser.Parse(s, "<span class=\"text-white\">", "</span>");
 
-                string a = Parser.Parse(s, "data-epoch=\"", "\"");
-                var dateUploaded = DateTimeOffset.FromUnixTimeSeconds(long.Parse(a)).LocalDateTime;
+        //            string temp = Parser.Parse(s, "<a data-action=\"file-link\"", "/a>");
+        //            string title = Parser.Parse(temp, "\">", "<");
 
-                string gameVersion = Parser.Parse(s, "<span class=\"version-label\">", "</span>");
+        //            string fileSize = Parser.Parse(s, @"</a>
 
-                string tempDL = Parser.Parse(s, "<td class=\"project-file-downloads\">", "</td>").Replace(",", "").Trim();
+        //</td>
+        //<td>", "</td>").Trim();
 
-                long dls = long.Parse(tempDL);
-                string downloadLink = Parser.Parse(s, " href=\"", "\"");
+        //            string a = Parser.Parse(s, "data-epoch=\"", "\"");
+        //            var dateUploaded = DateTimeOffset.FromUnixTimeSeconds(long.Parse(a)).LocalDateTime;
 
-                downloads.Add(new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink));
-            }
-            return downloads;
-        }
+        //            string gameVersion = Parser.Parse(s, "<div class=\"mr-2\">", "</div>");
 
-        public static List<Download> FromWowCurseForgeToDownloads(string htmlPage)
-        {
-            var downloads = new List<Download>();
-            int index1 = htmlPage.IndexOf("<div class=\"listing-body\">");
-            int index2 = htmlPage.IndexOf("</table>");
-            string data = htmlPage.Substring(index1, index2 - index1);
-            var strings = Regex.Split(data, "<tr class=\"project-file-list-item\">").Skip(1).ToList();
+        //            string tempDL = Parser.Parse(s, @"</div>
+        //    </div>
+        //</td>
+        //<td>", "</td>").Replace(",", "").Trim();
 
-            foreach (var s in strings)
-            {
-                string temp = Parser.Parse(s, "<td class=\"project-file-release-type\">", "</td>");
-                string release = Parser.Parse(temp, "title=\"", "\"></div>");
-
-                string title = Parser.Parse(s, "data-name=\"", "\">");
-                string fileSize = Parser.Parse(s, "<td class=\"project-file-size\">", "</td>").Trim();
-
-                string a = Parser.Parse(s, "data-epoch=\"", "\"");
-                var dateUploaded = DateTimeOffset.FromUnixTimeSeconds(long.Parse(a)).LocalDateTime;
-
-                string gameVersion = Parser.Parse(s, "<span class=\"version-label\">", "</span>");
-
-                string tempDL = Parser.Parse(s, "<td class=\"project-file-downloads\">", "</td>").Replace(",", "").Trim();
-
-                long dls = long.Parse(tempDL);
-                string downloadLink = Parser.Parse(s, " href=\"", "\"");
-
-                downloads.Add(new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink));
-            }
-            return downloads;
-        }
+        //            long dls = long.Parse(tempDL);
+        //            string downloadLink = Parser.Parse(s, @"<div class=""mx-auto flex justify-center"">
+        //            <a href=""", "\" ");
+        //            var obj = new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink);
+        //            Console.WriteLine(obj.ToStringManyLines());
+        //            //downloads.Add(new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink));
+        //            downloads.Add(obj);
+        //        }
+        //        return downloads;
+        //    }
 
         public static List<Download> FromElvUiToDownloads(string htmlPage)
         {
@@ -142,57 +117,42 @@ namespace AddonToolkit.Parse
             }
         }
 
-        public static List<CurseAddon> FromCursePageToCurseAddons(string page, ILogger log = null)
+        public static List<CurseAddon> FromCursePageToCurseAddons(string page)
         {
             var addons = new List<CurseAddon>();
-            var strings = new List<string>();
-            try
-            {
-                log?.LogInformation("page.Length, {page.Length}!", page.Length);
-                strings = Regex.Split(page, "<div class=\"project-listing-row").Skip(1).ToList();
-                log?.LogInformation("strings.count {strings.Count}", strings.Count);
-            }
-            catch (Exception e)
-            {
-                log?.LogError(e, nameof(FromCursePageToCurseAddons));
-                return addons;
-            }
+            var strings = Regex.Split(page, "<div class=\"project-listing-row").Skip(1).ToList();
+
             foreach (var s in strings)
             {
-                try
+                var url = Parser.Parse(s, "<a href=\"/wow/addons/", "\"").Trim();
+                var titleHtml = Parser.Parse(s, "<h3 class=\"text-primary-500 font-bold text-lg hover:no-underline\">", "</h3>").Trim();
+                var title = System.Net.WebUtility.HtmlDecode(titleHtml);
+                var descriptionHtml = Parser.Parse(s, "<p class=\"text-sm leading-snug\">", "</p>").Trim();
+                var description = System.Net.WebUtility.HtmlDecode(descriptionHtml);
+
+                var downloadsString = Parser.Parse(s, "<div class=\"flex my-1\">\r\n" +
+                    "            <span class=\"mr-2 text-xs text-gray-500\">", " Downloads</span>").Trim();
+                long downloads = Parser.FromStringDownloadToLong(downloadsString);
+
+                var updatedString = Parser.Parse(s, "Updated <abbr", "</abbr></span>");
+                var updatedEpochString = Parser.Parse(updatedString, "data-epoch=\"", "\"");
+                var updated = long.Parse(updatedEpochString);
+
+                var createdString = Parser.Parse(s, "Created <abbr", "</abbr></span>");
+                var createdEpochString = Parser.Parse(createdString, "data-epoch=\"", "\"");
+                var created = long.Parse(createdEpochString);
+
+                addons.Add(new CurseAddon()
                 {
-                    var url = Parser.Parse(s, "<a href=\"/wow/addons/", "\">").Trim();
-                    var titleHtml = Parser.Parse(s, "<h2 class=\"list-item__title strong mg-b-05\">", "</h2>").Trim();
-                    var title = System.Net.WebUtility.HtmlDecode(titleHtml);
-                    var descriptionHtml = Parser.Parse(s, "<p title=\"", "\">").Trim();
-                    var description = System.Net.WebUtility.HtmlDecode(descriptionHtml);
-
-                    var downloadsString = Parser.Parse(s, "<span class=\"has--icon count--download\">", "</span>").Replace(",", "").Trim();
-                    long downloads = long.Parse(downloadsString);
-
-                    var updatedString = Parser.Parse(s, "<span class=\"has--icon date--updated\">", "</abbr></span>");
-                    var updatedEpochString = Parser.Parse(updatedString, "data-epoch=\"", "\">");
-                    var updated = long.Parse(updatedEpochString);
-
-                    var createdString = Parser.Parse(s, "<span class=\"has--icon date--created\">", "</abbr></span>");
-                    var createdEpochString = Parser.Parse(createdString, "data-epoch=\"", "\">");
-                    var created = long.Parse(createdEpochString);
-
-                    addons.Add(new CurseAddon()
-                    {
-                        AddonURL = url,
-                        Title = title,
-                        Description = description,
-                        Downloads = downloads,
-                        UpdatedEpoch = updated,
-                        CreatedEpoch = created
-                    });
-                }
-                catch (Exception e)
-                {
-                    log?.LogError(e, nameof(FromCursePageToCurseAddons));
-                }
+                    AddonURL = url,
+                    Title = title,
+                    Description = description,
+                    Downloads = downloads,
+                    UpdatedEpoch = updated,
+                    CreatedEpoch = created
+                });
             }
+
             return addons;
         }
     }
