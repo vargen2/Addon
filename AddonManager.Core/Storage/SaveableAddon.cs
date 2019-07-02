@@ -1,4 +1,5 @@
 ﻿using AddonManager.Core.Models;
+using AddonToolkit.Model;
 using System.Collections.Generic;
 
 namespace AddonManager.Core.Storage
@@ -18,7 +19,6 @@ namespace AddonManager.Core.Storage
         public string GameVersion { get; set; }
         public string Status { get; set; }
         public HashSet<string> SubFolders { get; set; }
-
 
         public override string ToString()
         {
@@ -47,7 +47,5 @@ namespace AddonManager.Core.Storage
                 SubFolders = this.SubFolders ?? new HashSet<string>()
             };
         }
-
-
     }
 }

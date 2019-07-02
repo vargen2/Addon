@@ -1,5 +1,6 @@
 ﻿using AddonManager.Core.Helpers;
 using AddonManager.Core.Models;
+using AddonToolkit.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

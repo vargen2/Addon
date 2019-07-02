@@ -2,6 +2,7 @@
 using AddonManager.Core.Models;
 using AddonManager.Core.Storage;
 using AddonManager.Helpers;
+using AddonToolkit.Model;
 using Microsoft.Toolkit.Uwp.Helpers;
 using System;
 using System.Collections.Generic;
@@ -41,7 +42,6 @@ namespace AddonManager.Logic
             catch (Exception e)
             {
                 Debug.WriteLine("ERROR when saveing session, " + e.Message);
-
             }
         }
 
@@ -65,8 +65,6 @@ namespace AddonManager.Logic
                 }
             }
 
-
-
             // Debug.WriteLine("Loaded from " + localFolder.Path);
         }
 
@@ -75,7 +73,6 @@ namespace AddonManager.Logic
         //    var assets = await APP_INSTALLED_FOLDER.GetFolderAsync("Assets");
         //    return await assets.ReadAsync<HashSet<string>>("knownsubfolders");
         //}
-
 
         public static async Task<HashSet<string>> LoadKnownSubFoldersFromUser()
         {
@@ -97,11 +94,8 @@ namespace AddonManager.Logic
             }
         }
 
-
-
         public static async Task<List<AddonData>> LoadAddonData()
         {
-
             using (var stream = await StreamHelper.GetPackagedFileStreamAsync("Assets/allvalidaddondata1-340.json"))
             {
                 var fileContent = await stream.ReadTextAsync();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 // TODO add string FileSizeString and  int FileSizeBytes
 namespace AddonToolkit.Model
@@ -37,6 +38,17 @@ namespace AddonToolkit.Model
         public string ToStringManyLines()
         {
             return $"{nameof(ReleaseType)}: {ReleaseType},\r\n{nameof(Version)}: {Version},\r\n{nameof(FileSize)}: {FileSize},\r\n{nameof(DateUploaded)}: {DateUploaded},\r\n{nameof(GameVersion)}: {GameVersion},\r\n{nameof(NrOfDownloads)}: {NrOfDownloads},\r\n{nameof(DownloadLink)}: {DownloadLink}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Download download &&
+                   Version == download.Version;
+        }
+
+        public override int GetHashCode()
+        {
+            return -1677367089 + EqualityComparer<string>.Default.GetHashCode(Version);
         }
     }
 }

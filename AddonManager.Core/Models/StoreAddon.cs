@@ -1,4 +1,4 @@
-﻿using AddonManager.Core.Storage;
+﻿using AddonToolkit.Model;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -8,9 +8,9 @@ namespace AddonManager.Core.Models
     public class StoreAddon : INotifyPropertyChanged, IProgressable
     {
         public AddonData AddonData { get; }
-        public string Title { get => AddonData.Title; }
-        public string Description { get => AddonData.Description; }
-        public long NrOfDownloads { get => AddonData.NrOfDownloads; }
+        public string Title => AddonData.Title;
+        public string Description => AddonData.Description;
+        public long NrOfDownloads => AddonData.NrOfDownloads;
         public DateTime Updated { get; }
         public DateTime Created { get; }
         public string UpdatedFormated { get; }
@@ -23,9 +23,7 @@ namespace AddonManager.Core.Models
             Created = DateTimeOffset.FromUnixTimeSeconds(addonData.CreatedEpoch).UtcDateTime;
             UpdatedFormated = Updated.ToString("yyyy'-'MM'-'dd");
             CreatedFormated = Created.ToString("yyyy'-'MM'-'dd");
-
         }
-
 
         public const string INSTALLED = "Installed";
         public const string INSTALLING = "Installing";
@@ -38,6 +36,7 @@ namespace AddonManager.Core.Models
         public bool IsUnknown => status.Equals(UNKNOWN);
 
         private string status = NOTINSTALLED;
+
         public string Status
         {
             get => status;
@@ -51,8 +50,6 @@ namespace AddonManager.Core.Models
                 NotifyPropertyChanged("IsInstalling");
                 NotifyPropertyChanged("IsNotInstalled");
                 NotifyPropertyChanged("IsUnknown");
-
-
             }
         }
 

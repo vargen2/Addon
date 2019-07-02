@@ -1,6 +1,6 @@
 ﻿using AddonManager.Core.Helpers;
 using AddonManager.Core.Models;
-using AddonManager.Core.Storage;
+using AddonToolkit.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,6 @@ namespace AddonManager.Logic
 {
     public static class Parse
     {
-
         public static List<Download> FromPageToDownloads(Core.Models.Addon addon, string page)
         {
             if (addon.ProjectUrl.Contains("https://wow.curseforge.com/projects/"))
@@ -196,7 +195,6 @@ namespace AddonManager.Logic
         internal static string CreateGameDisplayName(string fullPath)
         {
             var path = fullPath.ToLower();
-
 
             if (path.Contains("_classic_beta_"))
             {

@@ -295,7 +295,11 @@
       <Name>AddonManager.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="AddonToolkit">
+      <HintPath>..\..\AddonToolkit\AddonToolkit\bin\Release\netcoreapp2.1\AddonToolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

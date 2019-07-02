@@ -1,5 +1,6 @@
 ﻿using AddonManager.Core.Helpers;
 using AddonManager.Core.Storage;
+using AddonToolkit.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,12 +11,12 @@ namespace AddonManager.Core.Models
     {
         public const string EMPTY_GAME = "No Game found";
         private Game _selectedGame;
+
         public Game SelectedGame
         {
             get => _selectedGame;
             set
             {
-
                 Set(ref _selectedGame, value);
                 OnPropertyChanged("IsNoGameSelected");
                 OnPropertyChanged("IsGameSelected");
@@ -74,7 +75,5 @@ namespace AddonManager.Core.Models
                 Games = this.Games.Select(g => g.AsSaveableGame()).ToList()
             };
         }
-
-
     }
 }

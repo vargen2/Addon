@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.28721.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddonManager", "AddonManager\AddonManager.csproj", "{25F7FB92-65B2-4838-A4C1-20E530A9CF3B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5993895E-93F0-4CAE-A96B-E247D1E6E9B4} = {5993895E-93F0-4CAE-A96B-E247D1E6E9B4}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddonManager.Core", "AddonManager.Core\AddonManager.Core.csproj", "{E6760120-C01E-44CA-9028-EC9F0D7ABDDA}"
 EndProject

@@ -1,5 +1,6 @@
 ﻿using AddonManager.Core.Helpers;
 using AddonManager.Core.Models;
+using AddonToolkit.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,12 +37,10 @@ namespace AddonManager.Logic
             {"dbm-icecrown", new List<string>{"deadly-boss-mods-wotlk"}},
             {"dbm-pandaria", new List<string>{"deadly-boss-mods-mop"}},
             {"dbm-outlands", new List<string>{"dbm-bc"}}
-
         };
 
         internal static async Task<string> FindProjectUrlFor(Core.Models.Addon addon)
         {
-
             var addonDatas = Singleton<Session>.Instance.AddonData.FindAll(ad => ad.FolderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase));
 
             if (addonDatas.Count == 1)
@@ -113,7 +112,6 @@ namespace AddonManager.Logic
             {
                 for (int i = 1; i < 5; i++)
                 {
-
                     var uri = new Uri(addon.ProjectUrl + "/files?page=" + i);
                     var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
                     var fresh = Parse.FromPageToDownloads(addon, htmlPage);
@@ -226,6 +224,5 @@ namespace AddonManager.Logic
             //}
             return string.Empty;
         }
-
     }
 }

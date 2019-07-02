@@ -1,5 +1,6 @@
 ﻿using AddonManager.Core.Helpers;
 using AddonManager.Core.Storage;
+using AddonToolkit.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
