@@ -72,6 +72,7 @@ namespace AddonManager.Views
             //    }
             //    return nameList;
             //}).ToList());
+            bool hasElvui = ViewModel.Session.SelectedGame.Addons.Any(a => a.ProjectUrl.Equals(Logic.Version.ELVUI));
             var addons = new HashSet<string>(ViewModel.Session.SelectedGame.Addons.Select(a => a.ProjectUrl)).ToHashSet();
             foreach (var storeAddon in ViewModel.Session.StoreAddons)
             {
@@ -80,7 +81,7 @@ namespace AddonManager.Views
                     continue;
                 }
 
-                if (addons.Contains(storeAddon.AddonData.ProjectName))
+                if (addons.Contains(storeAddon.AddonData.ProjectName) || (hasElvui && storeAddon.AddonData.ProjectName.Equals("elvui")))
                 {
                     storeAddon.Status = StoreAddon.INSTALLED;
                 }

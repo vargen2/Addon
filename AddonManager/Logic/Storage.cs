@@ -58,6 +58,16 @@ namespace AddonManager.Logic
             foreach (var saveableGame in saveableSession.Games)
             {
                 var game = saveableGame.AsGame();
+
+                foreach (var addon in game.Addons)
+                {
+                    if (addon.ProjectUrl.Contains("https://www.wowace") || addon.ProjectUrl.Contains("https://wow.curseforge"))
+                    {
+                        addon.ProjectUrl = string.Empty;
+                        addon.Downloads = new List<Download>();
+                    }
+                }
+
                 session.Games.Add(game);
                 if (saveableSession.SelectedGame.AbsolutePath.Equals(game.AbsolutePath))
                 {

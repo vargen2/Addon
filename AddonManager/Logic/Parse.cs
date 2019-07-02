@@ -106,22 +106,22 @@ namespace AddonManager.Logic
             return downloads;
         }
 
-        public static string FromPageToChanges(string htmlPage)
-        {
-            try
-            {
-                string section = Util.Parse2(htmlPage, "<section class=\"project-content", "</section>");
+        //public static string FromPageToChanges(string htmlPage)
+        //{
+        //    try
+        //    {
+        //        string section = Util.Parse2(htmlPage, "<section class=\"project-content", "</section>");
 
-                section = Regex.Replace(section, "href=\".*\"", "href=\"#\"");
+        //        section = Regex.Replace(section, "href=\".*\"", "href=\"#\"");
 
-                return section.Substring(section.IndexOf(">") + 1);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("[ERROR] FromPageToChanges, " + e.Message);
-                return string.Empty;
-            }
-        }
+        //        return section.Substring(section.IndexOf(">") + 1);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine("[ERROR] FromPageToChanges, " + e.Message);
+        //        return string.Empty;
+        //    }
+        //}
 
         public static string FromElvUiPageToChanges(string htmlPage)
         {
