@@ -1,6 +1,8 @@
 ﻿using AddonManager.Core.Helpers;
 using AddonManager.Core.Models;
+
 using AddonToolkit.Model;
+using AddonToolkit.Parse;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,21 +13,17 @@ namespace AddonManager.Logic
 {
     public static class Parse
     {
-        public static List<Download> FromPageToDownloads(Core.Models.Addon addon, string page)
+        public static List<Download> FromPageToDownloads(Addon addon, string page)
         {
-            if (addon.ProjectUrl.Contains("https://wow.curseforge.com/projects/"))
-            {
-                return FromWowCurseForgeToDownloads(page);
-            }
-            else if (addon.ProjectUrl.Contains("https://www.wowace.com/projects/"))
-            {
-                return FromWowaceToDownloads(page);
-            }
-            else if (addon.ProjectUrl.Equals(Version.ELVUI))
+            if (addon.ProjectUrl.Equals(Version.ELVUI))
             {
                 return FromElvUiToDownloads(page);
             }
-            return new List<Download>();
+            else
+            {
+                return HtmlAgilityParser.FromCurseForgeToDownloads(page);
+            }
+            //return new List<Download>();
         }
 
         public static List<Download> FromWowaceToDownloads(string htmlPage)

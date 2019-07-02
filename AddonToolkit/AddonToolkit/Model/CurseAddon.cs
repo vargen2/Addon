@@ -18,14 +18,13 @@
         {
             return new AddonData()
             {
-                ProjectName=this.AddonURL,
-                Title=this.Title,
-                Description=this.Description,
-                NrOfDownloads=this.Downloads,
-                UpdatedEpoch=this.UpdatedEpoch,
-                CreatedEpoch=this.CreatedEpoch
+                ProjectName = this.AddonURL,
+                Title = this.Title,
+                Description = this.Description,
+                NrOfDownloads = this.Downloads,
+                UpdatedEpoch = this.UpdatedEpoch,
+                CreatedEpoch = this.CreatedEpoch
             };
         }
-        
     }
 }

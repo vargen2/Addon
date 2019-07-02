@@ -54,7 +54,7 @@ namespace AddonManager.Logic
             Stream zipMemoryStream = await zipFile.OpenStreamForReadAsync();
 
             // Create zip archive to access compressed files in memory stream
-            using (ZipArchive zipArchive = new ZipArchive(zipMemoryStream, ZipArchiveMode.Read))
+            using (var zipArchive = new ZipArchive(zipMemoryStream, ZipArchiveMode.Read))
             {
                 //foreach (ZipArchiveEntry entry in zipArchive.Entries)
                 //{

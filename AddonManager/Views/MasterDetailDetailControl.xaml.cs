@@ -1,9 +1,4 @@
-﻿using Microsoft.Toolkit.Extensions;
-using Microsoft.Toolkit.Uwp.UI.Controls;
-using System;
-using System.Threading.Tasks;
-using Windows.UI.Core;
-using Windows.UI.Popups;
+﻿using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -21,14 +16,17 @@ namespace AddonManager.Views
 
         // Getter and Setter
         public static string GetHtmlString(DependencyObject obj) { return (string)obj.GetValue(HtmlStringProperty); }
-        public static void SetHtmlString(DependencyObject obj, string value) { obj.SetValue(HtmlStringProperty, value); }
+
+        public static void SetHtmlString(DependencyObject obj, string value)
+        {
+            obj.SetValue(HtmlStringProperty, value);
+        }
 
         private static void OnHtmlStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             //  Debug.WriteLine("OnHTMLChanged");
             if (d is WebView webView)
             {
-
                 var head = "<head><meta charset=\"UTF-8\"></head>";
                 var styles = "<style>html{font-family:'Segoe UI'; font-size:14px;}</style>";
                 var html = (string)e.NewValue;
@@ -37,7 +35,6 @@ namespace AddonManager.Views
                 {
                     styles = "<style>html{font-family:'Segoe UI';  font-size:14px; color:#fff;}</style>";
                 }
-
 
                 webView.NavigateToString(head + styles + html);
                 //var decoded = html.DecodeHtml();
@@ -53,15 +50,13 @@ namespace AddonManager.Views
                 //                   Content=mark,
                 //                   PrimaryButtonText="OK"
                 //               };
-                               
+
                 //              var res= await contentDialog.ShowAsync();
                 //               if (res == ContentDialogResult.Primary)
                 //               {
-
                 //               }
                 //           }
                 //       });
-                
             }
         }
     }
@@ -78,6 +73,11 @@ namespace AddonManager.Views
             {
                 return new Uri("https://www.curseforge.com/wow/addons");
             }
+            else if (!uri.Contains("https"))
+            {
+                return new Uri("https://www.curseforge.com/wow/addons/" + uri);
+            }
+
             return new Uri(uri);
         }
 
@@ -89,14 +89,10 @@ namespace AddonManager.Views
 
     public sealed partial class MasterDetailDetailControl : UserControl
     {
-
-
-
-
         public Core.Models.Addon MasterMenuItem
         {
-            get { return GetValue(MasterMenuItemProperty) as Core.Models.Addon; }
-            set { SetValue(MasterMenuItemProperty, value); }
+            get => GetValue(MasterMenuItemProperty) as Core.Models.Addon;
+            set => SetValue(MasterMenuItemProperty, value);
         }
 
         public static readonly DependencyProperty MasterMenuItemProperty = DependencyProperty.Register("MasterMenuItem", typeof(Core.Models.Addon), typeof(MasterDetailDetailControl), new PropertyMetadata(null, OnMasterMenuItemPropertyChanged));
@@ -104,7 +100,6 @@ namespace AddonManager.Views
         public MasterDetailDetailControl()
         {
             InitializeComponent();
-
         }
 
         private static void OnMasterMenuItemPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -128,31 +123,28 @@ namespace AddonManager.Views
         //    }
         //}
 
-        //string DisableScrollingJs = @"function RemoveScrolling()  
-        //                      {  
-        //                          var styleElement = document.createElement('style');  
-        //                          var styleText = 'body, html { overflow: hidden; }'  
-        //                          var headElements = document.getElementsByTagName('head');  
-        //                          styleElement.type = 'text/css';  
-        //                          if (headElements.length == 1)  
-        //                          {  
-        //                              headElements[0].appendChild(styleElement);  
-        //                          }  
-        //                          else if (document.head)  
-        //                          {  
-        //                              document.head.appendChild(styleElement);  
-        //                          }  
-        //                          if (styleElement.styleSheet)  
-        //                          {  
-        //                              styleElement.styleSheet.cssText = styleText;  
-        //                          }  
+        //string DisableScrollingJs = @"function RemoveScrolling()
+        //                      {
+        //                          var styleElement = document.createElement('style');
+        //                          var styleText = 'body, html { overflow: hidden; }'
+        //                          var headElements = document.getElementsByTagName('head');
+        //                          styleElement.type = 'text/css';
+        //                          if (headElements.length == 1)
+        //                          {
+        //                              headElements[0].appendChild(styleElement);
+        //                          }
+        //                          else if (document.head)
+        //                          {
+        //                              document.head.appendChild(styleElement);
+        //                          }
+        //                          if (styleElement.styleSheet)
+        //                          {
+        //                              styleElement.styleSheet.cssText = styleText;
+        //                          }
         //                      }";
-
-
 
         //private async void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         //{
-
         //    var heightString = await sender.InvokeScriptAsync("eval", new[] { "document.body.scrollHeight.toString()" });
 
         //    int height;
@@ -166,14 +158,8 @@ namespace AddonManager.Views
         //    }
         //}
 
-
-
-
-
-
         //private void ForegroundElement_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         //{
-
         //   // Debug.WriteLine("pressed");
         //    isPressed = true;
         //    xPrev = e.GetCurrentPoint(sender as UIElement).Position.X;
@@ -206,6 +192,5 @@ namespace AddonManager.Views
         //    //Debug.WriteLine("released");
         //    isPressed = false;
         //}
-
     }
 }

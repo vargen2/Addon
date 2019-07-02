@@ -1,12 +1,16 @@
-﻿using AddonToolkit.Model;
-using System;
-using System.Diagnostics;
-using static AddonToolkit.Model.Enums;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AddonToolkit.Parse
 {
     public static class Parser
     {
+        public static readonly Dictionary<string, string> RELEASE_TYPES = new Dictionary<string, string>() {
+            {"A","Alpha" },
+            {"B","Beta" },
+            {"R","Release" },
+            };
+
         public static DateTime SafeParseFromEpochString(string epoch)
         {
             if (long.TryParse(epoch, out long result))

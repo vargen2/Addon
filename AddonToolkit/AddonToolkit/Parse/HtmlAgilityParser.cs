@@ -1,9 +1,8 @@
 ﻿using AddonToolkit.Model;
-using AddonToolkit.Parse;
 using HtmlAgilityPack;
 using System.Collections.Generic;
 
-namespace AddonToolkit.AddonToolkit.Parse
+namespace AddonToolkit.Parse
 {
     public static class HtmlAgilityParser
     {
@@ -65,7 +64,7 @@ namespace AddonToolkit.AddonToolkit.Parse
             {
                 var cells = row.SelectNodes("td");
 
-                string release = cells[0].InnerText.Trim();
+                string release = Parser.RELEASE_TYPES[cells[0].InnerText.Trim()];
 
                 string title = cells[1].InnerText.Trim();
 

@@ -30,7 +30,7 @@ namespace AddonManager.Logic
 
             storeAddon.Status = StoreAddon.INSTALLING;
 
-            var tempAddon = new Core.Models.Addon(game, storeAddon.AddonData.FolderName, game.AbsolutePath + @"\" + storeAddon.AddonData.FolderName) { };
+            var tempAddon = new Addon(game, storeAddon.AddonData.FolderName, game.AbsolutePath + @"\" + storeAddon.AddonData.FolderName) { };
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(tempAddon);
             var download = tempAddon.SuggestedDownload;
             storeAddon.Message = "Downloading...";
@@ -43,7 +43,7 @@ namespace AddonManager.Logic
                 // TODO move to method
                 var trash = await Task.Run(() => Update.UpdateAddonOld(tempAddon, download, file, storeAddon));
                 tempAddon.CurrentDownload = download;
-                await Tasks.RefreshTocFileFor(new List<Core.Models.Addon>() { tempAddon });
+                await Tasks.RefreshTocFileFor(new List<Addon>() { tempAddon });
                 game.Addons.Add(tempAddon);
                 await Update.AddSubFolders(tempAddon, trash.Item2);
                 storeAddon.Status = StoreAddon.INSTALLED;
@@ -61,7 +61,7 @@ namespace AddonManager.Logic
 
                 try
                 {
-                    await Tasks.RefreshTocFileFor(new List<Core.Models.Addon>() { tempAddon });
+                    await Tasks.RefreshTocFileFor(new List<Addon>() { tempAddon });
                     game.Addons.Add(tempAddon);
                     await Update.AddSubFolders(tempAddon, trash);
 
@@ -84,7 +84,7 @@ namespace AddonManager.Logic
             storeAddon.Message = string.Empty;
         }
 
-        private static async Task<List<Core.Models.Addon>> AnotherInstall(StorageFile file, Game game)
+        private static async Task<List<Addon>> AnotherInstall(StorageFile file, Game game)
         {
             var extractFolderPath = Update.localFolder.Path + @"\" + file.Name.Replace(".zip", "");
             ZipFile.ExtractToDirectory(file.Path, extractFolderPath);
@@ -107,7 +107,7 @@ namespace AddonManager.Logic
             var tasks = await Task.WhenAll(folders.Select(Toc.FolderToTocFile));
 
             var newAddons = tasks.Where(tf => tf != null && !tf.IsKnownSubFolder)
-                 .Select(tf => new Core.Models.Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
+                 .Select(tf => new Addon(game, tf.StorageFolder.Name, tf.StorageFolder.Path)
                  {
                      Version = tf.Version,
                      GameVersion = tf.GameVersion,

@@ -70,7 +70,7 @@ namespace AddonManager
         //
         private async Task PreventFromSuspending()
         {
-            ExtendedExecutionSession newSession = new ExtendedExecutionSession();
+            var newSession = new ExtendedExecutionSession();
             newSession.Reason = ExtendedExecutionReason.Unspecified;
             newSession.Revoked += SessionRevoked;
 

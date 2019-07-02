@@ -16,7 +16,7 @@ namespace AddonManager.Logic
     public static class Storage
     {
         private static readonly StorageFolder LOCAL_FOLDER = ApplicationData.Current.LocalFolder;
-        private static readonly StorageFolder APP_INSTALLED_FOLDER = Package.Current.InstalledLocation;
+        // private static readonly StorageFolder APP_INSTALLED_FOLDER = Package.Current.InstalledLocation;
 
         public static async Task SaveSession()
         {
@@ -96,7 +96,7 @@ namespace AddonManager.Logic
 
         public static async Task<List<AddonData>> LoadAddonData()
         {
-            using (var stream = await StreamHelper.GetPackagedFileStreamAsync("Assets/allvalidaddondata1-340.json"))
+            using (var stream = await StreamHelper.GetPackagedFileStreamAsync("Assets/allvalidaddondata1-345.json"))
             {
                 var fileContent = await stream.ReadTextAsync();
                 var addonDatas = await Json.ToObjectAsync<List<AddonData>>(fileContent);
@@ -109,7 +109,7 @@ namespace AddonManager.Logic
                     UpdatedEpoch = 1557784800,
                     CreatedEpoch = 0,
                     ProjectName = "elvui",
-                    ProjectUrl = Version.ELVUI,
+                    //ProjectUrl = Version.ELVUI,
                     SubFolders = new HashSet<string>() { "ElvUI_Config", "ElvUI_OptionsUI" },
                     Files = 100,
                     Size = 100

@@ -42,7 +42,7 @@ namespace AddonManager.Views
         private async void UpdateButtonClick(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            var addon = button.Tag as Core.Models.Addon;
+            var addon = button.Tag as Addon;
             await Tasks.UpdateAddon(addon);
         }
 
@@ -51,7 +51,7 @@ namespace AddonManager.Views
             e.Handled = true;
             if (sender is FrameworkElement frameworkElement)
             {
-                FlyoutBase flyoutBase = FlyoutBase.GetAttachedFlyout(frameworkElement);
+                var flyoutBase = FlyoutBase.GetAttachedFlyout(frameworkElement);
                 flyoutBase.ShowAt(frameworkElement, new FlyoutShowOptions() { Position = e.GetPosition(frameworkElement) });
             }
         }
@@ -92,7 +92,7 @@ namespace AddonManager.Views
         {
             var menuflyuout = sender as MenuFlyout;
 
-            Core.Models.Addon addon = menuflyuout.Items.First().Tag as Core.Models.Addon;
+            var addon = menuflyuout.Items.First().Tag as Addon;
             MenuFlyoutItemBase temp = menuflyuout.Items.FirstOrDefault(item => item.Name.Equals("VersionsMenuFlyout"));
 
             if (temp != null)
@@ -110,7 +110,7 @@ namespace AddonManager.Views
                     {
                         if (addon.IsIgnored)
                         {
-                            ContentDialog updateAddonDialog = new ContentDialog()
+                            var updateAddonDialog = new ContentDialog()
                             {
                                 Title = "Can't update ignored addon",
                                 PrimaryButtonText = "Ok"
@@ -119,7 +119,7 @@ namespace AddonManager.Views
                         }
                         else
                         {
-                            ContentDialog updateAddonDialog = new ContentDialog()
+                            var updateAddonDialog = new ContentDialog()
                             {
                                 Title = "Update Addon?",
                                 Content = "Update to " + download.ReleaseType + " " + download.Version + "?",
@@ -150,7 +150,7 @@ namespace AddonManager.Views
 
             var res = ResourceLoader.GetForCurrentView();
             var appName = res.GetString("AppDisplayName");
-            ContentDialog dialog = new ContentDialog()
+            var dialog = new ContentDialog()
             {
                 Title = "Remove Game?",
                 Content = "Remove " + ViewModel.Session.SelectedGame.AbsolutePath + " from " + appName + "?",
@@ -184,32 +184,32 @@ namespace AddonManager.Views
         private async void MenuFlyoutItem_Click_Open_Edit_URL_DIALOG(object sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuFlyoutItem;
-            Core.Models.Addon addon = menuItem.Tag as Core.Models.Addon;
+            var addon = menuItem.Tag as Addon;
 
-            TextBlock textBlock = new TextBlock()
+            var textBlock = new TextBlock()
             {
                 Margin = new Thickness(0, 0, 0, 16),
                 TextWrapping = TextWrapping.Wrap,
                 Text = "Example: For https://www.curseforge.com/wow/addons/deadly-boss-mods You would type: deadly-boss-mods"
             };
-            TextBlock currentValueTextBlock = new TextBlock()
+            var currentValueTextBlock = new TextBlock()
             {
                 Margin = new Thickness(0, 0, 0, 16),
                 TextWrapping = TextWrapping.Wrap,
                 Text = "Current URL: " + addon.ProjectUrl
             };
-            TextBlock testResultTextBlock = new TextBlock()
+            var testResultTextBlock = new TextBlock()
             {
                 Margin = new Thickness(0, 0, 0, 16),
                 TextWrapping = TextWrapping.Wrap,
                 Text = ""
             };
-            TextBox textBox = new TextBox() { HorizontalAlignment = HorizontalAlignment.Stretch };
-            Button testButton = new Button() { HorizontalAlignment = HorizontalAlignment.Stretch, Content = "Test", Margin = new Thickness(8, 0, 0, 0) };
+            var textBox = new TextBox() { HorizontalAlignment = HorizontalAlignment.Stretch };
+            var testButton = new Button() { HorizontalAlignment = HorizontalAlignment.Stretch, Content = "Test", Margin = new Thickness(8, 0, 0, 0) };
 
 
             Grid.SetColumn(testButton, 1);
-            Grid row = new Grid()
+            var row = new Grid()
             {
                 Margin = new Thickness(0, 0, 0, 16),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -220,7 +220,7 @@ namespace AddonManager.Views
             row.Children.Add(textBox);
             row.Children.Add(testButton);
 
-            StackPanel stackPanel = new StackPanel()
+            var stackPanel = new StackPanel()
             {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch
@@ -231,7 +231,7 @@ namespace AddonManager.Views
             stackPanel.Children.Add(row);
             stackPanel.Children.Add(testResultTextBlock);
 
-            ContentDialog dialog = new ContentDialog()
+            var dialog = new ContentDialog()
             {
                 Title = "Set URL for " + addon.FolderName,
                 Content = stackPanel,
@@ -275,11 +275,11 @@ namespace AddonManager.Views
         private async void MenuFlyoutItem_Click_Remove_Addon(object sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuFlyoutItem;
-            Core.Models.Addon addon = menuItem.Tag as Core.Models.Addon;
+            var addon = menuItem.Tag as Addon;
             var folderNames = addon.FolderName + "\r\n";
             folderNames += string.Join("\r\n", addon.SubFolders);
 
-            ContentDialog dialog = new ContentDialog()
+            var dialog = new ContentDialog()
             {
                 Title = "Remove " + addon.FolderName + "?",
                 Content = folderNames,
@@ -297,7 +297,7 @@ namespace AddonManager.Views
         private async void MenuFlyoutItem_Click_Refresh_Addon(object sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuFlyoutItem;
-            Core.Models.Addon addon = menuItem.Tag as Core.Models.Addon;
+            var addon = menuItem.Tag as Addon;
             await Tasks.FindProjectUrlAndDownLoadVersionsFor(addon);
         }
 

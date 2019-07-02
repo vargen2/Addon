@@ -21,7 +21,7 @@ namespace AddonManager.Logic
     {
         internal static StorageFolder localFolder = ApplicationData.Current.TemporaryFolder;
 
-        private static string GetDownLoadLink(Core.Models.Addon addon, Download download)
+        private static string GetDownLoadLink(Addon addon, Download download)
         {
             if (addon.ProjectUrl.Equals(Version.ELVUI))
             {
@@ -29,7 +29,8 @@ namespace AddonManager.Logic
             }
             else
             {
-                return addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects")) + download.DownloadLink;
+                return "https://www.curseforge.com" + download.DownloadLink + "/file";
+                //return addon.ProjectUrl.Remove(addon.ProjectUrl.IndexOf("/projects")) + download.DownloadLink;
             }
         }
 
@@ -48,7 +49,7 @@ namespace AddonManager.Logic
             return await DownloadFile(destinationFile, source, addon, progressable);
         }
 
-        private static async Task<StorageFile> DownloadFile(StorageFile destinationFile, Uri source, Core.Models.Addon addon, IProgressable progressable)
+        private static async Task<StorageFile> DownloadFile(StorageFile destinationFile, Uri source, Addon addon, IProgressable progressable)
         {
             try
             {
@@ -70,7 +71,7 @@ namespace AddonManager.Logic
             return destinationFile;
         }
 
-        internal static async Task<(string, List<string>)> UpdateAddonOld(Core.Models.Addon addon, Download download, StorageFile file, IProgressable progressable = null)
+        internal static async Task<(string, List<string>)> UpdateAddonOld(Addon addon, Download download, StorageFile file, IProgressable progressable = null)
         {
             var extractFolderPath = localFolder.Path + @"\" + file.Name.Replace(".zip", "");
             var subFoldersToDelete = new List<string>();
@@ -316,7 +317,7 @@ namespace AddonManager.Logic
             }
         }
 
-        internal static async Task AddSubFolders(Core.Models.Addon addon, List<string> subFoldersToDelete)
+        internal static async Task AddSubFolders(Addon addon, List<string> subFoldersToDelete)
         {
             var addons = addon.Game.Addons;
             foreach (var name in subFoldersToDelete)
@@ -335,7 +336,7 @@ namespace AddonManager.Logic
             await Task.CompletedTask;
         }
 
-        internal static async Task RemoveFilesFor(Core.Models.Addon addon)
+        internal static async Task RemoveFilesFor(Addon addon)
         {
             var folders = new List<string>(addon.SubFolders)
             {
@@ -531,7 +532,7 @@ namespace AddonManager.Logic
 
         private class DownloadProgressHandler
         {
-            public Core.Models.IProgressable Progressable { get; set; }
+            public IProgressable Progressable { get; set; }
 
             public void DownloadProgressCallback(IAsyncOperationWithProgress<HttpResponseMessage, HttpProgress> asyncInfo, HttpProgress progressInfo)
             {

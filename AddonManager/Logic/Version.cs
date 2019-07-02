@@ -39,20 +39,25 @@ namespace AddonManager.Logic
             {"dbm-outlands", new List<string>{"dbm-bc"}}
         };
 
-        internal static async Task<string> FindProjectUrlFor(Core.Models.Addon addon)
+        internal static async Task<string> FindProjectUrlFor(Addon addon)
         {
             var addonDatas = Singleton<Session>.Instance.AddonData.FindAll(ad => ad.FolderName.Equals(addon.FolderName, StringComparison.OrdinalIgnoreCase));
 
             if (addonDatas.Count == 1)
             {
-                return addonDatas[0].ProjectUrl;
+                //Debug.WriteLine("projectname=" + addonDatas[0].ProjectName + " for " + addon.FolderName);
+                if (addon.FolderName.ToLower().Equals("elvui"))
+                {
+                    return ELVUI;
+                }
+                return addonDatas[0].ProjectName;
             }
             else if (addonDatas.Count > 1)
             {
                 Debug.WriteLine("Addondata.count=" + addonDatas.Count + " for " + addon.FolderName);
             }
 
-            List<string> urlNames = new List<string>() { addon.FolderName.Replace(" ", "-"),
+            var urlNames = new List<string>() { addon.FolderName.Replace(" ", "-"),
                 addon.FolderName,addon.Title.Replace(" ","-"),addon.Title.Replace(" ",""),addon.Title };
 
             if (PROJECT_URLS.TryGetValue(addon.FolderName.ToLower(), out List<string> list))
@@ -84,7 +89,7 @@ namespace AddonManager.Logic
             return string.Empty;
         }
 
-        internal static async Task<List<Download>> DownloadVersionsFor(Core.Models.Addon addon)
+        internal static async Task<List<Download>> DownloadVersionsFor(Addon addon)
         {
             if (string.IsNullOrEmpty(addon.ProjectUrl))
             {
@@ -104,7 +109,7 @@ namespace AddonManager.Logic
             return await FromCurse(addon);
         }
 
-        private static async Task<List<Download>> FromCurse(Core.Models.Addon addon)
+        private static async Task<List<Download>> FromCurse(Addon addon)
         {
             var downloads = new List<Download>();
 
@@ -112,7 +117,7 @@ namespace AddonManager.Logic
             {
                 for (int i = 1; i < 5; i++)
                 {
-                    var uri = new Uri(addon.ProjectUrl + "/files?page=" + i);
+                    var uri = new Uri("https://www.curseforge.com/wow/addons/" + addon.ProjectUrl + "/files?page=" + i);
                     var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
                     var fresh = Parse.FromPageToDownloads(addon, htmlPage);
 
@@ -131,9 +136,9 @@ namespace AddonManager.Logic
                     }
 
                     downloads.AddRange(newPage);
-                    if (downloads.Any(d => d.ReleaseType.Equals("release", StringComparison.OrdinalIgnoreCase))
-                        && downloads.Any(d => d.ReleaseType.Equals("beta", StringComparison.OrdinalIgnoreCase))
-                        && downloads.Any(d => d.ReleaseType.Equals("aplha", StringComparison.OrdinalIgnoreCase))
+                    if (downloads.Any(d => d.ReleaseType.Equals("Release", StringComparison.OrdinalIgnoreCase))
+                        && downloads.Any(d => d.ReleaseType.Equals("Beta", StringComparison.OrdinalIgnoreCase))
+                        && downloads.Any(d => d.ReleaseType.Equals("Alpha", StringComparison.OrdinalIgnoreCase))
                         )
                     {
                         return downloads;
@@ -157,7 +162,7 @@ namespace AddonManager.Logic
             return new List<Download>();
         }
 
-        private static async Task<List<Download>> FromElvUI(Core.Models.Addon addon)
+        private static async Task<List<Download>> FromElvUI(Addon addon)
         {
             var uri = new Uri(addon.ProjectUrl);
 

@@ -1,10 +1,6 @@
-﻿using AddonToolkit.AddonToolkit.Parse;
-using AddonToolkit.Model;
+﻿using AddonToolkit.Model;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text.RegularExpressions;
 using static AddonToolkit.Model.Enums;
 
 namespace AddonToolkit.Parse

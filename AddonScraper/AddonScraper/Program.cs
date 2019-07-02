@@ -1,5 +1,4 @@
 ﻿using AddonScraper.FileIO;
-using AddonToolkit.AddonToolkit.Parse;
 using AddonToolkit.Model;
 using AddonToolkit.Parse;
 using Microsoft.Extensions.Logging;

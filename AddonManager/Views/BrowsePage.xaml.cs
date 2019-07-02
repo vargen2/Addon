@@ -32,7 +32,7 @@ namespace AddonManager.Views
                     return storeAddon.AddonData.Title.Contains(sender.Text, StringComparison.CurrentCultureIgnoreCase);
                 }
                 return false;
-            };            
+            };
         }
 
         private async void Install_Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -46,7 +46,7 @@ namespace AddonManager.Views
         {
             base.OnNavigatedTo(e);
             RefreshStoreAddonStatus();
-         //   ViewModel.Session.PropertyChanged += Session_PropertyChanged;
+            //   ViewModel.Session.PropertyChanged += Session_PropertyChanged;
         }
 
         //protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -72,7 +72,7 @@ namespace AddonManager.Views
             //    }
             //    return nameList;
             //}).ToList());
-            var addons = new HashSet<string>(ViewModel.Session.SelectedGame.Addons.Select(a=>a.ProjectUrl)).ToHashSet();
+            var addons = new HashSet<string>(ViewModel.Session.SelectedGame.Addons.Select(a => a.ProjectUrl)).ToHashSet();
             foreach (var storeAddon in ViewModel.Session.StoreAddons)
             {
                 if (storeAddon.Status.Equals(StoreAddon.INSTALLING))
@@ -80,7 +80,7 @@ namespace AddonManager.Views
                     continue;
                 }
 
-                if (addons.Contains(storeAddon.AddonData.ProjectUrl))
+                if (addons.Contains(storeAddon.AddonData.ProjectName))
                 {
                     storeAddon.Status = StoreAddon.INSTALLED;
                 }
@@ -88,7 +88,7 @@ namespace AddonManager.Views
                 {
                     storeAddon.Status = StoreAddon.NOTINSTALLED;
                 }
-            }           
+            }
             ViewModel.StoreAddons.Refresh();
         }
 
@@ -135,7 +135,7 @@ namespace AddonManager.Views
         }
 
         private void Created_Header_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {            
+        {
             ViewModel.CreatedSortDirection = Opposite(ViewModel.CreatedSortDirection);
             Sort(new SortDescription("Created", ViewModel.CreatedSortDirection));
         }

@@ -21,7 +21,7 @@ namespace AddonManager.Logic
             {
                 return;
             }
-            var a = new Core.Models.Addon(game, tocFile.StorageFolder.Name, tocFile.StorageFolder.Path)
+            var a = new Addon(game, tocFile.StorageFolder.Name, tocFile.StorageFolder.Path)
             {
                 Version = tocFile.Version,
                 GameVersion = tocFile.GameVersion,
@@ -29,7 +29,7 @@ namespace AddonManager.Logic
             };
             game.Addons.Add(a);
             await Task.Delay(500);
-            await Tasks.FindProjectUrlAndDownLoadVersionsFor(a);
+            await FindProjectUrlAndDownLoadVersionsFor(a);
         }
 
         public static async Task RefreshGameFolder(Game game)
@@ -65,13 +65,13 @@ namespace AddonManager.Logic
             await Task.WhenAll(tasks);
         }
 
-        internal static async Task AutoUpdate(ObservableCollection<Core.Models.Addon> addons)
+        internal static async Task AutoUpdate(ObservableCollection<Addon> addons)
         {
             var tasks = addons.Where(addon => addon.IsAutoUpdate && addon.IsUpdateable).Select(UpdateAddon);
             await Task.WhenAll(tasks);
         }
 
-        public static async Task RefreshTocFileFor(IList<Core.Models.Addon> addons)
+        public static async Task RefreshTocFileFor(IList<Addon> addons)
         {
             foreach (var addon in addons)
             {
@@ -83,9 +83,9 @@ namespace AddonManager.Logic
             }
         }
 
-        public static async Task FindProjectUrlAndDownLoadVersionsFor(ObservableCollection<Core.Models.Addon> addons)
+        public static async Task FindProjectUrlAndDownLoadVersionsFor(ObservableCollection<Addon> addons)
         {
-            var addonList = new List<Core.Models.Addon>(addons);
+            var addonList = new List<Addon>(addons);
             var tasks = new List<Task>();
             // Start tasks with a small delay to not get a UI spike
             foreach (var addon in addonList)
@@ -98,31 +98,32 @@ namespace AddonManager.Logic
             //await Sorter.Sort(addons);
         }
 
-        public static async Task FindProjectUrlAndDownLoadVersionsFor(Core.Models.Addon addon)
+        public static async Task FindProjectUrlAndDownLoadVersionsFor(Addon addon)
         {
             if (addon.IsIgnored
-                || addon.Status.Equals(Core.Models.Addon.DOWNLOADING_VERSIONS)
-                || addon.Status.Equals(Core.Models.Addon.UPDATING))
+                || addon.Status.Equals(Addon.DOWNLOADING_VERSIONS)
+                || addon.Status.Equals(Addon.UPDATING))
             {
                 return;
             }
             addon.Progress = 0;
-            addon.Status = Core.Models.Addon.DOWNLOADING_VERSIONS;
+            addon.Status = Addon.DOWNLOADING_VERSIONS;
 
             if (string.IsNullOrEmpty(addon.ProjectUrl))
             {
                 addon.ProjectUrl = await Task.Run(() => Version.FindProjectUrlFor(addon));
             }
             var downloadsToBeAdded = await Task.Run(() => Version.DownloadVersionsFor(addon));
+            //Debug.WriteLine(downloadsToBeAdded.Count);
             addon.InsertNewDownloads(downloadsToBeAdded);
         }
 
-        public static async Task UpdateAddon(Core.Models.Addon addon)
+        public static async Task UpdateAddon(Addon addon)
         {
             await UpdateAddon(addon, addon.SuggestedDownload);
         }
 
-        public static async Task UpdateAddon(Core.Models.Addon addon, Download download)
+        public static async Task UpdateAddon(Addon addon, Download download)
         {
             if (addon.IsIgnored)
             {
@@ -130,13 +131,13 @@ namespace AddonManager.Logic
             }
             addon.Message = "Downloading...";
             addon.Progress = 0;
-            addon.Status = Core.Models.Addon.UPDATING;
+            addon.Status = Addon.UPDATING;
 
             var file = await Task.Run(() => Update.DLWithHttpProgress(addon, download));
 
             if (file == null)
             {
-                addon.Status = Core.Models.Addon.UNKNOWN;
+                addon.Status = Addon.UNKNOWN;
                 addon.Message = string.Empty;
                 addon.Progress = 0;
                 return;
@@ -165,7 +166,7 @@ namespace AddonManager.Logic
             }
         }
 
-        internal static async Task Remove(Core.Models.Addon addon)
+        internal static async Task Remove(Addon addon)
         {
             addon.Game.Addons.Remove(addon);
             await Task.Run(() => Update.RemoveFilesFor(addon));

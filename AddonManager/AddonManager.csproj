@@ -275,7 +275,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <None Include="Addon_StoreKey.pfx" />
-    <Content Include="Assets\allvalidaddondata1-340.json" />
+    <Content Include="Assets\allvalidaddondata1-345.json" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
@@ -297,7 +297,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AddonToolkit">
-      <HintPath>..\..\AddonToolkit\AddonToolkit\bin\Release\netcoreapp2.1\AddonToolkit.dll</HintPath>
+      <HintPath>..\AddonToolkit\bin\Release\netcoreapp2.1\AddonToolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
