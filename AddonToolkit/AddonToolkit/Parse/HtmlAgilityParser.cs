@@ -86,5 +86,24 @@ namespace AddonToolkit.Parse
             }
             return downloads;
         }
+
+        public static string FromCursePageToChanges(string htmlPage)
+        {
+            var htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(htmlPage);
+
+            var changeDiv = htmlDocument.DocumentNode.SelectSingleNode("//div[contains(@class,'user-content')]");
+
+            var allLinks = changeDiv.SelectNodes(".//a");
+            if (allLinks != null)
+            {
+                foreach (var link in allLinks)
+                {
+                    link.Remove();
+                }
+            }
+
+            return changeDiv.InnerHtml;
+        }
     }
 }
