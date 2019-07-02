@@ -1,4 +1,5 @@
 ﻿using AddonScraper.FileIO;
+using AddonToolkit.AddonToolkit.Parse;
 using AddonToolkit.Model;
 using AddonToolkit.Parse;
 using Microsoft.Extensions.Logging;
@@ -468,7 +469,7 @@ namespace AddonScraper
                 {
                     try
                     {
-                        List<CurseAddon> addonsFromPage = HtmlParser.FromCursePageToCurseAddons(page);
+                        List<CurseAddon> addonsFromPage = HtmlAgilityParser.FromCursePageToCurseAddons(page);
                         addons.AddRange(addonsFromPage);
                         logger.LogInformation("Page: " + i + ", Added: " + addonsFromPage.Count);
                     }

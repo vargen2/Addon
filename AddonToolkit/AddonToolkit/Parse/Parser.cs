@@ -32,18 +32,18 @@ namespace AddonToolkit.Parse
             //}
         }
 
-        public static PROJECT_SITE FromProjectUrlToEnum(string projectUrl)
-        {
-            if (projectUrl.Contains("https://wow.curseforge.com/projects/"))
-            {
-                return PROJECT_SITE.CURSEFORGE;
-            }
-            else if (projectUrl.Equals(Consts.ELVUI))
-            {
-                return PROJECT_SITE.ELVUI;
-            }
-            throw new ArgumentException("Couldn't match projectUrl for " + projectUrl);
-        }
+        //public static PROJECT_SITE FromProjectUrlToEnum(string projectUrl)
+        //{
+        //    if (projectUrl.Contains("https://wow.curseforge.com/projects/"))
+        //    {
+        //        return PROJECT_SITE.CURSEFORGE;
+        //    }
+        //    else if (projectUrl.Equals(Consts.ELVUI))
+        //    {
+        //        return PROJECT_SITE.ELVUI;
+        //    }
+        //    throw new ArgumentException("Couldn't match projectUrl for " + projectUrl);
+        //}
 
         public static long FromStringDownloadToLong(string number)
         {

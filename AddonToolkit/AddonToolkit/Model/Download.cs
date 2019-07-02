@@ -1,4 +1,5 @@
 ﻿using System;
+
 // TODO add string FileSizeString and  int FileSizeBytes
 namespace AddonToolkit.Model
 {
@@ -14,16 +15,14 @@ namespace AddonToolkit.Model
 
         public Download(string releaseType, string version, string fileSize, DateTime dateUploaded, string gameVersion, long nrOfDownloads, string downloadLink)
         {
-            ReleaseType = releaseType;
-            Version = version;
-            FileSize = fileSize;
+            ReleaseType = releaseType ?? throw new ArgumentNullException(nameof(releaseType));
+            Version = version ?? throw new ArgumentNullException(nameof(version));
+            FileSize = fileSize ?? throw new ArgumentNullException(nameof(fileSize));
             DateUploaded = dateUploaded;
-            GameVersion = gameVersion;
+            GameVersion = gameVersion ?? throw new ArgumentNullException(nameof(gameVersion));
             NrOfDownloads = nrOfDownloads;
-            DownloadLink = downloadLink;
+            DownloadLink = downloadLink ?? throw new ArgumentNullException(nameof(downloadLink));
         }
-
-
 
         public override string ToString()
         {

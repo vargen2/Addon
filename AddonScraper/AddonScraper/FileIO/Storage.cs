@@ -45,6 +45,12 @@ namespace AddonScraper.FileIO
             }
 
             var file = mostRecent.GetFiles("allvalidaddondata*").FirstOrDefault();
+
+            if (file == null)
+            {
+                return new List<AddonData>();
+            }
+
             var addons = new List<AddonData>();
 
             using (StreamReader streamReader = File.OpenText(file.FullName))

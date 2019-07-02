@@ -1,15 +1,55 @@
 ﻿using AddonToolkit.Model;
 using AddonToolkit.Parse;
 using HtmlAgilityPack;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace AddonToolkit.AddonToolkit.Parse
 {
     public static class HtmlAgilityParser
     {
+        public static List<CurseAddon> FromCursePageToCurseAddons(string page)
+        {
+            var addons = new List<CurseAddon>();
+
+            var htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(page);
+
+            var divs = htmlDocument.DocumentNode.SelectNodes("//div[contains(@class,'project-listing-row')]");
+
+            foreach (var addonDiv in divs)
+            {
+                var link = addonDiv.SelectSingleNode(".//a");
+                string url = link.Attributes["href"].Value.Replace("/wow/addons/", "").Trim();
+
+                string title = System.Net.WebUtility.HtmlDecode(addonDiv.SelectSingleNode(".//h3[contains(@class,'text-primary-500') and contains(@class,'font-bold') and contains(@class,'text-lg')]").InnerText.Trim());
+
+                string description = System.Net.WebUtility.HtmlDecode(addonDiv.SelectSingleNode(".//p[contains(@class,'text-sm') and contains(@class,'leading-snug')]").InnerText.Trim());
+
+                var downloadString = addonDiv.SelectSingleNode(".//span[contains(text(),'Downloads')]").InnerText.Replace("Downloads", "").Trim();
+                long downloads = Parser.FromStringDownloadToLong(downloadString);
+
+                var updatedString = addonDiv.SelectSingleNode(".//span[contains(text(),'Updated')]/abbr")
+                    .Attributes["data-epoch"].Value;
+                long updated = long.Parse(updatedString);
+
+                var createdString = addonDiv.SelectSingleNode(".//span[contains(text(),'Created')]/abbr")
+                    .Attributes["data-epoch"].Value;
+                long created = long.Parse(createdString);
+
+                addons.Add(new CurseAddon()
+                {
+                    AddonURL = url,
+                    Title = title,
+                    Description = description,
+                    Downloads = downloads,
+                    UpdatedEpoch = updated,
+                    CreatedEpoch = created
+                });
+            }
+
+            return addons;
+        }
+
         public static List<Download> FromCurseForgeToDownloads(string htmlPage)
         {
             var downloads = new List<Download>();
@@ -20,11 +60,10 @@ namespace AddonToolkit.AddonToolkit.Parse
             var table = htmlDocument.DocumentNode.SelectSingleNode("//table");
 
             var rows = table.SelectNodes("tbody/tr");
-            // Console.WriteLine("rows: " + rows.Count);
+
             foreach (var row in rows)
             {
                 var cells = row.SelectNodes("td");
-                //    Console.WriteLine("cells: " + cells.Count);
 
                 string release = cells[0].InnerText.Trim();
 
@@ -45,9 +84,7 @@ namespace AddonToolkit.AddonToolkit.Parse
                 var downloadLink = link.Attributes["href"].Value;
 
                 downloads.Add(new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink));
-                // Console.WriteLine(downloads.Last().ToStringManyLines());
             }
-
             return downloads;
         }
     }
