@@ -20,9 +20,6 @@
     </Page.Transitions>
     <Page.Resources>
 
-
-
-
         <Style x:Key="mymaster" TargetType="controls:MasterDetailsView">
             <Setter Property="Background" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
             <Setter Property="BorderBrush" Value="{ThemeResource ApplicationForegroundThemeBrush}" />
@@ -242,16 +239,6 @@
             </Setter>
         </Style>
 
-
-
-
-
-
-
-
-
-
-
         <Style x:Key="mysyle2" TargetType="MenuFlyoutItem">
             <Setter Property="Background" Value="{ThemeResource MenuFlyoutItemRevealBackground}" />
             <Setter Property="BorderBrush" Value="{ThemeResource MenuFlyoutItemRevealBorderBrush}" />
@@ -354,7 +341,6 @@
                                             <Setter Target="KeyboardAcceleratorTextBlock.Foreground" Value="{ThemeResource MenuFlyoutItemKeyboardAcceleratorTextForegroundDisabled}" />
                                         </VisualState.Setters>
                                     </VisualState>
-
                                 </VisualStateGroup>
                                 <VisualStateGroup x:Name="CheckPlaceholderStates">
                                     <VisualState x:Name="NoPlaceholder" />
@@ -376,7 +362,6 @@
                                             <Setter Target="IconRoot.Visibility" Value="Visible" />
                                         </VisualState.Setters>
                                     </VisualState>
-
                                 </VisualStateGroup>
                                 <VisualStateGroup x:Name="PaddingSizeStates">
                                     <VisualState x:Name="DefaultPadding" />
@@ -388,7 +373,6 @@
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
-
                                 </VisualStateGroup>
                                 <VisualStateGroup x:Name="KeyboardAcceleratorTextVisibility">
                                     <VisualState x:Name="KeyboardAcceleratorTextCollapsed" />
@@ -397,18 +381,13 @@
                                             <Setter Target="KeyboardAcceleratorTextBlock.Visibility" Value="Visible" />
                                         </VisualState.Setters>
                                     </VisualState>
-
                                 </VisualStateGroup>
-
                             </VisualStateManager.VisualStateGroups>
                         </Grid>
-
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-
-
 
         <DataTemplate x:Key="ItemTemplate" x:DataType="data:Addon">
             <Grid
@@ -482,9 +461,7 @@
                             Opacity="0.7"
                             Symbol="Refresh" />
                         </Viewbox>
-
                     </Grid>
-
                 </StackPanel>-->
                 <StackPanel
                     Grid.Column="2"
@@ -520,7 +497,6 @@
                         IsHitTestVisible="False"
                         Text="{x:Bind Message, Mode=OneWay}"
                         Visibility="{x:Bind ShowMessage, Mode=OneWay}" />
-
                 </StackPanel>
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout
@@ -605,20 +581,15 @@
                         </MenuFlyoutSubItem>
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
-
             </Grid>
             <!--<StackPanel Width="50">
                             <Ellipse Height="44" Width="44" VerticalAlignment="Center">
                                 <Ellipse.Fill>
-                                    <ImageBrush ImageSource="../Assets/Square44x44Logo.png"/>
+                                    <ImageBrush ImageSource="../Assets/Square44x44Logo.png" />
                                 </Ellipse.Fill>
                             </Ellipse>
                         </StackPanel>-->
-
         </DataTemplate>
-
-
-
 
         <!--<DataTemplate x:Key="ItemTemplate" x:DataType="data:Addon">
             <Grid Height="60">
@@ -660,43 +631,45 @@
 
         <DataTemplate x:Key="MasterHeaderTemplate" x:DataType="data:Session">
             <StackPanel Height="40" Orientation="Horizontal">
-                <AppBarButton
+                <CommandBar Background="Transparent">
+                    <AppBarButton
                     Click="DownloadVersionsForAllAddonsInSelectedGame"
                     IsEnabled="{x:Bind IsRefreshButtonEnabled, Mode=OneWay}"
                     ToolTipService.ToolTip="Get new version from net">
-                    <StackPanel Orientation="Horizontal">
-                        <ProgressRing x:Name="RefreshButtonProgressRing" Visibility="Collapsed" />
-                        <SymbolIcon
+                        <StackPanel Orientation="Horizontal">
+                            <ProgressRing x:Name="RefreshButtonProgressRing" Visibility="Collapsed" />
+                            <SymbolIcon
                             x:Name="RefreshButtonIcon"
                             Symbol="Sync"
                             Visibility="Visible" />
-                    </StackPanel>
-                </AppBarButton>
-                <AppBarButton
+                        </StackPanel>
+                    </AppBarButton>
+                    <AppBarButton
                     Click="EditNameofSelectedGame"
                     Icon="Edit"
                     IsEnabled="{x:Bind IsGameSelected, Mode=OneWay}"
                     ToolTipService.ToolTip="Edit Name" />
-                <AppBarButton
+                    <AppBarButton
                     Click="RemoveSelectedGame"
                     Icon="Delete"
                     IsEnabled="{x:Bind IsGameSelected, Mode=OneWay}"
                     ToolTipService.ToolTip="Remove Game" />
-                <!--<Button Width="130" Click="DownloadVersionsForAllAddonsInSelectedGame">
+                    <!--<Button Width="130" Click="DownloadVersionsForAllAddonsInSelectedGame">
                     <StackPanel Orientation="Horizontal">
                         <ProgressRing x:Name="RefreshButtonProgressRing" Visibility="Collapsed" />
                 -->
-                <!--<SymbolIcon Symbol="Sync" />-->
-                <!--
+                    <!--<SymbolIcon Symbol="Sync" />-->
+                    <!--
                         <TextBlock Text="Refresh" />
                     </StackPanel>-->
-                <!--</Button>-->
-                <!--<Button
+                    <!--</Button>-->
+                    <!--<Button
                     Width="130"
                     Margin="{StaticResource SmallLeftMargin}"
                     Click="RemoveSelectedGame">
                     Remove Game...
                 </Button>-->
+                </CommandBar>
             </StackPanel>
         </DataTemplate>
         <!--<DataTemplate x:Key="MinimalMasterHeaderTemplate">
@@ -759,7 +732,6 @@
             </VisualStateGroup>-->
         <!--</VisualStateManager.VisualStateGroups>-->
 
-
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
@@ -775,8 +747,6 @@
     </Grid>
 </Page>
 
-
-
 <!--
     ItemsSource="{x:Bind ViewModel.Addons, Mode=OneWay}"
     ItemsSource="{x:Bind ViewModel.Session.SelectedGame.Addons, Mode=OneWay}"
@@ -790,7 +760,6 @@
 
 <!--
 Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-
 
  <ListView
                                         x:Name="MasterList"
