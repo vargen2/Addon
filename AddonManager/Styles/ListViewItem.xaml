@@ -16,7 +16,7 @@
         <Setter Property="TabNavigation" Value="Local" />
         <Setter Property="IsHoldingEnabled" Value="True" />
         <Setter Property="Padding" Value="12,0,12,0" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}" />
         <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}" />
@@ -59,7 +59,6 @@
                                 Content="{TemplateBinding Content}"
                                 ContentTemplate="{TemplateBinding ContentTemplate}"
                                 ContentTransitions="{TemplateBinding ContentTransitions}" />
-
                         </Grid>
                         <!--
                             The 'Xg' text simulates the amount of space one line of text will occupy.
@@ -183,7 +182,6 @@
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectCheck" Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
-
                                     </Storyboard>
                                 </VisualState>
 
@@ -212,7 +210,6 @@
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectCheck" Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
-
                                     </Storyboard>
                                 </VisualState>
 
@@ -270,10 +267,8 @@
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectCheck" Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
-
                                     </Storyboard>
                                 </VisualState>
-
                             </VisualStateGroup>
 
                             <VisualStateGroup x:Name="DisabledStates">
@@ -289,7 +284,6 @@
                                             Duration="0" />
                                     </Storyboard>
                                 </VisualState>
-
                             </VisualStateGroup>
 
                             <VisualStateGroup x:Name="MultiSelectStates">
@@ -359,7 +353,6 @@
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
-
                             </VisualStateGroup>
 
                             <VisualStateGroup x:Name="DataVirtualizationStates">
@@ -376,7 +369,6 @@
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
-
                             </VisualStateGroup>
 
                             <VisualStateGroup x:Name="ReorderHintStates">
@@ -425,7 +417,6 @@
                                 <VisualStateGroup.Transitions>
                                     <VisualTransition GeneratedDuration="0:0:0.2" To="NoReorderHint" />
                                 </VisualStateGroup.Transitions>
-
                             </VisualStateGroup>
 
                             <VisualStateGroup x:Name="DragStates">
@@ -573,16 +564,11 @@
                                 <VisualStateGroup.Transitions>
                                     <VisualTransition GeneratedDuration="0:0:0.2" To="NotDragging" />
                                 </VisualStateGroup.Transitions>
-
                             </VisualStateGroup>
-
                         </VisualStateManager.VisualStateGroups>
                     </Grid>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
-
 </ResourceDictionary>

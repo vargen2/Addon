@@ -7,13 +7,12 @@
     xmlns:data="using:AddonManager.Core.Models"
     xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    NavigationCacheMode="Required"
     Style="{StaticResource PageStyle}"
-    mc:Ignorable="d"
-    NavigationCacheMode="Required">
+    mc:Ignorable="d">
 
     <Page.Resources>
         <converters:StringFormatConverter x:Key="StringFormatConverter" />
-
     </Page.Resources>
     <Grid
         x:Name="ContentArea"
@@ -38,6 +37,8 @@
             <ListView
                 x:Name="ListView"
                 Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
                 IsEnabled="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}"
                 ItemContainerStyle="{StaticResource ListViewItemExpanded}"
                 ItemsSource="{x:Bind ViewModel.StoreAddons, Mode=OneWay}"
@@ -46,63 +47,78 @@
                 Visibility="{x:Bind ViewModel.Session.IsGameSelected, Mode=OneWay}">
                 <ListView.HeaderTemplate>
                     <DataTemplate>
-                        <StackPanel
+                        <Grid
                             Height="25"
                             Margin="{StaticResource SmallBottomMargin}"
-                            Padding="{StaticResource SmallLeftMargin}"
-                            Orientation="Horizontal">
+                            Padding="{StaticResource SmallLeftRightMargin}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="*"
+                                    MinWidth="100"
+                                    MaxWidth="200" />
+                                <ColumnDefinition Width="2*" MinWidth="200" />
+                                <ColumnDefinition Width="130" />
+                                <ColumnDefinition Width="120" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
                             <TextBlock
-                                Width="240"
+                                Grid.Column="0"
                                 extensions:Mouse.Cursor="Hand"
                                 FontSize="{StaticResource MediumFontSize}"
                                 Tapped="Title_Header_Tapped"
                                 Text="Title" />
                             <TextBlock
-                                Width="400"
+                                Grid.Column="1"
                                 FontSize="{StaticResource MediumFontSize}"
                                 Text="Description" />
                             <TextBlock
-                                Width="120"
+                                Grid.Column="2"
                                 extensions:Mouse.Cursor="Hand"
                                 FontSize="{StaticResource MediumFontSize}"
                                 Tapped="Download_Header_Tapped"
                                 Text="Downloads"
                                 TextAlignment="Right" />
                             <TextBlock
-                                Width="120"
+                                Grid.Column="3"
                                 extensions:Mouse.Cursor="Hand"
                                 FontSize="{StaticResource MediumFontSize}"
                                 Tapped="Status_Header_Tapped"
                                 Text="Install"
                                 TextAlignment="Center" />
                             <TextBlock
-                                Width="90"
+                                Grid.Column="4"
                                 extensions:Mouse.Cursor="Hand"
                                 FontSize="{StaticResource MediumFontSize}"
                                 Tapped="Updated_Header_Tapped"
                                 Text="Updated"
                                 TextAlignment="Center" />
                             <TextBlock
-                                Width="90"
+                                Grid.Column="5"
                                 extensions:Mouse.Cursor="Hand"
                                 FontSize="{StaticResource MediumFontSize}"
                                 Tapped="Created_Header_Tapped"
                                 Text="Created"
                                 TextAlignment="Center" />
-                        </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ListView.HeaderTemplate>
 
                 <ListView.ItemTemplate>
-
                     <DataTemplate x:DataType="data:StoreAddon">
-
-
-
-
-
-                        <StackPanel Height="60" Orientation="Horizontal">
-                            <StackPanel Width="240">
+                        <Grid Height="60">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="*"
+                                    MinWidth="100"
+                                    MaxWidth="200" />
+                                <ColumnDefinition Width="2*" MinWidth="200" />
+                                <ColumnDefinition Width="130" />
+                                <ColumnDefinition Width="120" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
                                 <TextBlock
                                     Height="60"
                                     Margin="0,0,8,0"
@@ -110,23 +126,23 @@
                                     Text="{x:Bind Title}"
                                     TextWrapping="Wrap" />
                             </StackPanel>
-                            <StackPanel Width="400">
+                            <StackPanel Grid.Column="1">
                                 <TextBlock
                                     Height="60"
                                     Margin="{StaticResource SmallRightMargin}"
                                     Text="{x:Bind Description}"
                                     TextWrapping="Wrap" />
                             </StackPanel>
-                            <StackPanel Width="120">
+                            <StackPanel Grid.Column="2">
                                 <TextBlock
                                     Height="30"
                                     Margin="0,15,0,15"
                                     Text="{x:Bind NrOfDownloads, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:0,0}'}"
                                     TextAlignment="Right" />
                             </StackPanel>
-                            <StackPanel Width="120" Padding="0,15,0,15">
+                            <StackPanel Grid.Column="3" Padding="0,15,0,15">
                                 <ProgressBar
-                                    Width="120"
+                                    Width="100"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}"
@@ -152,21 +168,21 @@
                                     Text="{x:Bind Message, Mode=OneWay}"
                                     Visibility="{x:Bind ShowMessage, Mode=OneWay}" />
                             </StackPanel>
-                            <StackPanel Width="90">
+                            <StackPanel Grid.Column="4">
                                 <TextBlock
                                     Height="30"
                                     Margin="0,15,0,15"
                                     Text="{x:Bind UpdatedFormated}"
                                     TextAlignment="Center" />
                             </StackPanel>
-                            <StackPanel Width="90">
+                            <StackPanel Grid.Column="5">
                                 <TextBlock
                                     Height="30"
                                     Margin="0,15,0,15"
                                     Text="{x:Bind CreatedFormated}"
                                     TextAlignment="Center" />
                             </StackPanel>
-                        </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -193,5 +209,4 @@
         </controls:Loading>-->
         </Grid>
     </Grid>
-
 </Page>
