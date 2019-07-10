@@ -30,14 +30,22 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 ## ChangeLog
 
-##### 1.0.19.0 - development
+##### 1.0.20.0 - In development
+
+- Layout changes
+
+   Commandbar for appbarbuttons
+   Better support for resizing
+   
+
+##### 1.0.19.0 - 2019-07-04
 
 - Fixes for html redesign
 - progress bar when using old update (elvui)
 - add ElvUI_OptionsUI to elvui subfolders
 - adding subfolder now updates infomessage
 
-##### 1.0.18.0 - 2019-05.30
+##### 1.0.18.0 - 2019-05-30
 
 - Live tiles disabled
 - Controls on detail page

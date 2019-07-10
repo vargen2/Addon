@@ -633,31 +633,31 @@
             <StackPanel Height="40" Orientation="Horizontal">
                 <CommandBar Background="Transparent">
                     <AppBarButton
-                    Click="DownloadVersionsForAllAddonsInSelectedGame"
-                    IsEnabled="{x:Bind IsRefreshButtonEnabled, Mode=OneWay}"
-                    ToolTipService.ToolTip="Get new version from net">
+                        Click="DownloadVersionsForAllAddonsInSelectedGame"
+                        IsEnabled="{x:Bind IsRefreshButtonEnabled, Mode=OneWay}"
+                        ToolTipService.ToolTip="Get new version from net">
                         <StackPanel Orientation="Horizontal">
                             <ProgressRing x:Name="RefreshButtonProgressRing" Visibility="Collapsed" />
                             <SymbolIcon
-                            x:Name="RefreshButtonIcon"
-                            Symbol="Sync"
-                            Visibility="Visible" />
+                                x:Name="RefreshButtonIcon"
+                                Symbol="Sync"
+                                Visibility="Visible" />
                         </StackPanel>
                     </AppBarButton>
                     <AppBarButton
-                    Click="EditNameofSelectedGame"
-                    Icon="Edit"
-                    IsEnabled="{x:Bind IsGameSelected, Mode=OneWay}"
-                    ToolTipService.ToolTip="Edit Name" />
+                        Click="EditNameofSelectedGame"
+                        Icon="Edit"
+                        IsEnabled="{x:Bind IsGameSelected, Mode=OneWay}"
+                        ToolTipService.ToolTip="Edit Name" />
                     <AppBarButton
-                    Click="RemoveSelectedGame"
-                    Icon="Delete"
-                    IsEnabled="{x:Bind IsGameSelected, Mode=OneWay}"
-                    ToolTipService.ToolTip="Remove Game" />
+                        Click="RemoveSelectedGame"
+                        Icon="Delete"
+                        IsEnabled="{x:Bind IsGameSelected, Mode=OneWay}"
+                        ToolTipService.ToolTip="Remove Game" />
                     <!--<Button Width="130" Click="DownloadVersionsForAllAddonsInSelectedGame">
                     <StackPanel Orientation="Horizontal">
                         <ProgressRing x:Name="RefreshButtonProgressRing" Visibility="Collapsed" />
-                -->
+                    -->
                     <!--<SymbolIcon Symbol="Sync" />-->
                     <!--
                         <TextBlock Text="Refresh" />
