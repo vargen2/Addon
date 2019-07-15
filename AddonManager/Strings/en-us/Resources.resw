@@ -233,7 +233,7 @@ Initial release</value>
     <comment>Source Code</comment>
   </data>
   <data name="Settings_Updates.Text" xml:space="preserve">
-    <value>Updates</value>
+    <value>Update History</value>
     <comment>Updates title</comment>
   </data>
 </root>
