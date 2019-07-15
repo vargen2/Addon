@@ -187,4 +187,53 @@
   <data name="Settings_DeleteOldFilesBeforeUpdate.Content" xml:space="preserve">
     <value>Delete old files before updateing</value>
   </data>
+  <data name="Settings_UpdatesChanges.Text" xml:space="preserve">
+    <value>1.0.19.0 - 2019-07-04
+Fixes for html redesign
+progress bar when using old update (elvui)
+add ElvUI_OptionsUI to elvui subfolders
+adding subfolder now updates infomessage
+
+1.0.18.0 - 2019-05-30
+Live tiles disabled
+Controls on detail page
+Context menu placed at cursor and hitbox fix
+Save and edit display name for game
+misc layout changes
+cache and reuse nav pages
+
+1.0.17.0 - 2019-05-24
+Layout changes
+Will try to get versions for all release types
+Per addon setting for auto update
+
+1.0.16.0 - 2019-05-20
+Added AddonData for almost all addons
+Bit snappier context menu on main page
+Can sort on browse page
+Correct dates on browse page
+Better sorting of addons on main page. Based on status and folder name.
+
+1.0.14.0 - 2019-05-15
+Decode html chars in browse page
+Small layout changes in browse page
+Sorting in browse page for title, download and status
+Better handling of refresh many addons
+Don't download versions or update ignored addons
+Setting to delete old files before update
+Can remove addons
+No more double scroll in detail page
+
+1.0.13.0 - 2019-05-10
+Initial release</value>
+    <comment>Change log</comment>
+  </data>
+  <data name="Settings_AboutSource.NavigateUri" xml:space="preserve">
+    <value>https://github.com/vargen2/Addon</value>
+    <comment>Source Code</comment>
+  </data>
+  <data name="Settings_Updates.Text" xml:space="preserve">
+    <value>Updates</value>
+    <comment>Updates title</comment>
+  </data>
 </root>
