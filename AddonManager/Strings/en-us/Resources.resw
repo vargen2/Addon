@@ -185,7 +185,7 @@
     <value>Refresh addons on start up</value>
   </data>
   <data name="Settings_DeleteOldFilesBeforeUpdate.Content" xml:space="preserve">
-    <value>Delete old files before updateing</value>
+    <value>Delete old files before updating</value>
   </data>
   <data name="Settings_UpdatesChanges.Text" xml:space="preserve">
     <value>1.0.19.0 - 2019-07-04
