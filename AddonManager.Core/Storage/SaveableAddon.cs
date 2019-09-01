@@ -1,6 +1,7 @@
 ﻿using AddonManager.Core.Models;
 using AddonToolkit.Model;
 using System.Collections.Generic;
+using static AddonToolkit.Model.Enums;
 
 namespace AddonManager.Core.Storage
 {
@@ -17,6 +18,7 @@ namespace AddonManager.Core.Storage
         public bool IsIgnored { get; set; }
         public bool IsAutoUpdate { get; set; }
         public string GameVersion { get; set; }
+        public GAME_TYPE GameType { get; set; }
         public string Status { get; set; }
         public HashSet<string> SubFolders { get; set; }
 
@@ -27,12 +29,12 @@ namespace AddonManager.Core.Storage
                 $"{nameof(Downloads)}: {Downloads}, {nameof(PreferredReleaseType)}: {PreferredReleaseType}, " +
                 $"{nameof(Version)}: {Version}, {nameof(CurrentDownload)}: {CurrentDownload}, " +
                 $"{nameof(IsIgnored)}: {IsIgnored},{ nameof(IsAutoUpdate)}: { IsAutoUpdate}, " +
-                $"{ nameof(GameVersion)}: { GameVersion}, { nameof(Status)}: { Status}";
+                $"{ nameof(GameVersion)}: { GameVersion}, { nameof(Status)}: { Status}, { nameof(GameType)}: { GameType}";
         }
 
-        public Models.Addon AsAddon(Game game)
+        public Addon AsAddon(Game game)
         {
-            return new Models.Addon(game, FolderName, AbsolutePath)
+            return new Addon(game, FolderName, AbsolutePath)
             {
                 Title = this.Title,
                 ProjectUrl = this.ProjectUrl,

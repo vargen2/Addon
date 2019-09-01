@@ -11,7 +11,6 @@ using Windows.UI.Xaml.Controls;
 
 namespace AddonManager.Views
 {
-
     public sealed partial class ShellPage : Page
     {
         public ShellViewModel ViewModel { get; } = new ShellViewModel();
@@ -36,8 +35,6 @@ namespace AddonManager.Views
             applicationTitleBar->ButtonInactiveBackgroundColor = bgColor;
             */
 
-
-
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
             var half = Windows.UI.Colors.White;
             half.A = 90;
@@ -52,9 +49,6 @@ namespace AddonManager.Views
             // Set inactive window colors
             titleBar.ButtonInactiveForegroundColor = inactivefgColor;
             titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
-
-
-
 
             // Hide default title bar.
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
@@ -72,8 +66,6 @@ namespace AddonManager.Views
             // Register a handler for when the title bar visibility changes.
             // For example, when the title bar is invoked in full screen mode.
             coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
-
-           
 
             ViewModel.Initialize(shellFrame, navigationView, KeyboardAccelerators);
 
@@ -101,10 +93,8 @@ namespace AddonManager.Views
         //    GameSelectorFlyout.Hide();
         //}
 
-
         private async void OpenFolder_OnClick(object sender, RoutedEventArgs e)
         {
-
             var folderPicker = new Windows.Storage.Pickers.FolderPicker
             {
                 SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop
@@ -118,7 +108,7 @@ namespace AddonManager.Views
 
                 Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(folder);
 
-                var game = new Game(folder.Path)
+                var game = new Game(folder.Path, Parse.FromPathToGameType(folder.Path))
                 {
                     IsLoading = true,
                     DisplayName = Parse.CreateGameDisplayName(folder.Path)
@@ -132,19 +122,12 @@ namespace AddonManager.Views
                     browsePage.RefreshStoreAddonStatus();
                 }
                 game.IsLoading = false;
-
-
-
-
             }
             else
             {
                 Debug.WriteLine("Operation cancelled.");
             }
-
-
         }
-
 
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
         {
@@ -154,7 +137,7 @@ namespace AddonManager.Views
         private void UpdateTitleBarLayout(CoreApplicationViewTitleBar coreTitleBar)
         {
             //Debug.WriteLine(nameof(UpdateTitleBarLayout));
-            // Get the size of the caption controls area and back button 
+            // Get the size of the caption controls area and back button
             // (returned in logical pixels), and move your content around as necessary.
             LeftPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayLeftInset);
             RightPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayRightInset);
@@ -198,6 +181,6 @@ namespace AddonManager.Views
         //    };
 
         //    var result=await contentDialog.ShowAsync();
-        //}       
+        //}
     }
 }

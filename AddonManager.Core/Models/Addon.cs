@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using static AddonToolkit.Model.Enums;
 using static System.String;
 
 namespace AddonManager.Core.Models
@@ -17,6 +18,7 @@ namespace AddonManager.Core.Models
         public Game Game { get; }
         public string FolderName { get; }
         public string AbsolutePath { get; }
+        public GAME_TYPE GameType { get; }
         public string Title { get; set; } = Empty;
 
         public HashSet<string> SubFolders { get; set; } = new HashSet<string>();
@@ -32,6 +34,7 @@ namespace AddonManager.Core.Models
             Game = game ?? throw new NullReferenceException();
             FolderName = folderName ?? throw new NullReferenceException();
             AbsolutePath = absolutePath ?? throw new NullReferenceException();
+            GameType = game.GameType;
             SetIgnored = new RelayCommand(() => IsIgnored = !IsIgnored);
             SetAutoUpdate = new RelayCommand(() => IsAutoUpdate = !IsAutoUpdate);
             SetAlpha = new RelayCommand(() => PreferredReleaseType = "Alpha");
@@ -326,7 +329,7 @@ namespace AddonManager.Core.Models
             $"\r\n{nameof(IsIgnored)}: {IsIgnored},\r\n{nameof(GameVersion)}: {GameVersion}," +
             $"\r\n{nameof(Status)}: {Status},\r\n{nameof(CurrentDownload)}: {CurrentDownload}," +
             $"\r\n{nameof(SuggestedDownload)}: {SuggestedDownload},\r\n{ nameof(IsAutoUpdate)}: { IsAutoUpdate}" +
-            $"\r\n{nameof(SubFolders)}: {SubFolderContents()}";
+            $"\r\n{nameof(GameType)}: {GameType},\r\n{nameof(SubFolders)}: {SubFolderContents()}";
 
         private string SubFolderContents()
         {
@@ -347,7 +350,7 @@ namespace AddonManager.Core.Models
                 IsAutoUpdate = IsAutoUpdate,
                 PreferredReleaseType = PreferredReleaseType,
                 ProjectUrl = ProjectUrl,
-
+                GameType = GameType,
                 Status = (this.Status.Equals(DOWNLOADING_VERSIONS) || this.Status.Equals(UPDATING)) ? UNKNOWN : this.Status,
                 Version = Version,
                 SubFolders = SubFolders

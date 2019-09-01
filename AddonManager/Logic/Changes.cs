@@ -31,7 +31,7 @@ namespace AddonManager.Logic
                 {
                     return string.Empty;
                 }
-                Debug.WriteLine("changes: " + htmlPage);
+                // Debug.WriteLine("changes: " + htmlPage);
                 return ParsedPage(addon, htmlPage);
             }
             catch (Exception ex)

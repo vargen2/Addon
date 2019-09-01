@@ -8,6 +8,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using static AddonToolkit.Model.Enums;
 
 namespace AddonManager.Views
 {
@@ -133,7 +134,6 @@ namespace AddonManager.Views
                                 await Tasks.UpdateAddon(addon, download);
                             }
                         }
-
                     };
                     submenu.Items.Add(menuItem);
                 }
@@ -167,18 +167,15 @@ namespace AddonManager.Views
                     ViewModel.Session.Games.Remove(game);
                     if (ViewModel.Session.Games.Count == 0)
                     {
-                        ViewModel.Session.SelectedGame = new Game(Session.EMPTY_GAME);
+                        ViewModel.Session.SelectedGame = new Game(Session.EMPTY_GAME, GAME_TYPE.RETAIL);
                         ViewModel.Selected = null;
                     }
                     else
                     {
                         ViewModel.Session.SelectedGame = ViewModel.Session.Games.First();
                     }
-
                 }
-
             }
-
         }
 
         private async void MenuFlyoutItem_Click_Open_Edit_URL_DIALOG(object sender, RoutedEventArgs e)
@@ -206,7 +203,6 @@ namespace AddonManager.Views
             };
             var textBox = new TextBox() { HorizontalAlignment = HorizontalAlignment.Stretch };
             var testButton = new Button() { HorizontalAlignment = HorizontalAlignment.Stretch, Content = "Test", Margin = new Thickness(8, 0, 0, 0) };
-
 
             Grid.SetColumn(testButton, 1);
             var row = new Grid()
@@ -326,8 +322,6 @@ namespace AddonManager.Views
 
             var textBlock = new TextBlock() { Text = game.AbsolutePath };
             var textBox = new TextBox() { PlaceholderText = game.DisplayName };
-
-
 
             var panel = new StackPanel() { };
             panel.Children.Add(textBlock);

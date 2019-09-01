@@ -7,12 +7,25 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text.RegularExpressions;
+using static AddonToolkit.Model.Enums;
 
 namespace AddonManager.Logic
 {
     public static class Parse
     {
+        public static GAME_TYPE FromPathToGameType(string path)
+        {
+            if (path.Contains("_retail_"))
+            {
+                return GAME_TYPE.RETAIL;
+            }
+            if (path.Contains("_classic_"))
+            {
+                return GAME_TYPE.CLASSIC;
+            }
+            return GAME_TYPE.RETAIL;
+        }
+
         public static List<Download> FromPageToDownloads(Addon addon, string page)
         {
             if (addon.ProjectUrl.Equals(Version.ELVUI))
@@ -26,67 +39,67 @@ namespace AddonManager.Logic
             //return new List<Download>();
         }
 
-        public static List<Download> FromWowaceToDownloads(string htmlPage)
-        {
-            var downloads = new List<Download>();
-            int index1 = htmlPage.IndexOf("<div class=\"listing-body\">");
-            int index2 = htmlPage.IndexOf("</table>");
-            string data = htmlPage.Substring(index1, index2 - index1);
-            var strings = data.Split("<tr class=\"project-file-list-item\">").Skip(1).ToList();
+        //public static List<Download> FromWowaceToDownloads(string htmlPage)
+        //{
+        //    var downloads = new List<Download>();
+        //    int index1 = htmlPage.IndexOf("<div class=\"listing-body\">");
+        //    int index2 = htmlPage.IndexOf("</table>");
+        //    string data = htmlPage.Substring(index1, index2 - index1);
+        //    var strings = data.Split("<tr class=\"project-file-list-item\">").Skip(1).ToList();
 
-            foreach (var s in strings)
-            {
-                string temp = Util.Parse2(s, "<td class=\"project-file-release-type\">", "</td>");
-                string release = Util.Parse2(temp, "title=\"", "\"></div>");
+        //    foreach (var s in strings)
+        //    {
+        //        string temp = Util.Parse2(s, "<td class=\"project-file-release-type\">", "</td>");
+        //        string release = Util.Parse2(temp, "title=\"", "\"></div>");
 
-                string title = Util.Parse2(s, "data-name=\"", "\">");
-                string fileSize = Util.Parse2(s, "<td class=\"project-file-size\">", "</td>").Trim();
+        //        string title = Util.Parse2(s, "data-name=\"", "\">");
+        //        string fileSize = Util.Parse2(s, "<td class=\"project-file-size\">", "</td>").Trim();
 
-                string a = Util.Parse2(s, "data-epoch=\"", "\"");
-                var dateUploaded = DateTimeOffset.FromUnixTimeSeconds(long.Parse(a)).LocalDateTime;
+        //        string a = Util.Parse2(s, "data-epoch=\"", "\"");
+        //        var dateUploaded = DateTimeOffset.FromUnixTimeSeconds(long.Parse(a)).LocalDateTime;
 
-                string gameVersion = Util.Parse2(s, "<span class=\"version-label\">", "</span>");
+        //        string gameVersion = Util.Parse2(s, "<span class=\"version-label\">", "</span>");
 
-                string tempDL = Util.Parse2(s, "<td class=\"project-file-downloads\">", "</td>").Replace(",", "").Trim();
+        //        string tempDL = Util.Parse2(s, "<td class=\"project-file-downloads\">", "</td>").Replace(",", "").Trim();
 
-                long dls = long.Parse(tempDL);
-                string downloadLink = Util.Parse2(s, " href=\"", "\"");
+        //        long dls = long.Parse(tempDL);
+        //        string downloadLink = Util.Parse2(s, " href=\"", "\"");
 
-                downloads.Add(new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink));
-            }
-            return downloads;
-        }
+        //        downloads.Add(new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink));
+        //    }
+        //    return downloads;
+        //}
 
-        public static List<Download> FromWowCurseForgeToDownloads(string htmlPage)
-        {
-            var downloads = new List<Download>();
-            int index1 = htmlPage.IndexOf("<div class=\"listing-body\">");
-            int index2 = htmlPage.IndexOf("</table>");
-            string data = htmlPage.Substring(index1, index2 - index1);
-            var strings = data.Split("<tr class=\"project-file-list-item\">").Skip(1).ToList();
+        //public static List<Download> FromWowCurseForgeToDownloads(string htmlPage)
+        //{
+        //    var downloads = new List<Download>();
+        //    int index1 = htmlPage.IndexOf("<div class=\"listing-body\">");
+        //    int index2 = htmlPage.IndexOf("</table>");
+        //    string data = htmlPage.Substring(index1, index2 - index1);
+        //    var strings = data.Split("<tr class=\"project-file-list-item\">").Skip(1).ToList();
 
-            foreach (var s in strings)
-            {
-                string temp = Util.Parse2(s, "<td class=\"project-file-release-type\">", "</td>");
-                string release = Util.Parse2(temp, "title=\"", "\"></div>");
+        //    foreach (var s in strings)
+        //    {
+        //        string temp = Util.Parse2(s, "<td class=\"project-file-release-type\">", "</td>");
+        //        string release = Util.Parse2(temp, "title=\"", "\"></div>");
 
-                string title = Util.Parse2(s, "data-name=\"", "\">");
-                string fileSize = Util.Parse2(s, "<td class=\"project-file-size\">", "</td>").Trim();
+        //        string title = Util.Parse2(s, "data-name=\"", "\">");
+        //        string fileSize = Util.Parse2(s, "<td class=\"project-file-size\">", "</td>").Trim();
 
-                string a = Util.Parse2(s, "data-epoch=\"", "\"");
-                var dateUploaded = DateTimeOffset.FromUnixTimeSeconds(long.Parse(a)).LocalDateTime;
+        //        string a = Util.Parse2(s, "data-epoch=\"", "\"");
+        //        var dateUploaded = DateTimeOffset.FromUnixTimeSeconds(long.Parse(a)).LocalDateTime;
 
-                string gameVersion = Util.Parse2(s, "<span class=\"version-label\">", "</span>");
+        //        string gameVersion = Util.Parse2(s, "<span class=\"version-label\">", "</span>");
 
-                string tempDL = Util.Parse2(s, "<td class=\"project-file-downloads\">", "</td>").Replace(",", "").Trim();
+        //        string tempDL = Util.Parse2(s, "<td class=\"project-file-downloads\">", "</td>").Replace(",", "").Trim();
 
-                long dls = long.Parse(tempDL);
-                string downloadLink = Util.Parse2(s, " href=\"", "\"");
+        //        long dls = long.Parse(tempDL);
+        //        string downloadLink = Util.Parse2(s, " href=\"", "\"");
 
-                downloads.Add(new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink));
-            }
-            return downloads;
-        }
+        //        downloads.Add(new Download(release, title, fileSize, dateUploaded, gameVersion, dls, downloadLink));
+        //    }
+        //    return downloads;
+        //}
 
         public static List<Download> FromElvUiToDownloads(string htmlPage)
         {

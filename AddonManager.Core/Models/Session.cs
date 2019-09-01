@@ -4,6 +4,7 @@ using AddonToolkit.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using static AddonToolkit.Model.Enums;
 
 namespace AddonManager.Core.Models
 {
@@ -53,7 +54,7 @@ namespace AddonManager.Core.Models
 
         public Session()
         {
-            _selectedGame = new Game(EMPTY_GAME)
+            _selectedGame = new Game(EMPTY_GAME, GAME_TYPE.RETAIL)
             {
                 IsLoading = false
             };

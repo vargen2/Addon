@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
+using static AddonToolkit.Model.Enums;
 
 namespace AddonManager.Logic
 {
@@ -119,7 +120,20 @@ namespace AddonManager.Logic
                 {
                     var uri = new Uri("https://www.curseforge.com/wow/addons/" + addon.ProjectUrl + "/files?page=" + i);
                     var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
-                    var fresh = Parse.FromPageToDownloads(addon, htmlPage);
+                    var fresh = Parse.FromPageToDownloads(addon, htmlPage).Where(d =>
+                    {
+                        var dGameVersion = d.GameVersion.First().ToString();
+
+                        if (addon.GameType == GAME_TYPE.RETAIL)
+                        {
+                            return dGameVersion == "8";
+                        }
+                        if (addon.GameType == GAME_TYPE.CLASSIC)
+                        {
+                            return dGameVersion == "1";
+                        }
+                        return false;
+                    }).ToList();
 
                     var dontExistAllready = fresh.Except(addon.Downloads).ToList();
                     if (dontExistAllready.Count == 0)
@@ -169,7 +183,8 @@ namespace AddonManager.Logic
             try
             {
                 var htmlPage = await Http.WebHttpClient.GetStringAsync(uri);
-                return Parse.FromPageToDownloads(addon, htmlPage);
+                var fresh = Parse.FromPageToDownloads(addon, htmlPage);
+                return fresh.Except(addon.Downloads).ToList();
             }
             catch (Exception ex)
             {
