@@ -30,13 +30,14 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 ## ChangeLog
 
-##### 1.0.20.0 - In development
+##### 1.0.20.0 - 2019-09-01
 
 - Layout changes
   - Commandbar for appbarbuttons
   - Better support for resizing
   - fixed typo
   - Basic support for classic and retail
+  - Browse page reacts to classic or retail game
    
 
 ##### 1.0.19.0 - 2019-07-04
