@@ -14,6 +14,8 @@ namespace AddonToolkit.Model
         public long NrOfDownloads { get; set; }
         public long UpdatedEpoch { get; set; }
         public long CreatedEpoch { get; set; }
+        public bool HasRetail { get; set; }
+        public bool HasClassic { get; set; }
         public List<Download> Downloads { get; set; }
     }
 }

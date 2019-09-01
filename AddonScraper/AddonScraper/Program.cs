@@ -274,6 +274,10 @@ namespace AddonScraper
             {
                 bool result = t.Result.Item1;
                 AddonData addonData = t.Result.Item2;
+
+                addonData.HasRetail = addonData.Downloads.Any(d => d.GameVersion.First().ToString() == "8");
+                addonData.HasClassic = addonData.Downloads.Any(d => d.GameVersion.First().ToString() == "1");
+
                 if (result)
                 {
                     validAddonData.Add(addonData);
@@ -409,6 +413,15 @@ namespace AddonScraper
                 foundData.CreatedEpoch = curseAddon.CreatedEpoch;
                 foundData.Description = curseAddon.Description;
                 foundData.Title = curseAddon.Title;
+
+                try
+                {
+                    foundData.Downloads = await Pure.Version.DownloadVersionsFor(httpClient, foundData.ProjectName);
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e, nameof(FromCurseToAddonData) + " error getting versions");
+                }
 
                 AddonData copy = new AddonData()
                 {
