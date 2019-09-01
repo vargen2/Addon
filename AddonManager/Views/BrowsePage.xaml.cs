@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using static AddonToolkit.Model.Enums;
 
 namespace AddonManager.Views
 {
@@ -90,6 +91,16 @@ namespace AddonManager.Views
                     storeAddon.Status = StoreAddon.NOTINSTALLED;
                 }
             }
+
+            if (ViewModel.Session.SelectedGame.GameType == GAME_TYPE.RETAIL)
+            {
+                ViewModel.StoreAddons.Filter = (obj) => obj is StoreAddon storeAddon ? storeAddon.AddonData.HasRetail : false;
+            }
+            else if (ViewModel.Session.SelectedGame.GameType == GAME_TYPE.CLASSIC)
+            {
+                ViewModel.StoreAddons.Filter = (obj) => obj is StoreAddon storeAddon ? storeAddon.AddonData.HasClassic : false;
+            }
+
             ViewModel.StoreAddons.Refresh();
         }
 

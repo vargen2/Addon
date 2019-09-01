@@ -122,7 +122,8 @@ namespace AddonManager.Logic
                     //ProjectUrl = Version.ELVUI,
                     SubFolders = new HashSet<string>() { "ElvUI_Config", "ElvUI_OptionsUI" },
                     Files = 100,
-                    Size = 100
+                    Size = 100,
+                    HasRetail = true
                 });
                 return addonDatas;
             }

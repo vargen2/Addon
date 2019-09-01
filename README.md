@@ -35,6 +35,8 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 - Layout changes
   - Commandbar for appbarbuttons
   - Better support for resizing
+  - fixed typo
+  - Basic support for classic and retail
    
 
 ##### 1.0.19.0 - 2019-07-04

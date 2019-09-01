@@ -1,6 +1,7 @@
 ﻿using AddonToolkit.Model;
 using HtmlAgilityPack;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace AddonToolkit.Parse
 {
@@ -27,13 +28,34 @@ namespace AddonToolkit.Parse
                 var downloadString = addonDiv.SelectSingleNode(".//span[contains(text(),'Downloads')]").InnerText.Replace("Downloads", "").Trim();
                 long downloads = Parser.FromStringDownloadToLong(downloadString);
 
-                var updatedString = addonDiv.SelectSingleNode(".//span[contains(text(),'Updated')]/abbr")
-                    .Attributes["data-epoch"].Value;
-                long updated = long.Parse(updatedString);
-
-                var createdString = addonDiv.SelectSingleNode(".//span[contains(text(),'Created')]/abbr")
-                    .Attributes["data-epoch"].Value;
-                long created = long.Parse(createdString);
+                long updated = 0;
+                try
+                {
+                    var node = addonDiv.SelectSingleNode(".//span[contains(text(),'Updated')]/abbr");
+                    if (node != null)
+                    {
+                        var updatedString = node.Attributes["data-epoch"].Value;
+                        updated = long.Parse(updatedString);
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+                long created = 0;
+                try
+                {
+                    var node = addonDiv.SelectSingleNode(".//span[contains(text(),'Created')]/abbr");
+                    if (node != null)
+                    {
+                        var createdString = node.Attributes["data-epoch"].Value;
+                        created = long.Parse(createdString);
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
 
                 addons.Add(new CurseAddon()
                 {

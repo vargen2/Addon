@@ -2,7 +2,7 @@
   "profiles": {
     "AddonScraper": {
       "commandName": "Project",
-      "commandLineArgs": "1 1"
+      "commandLineArgs": "64 65"
     }
   }
 }

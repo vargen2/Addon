@@ -1,4 +1,6 @@
-﻿namespace AddonToolkit.Model
+﻿using System.Collections.Generic;
+
+namespace AddonToolkit.Model
 {
     public class CurseAddon
     {
@@ -23,7 +25,8 @@
                 Description = this.Description,
                 NrOfDownloads = this.Downloads,
                 UpdatedEpoch = this.UpdatedEpoch,
-                CreatedEpoch = this.CreatedEpoch
+                CreatedEpoch = this.CreatedEpoch,
+                Downloads = new List<Download>()
             };
         }
     }
