@@ -4,19 +4,10 @@ Addon Manager for Wow. Windows 10 UWP Application
 
 ## Installation
 
-Get it from Microsoft Store for free
-https://www.microsoft.com/store/productId/9NXD1GMVB3ZH
+Unavailable atm as of 2019-09-27
 
-## Known Issues
-
-- Copy/move extracted files is slow
-
-## Screens
-
-![Alt text](img/img5.png?raw=true "")
-![Alt text](img/img4.png?raw=true "")
-![Alt text](img/img6.png?raw=true "")
-![Alt text](img/img3.png?raw=true "")
+<del>Get it from Microsoft Store for free
+https://www.microsoft.com/store/productId/9NXD1GMVB3ZH </del>
 
 ## Info
 
@@ -27,6 +18,17 @@ https://github.com/vargen2/addonmanager
 Boilerplate was made with
 
 https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTemplateStudio
+
+## Known Issues
+
+- Copy, move and extract files is slow due to not using unrestricted capabilities. https://docs.microsoft.com/en-us/windows/uwp/packaging/app-capability-declarations
+
+## Screens
+
+![Alt text](img/img5.png?raw=true "")
+![Alt text](img/img4.png?raw=true "")
+![Alt text](img/img6.png?raw=true "")
+![Alt text](img/img3.png?raw=true "")
 
 ## ChangeLog
 
@@ -85,6 +87,3 @@ https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTempla
 
 - Initial release
 
-## Donations
-
-Paypal paypal.me/hjalmar2
