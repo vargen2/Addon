@@ -2,22 +2,24 @@
 
 Addon Manager for Wow. Windows 10 UWP Application
 
-## Installation
-
-Unavailable atm as of 2019-09-27
-
-<del>Get it from Microsoft Store for free
-https://www.microsoft.com/store/productId/9NXD1GMVB3ZH </del>
-
 ## Info
 
-Program I made mostly for fun and to use it myself. I have done a similar program earlier in Java.
+I'm planning to do a rewrite July 2020 during my vacation. Make app work again and redesign the architecture.
+
+Program I made mostly for fun and to use it myself and to learn C#/UWP. I have done a similar program earlier in Java.
 
 https://github.com/vargen2/addonmanager
 
 Boilerplate was made with
 
 https://marketplace.visualstudio.com/items?itemName=WASTeamAccount.WindowsTemplateStudio
+
+## Installation
+
+Unavailable atm as of 2019-09-27
+
+<del>Get it from Microsoft Store for free
+https://www.microsoft.com/store/productId/9NXD1GMVB3ZH </del>
 
 ## Known Issues
 
